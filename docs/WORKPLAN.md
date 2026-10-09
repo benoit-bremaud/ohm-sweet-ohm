@@ -55,7 +55,7 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 
 - Content: **1. LED + resistor**, base block only.
 - Importer: validate, render SVG, upsert. Idempotent.
-- PostgreSQL schema + migrations (range types, SI units).
+- PostgreSQL schema + migrations (specs stored in SI units; search runs in memory, ADR-0001).
 - API: `GET /blocks/{slug}` + SVG, OpenAPI + Swagger UI.
 - Web: one block page (SVG, specs, source, validation status, safety warning).
 - Deploy staging: managed PostgreSQL, API container, Vercel PR preview.
@@ -75,7 +75,8 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 ### M3 — Search by need (weeks 7–8)
 
 - Content: **3. RC filter**.
-- API: filter search (category, numeric range overlap, difficulty, key component, keywords).
+- API: filter search (base circuit, numeric criteria matched with the domain match modes
+  `covers` / `within`, enum values, difficulty, key component, keywords), run in memory (ADR-0001).
 - Web: search page with filters, SEO metadata per page.
 - UML: sequence diagram "search by need".
 
