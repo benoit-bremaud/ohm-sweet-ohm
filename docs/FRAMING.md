@@ -23,7 +23,7 @@ architecture) takes precedence over catalogue volume.
 | Response content | Metadata + rendered schematic (SVG) | Source file download, BOM, educational explanation |
 | Reliability | Validation status (`tested` / `theoretical`) + cited source + high-voltage safety warning | Target: automated SPICE simulation from KiCad SPICE netlist, isolated service |
 | Spec model | Typed parameters per category, stored as min/max ranges in SI units | — |
-| Backend | TypeScript, Fastify, PostgreSQL (range types; pgvector in v2), OpenAPI from Zod schemas | — |
+| Backend | TypeScript, Fastify, PostgreSQL as a plain store (search runs in memory, see ADR-0001; pgvector in v2), OpenAPI from Zod schemas | — |
 | Name | **Ohm Sweet Ohm** (repo/domain slug: `ohm-sweet-ohm`) | — |
 | Front-end | Next.js (server rendering: one indexable page per base circuit and variant), typed client generated from OpenAPI | — |
 | Hosting | Managed services: hosted PostgreSQL, API on a container platform, front on Vercel. Environments: local → staging (PR preview) → prod | — |
