@@ -1,23 +1,23 @@
-# Local review — ohm-sweet-ohm (docs/1-use-case-diagram)
+# Local review — ohm-sweet-ohm (docs/2-domain-class-diagram)
 
-- Date: 2026-10-08
+- Date: 2026-10-09
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (use-case diagram, project log, README status) — re-run after Codex round 1
-- Checks run: docs · security (Gitleaks) · correctness (Mermaid render with mmdc, link check, markdownlint). Design and tests: not applicable, no code.
-- Verdict: ship as-is · Must 0 · Should 0 · Nice 0
+- Scope: branch diff main...HEAD (class diagram, parameter spec, ADR-0001, UC3, framing, work plan, project log)
+- Checks run: design (architecture-guardian, two passes) · docs · security (Gitleaks) · correctness (Mermaid render with mmdc, link check). Tests: not applicable, no code.
+- Verdict: ship as-is · Must 0 · Should 0 · Nice 1
 
 ## 🔴 Must Have
-_None._
+_None._ First pass: 5 Must Have, all applied. Verification pass: 1 unresolved (unit check at publication), applied.
 
 ## 🟡 Should Have
-_None._
+_None._ First pass: 9 Should Have, all applied. Verification pass: 4 new, all applied.
 
 ## 🔵 Nice to Have
-_None._
+- `docs/architecture/diagrams/catalogue/04-class.md` `[docs]` · The diagram is dense (about 30 classes) · Split into a structure view and a publication/search view if reviewers find it hard to read.
 
 ## ⚪ Disagree / Intentional
-- `docs/architecture/diagrams/catalogue/01-use-case.md` `[docs]` · markdownlint MD013 (line length > 80) on the textual specifications · No markdownlint configuration exists yet; the line-length policy is decided in the tooling PR (issue #3). No other rule fires.
-- `docs/architecture/diagrams/catalogue/01-use-case.md` `[docs]` · v2 use cases (UC7–UC10) appear without textual specifications · Intentional: named so the v1 class diagram leaves room for them; specified when scheduled.
+- `docs/architecture/diagrams/catalogue/04-class.md` `[design]` · Numeric/enum hierarchies for definitions, specs and criteria · Two concrete kinds carry different data and behaviour today; polymorphism replaces type switches.
+- `docs/architecture/specs/base-circuits-parameters.md` `[design]` · `outputVoltage` optional instead of conditionally required · YAGNI for a single case.
 
 ## Per-dimension summary
-- Design: N/A (no code) · Docs: UML 2.5 conventions followed (actor-initiated goals, grouping by domain, Cockburn specs) · Tests: N/A · Security: Gitleaks, no leaks · Correctness: Mermaid renders, relative links resolve
+- Design: two independent passes, all findings resolved · Docs: spec, ADR and use case aligned with the model · Tests: N/A · Security: Gitleaks, no leaks · Correctness: Mermaid renders, relative links resolve

@@ -96,7 +96,7 @@ flowchart LR
 - **Success guarantee**: the enthusiast has the information needed to judge whether to build the block.
 - **Main success scenario**:
   1. The enthusiast opens a block.
-  2. The system shows the rendered schematic, the typed specs with units, the difficulty, the key components, the cited source and the validation status (tested or theoretical).
+  2. The system shows the rendered schematic, the typed specs with units, the difficulty, the key components, the cited source, the validation status (tested or theoretical) and the design formulas of its base circuit.
 - **Extensions**:
   - 1a. The block does not exist: the system reports it; the use case ends with the minimal guarantee.
   - 2a. The block involves hazardous voltage: the system shows a safety warning before the schematic.

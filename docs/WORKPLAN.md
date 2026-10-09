@@ -55,7 +55,7 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 
 - Content: **1. LED + resistor**, base block only.
 - Importer: validate, render SVG, upsert. Idempotent.
-- PostgreSQL schema + migrations (range types, SI units).
+- PostgreSQL schema + migrations (specs stored in SI units; search runs in memory, ADR-0001).
 - API: `GET /blocks/{slug}` + SVG, OpenAPI + Swagger UI.
 - Web: one block page (SVG, specs, source, validation status, safety warning).
 - Deploy staging: managed PostgreSQL, API container, Vercel PR preview.
