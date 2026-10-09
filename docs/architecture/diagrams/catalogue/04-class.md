@@ -255,12 +255,12 @@ classDiagram
 
 | Class | Owns | Invariants it enforces |
 | --- | --- | --- |
-| `Catalogue` | Base circuits and blocks; listing (UC1) of base circuits that have a root block only, navigation (UC2), search (UC4), publication (UC6) | Unique block slugs; at most one root block per base circuit; a parent exists and belongs to the same base circuit; no cycle in a variant tree; a parameter key has the same quantity and match mode in every base circuit; publication replaces a block only when the resulting catalogue, including the replaced block's existing children, satisfies every invariant above |
+| `Catalogue` | Base circuits and blocks; listing (UC1) of base circuits that have a root block only, navigation (UC2), search (UC4), publication (UC6) | Unique block slugs; at most one root block per base circuit; a parent exists and belongs to the same base circuit; no cycle in a variant tree; a parameter key has the same definition kind in every base circuit (numeric: same quantity and match mode; enum: same allowed values); publication replaces a block only when the resulting catalogue, including the replaced block's existing children, satisfies every invariant above |
 | `BaseCircuit` | Its parameter definitions and design formulas; building specs from raw input | Every raw key is defined; no duplicate key; every required key is present; each value is checked by its definition |
 | `ParameterDefinition` | Turning one raw value into a typed spec | Numeric: the raw quantity, when given, equals the definition's quantity; `min ≤ max`; a `COUNT` is a positive integer. Enum: the value is allowed |
 | `Block` | Its specs, its position in the variant tree, its diff against its parent (UC2, UC3) | A variant has a `changeSummary`; a root block has none |
 | `Spec` | Matching a requested range or values (UC4) and comparing itself with another spec (UC2) | `COVERS`: the spec range contains the requested range. `WITHIN`: the requested range contains the spec range. Enum: the value is one of the requested values. A numeric spec never satisfies values and an enum spec never satisfies a range |
-| `SearchCriteria` | Validating a request against the catalogue's key lookup and matching one block | Unknown key, incompatible quantity or wrong criterion kind is an error, never ignored; a block matches only if every criterion is satisfied; a block lacking a targeted spec does not match |
+| `SearchCriteria` | Validating a request against the catalogue's key lookup and matching one block | Unknown key, incompatible quantity, wrong criterion kind or an enum value outside the allowed values is an error, never ignored; a block matches only if every criterion is satisfied; a block lacking a targeted spec does not match |
 | `SpecRange` | A closed interval in SI units | `min ≤ max` |
 
 ## Notes

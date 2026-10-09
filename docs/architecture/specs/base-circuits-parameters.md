@@ -29,7 +29,8 @@ it. Blocks of a base circuit may only declare the parameters listed for it.
 - **Open-ended requests** use a point or a bounded range, never infinity: "at least 1 A" on a
   `covers` parameter is the point `[1, 1]`; "at most 3.3 V" on a `within` parameter is `[0, 3.3]`.
 - **Same key, same meaning**: a key used by several base circuits (e.g. `inputVoltage`) has the
-  same quantity and match mode everywhere, so a search can span base circuits.
+  same kind everywhere: for a numeric parameter, the same quantity and match mode; for an enum,
+  the same set of allowed values. A search can then span base circuits.
 - **Required**: a required parameter must be declared by every block of the base circuit.
 
 ## Quantities
