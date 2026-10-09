@@ -25,7 +25,7 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
 
 ## 2026-10-09
 
-- **Domain class diagram and typed parameters** (branch `docs/2-domain-class-diagram`, issue #2) — `docs/architecture/diagrams/catalogue/04-class.md`, `docs/architecture/specs/base-circuits-parameters.md`, ADR-0001. Draft reviewed by an independent architecture review before push: 5 Must Have and 9 Should Have findings, all applied with owner validation; a verification pass found one unresolved point (unit check at publication) and four new Should Have items (explicit result objects, no SearchCriteria↔Catalogue cycle, typed matching without downcast, invariants checked after republication), all applied.
+- **PR #8 merged** (`8a4bb39`) — docs(uml): add catalogue domain class diagram and typed parameters. Branch `docs/2-domain-class-diagram`, closes #2; review rounds: Codex ×2, Copilot ×3, all addressed. Content: `docs/architecture/diagrams/catalogue/04-class.md`, `docs/architecture/specs/base-circuits-parameters.md`, ADR-0001. Draft reviewed by an independent architecture review before push: 5 Must Have and 9 Should Have findings, all applied with owner validation; a verification pass found one unresolved point (unit check at publication) and four new Should Have items (explicit result objects, no SearchCriteria↔Catalogue cycle, typed matching without downcast, invariants checked after republication), all applied.
   - **Decisions**:
     - `Match mode fixed per parameter` — `covers` for what a circuit accepts or withstands, `within` for what it delivers; plain range overlap rejected (false positives), user-chosen mode rejected (complexity).
     - `BaseCircuit holds definitions, its root Block holds values` — single responsibility; the root block is the base circuit's own schematic.
@@ -36,3 +36,10 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `Base circuits without a root block are not listed` — raised by review (Codex): parameters can be defined before the schematic; the base circuit appears once its root block is published. Forbidding rootless base circuits rejected (blocks progressive import).
     - `Separate outputCurrent (capacity, covers) and regulatedCurrent (setpoint, within)` — raised by review (Codex): one parameter could not match both "at least 500 mA" and "18–22 mA" requests. Mode-dependent matching rejected (special mechanism for one case).
     - `Shared keys have the same definition kind` — raised by review (Copilot): enum keys reused across base circuits must keep the same allowed values, so search validation never depends on which definition is found first. Enum criterion values are validated too, so a typo is reported instead of returning no match.
+- **Tooling and CI** (branch `chore/3-tooling-and-ci`, issues #3 and #4) — pnpm workspace, strict TypeScript 6.0, ESLint (strict type-checked, named exports only), Prettier, Vitest, markdownlint, CI quality job and Gitleaks. Review rounds: Codex ×2 (config glob for nested packages, Node engines), Copilot ×1 (root typecheck), all addressed; CI fix: Gitleaks needs `pull-requests: read`.
+  - **Decisions**:
+    - `TypeScript 6.0, not 7` — typescript-eslint 8.71 supports TypeScript below 6.1; typed linting matters more than the native compiler for now.
+    - `CodeQL and dependency review gated on a public repository` — the free plan offers them, and branch protection, only on public repositories; `pnpm audit --audit-level high` stands in, branch protection added to M5.
+    - `GHSA-vfj7-8cjw-p6xm ignored` — no patched version; reached only through markdownlint-cli2 on the repository's own globs.
+    - `engines.node = ^22.13.0 || ^24.0.0 || >=26.0.0` — exact intersection of ESLint and Vitest support.
+    - `Typecheck the root before packages` — `pnpm -r` skips the root, so the step passed without running tsc.

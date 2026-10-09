@@ -1,23 +1,30 @@
-# Local review — ohm-sweet-ohm (docs/2-domain-class-diagram)
+# Local review — ohm-sweet-ohm (chore/3-tooling-and-ci)
 
 - Date: 2026-10-09
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (class diagram, parameter spec, ADR-0001, UC3, framing, work plan, project log)
-- Checks run: design (architecture-guardian, two passes) · docs · security (Gitleaks) · correctness (Mermaid render with mmdc, link check). Tests: not applicable, no code.
+- Scope: branch diff main...HEAD (workspace, TypeScript, ESLint, Prettier, Vitest, markdownlint, CI and security workflows, Markdown fixes)
+- Checks run: design · docs · security (Gitleaks, pnpm audit, workflow permissions and pinning) · correctness (`pnpm check`, actionlint). Tests: no production code yet.
 - Verdict: ship as-is · Must 0 · Should 0 · Nice 1
 
 ## 🔴 Must Have
-_None._ First pass: 5 Must Have, all applied. Verification pass: 1 unresolved (unit check at publication), applied.
+
+_None._
 
 ## 🟡 Should Have
-_None._ First pass: 9 Should Have, all applied. Verification pass: 4 new, all applied.
+
+_None._
 
 ## 🔵 Nice to Have
-- `docs/architecture/diagrams/catalogue/04-class.md` `[docs]` · The diagram is dense (about 30 classes) · Split into a structure view and a publication/search view if reviewers find it hard to read.
+
+- `vitest.config.ts` `[tests]` · `passWithNoTests` is on because no package exists yet · Remove it once the first package with tests lands (issue #5).
 
 ## ⚪ Disagree / Intentional
-- `docs/architecture/diagrams/catalogue/04-class.md` `[design]` · Numeric/enum hierarchies for definitions, specs and criteria · Two concrete kinds carry different data and behaviour today; polymorphism replaces type switches.
-- `docs/architecture/specs/base-circuits-parameters.md` `[design]` · `outputVoltage` optional instead of conditionally required · YAGNI for a single case.
+
+- `.github/workflows/codeql.yml`, `.github/workflows/dependency-review.yml` `[security]` · Jobs skipped while the repository is private · The free plan offers code scanning and dependency review on public repositories only; `pnpm audit --audit-level high` in CI stands in until then, and both jobs start automatically once public.
+- `pnpm-workspace.yaml` `[security]` · GHSA-vfj7-8cjw-p6xm ignored · No patched version exists; reached only through markdownlint-cli2 on the repository's own globs.
+- Branch protection on `main` `[security]` · Not configured · Unavailable on a private repository on the free plan; added to the public release checklist.
+- `typescript` 6.0.3 instead of 7.x `[design]` · typescript-eslint 8.71 supports TypeScript below 6.1 only; typed linting matters more than the native compiler for now.
 
 ## Per-dimension summary
-- Design: two independent passes, all findings resolved · Docs: spec, ADR and use case aligned with the model · Tests: N/A · Security: Gitleaks, no leaks · Correctness: Mermaid renders, relative links resolve
+
+- Design: flat tooling, no package before it is needed · Docs: README development section, Markdown lint fixes · Tests: N/A · Security: actions pinned by SHA, read-only permissions, Gitleaks active, audit gate · Correctness: `pnpm check` and actionlint pass

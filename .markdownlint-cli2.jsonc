@@ -1,0 +1,8 @@
+{
+  // Long lines are allowed: tables and Cockburn specifications read better unwrapped.
+  "config": {
+    "MD013": false,
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["**/node_modules/**"],
+}
