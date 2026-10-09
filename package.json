@@ -13,7 +13,7 @@
     "lint:md": "markdownlint-cli2",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "pnpm -r --if-present typecheck",
+    "typecheck": "tsc -p tsconfig.json && pnpm -r --if-present typecheck",
     "test": "vitest run",
     "check": "pnpm format:check && pnpm lint && pnpm lint:md && pnpm typecheck && pnpm test"
   },
