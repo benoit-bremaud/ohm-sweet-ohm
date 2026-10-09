@@ -20,3 +20,5 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `Third-party developer generalizes Electronics enthusiast` — same goals through another channel; web and API are channels, not actors.
     - `Declaring a variant is publishing a block with a parent` — a separate use case would duplicate the publication flow.
     - `Fully object-oriented domain` — domain concepts are classes carrying their behaviour (e.g. a block computes its spec diff against its parent), not plain data structures handled by free functions. Applies from the class diagram (#2) on.
+    - `API keys: GitHub sign-in, one active key per account` — raised by review (Copilot): unrestricted issuance let a developer bypass the quota by requesting new keys. The quota is tied to the account; a new key revokes the old one. Email verification rejected (disposable addresses), manual issuance rejected (does not scale).
+    - `No per-block license in v1` — raised by review (Copilot): the catalogue keeps a single CC BY-SA 4.0 license, as framed.

@@ -31,7 +31,7 @@ architecture) takes precedence over catalogue volume.
 | Delivery | Vertical slices from M1; tracked with GitHub Project + milestones + issues. See WORKPLAN.md | — |
 | Value calculator | v1: each base circuit stores its design formulas in the model | v2: per-circuit calculator returning component values rounded to standard series (E12…) |
 | Consumers | Own web front + public API for third-party developers | — |
-| API access | Anonymous read-only with rate limit; free API key for higher quotas; writes admin-only | — |
+| API access | Anonymous read-only with rate limit; free API key for higher quotas, issued after GitHub sign-in, one active key per account (quota tied to the account, a new key revokes the old one); writes admin-only | — |
 | Import pipeline | v1: CLI script in Docker (`kicad-cli` renders SVG) reading `<block>/schematic.kicad_sch` + `<block>/meta.yaml` | Catalogue git repo whose CI runs the same script on merge |
 | Licensing | Code MIT; schematics CC BY-SA 4.0 | Per-schematic license field if third-party schematics are imported |
 | Entry points | v1: browse by **base circuit** (voltage divider, regulator, transistor switch, op-amp…) and explore its variants; search by need via filters | Browse by **key component** (LM317, NE555…) — enabled by a block→key-component link |

@@ -18,6 +18,7 @@ flowchart LR
   Enthusiast(("Electronics enthusiast"))
   Developer(("Third-party developer"))
   Curator(("Catalogue curator"))
+  GitHubIdP(("GitHub — identity provider"))
 
   subgraph SYSTEM ["Ohm Sweet Ohm"]
     subgraph Explore ["Explore domain"]
@@ -50,6 +51,7 @@ flowchart LR
   Enthusiast -.-> UC9
   Enthusiast -.-> UC10
   Developer --> UC5
+  UC5 --- GitHubIdP
   Curator --> UC6
 
   classDef planned stroke-dasharray: 5 5
@@ -117,15 +119,19 @@ flowchart LR
 ### UC5 — Obtain an API key (planned, M4)
 
 - **Primary actor**: Third-party developer.
+- **Supporting actor**: GitHub, as identity provider.
 - **Precondition**: none.
-- **Minimal guarantee**: no key is issued without being recorded; anonymous read access keeps working.
-- **Success guarantee**: the developer holds a key that raises their read quota.
+- **Minimal guarantee**: no key is issued without being recorded; a GitHub account never holds more than one active key; anonymous read access keeps working.
+- **Success guarantee**: the developer holds exactly one active key, tied to their GitHub account, that raises their read quota.
 - **Main success scenario**:
-  1. The developer requests a key.
-  2. The system issues the key and shows it once.
-  3. The developer uses it on read requests and benefits from the higher quota.
+  1. The developer signs in with their GitHub account.
+  2. The developer requests a key.
+  3. The system issues the key and shows it once.
+  4. The developer uses it on read requests and benefits from the higher quota.
 - **Extensions**:
-  - 3a. The developer exceeds the quota: the system refuses further requests until the quota window resets and says when.
+  - 1a. GitHub sign-in fails or is refused: no key is issued; the use case ends with the minimal guarantee.
+  - 2a. The account already holds an active key: the system revokes it and issues a new one (rotation), so the quota stays attached to the account and a new key never resets it.
+  - 4a. The developer exceeds the quota: the system refuses further requests until the quota window resets and says when.
 
 ### UC6 — Publish a block to the catalogue (planned, M1)
 
@@ -134,7 +140,7 @@ flowchart LR
 - **Minimal guarantee**: an invalid block never reaches the catalogue; the published catalogue stays unchanged.
 - **Success guarantee**: the block and its rendered schematic are available to readers, and, for a variant, its link to its parent block.
 - **Main success scenario**:
-  1. The curator adds a block: a KiCad schematic and its metadata (base circuit, parent block if it is a variant, typed specs, difficulty, key components, source, license, validation status).
+  1. The curator adds a block: a KiCad schematic and its metadata (base circuit, parent block if it is a variant, typed specs, difficulty, key components, source, validation status).
   2. The system validates the metadata against the parameters defined for the base circuit.
   3. The system renders the schematic.
   4. The system publishes the block, replacing any previous version of it.
@@ -154,5 +160,10 @@ flowchart LR
 - **v2 goals** (dashed) are named so the v1 class diagram can leave room for them; they get
   textual specifications when they are scheduled.
 - **Next**: the domain class diagram (issue #2) must provide every concept named here — block,
-  base circuit, parent link, typed spec, unit, difficulty, key component, source, license,
-  validation status, hazard flag.
+  base circuit, parent link, typed spec, unit, difficulty, key component, source, validation
+  status, hazard flag — and, for UC5, developer account and API key.
+- **No per-block license in v1**: the whole catalogue is under CC BY-SA 4.0
+  ([FRAMING.md](../../../FRAMING.md) § Licensing); a per-schematic license comes back only if
+  third-party schematics are imported.
+- **Quota per account, not per key**: rotation (UC5 extension 2a) keeps the quota attached to the
+  GitHub account, so requesting a new key never bypasses it.
