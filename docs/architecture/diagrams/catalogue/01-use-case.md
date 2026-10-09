@@ -61,7 +61,7 @@ flowchart LR
 ### UC1 — Browse base circuits by progression (planned, M2)
 
 - **Primary actor**: Electronics enthusiast.
-- **Precondition**: the catalogue holds at least one base circuit.
+- **Precondition**: none.
 - **Minimal guarantee**: no data is altered.
 - **Success guarantee**: the enthusiast sees the base circuits ordered from simplest to most complex, each with its difficulty level.
 - **Main success scenario**:
@@ -74,7 +74,7 @@ flowchart LR
 ### UC2 — Explore the variants of a base circuit (planned, M2)
 
 - **Primary actor**: Electronics enthusiast.
-- **Precondition**: the chosen block exists.
+- **Precondition**: none.
 - **Minimal guarantee**: no data is altered.
 - **Success guarantee**: the enthusiast sees a block, its direct variants and what each variant changes, and can move up or down the variant tree.
 - **Main success scenario**:
@@ -89,13 +89,14 @@ flowchart LR
 ### UC3 — Inspect a block (planned, M1)
 
 - **Primary actor**: Electronics enthusiast.
-- **Precondition**: the block exists.
+- **Precondition**: none.
 - **Minimal guarantee**: no data is altered.
 - **Success guarantee**: the enthusiast has the information needed to judge whether to build the block.
 - **Main success scenario**:
   1. The enthusiast opens a block.
   2. The system shows the rendered schematic, the typed specs with units, the difficulty, the key components, the cited source and the validation status (tested or theoretical).
 - **Extensions**:
+  - 1a. The block does not exist: the system reports it; the use case ends with the minimal guarantee.
   - 2a. The block involves hazardous voltage: the system shows a safety warning before the schematic.
   - 2b. The schematic rendering is unavailable: the system shows every other piece of information and says the schematic is missing.
 
@@ -131,7 +132,7 @@ flowchart LR
 - **Primary actor**: Catalogue curator.
 - **Precondition**: the curator has write access to the catalogue repository.
 - **Minimal guarantee**: an invalid block never reaches the catalogue; the published catalogue stays unchanged.
-- **Success guarantee**: the block, its rendered schematic and its link to its parent block are available to readers.
+- **Success guarantee**: the block and its rendered schematic are available to readers, and, for a variant, its link to its parent block.
 - **Main success scenario**:
   1. The curator adds a block: a KiCad schematic and its metadata (base circuit, parent block if it is a variant, typed specs, difficulty, key components, source, license, validation status).
   2. The system validates the metadata against the parameters defined for the base circuit.

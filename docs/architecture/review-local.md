@@ -2,7 +2,7 @@
 
 - Date: 2026-10-08
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (use-case diagram, project log)
+- Scope: branch diff main...HEAD (use-case diagram, project log, README status) — re-run after Codex round 1
 - Checks run: docs · security (Gitleaks) · correctness (Mermaid render with mmdc, link check, markdownlint). Design and tests: not applicable, no code.
 - Verdict: ship as-is · Must 0 · Should 0 · Nice 0
 
