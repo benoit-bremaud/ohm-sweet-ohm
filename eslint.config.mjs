@@ -31,7 +31,7 @@ export default tseslint.config(
   },
   {
     // Tool configuration files must use the default export their tool expects.
-    files: ['*.config.mjs', '*.config.ts'],
+    files: ['**/*.config.mjs', '**/*.config.ts'],
     rules: { 'no-restricted-syntax': 'off' },
   },
   prettier,
