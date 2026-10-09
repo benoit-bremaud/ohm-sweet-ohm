@@ -4,7 +4,7 @@ A public API (and its demo web front-end) that helps electronics enthusiasts fin
 a **reusable circuit block** matching a precise need — and explore its variants,
 from the simplest base circuits to more complex ones.
 
-> Status: framing done, milestone M0 (foundations & modelling) not started.
+> Status: milestone M0 (foundations & modelling) in progress — tracked in the [GitHub Project](https://github.com/users/benoit-bremaud/projects/61).
 
 ## Documentation
 
