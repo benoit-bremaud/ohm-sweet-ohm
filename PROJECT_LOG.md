@@ -33,3 +33,5 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `Publication takes a draft with raw specs` — the domain itself reports unknown parameters, wrong types, missing parent and cycles; Zod only checks shapes at the boundary.
     - `Formulas shown in UC3` — gives the class a v1 use and prepares the v2 calculator.
     - `Search in memory (ADR-0001)` — one implementation of the match rules for ~25 blocks; PostgreSQL range types no longer required.
+    - `Base circuits without a root block are not listed` — raised by review (Codex): parameters can be defined before the schematic; the base circuit appears once its root block is published. Forbidding rootless base circuits rejected (blocks progressive import).
+    - `Separate outputCurrent (capacity, covers) and regulatedCurrent (setpoint, within)` — raised by review (Codex): one parameter could not match both "at least 500 mA" and "18–22 mA" requests. Mode-dependent matching rejected (special mechanism for one case).

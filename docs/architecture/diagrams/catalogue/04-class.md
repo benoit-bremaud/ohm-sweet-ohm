@@ -255,7 +255,7 @@ classDiagram
 
 | Class | Owns | Invariants it enforces |
 | --- | --- | --- |
-| `Catalogue` | Base circuits and blocks; listing (UC1), navigation (UC2), search (UC4), publication (UC6) | Unique block slugs; at most one root block per base circuit; a parent exists and belongs to the same base circuit; no cycle in a variant tree; a parameter key has the same quantity and match mode in every base circuit; publication replaces a block only when the resulting catalogue, including the replaced block's existing children, satisfies every invariant above |
+| `Catalogue` | Base circuits and blocks; listing (UC1) of base circuits that have a root block only, navigation (UC2), search (UC4), publication (UC6) | Unique block slugs; at most one root block per base circuit; a parent exists and belongs to the same base circuit; no cycle in a variant tree; a parameter key has the same quantity and match mode in every base circuit; publication replaces a block only when the resulting catalogue, including the replaced block's existing children, satisfies every invariant above |
 | `BaseCircuit` | Its parameter definitions and design formulas; building specs from raw input | Every raw key is defined; no duplicate key; every required key is present; each value is checked by its definition |
 | `ParameterDefinition` | Turning one raw value into a typed spec | Numeric: the raw quantity, when given, equals the definition's quantity; `min ≤ max`; a `COUNT` is a positive integer. Enum: the value is allowed |
 | `Block` | Its specs, its position in the variant tree, its diff against its parent (UC2, UC3) | A variant has a `changeSummary`; a root block has none |
@@ -283,6 +283,8 @@ classDiagram
 - **Keywords** search the block name, description, change summary and key component part numbers.
 - **Search runs in memory** over the whole catalogue (ADR-0001): one implementation of the match
   rules, unit-tested in the domain.
+- **A base circuit without a root block is not listed** (UC1): its parameters can be defined
+  before its schematic is drawn, and it appears once its root block is published.
 - **The root block is the base circuit's own schematic**: the base circuit page (UC1, UC2) uses
   it for the difficulty and as the root of the variant tree. `BaseCircuit` holds definitions,
   `Block` holds values.

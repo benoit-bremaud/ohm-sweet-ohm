@@ -98,7 +98,8 @@ overdrive factor `k` (typically 3–10).
 | `outputMode` | Output mode | enum: `fixed`, `adjustable`, `constant-current` | — | yes |
 | `inputVoltage` | Input voltage | Voltage | covers | yes |
 | `outputVoltage` | Output voltage | Voltage | within | no — absent for `constant-current` |
-| `outputCurrent` | Output current | Current | covers | yes |
+| `outputCurrent` | Maximum output current (capacity) | Current | covers | no — absent for `constant-current` |
+| `regulatedCurrent` | Regulated current (setpoint) | Current | within | no — only for `constant-current` |
 | `dropoutVoltage` | Dropout voltage | Voltage | within | no |
 
 Design formulas: LM317 adjustable `Vout = 1.25 · (1 + R2/R1)`; constant current
@@ -106,6 +107,10 @@ Design formulas: LM317 adjustable `Vout = 1.25 · (1 + R2/R1)`; constant current
 
 ## Open points
 
+- `outputCurrent` and `regulatedCurrent` are two parameters because they mean different things:
+  the capacity a voltage regulator can supply (`covers`: "at least 500 mA") and the current a
+  constant-current source imposes (`within`: "between 18 and 22 mA"). One parameter could not
+  match both kinds of request correctly.
 - `outputVoltage` is optional rather than "required unless constant-current": a conditional
   requirement would need a dedicated mechanism for a single case in v1 (YAGNI).
 - Hazardous voltage is declared per block by the curator; none of the five v1 base circuits is
