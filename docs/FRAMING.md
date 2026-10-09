@@ -1,6 +1,6 @@
 # Project framing — Ohm Sweet Ohm
 
-_Electronic schematics search API · Status: draft · 2026-10-08_
+Electronic schematics search API · Status: draft · 2026-10-08
 
 ## Vision
 
@@ -16,7 +16,7 @@ architecture) takes precedence over catalogue volume.
 ## Decisions
 
 | Topic | Decision | Deferred / later |
-|---|---|---|
+| --- | --- | --- |
 | Data source | Curated catalogue (open formats: KiCad, manufacturer app notes) | Aggregation of explicitly-licensed sources; community contributions via PR |
 | Unit of content | Reusable functional block (regulator, preamp, H-bridge…) | Full projects composed of blocks |
 | Search | v1: structured filters (category, numeric ranges, components, keywords) | v2: natural language → structured filters (LLM), semantic search (pgvector) |

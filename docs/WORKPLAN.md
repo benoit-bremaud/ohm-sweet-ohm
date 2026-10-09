@@ -1,6 +1,6 @@
 # Work plan — Ohm Sweet Ohm v1
 
-_Status: validated draft · 2026-10-08 · cadence: a few hours/week, 2-week milestones, v1 in ~12 weeks_
+Status: validated draft · 2026-10-08 · cadence: a few hours/week, 2-week milestones, v1 in ~12 weeks
 
 See [FRAMING.md](FRAMING.md) for the decisions behind this plan.
 
@@ -18,7 +18,7 @@ See [FRAMING.md](FRAMING.md) for the decisions behind this plan.
 
 Single private repo `ohm-sweet-ohm`, pnpm workspace (no Turborepo/Nx in v1):
 
-```
+```text
 apps/api          Fastify + Zod, OpenAPI
 apps/web          Next.js (server rendering)
 apps/importer     CLI: validate meta.yaml, kicad-cli → SVG, upsert into PostgreSQL
@@ -94,7 +94,9 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 
 - Content: **5. linear regulator**.
 - Production environment; catalogue import runs in CI on merge to `main`.
-- Contribution guide for blocks; public release checklist, then repo goes public.
+- Contribution guide for blocks; public release checklist, then repo goes public; then enable
+  branch protection on `main` (unavailable while private on the free plan) and check that
+  CodeQL and dependency review run.
 - Tag `v1.0.0`, `CHANGELOG.md`, LinkedIn post.
 
 **Done when**: public URL live with the 5 base circuits, repo public, v1.0.0 tagged.
@@ -110,7 +112,7 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 ## Risks
 
 | Risk | Mitigation |
-|---|---|
+| --- | --- |
 | Content entry slower than expected | Cut variants before cutting base circuits |
 | Typed parameters wrong for later circuits | All 5 circuits modelled in M0 |
 | `kicad-cli` friction in Docker/CI | Spike in M0; fallback: commit pre-rendered SVGs |

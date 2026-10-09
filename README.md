@@ -12,6 +12,15 @@ from the simplest base circuits to more complex ones.
 - [Work plan](docs/WORKPLAN.md) — v1 milestones (vertical slices, 2-week cadence).
 - [Project log](PROJECT_LOG.md) — chronological operational logbook.
 
+## Development
+
+Requires Node.js 22 (see `.nvmrc`) and pnpm 10.
+
+```bash
+pnpm install
+pnpm check   # format, lint (TypeScript + Markdown), typecheck, tests
+```
+
 ## Licenses
 
 - Code: [MIT](LICENSE).

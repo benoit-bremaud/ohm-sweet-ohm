@@ -1,0 +1,9 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+auditConfig:
+  ignoreGhsas:
+    # braces DoS via deeply nested patterns: no patched version exists; only reached through
+    # markdownlint-cli2 (dev tool) on the repository's own glob patterns, never untrusted input.
+    - GHSA-vfj7-8cjw-p6xm
