@@ -109,15 +109,17 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 - Browse by key component, base circuits 6 (NE555) and 7 (op-amp).
 - Source file download, BOM, educational explanations.
 
-### Electronics tooling backlog
+## Electronics tooling backlog
 
 Tools that enrich the API and the web front-end. They stay at the edges: in CI for anything that
 produces files, in the browser for anything interactive. The domain never depends on them. Each
-entry becomes a decision (and, where the model changes, a UML update) when it is scheduled.
+entry becomes a decision (and, where the model changes, a UML update) when it is scheduled. The
+**Target** column defines when an entry may enter the plan; a "v1" target never displaces a
+milestone deliverable.
 
 | Priority | Tool | Use in Ohm Sweet Ohm | Where it runs | License | Target |
 | --- | --- | --- | --- | --- | --- |
-| 1 | KiCanvas | Interactive schematic viewer on the block page (zoom, pan, hover a component) instead of a static SVG | Browser | MIT | v1, with the front-end (M4) if time allows, else first v1.x item |
+| 1 | KiCanvas | Interactive schematic viewer on the block page (zoom, pan, hover a component) instead of a static SVG | Browser | MIT | v1, on the block page (built from M1), only in a milestone with slack; else first v1.x item |
 | 2 | KiCad ERC (`kicad-cli sch erc --exit-code-violations`) | Reject a block whose schematic fails the electrical rules check at publication (new UC6 extension); without the flag the command exits 0 even when it finds violations | CI / importer | GPL-3.0 (KiCad, used as a tool) | v1.x |
 | 3 | KiCad BOM export | Extract components from the schematic and cross-check the declared key components | CI / importer | GPL-3.0 (tool) | v1.x |
 | 4 | KiDiff | Visual diff between a variant and its parent, shown in the variant tree (UC2) | CI | GPL-2.0 (tool only, output files) | v1.x |

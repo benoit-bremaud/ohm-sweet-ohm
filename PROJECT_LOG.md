@@ -52,3 +52,4 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `ngspice, not PSpice` — PSpice is commercial and has no headless use; ngspice ships with KiCad and runs in CI and, compiled to WebAssembly, in the browser.
     - `GPL/AGPL tools only as CI tools or links` — KiDiff, KiBot and CircuitJS never get bundled into the MIT-licensed code.
     - `Rejected: netlistsvg, SKiDL` — unmaintained since 2022, and not needed while the catalogue is curated by hand.
+  - **Review round 2** (Copilot ×1): the tooling backlog was nested under "After v1 (backlog, not scheduled)" while KiCanvas targeted v1, and its target wrongly named M4 (the public API milestone) as the front-end one. The tooling backlog is now a top-level section whose Target column defines scheduling, and KiCanvas targets the block page built from M1, only in a milestone with slack.
