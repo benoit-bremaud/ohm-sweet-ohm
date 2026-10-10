@@ -107,8 +107,16 @@ export function readBlockMeta(yamlText: string): BlockMetaResult {
     };
   }
 
-  const content: unknown = document.toJS();
-  const specTexts = readSpecTexts(yamlText);
+  let content: unknown;
+  let specTexts: unknown;
+  try {
+    content = document.toJS();
+    specTexts = readSpecTexts(yamlText);
+  } catch (error) {
+    // Alias expansion beyond the parser's limit ("billion laughs") throws while converting.
+    const reason = error instanceof Error ? error.message : String(error);
+    return { ok: false, errors: [{ field: '', message: `invalid YAML: ${reason}` }] };
+  }
   const input =
     typeof content === 'object' && content !== null && specTexts !== undefined
       ? { ...content, specs: specTexts }

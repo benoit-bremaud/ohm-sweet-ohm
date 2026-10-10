@@ -54,19 +54,25 @@ Unknown fields are rejected, so a typo never goes unnoticed.
 | `<number> <unit>` | A single value | `ledCurrent: 13.6 mA` |
 | `<number> <unit> .. <number> <unit>` | A closed range; both ends carry a unit of the same quantity | `inputVoltage: 7 V .. 15 V` |
 | `<integer>` | A count, no unit | `ledCount: 1` |
-| `<word>` | An enumeration value: a lowercase kebab-case word | `ledColor: red`, `filterType: low-pass` |
+| `<word>` | An enumeration value: lowercase letters and digits in segments joined by single hyphens | `ledColor: red`, `filterType: low-pass` |
 
 - **Units**: `V`, `A`, `Ω` (also `ohm`), `Hz`, `W`.
 - **Prefixes**: `p`, `n`, `µ` (also `u`), `m`, `k`, `M`, `G`. A space between number and unit is
   optional.
 - **Numbers**: decimal point `.` with digits on both sides, optional sign; no exponent, comma or
   hexadecimal notation.
+- **Words**: `red-`, `red--blue` or `Red` are rejected with a message showing the expected form.
 - **Read as written**: spec values are checked as the exact text in the file, so YAML never turns
   `1e3` or `1.0` into a number first. Quoting a value is never needed.
-- Values are converted to SI and rounded to 12 significant digits, so `4.7 kΩ` is stored as
-  `4700` ohms and `13.6 mA` as `0.0136` A.
+- Values are converted to SI by shifting the decimal point (`13.6 mA` reads as `13.6e-3`), so the
+  stored number is the closest one to what was written, with no rounding step: `4.7 kΩ` is
+  stored as `4700` ohms and `13.6 mA` as `0.0136` A.
+- At most **15 significant digits** per number, so two different written values always stay
+  different and correctly ordered.
+- A value too large, too small to stay exact, or written as non-zero but converting to zero is
+  rejected as out of range. Overflow and underflow never pass silently.
 - A single value is read as a range whose ends are equal: `5 V` and `5 V .. 5 V` mean the same.
-- A range must satisfy `min ≤ max`; an unknown unit, a missing unit on one end, or units of
+- A range must satisfy `min ≤ max`, checked on the converted values; an unknown unit, a missing unit on one end, or units of
   different quantities are errors.
 - Whether a parameter expects a number, a count or an enumeration value is a domain rule, checked
   against the base circuit's definitions. For example a bare `ohm` reads as a word here, and the

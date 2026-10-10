@@ -51,3 +51,7 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `Every error reported` — spec checks run inside the schema, one issue per key, so no invalid entry hides another.
     - `Boundary only` — the package checks shape and notation; known keys, required parameters, parent and change summary stay domain rules (04-class.md).
   - **Noted for later**: the KiCad `Device:LED` symbol has no SPICE model mapping (SPICE netlist export shows `D1` without nodes); to handle with the ngspice backlog item.
+  - **Review round 1** (Codex ×1, Copilot ×3), each studied further before deciding, on the owner's request:
+    - `Decimal shift instead of multiply-then-round` — measuring float behaviour showed the 12-digit rounding was the common cause of two comments (a reversed range like `1.000000000001 V .. 1 V` accepted; a tiny value silently becoming 0) and also silently altered valid 13–14 digit values. Values now convert in one step (`13.6e-3`), with at most 15 significant digits and out-of-range rejection.
+    - `Word-specific error message` — tightening the enum word rule alone would have reported `red-` as an invalid number; any text starting like a word now gets "must be a lowercase kebab-case word". Checked that all 23 enum values of the parameter spec still pass.
+    - `Alias bomb returns an error` — YAML alias expansion beyond the parser limit is caught and reported as invalid YAML, since the catalogue will later accept contributions.

@@ -32,16 +32,17 @@ const UNITS: Readonly<Record<string, Quantity>> = {
   W: 'POWER',
 };
 
+/** Decimal exponent of each SI prefix. */
 const PREFIXES: Readonly<Record<string, number>> = {
-  p: 1e-12,
-  n: 1e-9,
-  '\u00b5': 1e-6, // MICRO SIGN
-  '\u03bc': 1e-6, // GREEK SMALL LETTER MU, a look-alike of the micro sign
-  u: 1e-6,
-  m: 1e-3,
-  k: 1e3,
-  M: 1e6,
-  G: 1e9,
+  p: -12,
+  n: -9,
+  '\u00b5': -6, // MICRO SIGN
+  '\u03bc': -6, // GREEK SMALL LETTER MU, a look-alike of the micro sign
+  u: -6,
+  m: -3,
+  k: 3,
+  M: 6,
+  G: 9,
 };
 
 const NUMBER = String.raw`[+-]?\d+(?:\.\d+)?`;
@@ -51,11 +52,22 @@ const NUMBER = String.raw`[+-]?\d+(?:\.\d+)?`;
  */
 const MEASURE = new RegExp(String.raw`^(${NUMBER})(?:\s*([^\d.,eExX\s].*))?$`);
 const INTEGER = /^[+-]?\d+$/;
-const ENUM_WORD = /^[a-z][a-z0-9-]*$/;
+/** Lowercase kebab-case: segments of letters and digits joined by single hyphens. */
+const ENUM_WORD = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
+/**
+ * Anything starting with a letter, or a hyphen then a letter, is meant as a word, so it gets a
+ * word-specific error rather than a number one.
+ */
+const WORD_ATTEMPT = /^-?[A-Za-z]/;
 const RANGE_SEPARATOR = '..';
 
-/** Significant digits kept after SI conversion, so `4.7 kΩ` becomes exactly 4700. */
-const SIGNIFICANT_DIGITS = 12;
+/**
+ * Up to 15 significant digits, two different written values always convert to two different,
+ * correctly ordered numbers.
+ */
+const MAX_SIGNIFICANT_DIGITS = 15;
+/** Below this magnitude numbers lose precision (subnormal) or vanish to zero. */
+const SMALLEST_NORMAL = 2.2250738585072014e-308;
 
 interface Measure {
   readonly value: number;
@@ -66,22 +78,33 @@ type MeasureResult =
 
 function parseUnit(
   symbol: string,
-): { readonly factor: number; readonly quantity: Quantity } | undefined {
+): { readonly exponent: number; readonly quantity: Quantity } | undefined {
   const bare = UNITS[symbol];
   if (bare !== undefined) {
-    return { factor: 1, quantity: bare };
+    return { exponent: 0, quantity: bare };
   }
   const prefix = PREFIXES[symbol.charAt(0)];
   const unit = UNITS[symbol.slice(1)];
   if (prefix === undefined || unit === undefined) {
     return undefined;
   }
-  return { factor: prefix, quantity: unit };
+  return { exponent: prefix, quantity: unit };
 }
 
-/** Converts to SI, keeps 12 significant digits and turns -0 into 0. */
-function toSi(number: string, factor: number): number {
-  return Number((Number(number) * factor).toPrecision(SIGNIFICANT_DIGITS)) + 0;
+function significantDigits(number: string): number {
+  return number.replace(/[+\-.]/g, '').replace(/^0+/, '').length;
+}
+
+/**
+ * Converts to SI by shifting the decimal point (`13.6` with prefix `m` reads `13.6e-3`), so the
+ * result is the closest number to what was written, with no rounding step. Turns -0 into 0.
+ * Returns undefined when the result is not exactly representable.
+ */
+function toSi(number: string, exponent: number): number | undefined {
+  const value = Number(`${number}e${String(exponent)}`) + 0;
+  const vanished = value === 0 && /[1-9]/.test(number);
+  const imprecise = value !== 0 && Math.abs(value) < SMALLEST_NORMAL;
+  return Number.isFinite(value) && !vanished && !imprecise ? value : undefined;
 }
 
 function parseMeasure(text: string): MeasureResult {
@@ -97,8 +120,14 @@ function parseMeasure(text: string): MeasureResult {
   if (unit === undefined) {
     return { ok: false, error: `unknown unit "${symbol}"` };
   }
-  const value = toSi(number, unit.factor);
-  if (!Number.isFinite(value)) {
+  if (significantDigits(number) > MAX_SIGNIFICANT_DIGITS) {
+    return {
+      ok: false,
+      error: `"${text}" has more than ${String(MAX_SIGNIFICANT_DIGITS)} significant digits`,
+    };
+  }
+  const value = toSi(number, unit.exponent);
+  if (value === undefined) {
     return { ok: false, error: `"${text}" is out of range` };
   }
   return { ok: true, measure: { value, quantity: unit.quantity } };
@@ -156,8 +185,13 @@ export function parseSpecValue(written: string): SpecValueResult {
       ? { ok: true, value: { kind: 'count', value: count } }
       : { ok: false, error: `"${text}" is out of range` };
   }
-  if (ENUM_WORD.test(text)) {
-    return { ok: true, value: { kind: 'text', text } };
+  if (WORD_ATTEMPT.test(text)) {
+    return ENUM_WORD.test(text)
+      ? { ok: true, value: { kind: 'text', text } }
+      : {
+          ok: false,
+          error: `"${text}" must be a lowercase kebab-case word, e.g. low-pass`,
+        };
   }
   const single = parseMeasure(text);
   return single.ok

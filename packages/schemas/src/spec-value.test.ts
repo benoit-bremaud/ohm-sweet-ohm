@@ -39,6 +39,20 @@ describe('parseSpecValue', () => {
       });
     });
 
+    it('keeps a 14-digit value exactly instead of rounding it', () => {
+      expect(parseSpecValue('1.0000000000001 V')).toEqual({
+        ok: true,
+        value: { kind: 'measure', min: 1.0000000000001, max: 1.0000000000001, quantity: 'VOLTAGE' },
+      });
+    });
+
+    it('reads a written zero as zero', () => {
+      expect(parseSpecValue('0.000 V')).toEqual({
+        ok: true,
+        value: { kind: 'measure', min: 0, max: 0, quantity: 'VOLTAGE' },
+      });
+    });
+
     it('turns a negative zero into zero', () => {
       expect(parseSpecValue('-0 V')).toEqual({
         ok: true,
@@ -57,8 +71,10 @@ describe('parseSpecValue', () => {
       ['5. V', '"5. V" is not a valid number with a unit'],
       ['.5 V', '".5 V" is not a valid number with a unit'],
       ['0x10', '"0x10" is not a valid number with a unit'],
-      ['Red LED', '"Red LED" is not a valid number with a unit'],
-      [`${'9'.repeat(400)} GV`, 'is out of range'],
+      [`${'9'.repeat(400)} GV`, 'has more than 15 significant digits'],
+      ['1.000000000000001 V', 'has more than 15 significant digits'],
+      [`0.${'0'.repeat(400)}1 pA`, 'is out of range'],
+      [`0.${'0'.repeat(309)}1 V`, 'is out of range'],
     ])('rejects "%s"', (written, message) => {
       const result = parseSpecValue(written);
 
@@ -82,6 +98,7 @@ describe('parseSpecValue', () => {
 
     it.each([
       ['15 V .. 7 V', 'range start is greater than its end'],
+      ['1.000000000001 V .. 1 V', 'range start is greater than its end'],
       ['7 V .. 1 A', 'range ends mix VOLTAGE and CURRENT'],
       ['7 .. 15 V', 'range start: "7" has no unit'],
       ['7 V .. 15', 'range end: "15" has no unit'],
@@ -116,6 +133,16 @@ describe('parseSpecValue', () => {
     it.each(['red', 'low-pass', 'n-mosfet'])('reads "%s" as an enum word', (word) => {
       expect(parseSpecValue(word)).toEqual({ ok: true, value: { kind: 'text', text: word } });
     });
+
+    it.each(['red-', 'red--blue', '-red', 'Red', 'Red LED', 'low_pass'])(
+      'rejects the malformed word "%s" with a word-specific message',
+      (written) => {
+        expect(parseSpecValue(written)).toEqual({
+          ok: false,
+          error: `"${written}" must be a lowercase kebab-case word, e.g. low-pass`,
+        });
+      },
+    );
 
     it('reads a bare unit name as a word, leaving the type check to the domain', () => {
       expect(parseSpecValue('ohm')).toEqual({ ok: true, value: { kind: 'text', text: 'ohm' } });

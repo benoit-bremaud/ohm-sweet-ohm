@@ -166,6 +166,20 @@ describe('readBlockMeta', () => {
     ]);
   });
 
+  it('rejects an alias bomb as invalid YAML instead of throwing', () => {
+    const levels = Array.from({ length: 7 }, (_, index) => {
+      const level = index + 1;
+      return `a${String(level)}: &a${String(level)} [${Array(10)
+        .fill(`*a${String(index)}`)
+        .join(', ')}]`;
+    });
+    const yaml = ['a0: &a0 [x, x, x, x, x, x, x, x, x, x]', ...levels].join('\n');
+
+    expect(errorsOf(yaml)).toEqual([
+      { field: '', message: expect.stringMatching(/^invalid YAML: .*alias/) as unknown },
+    ]);
+  });
+
   it('rejects malformed YAML', () => {
     expect(errorsOf('slug: [unclosed')).toEqual([
       { field: '', message: expect.stringMatching(/^invalid YAML: /) as unknown },
