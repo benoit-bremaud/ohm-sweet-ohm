@@ -1,10 +1,10 @@
-# Local review — ohm-sweet-ohm (chore/3-tooling-and-ci)
+# Local review — ohm-sweet-ohm (docs/workplan-tooling-backlog)
 
-- Date: 2026-10-09
+- Date: 2026-10-10
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (workspace, TypeScript, ESLint, Prettier, Vitest, markdownlint, CI and security workflows, Markdown fixes)
-- Checks run: design · docs · security (Gitleaks, pnpm audit, workflow permissions and pinning) · correctness (`pnpm check`, actionlint). Tests: no production code yet.
-- Verdict: ship as-is · Must 0 · Should 0 · Nice 1
+- Scope: branch diff main...HEAD (work plan tooling backlog, project log)
+- Checks run: docs · security (Gitleaks, license review of each listed tool) · correctness (`pnpm check`, tool existence and maintenance checked on npm and GitHub). Design and tests: not applicable, no code.
+- Verdict: ship as-is · Must 0 · Should 0 · Nice 0
 
 ## 🔴 Must Have
 
@@ -16,15 +16,13 @@ _None._
 
 ## 🔵 Nice to Have
 
-- `vitest.config.ts` `[tests]` · `passWithNoTests` is on because no package exists yet · Remove it once the first package with tests lands (issue #5).
+_None._
 
 ## ⚪ Disagree / Intentional
 
-- `.github/workflows/codeql.yml`, `.github/workflows/dependency-review.yml` `[security]` · Jobs skipped while the repository is private · The free plan offers code scanning and dependency review on public repositories only; `pnpm audit --audit-level high` in CI stands in until then, and both jobs start automatically once public.
-- `pnpm-workspace.yaml` `[security]` · GHSA-vfj7-8cjw-p6xm ignored · No patched version exists; reached only through markdownlint-cli2 on the repository's own globs.
-- Branch protection on `main` `[security]` · Not configured · Unavailable on a private repository on the free plan; added to the public release checklist.
-- `typescript` 6.0.3 instead of 7.x `[design]` · typescript-eslint 8.71 supports TypeScript below 6.1 only; typed linting matters more than the native compiler for now.
+- `docs/WORKPLAN.md` `[docs]` · The former "SPICE simulation service" backlog line is removed · It is now row 5 of the tooling table (ngspice), with its constraints.
+- `docs/WORKPLAN.md` `[security]` · GPL/AGPL tools listed · Used only as CI tools producing files, or linked (CircuitJS); never bundled into the MIT-licensed code.
 
 ## Per-dimension summary
 
-- Design: flat tooling, no package before it is needed · Docs: README development section, Markdown lint fixes · Tests: N/A · Security: actions pinned by SHA, read-only permissions, Gitleaks active, audit gate · Correctness: `pnpm check` and actionlint pass
+- Design: tools kept at the edges, domain unchanged · Docs: backlog prioritized with target and license · Tests: N/A · Security: licenses reviewed, Gitleaks clean · Correctness: `pnpm check` passes

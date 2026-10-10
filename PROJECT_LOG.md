@@ -36,10 +36,19 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `Base circuits without a root block are not listed` — raised by review (Codex): parameters can be defined before the schematic; the base circuit appears once its root block is published. Forbidding rootless base circuits rejected (blocks progressive import).
     - `Separate outputCurrent (capacity, covers) and regulatedCurrent (setpoint, within)` — raised by review (Codex): one parameter could not match both "at least 500 mA" and "18–22 mA" requests. Mode-dependent matching rejected (special mechanism for one case).
     - `Shared keys have the same definition kind` — raised by review (Copilot): enum keys reused across base circuits must keep the same allowed values, so search validation never depends on which definition is found first. Enum criterion values are validated too, so a typo is reported instead of returning no match.
-- **Tooling and CI** (branch `chore/3-tooling-and-ci`, issues #3 and #4) — pnpm workspace, strict TypeScript 6.0, ESLint (strict type-checked, named exports only), Prettier, Vitest, markdownlint, CI quality job and Gitleaks. Review rounds: Codex ×2 (config glob for nested packages, Node engines), Copilot ×1 (root typecheck), all addressed; CI fix: Gitleaks needs `pull-requests: read`.
+- **PR #9 merged** (`5957226`) — chore: set up pnpm workspace, tooling and CI baseline. Branch `chore/3-tooling-and-ci`, closes #3 and #4; CI green on `main` after merge. Content: pnpm workspace, strict TypeScript 6.0, ESLint (strict type-checked, named exports only), Prettier, Vitest, markdownlint, CI quality job and Gitleaks. Review rounds: Codex ×2 (config glob for nested packages, Node engines), Copilot ×1 (root typecheck), all addressed; CI fix: Gitleaks needs `pull-requests: read`.
   - **Decisions**:
     - `TypeScript 6.0, not 7` — typescript-eslint 8.71 supports TypeScript below 6.1; typed linting matters more than the native compiler for now.
     - `CodeQL and dependency review gated on a public repository` — the free plan offers them, and branch protection, only on public repositories; `pnpm audit --audit-level high` stands in, branch protection added to M5.
     - `GHSA-vfj7-8cjw-p6xm ignored` — no patched version; reached only through markdownlint-cli2 on the repository's own globs.
     - `engines.node = ^22.13.0 || ^24.0.0 || >=26.0.0` — exact intersection of ESLint and Vitest support.
     - `Typecheck the root before packages` — `pnpm -r` skips the root, so the step passed without running tsc.
+
+## 2026-10-10
+
+- **Electronics tooling backlog** (branch `docs/workplan-tooling-backlog`) — `docs/WORKPLAN.md` gains a prioritized table of tools that enrich the API and the front-end: KiCanvas, KiCad ERC and BOM export, KiDiff, ngspice, EEcircuit-engine, PCB Calculator formulas, KiBot, CircuitJS.
+  - **Decisions**:
+    - `Tools stay at the edges` — CI for file-producing tools, browser for interactive ones; the domain never depends on them.
+    - `ngspice, not PSpice` — PSpice is commercial and has no headless use; ngspice ships with KiCad and runs in CI and, compiled to WebAssembly, in the browser.
+    - `GPL/AGPL tools only as CI tools or links` — KiDiff, KiBot and CircuitJS never get bundled into the MIT-licensed code.
+    - `Rejected: netlistsvg, SKiDL` — unmaintained since 2022, and not needed while the catalogue is curated by hand.

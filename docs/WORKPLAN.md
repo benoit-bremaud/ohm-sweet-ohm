@@ -107,8 +107,37 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 - Natural language → structured filters (LLM), semantic search (pgvector).
 - Side-by-side comparator, guided learning path, value calculator (E-series).
 - Browse by key component, base circuits 6 (NE555) and 7 (op-amp).
-- SPICE simulation service validating announced specs.
 - Source file download, BOM, educational explanations.
+
+### Electronics tooling backlog
+
+Tools that enrich the API and the web front-end. They stay at the edges: in CI for anything that
+produces files, in the browser for anything interactive. The domain never depends on them. Each
+entry becomes a decision (and, where the model changes, a UML update) when it is scheduled.
+
+| Priority | Tool | Use in Ohm Sweet Ohm | Where it runs | License | Target |
+| --- | --- | --- | --- | --- | --- |
+| 1 | KiCanvas | Interactive schematic viewer on the block page (zoom, pan, hover a component) instead of a static SVG | Browser | MIT | v1, with the front-end (M4) if time allows, else first v1.x item |
+| 2 | KiCad ERC (`kicad-cli sch erc`) | Reject a block whose schematic fails the electrical rules check at publication (new UC6 extension) | CI / importer | GPL-3.0 (KiCad, used as a tool) | v1.x |
+| 3 | KiCad BOM export | Extract components from the schematic and cross-check the declared key components | CI / importer | GPL-3.0 (tool) | v1.x |
+| 4 | KiDiff | Visual diff between a variant and its parent, shown in the variant tree (UC2) | CI | GPL-2.0 (tool only, output files) | v1.x |
+| 5 | ngspice (KiCad SPICE netlist export) | Simulate blocks at publication, check announced specs, add a `SIMULATED` validation status, publish result curves | CI | BSD-3-Clause / GPL parts (tool) | v2 |
+| 6 | EEcircuit-engine | ngspice in the browser: interactive simulation where the enthusiast changes a value and sees the curve update | Browser | MIT | v2 |
+| 7 | KiCad PCB Calculator formulas | Re-implemented, not called (no CLI): E-series rounding, LM317 resistor pair, resistor colour code — feeds the value calculator (UC10) | Domain | — (formulas) | v2 |
+| 8 | KiBot | Replace the importer's `kicad-cli` orchestration only if the pipeline grows beyond a few commands | CI | AGPL-3.0 (tool only) | When needed |
+| 9 | CircuitJS (Falstad) | "See it run" link from each block to an animated simulation | Link to falstad.com | GPL-2.0 (linked, not embedded) | When the catalogue grows |
+
+Constraints:
+
+- **SPICE models**: base circuits 1–4 simulate with ngspice primitives; vendor models (e.g. LM317)
+  are usually not redistributable — publish results and a model reference only.
+- **Simulated is not tested**: `SIMULATED` stays distinct from `TESTED` (measured on a breadboard).
+- **Simulation runs at publication**, never per request; the API serves precomputed results.
+- **GPL/AGPL tools** run in CI and are never bundled into the MIT-licensed code; CircuitJS is
+  linked, not embedded.
+- **Rejected**: netlistsvg (unmaintained since 2022, KiCad already renders); SKiDL (circuits as
+  code, not needed while the catalogue is curated by hand); PSpice (commercial, no headless use —
+  ngspice covers the need).
 
 ## Risks
 
