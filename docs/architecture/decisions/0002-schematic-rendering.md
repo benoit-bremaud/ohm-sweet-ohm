@@ -36,7 +36,8 @@ drawing.
 Chosen option: **1**, because cropped SVGs are then correct for every consumer — the web
 front-end, third-party API clients, thumbnails — and are computed once, never per request.
 
-- `docker/renderer/Dockerfile`: `kicad/kicad:9.0.9` pinned by digest, plus Inkscape.
+- `docker/renderer/Dockerfile`: `kicad/kicad:9.0.9` pinned by digest, plus Inkscape pinned to
+  `1.2.2-2+b1`, so a new version is always a deliberate change.
 - `scripts/render-catalogue.sh`: renders every `schematic.kicad_sch` to
   `build/catalogue/<base-circuit>/<block>/schematic.svg`, without the drawing sheet and the
   background, cropped with a 2 mm margin. Paths are resolved from inside the catalogue, so any
@@ -61,7 +62,14 @@ front-end, third-party API clients, thumbnails — and are computed once, never 
 - **ERC gating** (tooling backlog): the base image needs `--severity-error` (library-table
   warnings are environmental), or the `-full` image (1.1 GB compressed) with the libraries.
 - **Importer (M1)**: if the importer calls `kicad-cli` directly instead of this script, it must
-  keep the single-sheet check (one SVG emitted per block).
+  keep the single-sheet check (one SVG emitted per block) and the crop check below.
+- **Inkscape exit status is unreliable**: measured in the renderer image, it exits 0 on a missing
+  input, an unwritable output and a malformed SVG (for which it even writes a 218-byte empty
+  SVG). The script therefore checks the result — a non-empty SVG with a `viewBox`, and no message
+  other than the harmless `GtkRecentManager` warning — and reports the block with Inkscape's
+  message. `kicad-cli` is reliable: it exits 3 on a broken or missing schematic.
+- **Registry**: publishing the renderer image and consuming it by digest becomes worthwhile when
+  the M1 importer renders on every publication.
 - **SVG safety**: today's SVGs come from curated schematics and contain no script. Once the
   catalogue accepts contributions, sanitize SVGs before serving them inline.
 - **KiCanvas** (tooling backlog) may render `.kicad_sch` directly in the browser; the cropped

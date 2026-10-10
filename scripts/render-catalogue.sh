@@ -13,6 +13,7 @@ trap 'rm -rf "$work"' EXIT
 
 count=0
 multi_sheet=()
+crop_failed=()
 while IFS= read -r -d '' found; do
   # Paths are found from inside the catalogue, so the block's relative path never depends on how
   # CATALOGUE_DIR was written (trailing slash, absolute path, symbolic link).
@@ -31,10 +32,20 @@ while IFS= read -r -d '' found; do
     continue
   fi
 
-  # Crop to the drawing plus a small margin.
+  # Crop to the drawing plus a small margin. Inkscape exits 0 even when it fails (missing input,
+  # unwritable output, malformed SVG), so the result is checked instead of the exit status.
+  cropped="$output/$relative/schematic.svg"
+  crop_log="$work/$relative/inkscape.log"
   inkscape "$work/$relative/schematic.svg" --export-area-drawing \
-    --export-margin="$margin_mm" --export-plain-svg \
-    -o "$output/$relative/schematic.svg" 2>/dev/null
+    --export-margin="$margin_mm" --export-plain-svg -o "$cropped" 2>"$crop_log" || true
+  # The GtkRecentManager warning is printed on every headless run and is harmless.
+  unexpected="$(grep -v -e 'GtkRecentManager' -e '^[[:space:]]*$' "$crop_log" || true)"
+  if [ ! -s "$cropped" ] || ! grep -q 'viewBox=' "$cropped" || [ -n "$unexpected" ]; then
+    echo "crop failed for $relative:" >&2
+    echo "${unexpected:-no cropped SVG with a viewBox was produced}" >&2
+    crop_failed+=("$relative")
+    continue
+  fi
 
   echo "rendered $relative"
   count=$((count + 1))
@@ -43,6 +54,11 @@ done < <(cd "$catalogue" && find . -name schematic.kicad_sch -print0 | sort -z)
 if [ "${#multi_sheet[@]}" -gt 0 ]; then
   echo "multi-sheet schematics are not supported, a block must fit on one sheet:" >&2
   printf '  %s\n' "${multi_sheet[@]}" >&2
+  exit 1
+fi
+
+if [ "${#crop_failed[@]}" -gt 0 ]; then
+  echo "cropping failed for ${#crop_failed[@]} block(s): ${crop_failed[*]}" >&2
   exit 1
 fi
 
