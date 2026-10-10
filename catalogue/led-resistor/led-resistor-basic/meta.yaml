@@ -1,0 +1,20 @@
+# LED with current-limiting resistor — root block of the led-resistor base circuit.
+# Format: docs/architecture/specs/catalogue-format.md
+slug: led-resistor-basic
+name: LED with current-limiting resistor
+description: >-
+  A single red LED driven from a 5 V supply through a 220 Ω resistor, which limits the current to
+  about 14 mA. The simplest circuit that lights an LED safely.
+baseCircuit: led-resistor
+difficulty: beginner
+validationStatus: theoretical
+hazardous: false
+specs:
+  supplyVoltage: 5 V
+  ledCurrent: 13.6 mA
+  ledColor: red
+  ledCount: 1
+  resistorPower: 41 mW
+keyComponents: []
+source:
+  title: Ohm Sweet Ohm original design

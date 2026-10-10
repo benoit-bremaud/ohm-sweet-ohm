@@ -24,4 +24,4 @@ pnpm check   # format, lint (TypeScript + Markdown), typecheck, tests
 ## Licenses
 
 - Code: [MIT](LICENSE).
-- Schematics catalogue (`catalogue/`, to come): CC BY-SA 4.0.
+- Schematics catalogue: [CC BY-SA 4.0](catalogue/LICENSE).

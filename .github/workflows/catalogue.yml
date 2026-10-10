@@ -1,0 +1,50 @@
+name: Catalogue
+
+on:
+  pull_request:
+    paths:
+      - catalogue/**
+      - docker/renderer/**
+      - scripts/render-catalogue.sh
+      - .github/workflows/catalogue.yml
+  push:
+    branches: [main]
+    paths:
+      - catalogue/**
+      - docker/renderer/**
+      - scripts/render-catalogue.sh
+      - .github/workflows/catalogue.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalogue-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render schematics
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build renderer image
+        run: docker build -t ohm-sweet-ohm-renderer docker/renderer
+      - name: Render every schematic to a cropped SVG
+        run: |
+          mkdir -p build
+          docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$PWD:/repo" -w /repo --entrypoint scripts/render-catalogue.sh \
+            ohm-sweet-ohm-renderer
+      - name: Check one SVG per schematic
+        run: |
+          expected=$(find catalogue -name schematic.kicad_sch | wc -l)
+          actual=$(find build/catalogue -name schematic.svg -size +1k | wc -l)
+          echo "schematics: $expected, rendered: $actual"
+          test "$expected" -eq "$actual"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: catalogue-svg
+          path: build/catalogue
+          retention-days: 7
