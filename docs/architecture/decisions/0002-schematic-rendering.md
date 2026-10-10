@@ -39,7 +39,10 @@ front-end, third-party API clients, thumbnails — and are computed once, never 
 - `docker/renderer/Dockerfile`: `kicad/kicad:9.0.9` pinned by digest, plus Inkscape.
 - `scripts/render-catalogue.sh`: renders every `schematic.kicad_sch` to
   `build/catalogue/<base-circuit>/<block>/schematic.svg`, without the drawing sheet and the
-  background, cropped with a 2 mm margin. Fails if no schematic is found.
+  background, cropped with a 2 mm margin. Paths are resolved from inside the catalogue, so any
+  way of writing `CATALOGUE_DIR` works (checked on eight forms, including a trailing slash, an
+  absolute path and a symbolic link). Fails if no schematic is found, and fails on a multi-sheet
+  schematic: `kicad-cli` emits one SVG per sheet, and a block has a single rendered schematic.
 - `.github/workflows/catalogue.yml`: runs only when the catalogue or the renderer changes, checks
   one SVG per schematic, uploads the SVGs as a 7-day artifact.
 - Rendered SVGs are build output (`build/` is git-ignored). The importer (M1) will publish them.
@@ -57,6 +60,8 @@ front-end, third-party API clients, thumbnails — and are computed once, never 
 
 - **ERC gating** (tooling backlog): the base image needs `--severity-error` (library-table
   warnings are environmental), or the `-full` image (1.1 GB compressed) with the libraries.
+- **Importer (M1)**: if the importer calls `kicad-cli` directly instead of this script, it must
+  keep the single-sheet check (one SVG emitted per block).
 - **SVG safety**: today's SVGs come from curated schematics and contain no script. Once the
   catalogue accepts contributions, sanitize SVGs before serving them inline.
 - **KiCanvas** (tooling backlog) may render `.kicad_sch` directly in the browser; the cropped

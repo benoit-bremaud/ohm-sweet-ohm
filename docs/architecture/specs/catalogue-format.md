@@ -27,6 +27,9 @@ catalogue/
 - Blocks are grouped by base circuit. The variant tree is declared by `parent` in `meta.yaml`,
   never by the folder structure, so moving a variant never moves a folder.
 - The folder name of a block equals its `slug`.
+- A block's schematic is a **single sheet**: hierarchical sub-sheets are not supported, because a
+  block has exactly one rendered schematic (`SchematicAsset` in 04-class.md). Rendering fails on a
+  multi-sheet schematic rather than dropping sheets silently.
 
 ## `meta.yaml`
 

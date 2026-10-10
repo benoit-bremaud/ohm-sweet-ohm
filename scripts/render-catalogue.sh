@@ -12,14 +12,24 @@ work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
 count=0
-while IFS= read -r -d '' schematic; do
-  block_dir="$(dirname "$schematic")"
-  relative="${block_dir#"$catalogue"/}"
+multi_sheet=()
+while IFS= read -r -d '' found; do
+  # Paths are found from inside the catalogue, so the block's relative path never depends on how
+  # CATALOGUE_DIR was written (trailing slash, absolute path, symbolic link).
+  relative="$(dirname "${found#./}")"
+  schematic="$catalogue/${found#./}"
   mkdir -p "$output/$relative" "$work/$relative"
 
-  # Page-size SVG without the drawing sheet frame and title block.
+  # Page-size SVG without the drawing sheet frame and title block; one file per sheet.
   kicad-cli sch export svg --exclude-drawing-sheet --no-background-color \
     -o "$work/$relative" "$schematic" >/dev/null
+
+  # A block is a single sheet (catalogue-format.md): more SVGs mean sub-sheets that would be lost.
+  sheets=("$work/$relative"/*.svg)
+  if [ "${#sheets[@]}" -ne 1 ]; then
+    multi_sheet+=("$relative (${#sheets[@]} sheets)")
+    continue
+  fi
 
   # Crop to the drawing plus a small margin.
   inkscape "$work/$relative/schematic.svg" --export-area-drawing \
@@ -28,7 +38,13 @@ while IFS= read -r -d '' schematic; do
 
   echo "rendered $relative"
   count=$((count + 1))
-done < <(find "$catalogue" -name schematic.kicad_sch -print0 | sort -z)
+done < <(cd "$catalogue" && find . -name schematic.kicad_sch -print0 | sort -z)
+
+if [ "${#multi_sheet[@]}" -gt 0 ]; then
+  echo "multi-sheet schematics are not supported, a block must fit on one sheet:" >&2
+  printf '  %s\n' "${multi_sheet[@]}" >&2
+  exit 1
+fi
 
 if [ "$count" -eq 0 ]; then
   echo "no schematic found in $catalogue" >&2
