@@ -1,0 +1,18 @@
+{
+  "name": "@ohm-sweet-ohm/schemas",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Boundary schemas: catalogue file format and spec value notation",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "yaml": "2.9.1",
+    "zod": "4.6.5"
+  }
+}

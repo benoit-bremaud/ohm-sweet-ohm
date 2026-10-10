@@ -43,3 +43,11 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
     - `GHSA-vfj7-8cjw-p6xm ignored` — no patched version; reached only through markdownlint-cli2 on the repository's own globs.
     - `engines.node = ^22.13.0 || ^24.0.0 || >=26.0.0` — exact intersection of ESLint and Vitest support.
     - `Typecheck the root before packages` — `pnpm -r` skips the root, so the step passed without running tsc.
+- **Catalogue format and LED block** (branch `feat/5-catalogue-format`, issue #5) — `docs/architecture/specs/catalogue-format.md`, first package `packages/schemas` (Zod 4.6, yaml 2.9, 68 Vitest tests), first block `catalogue/led-resistor/led-resistor-basic/` and the CC BY-SA 4.0 legal text in `catalogue/LICENSE` (downloaded from creativecommons.org with owner approval). The KiCad 9 schematic was generated from the official KiCad libraries by a one-off script and validated locally: ERC 0 violations, netlist +5V → R1 → D1 anode → D1 cathode → GND, SVG export. Independent code review before push: 2 Must, 4 Should, 3 Nice, then a verification pass with 1 new Should and 3 Nice — all applied.
+  - **Decisions**:
+    - `Readable value notation` — `5 V`, `7 V .. 15 V`, integer counts and lowercase words; a structured `{min, max, unit}` notation rejected as too verbose for curators.
+    - `Layout catalogue/<base-circuit>/<block>/` — the variant tree lives in `parent`, never in folders, so moving a variant never moves a folder.
+    - `Spec values read as written` — a second, failsafe YAML parse keeps spec scalars as text, so `1e3`, `1.0` or `0x10` never become numbers before the notation is checked.
+    - `Every error reported` — spec checks run inside the schema, one issue per key, so no invalid entry hides another.
+    - `Boundary only` — the package checks shape and notation; known keys, required parameters, parent and change summary stay domain rules (04-class.md).
+  - **Noted for later**: the KiCad `Device:LED` symbol has no SPICE model mapping (SPICE netlist export shows `D1` without nodes); to handle with the ngspice backlog item.
