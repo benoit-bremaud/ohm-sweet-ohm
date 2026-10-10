@@ -118,7 +118,7 @@ entry becomes a decision (and, where the model changes, a UML update) when it is
 | Priority | Tool | Use in Ohm Sweet Ohm | Where it runs | License | Target |
 | --- | --- | --- | --- | --- | --- |
 | 1 | KiCanvas | Interactive schematic viewer on the block page (zoom, pan, hover a component) instead of a static SVG | Browser | MIT | v1, with the front-end (M4) if time allows, else first v1.x item |
-| 2 | KiCad ERC (`kicad-cli sch erc`) | Reject a block whose schematic fails the electrical rules check at publication (new UC6 extension) | CI / importer | GPL-3.0 (KiCad, used as a tool) | v1.x |
+| 2 | KiCad ERC (`kicad-cli sch erc --exit-code-violations`) | Reject a block whose schematic fails the electrical rules check at publication (new UC6 extension); without the flag the command exits 0 even when it finds violations | CI / importer | GPL-3.0 (KiCad, used as a tool) | v1.x |
 | 3 | KiCad BOM export | Extract components from the schematic and cross-check the declared key components | CI / importer | GPL-3.0 (tool) | v1.x |
 | 4 | KiDiff | Visual diff between a variant and its parent, shown in the variant tree (UC2) | CI | GPL-2.0 (tool only, output files) | v1.x |
 | 5 | ngspice (KiCad SPICE netlist export) | Simulate blocks at publication, check announced specs, add a `SIMULATED` validation status, publish result curves | CI | BSD-3-Clause / GPL parts (tool) | v2 |
