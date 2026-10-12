@@ -1,9 +1,9 @@
-# Local review — ohm-sweet-ohm (docs/workplan-tooling-backlog)
+# Local review — ohm-sweet-ohm (docs/calculator-in-v1)
 
-- Date: 2026-10-10
+- Date: 2026-10-12
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (work plan tooling backlog, project log)
-- Checks run: docs · security (Gitleaks, license review of each listed tool) · correctness (`pnpm check`, tool existence and maintenance checked on npm and GitHub). Design and tests: not applicable, no code.
+- Scope: branch diff main...HEAD (use-case diagram UC5/UC10, work plan M4/M5, framing, project log)
+- Checks run: docs (consistency between use cases, plan and framing) · security (Gitleaks) · correctness (Mermaid render, `pnpm check`). Design and tests: not applicable, no code.
 - Verdict: ship as-is · Must 0 · Should 0 · Nice 0
 
 ## 🔴 Must Have
@@ -20,9 +20,9 @@ _None._
 
 ## ⚪ Disagree / Intentional
 
-- `docs/WORKPLAN.md` `[docs]` · The former "SPICE simulation service" backlog line is removed · It is now row 5 of the tooling table (ngspice), with its constraints.
-- `docs/WORKPLAN.md` `[security]` · GPL/AGPL tools listed · Used only as CI tools producing files, or linked (CircuitJS); never bundled into the MIT-licensed code.
+- `docs/architecture/diagrams/catalogue/04-class.md` `[docs]` · The class diagram has no calculator classes yet although UC10 is now v1 · UML-first within the milestone: M4 starts by modelling calculation modes, standard series and checks, as the work plan states. Modelling now would freeze a design two milestones ahead.
+- `docs/architecture/diagrams/catalogue/01-use-case.md` `[docs]` · UC5 keeps its full specification while moved after v1 · The specification and its security decisions stay valid; only the schedule changed.
 
 ## Per-dimension summary
 
-- Design: tools kept at the edges, domain unchanged · Docs: backlog prioritized with target and license · Tests: N/A · Security: licenses reviewed, Gitleaks clean · Correctness: `pnpm check` passes
+- Design: N/A · Docs: UC10 specified, UC5 rescheduled, plan and framing aligned · Tests: N/A · Security: Gitleaks clean · Correctness: Mermaid renders, `pnpm check` passes

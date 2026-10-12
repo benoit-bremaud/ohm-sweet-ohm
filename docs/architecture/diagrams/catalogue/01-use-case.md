@@ -8,7 +8,7 @@
 ## Context
 
 This diagram states the actor-initiated goals of the whole product. It covers v1 goals in full
-and shows v2 goals (dashed) so the v1 model leaves room for them. It does not show how the
+and shows later goals (dashed) so the v1 model leaves room for them. It does not show how the
 system is built: the web front-end, API and importer split belongs to the component diagram.
 
 ## Diagram
@@ -31,10 +31,10 @@ flowchart LR
     subgraph Find ["Find domain"]
       UC4(("UC4 Find blocks matching a need"))
       UC9(("UC9 Describe a need in plain language (v2)"))
-      UC10(("UC10 Compute component values (v2)"))
+      UC10(("UC10 Compute component values"))
     end
     subgraph Access ["Access domain"]
-      UC5(("UC5 Obtain an API key"))
+      UC5(("UC5 Obtain an API key (after v1)"))
     end
     subgraph Curate ["Curate domain"]
       UC6(("UC6 Publish a block to the catalogue"))
@@ -49,13 +49,13 @@ flowchart LR
   Enthusiast -.-> UC7
   Enthusiast -.-> UC8
   Enthusiast -.-> UC9
-  Enthusiast -.-> UC10
-  Developer --> UC5
+  Enthusiast --> UC10
+  Developer -.-> UC5
   UC5 --- GitHubIdP
   Curator --> UC6
 
   classDef planned stroke-dasharray: 5 5
-  class UC7,UC8,UC9,UC10 planned
+  class UC5,UC7,UC8,UC9 planned
 ```
 
 ## Use case specifications (v1)
@@ -116,7 +116,7 @@ flowchart LR
   - 1a. A criterion uses an unknown parameter or an incompatible unit: the system rejects the request and explains which criterion is invalid.
   - 2a. No block matches: the system says so and keeps the criteria so they can be relaxed.
 
-### UC5 — Obtain an API key (planned, M4)
+### UC5 — Obtain an API key (planned, after v1)
 
 - **Primary actor**: Third-party developer.
 - **Supporting actor**: GitHub, as identity provider.
@@ -148,16 +148,34 @@ flowchart LR
   - 2a. The metadata is invalid (unknown parameter, wrong unit, missing parent, cycle in the variant tree): the system reports every error; the use case ends with the minimal guarantee.
   - 3a. Rendering fails: the system reports it; the use case ends with the minimal guarantee.
 
+### UC10 — Compute component values (planned, M4)
+
+- **Primary actor**: Electronics enthusiast.
+- **Precondition**: none.
+- **Minimal guarantee**: no data is altered; an invalid input is reported, never turned into a silently wrong value.
+- **Success guarantee**: the enthusiast has component values buildable with standard parts, the real result they give, and every warning that applies.
+- **Main success scenario**:
+  1. The enthusiast opens the calculator of a base circuit, from the calculators index or from a block page, where it is prefilled with the block's values.
+  2. The enthusiast chooses a calculation mode offered by the base circuit, for example "target output to component values" or "component values to result".
+  3. The enthusiast enters the known values, in the catalogue notation (`4.7k`, `20 mA`) or from presets (LED colour, common supplies, microcontroller pin limits).
+  4. The system computes the exact values, rounds them to the chosen standard series (E12 or E24), and shows the real result with its deviation, the power dissipated in each resistor, and the formula step by step with the values substituted.
+  5. The system runs the base circuit's checks and shows each warning with its reason.
+  6. The enthusiast copies a shareable link that reproduces the calculation.
+- **Extensions**:
+  - 3a. A value is invalid or uses a unit of the wrong quantity: the system reports it on its field; the use case ends with the minimal guarantee.
+  - 4a. The request has no physical solution (an output above the input of a divider, an LED forward voltage above the supply): the system explains why; the use case ends with the minimal guarantee.
+  - 5a. A check fails (resistor power above its rating, LM317 dropout not met, transistor not saturated, current above an LED or pin limit): the system shows the values with the warning, never hides them.
+
 ## Notes
 
 - **Actor generalization**: a third-party developer is an enthusiast who reaches the same goals
-  through the API, so they inherit UC1–UC4. The web front-end and the API are channels, not
+  through the API, so they inherit UC1–UC4 and UC10. The web front-end and the API are channels, not
   actors.
 - **No «include» between UC2, UC4 and UC3**: moving from a list to a block is navigation, not a
   UML relationship.
 - **UC6 covers variants**: declaring a variant is publishing a block with a parent, so there is
   no separate use case for it.
-- **v2 goals** (dashed) are named so the v1 class diagram can leave room for them; they get
+- **Later goals** (dashed) are named so the v1 class diagram can leave room for them; they get
   textual specifications when they are scheduled.
 - **Next**: the domain class diagram (issue #2) must provide every concept named here — block,
   base circuit, parent link, typed spec, unit, difficulty, key component, source, validation

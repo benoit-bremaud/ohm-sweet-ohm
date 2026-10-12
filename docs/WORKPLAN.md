@@ -82,18 +82,29 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 
 **Done when**: "5 V out, beginner" style queries return the expected blocks, covered by tests.
 
-### M4 — Public API (weeks 9–10)
+### M4 — Value calculator (weeks 9–10)
 
 - Content: **4. transistor switch**.
-- Anonymous read with rate limit; free API keys for higher quotas; admin-only writes.
-- API guide for third-party developers; OpenAPI-generated typed client used by web.
-- UML: state diagram for the API key lifecycle if it carries real states.
+- UML first: calculator classes in the class diagram (calculation modes per base circuit,
+  standard series, checks), sequence diagram "compute component values" (UC10).
+- Domain: explicit calculation modes per base circuit, both ways (target to components,
+  components to result) — no general equation solver; E12/E24 rounding with the real result and
+  its deviation; power dissipated per resistor; base-circuit checks (LED and pin current limits,
+  transistor saturation, LM317 dropout); step-by-step formula with values substituted.
+- Presets: LED forward voltage by colour, common supplies, microcontroller pin current limits.
+- API: calculation endpoint per base circuit (UC10 for third-party developers).
+- Web: calculator on each block page, prefilled with the block's values; calculators index page;
+  input in the catalogue notation (`4.7k`, `20 mA`); shareable link reproducing a calculation.
+- Calculators for base circuits 1–4; the linear regulator's comes with its content in M5.
 
-**Done when**: a third party can obtain a key and query the API from the docs alone.
+**Done when**: for base circuits 1–4, a target value gives buildable E12/E24 values with their
+real result, power and warnings, in the web front-end and through the API.
 
 ### M5 — Release v1.0.0 (weeks 11–12)
 
-- Content: **5. linear regulator**.
+- Content: **5. linear regulator**, with its calculator (LM317 dropout check).
+- Public API: anonymous read with rate limit, admin-only writes; API guide for third-party
+  developers; OpenAPI-generated typed client used by web.
 - Production environment; catalogue import runs in CI on merge to `main`.
 - Contribution guide for blocks; public release checklist, then repo goes public; then enable
   branch protection on `main` (unavailable while private on the free plan) and check that
@@ -105,7 +116,11 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 ## After v1 (backlog, not scheduled)
 
 - Natural language → structured filters (LLM), semantic search (pgvector).
-- Side-by-side comparator, guided learning path, value calculator (E-series).
+- API keys (UC5): GitHub sign-in, one active key per account, higher quotas — moved out of v1
+  when the value calculator took M4.
+- Calculator extras: combination of two standard resistors, resistor colour code, tolerance
+  worst case and load effect, curves.
+- Side-by-side comparator, guided learning path.
 - Browse by key component, base circuits 6 (NE555) and 7 (op-amp).
 - Source file download, BOM, educational explanations.
 
