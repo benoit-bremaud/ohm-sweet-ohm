@@ -116,6 +116,18 @@ describe('EnumParameterDefinition.createSpec', () => {
   });
 });
 
+describe('Spec.toRaw', () => {
+  it.each([
+    [voltage, { key: 'supplyVoltage', min: 7, max: 15, quantity: 'VOLTAGE' as const }],
+    [count, { key: 'ledCount', min: 2, max: 2 }],
+    [color, { key: 'ledColor', text: 'red' }],
+  ])('gives back the raw value the spec was created from (%#)', (definition, raw) => {
+    const spec = definition.createSpec(raw);
+
+    expect(spec instanceof ValidationError ? spec : spec.toRaw()).toEqual(raw);
+  });
+});
+
 describe('sameKindAs', () => {
   it('matches numeric definitions only with the same quantity and match mode', () => {
     const same = new NumericParameterDefinition('supplyVoltage', 'Vin', false, 'VOLTAGE', 'COVERS');

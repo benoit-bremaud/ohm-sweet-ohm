@@ -1,0 +1,23 @@
+{
+  "name": "@ohm-sweet-ohm/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "PostgreSQL persistence adapter for the catalogue domain",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ohm-sweet-ohm/domain": "workspace:*",
+    "kysely": "0.29.6",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "12.2.1",
+    "@types/pg": "8.23.1"
+  }
+}
