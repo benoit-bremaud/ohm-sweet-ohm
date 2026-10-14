@@ -46,7 +46,7 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
 
 ## 2026-10-10
 
-- **Electronics tooling backlog** (branch `docs/workplan-tooling-backlog`) — `docs/WORKPLAN.md` gains a prioritized table of tools that enrich the API and the front-end: KiCanvas, KiCad ERC and BOM export, KiDiff, ngspice, EEcircuit-engine, PCB Calculator formulas, KiBot, CircuitJS.
+- **PR #10 merged** (`87b20ef`) — docs(plan): add electronics tooling backlog. Branch `docs/workplan-tooling-backlog`; review rounds: Codex ×1, Copilot ×1, all addressed. Content: `docs/WORKPLAN.md` gains a prioritized table of tools that enrich the API and the front-end: KiCanvas, KiCad ERC and BOM export, KiDiff, ngspice, EEcircuit-engine, PCB Calculator formulas, KiBot, CircuitJS.
   - **Decisions**:
     - `Tools stay at the edges` — CI for file-producing tools, browser for interactive ones; the domain never depends on them.
     - `ngspice, not PSpice` — PSpice is commercial and has no headless use; ngspice ships with KiCad and runs in CI and, compiled to WebAssembly, in the browser.
@@ -76,3 +76,16 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
   - **Review round 2** (Copilot ×2), studied in depth:
     - `Pin Inkscape to 1.2.2-2+b1` — the base image was digest-pinned but Inkscape floated with the Debian index. Package pin chosen (one line, any change becomes deliberate); a dated Debian snapshot rejected (fragile mirror for byte-level reproducibility a rendering does not need); publishing the image by digest deferred to M1.
     - `Check the crop result, not Inkscape's exit status` — Copilot flagged hidden diagnostics; measuring showed the deeper defect: Inkscape exits 0 on a missing input, an unwritable output and a malformed SVG (writing a 218-byte empty SVG). The script now checks for a non-empty SVG with a `viewBox` and no unexpected message, reports the block with Inkscape's message and fails. Verified in the image with a read-only output and a simulated malformed crop.
+- **Milestone M0 closed** — issues #1–#6 done through PRs #7–#12; CI green on `main`.
+
+## 2026-10-12
+
+- **Debrief: online calculators survey** (branch `docs/calculator-in-v1`) — surveyed per-circuit calculators (DigiKey, Circuit Digest, electronics2000, Every Calculators, KSP, Ohmdox, RobotDyn, Kunkune) and reference design libraries (DigiKey, TI PowerLab, Würth REDEXPERT). Finding: calculators are what makers use, but none combines search by need, variants, standard values and an API; reference libraries search by specs but are vendor-tied, power-only and not pedagogical.
+  - **Decisions**:
+    - `Value calculator in v1 (M4)` — UC10 moves from v2 to v1: both ways via explicit calculation modes per base circuit (no general solver), E12/E24 values with real result and deviation, resistor power, base-circuit checks, step-by-step formula, presets, notation input, shareable link; on block pages, an index page and the API. Milestone M4 renamed "M4 — Value calculator".
+    - `API keys (UC5) after v1` — keeps the 12-week calendar; v1 API stays anonymous read-only with rate limit, moved to M5 with the API guide. Adding a 14th week was rejected.
+    - `Deferred calculator extras` — two-resistor combinations, colour code, tolerance and load, curves.
+    - `Calculator input: numeric field plus unit-prefix list` — raised by review (Codex): the plan promised `4.7k`, which the catalogue parser rejects. Deeper study: every surveyed calculator uses a numeric field with a unit selector, and a numeric field brings the phone keypad; with a default prefix per field it is nearly as fast as free text. Free text with IEC 60062 codes (`4k7`) and text with a mandatory unit rejected; the catalogue notation stays for catalogue files and the API.
+    - `M4 done when both directions work` — raised by review (Codex): the acceptance criterion only covered target-to-components.
+    - `Stale schedule references fixed` — raised by review (Codex): the class diagram and the parameter spec still placed the calculator in v2 and UC5 in M4.
+    - `Realistic component view, first item after v1` — real-looking components drawn on each block's KiCad geometry (layout extracted at publication; Wokwi elements, MIT, plus in-house drawings), animated by the calculator. Weighted score 4.55/5 against a per-base-circuit breadboard template (3.60, needs a template per variant adding a component), automatic breadboard placement (4.30 but low feasibility, kept as a later evolution), a KiCad 3D render (2.85) and a hand-drawn Fritzing view (2.05, drifts from the schematic).

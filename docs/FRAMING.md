@@ -29,9 +29,9 @@ architecture) takes precedence over catalogue volume.
 | Hosting | Managed services: hosted PostgreSQL, API on a container platform, front on Vercel. Environments: local → staging (PR preview) → prod | — |
 | Repository | Single repo, pnpm workspace (`apps/api`, `apps/web`, `apps/importer`, `packages/schemas`), catalogue in `catalogue/` with its own CC BY-SA license | Split catalogue repo if community contributions grow |
 | Delivery | Vertical slices from M1; tracked with GitHub Project + milestones + issues. See WORKPLAN.md | — |
-| Value calculator | v1: each base circuit stores its design formulas in the model | v2: per-circuit calculator returning component values rounded to standard series (E12…) |
+| Value calculator | v1 (M4): per base circuit, both ways, E12/E24 values with real result and deviation, resistor power, base-circuit checks, step-by-step formula, presets, notation input, shareable link; on block pages, an index page and the API. Motivated by the 2026-10-12 survey: calculators are what makers use, but none combines search by need, variants and standard values | Two-resistor combinations, colour code, tolerance and load, curves |
 | Consumers | Own web front + public API for third-party developers | — |
-| API access | Anonymous read-only with rate limit; free API key for higher quotas, issued after GitHub sign-in, one active key per account (quota tied to the account, a new key revokes the old one); writes admin-only | — |
+| API access | v1: anonymous read-only with rate limit; writes admin-only | Free API key for higher quotas, issued after GitHub sign-in, one active key per account (quota tied to the account, a new key revokes the old one) — moved after v1 |
 | Import pipeline | v1: CLI script in Docker (`kicad-cli` renders SVG) reading `<block>/schematic.kicad_sch` + `<block>/meta.yaml` | Catalogue git repo whose CI runs the same script on merge |
 | Licensing | Code MIT; schematics CC BY-SA 4.0 | Per-schematic license field if third-party schematics are imported |
 | Entry points | v1: browse by **base circuit** (voltage divider, regulator, transistor switch, op-amp…) and explore its variants; search by need via filters | Browse by **key component** (LM317, NE555…) — enabled by a block→key-component link |
