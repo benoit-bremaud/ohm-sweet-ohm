@@ -21,6 +21,18 @@ pnpm install
 pnpm check   # format, lint (TypeScript + Markdown), typecheck, tests
 ```
 
+Integration tests start a disposable PostgreSQL with Testcontainers, so Docker must be running.
+
+Publish the catalogue to a database (Docker required for rendering):
+
+```bash
+pnpm catalogue:render
+DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm catalogue:import
+```
+
+The import mirrors the `catalogue/` folder: it adds, updates and removes blocks so the database
+matches it exactly, and refuses to run when no block is found.
+
 ## Licenses
 
 - Code: [MIT](LICENSE).

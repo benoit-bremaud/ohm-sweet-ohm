@@ -3,11 +3,13 @@ import { type Migration, type MigrationResultSet, Migrator } from 'kysely/migrat
 import pg from 'pg';
 
 import * as initial from './migrations/0001-initial.js';
+import * as schematicsAndContentHash from './migrations/0002-schematics-and-content-hash.js';
 import type { Database } from './schema.js';
 
 /** Migrations in apply order; new ones are appended, never edited once merged. */
 const MIGRATIONS: Readonly<Record<string, Migration>> = {
   '0001-initial': initial,
+  '0002-schematics-and-content-hash': schematicsAndContentHash,
 };
 
 export function createDatabase(connectionString: string): Kysely<Database> {
