@@ -14,7 +14,8 @@ This diagram models the catalogue domain: base circuits, blocks and their varian
 specs, publication (UC6) and search (UC4). Classes own their behaviour and invariants. It shows
 no infrastructure: the `meta.yaml` reader and the HTTP API turn raw input into `BlockDraft`,
 `RawSpec` and `SearchCriteria`, and every domain rule is checked by the classes below. The
-access domain of UC5 (developer account, API key) is modelled in M4.
+access domain of UC5 (developer account, API key) is modelled when it is scheduled, after v1. The
+value calculator of UC10 (calculation modes, standard series, checks) is modelled at the start of M4.
 
 ## Diagram
 
@@ -288,10 +289,11 @@ classDiagram
 - **The root block is the base circuit's own schematic**: the base circuit page (UC1, UC2) uses
   it for the difficulty and as the root of the variant tree. `BaseCircuit` holds definitions,
   `Block` holds values.
-- **Formulas are displayed, not evaluated** in v1 (UC3); the v2 calculator (UC10) will evaluate
-  them.
+- **Formulas are displayed in UC3 and evaluated by the value calculator** (UC10, M4), whose
+  classes are added at the start of M4.
 - **Hazard is declared, not computed**: deriving it from voltages would need AC/DC and context
   rules that v1 does not have.
 - **Associations carry role names** instead of repeating them as attributes, so each
   relationship is stated once.
-- **Not modelled yet**: the access domain of UC5 (M4) and the v2 use cases UC7–UC10.
+- **Not modelled yet**: the value calculator of UC10 (start of M4), the access domain of UC5
+  (after v1) and the later use cases UC7–UC9.

@@ -2,7 +2,7 @@
 
 - Date: 2026-10-12
 - Commit: branch head before push
-- Scope: branch diff main...HEAD (use-case diagram UC5/UC10, work plan M4/M5, framing, project log)
+- Scope: branch diff main...HEAD (use-case diagram UC5/UC10, work plan M4/M5 and realistic view, class diagram and parameter spec schedule notes, framing, project log) — re-run after Codex round 1
 - Checks run: docs (consistency between use cases, plan and framing) · security (Gitleaks) · correctness (Mermaid render, `pnpm check`). Design and tests: not applicable, no code.
 - Verdict: ship as-is · Must 0 · Should 0 · Nice 0
 

@@ -54,7 +54,7 @@ it. Blocks of a base circuit may only declare the parameters listed for it.
 | `ledCount` | Number of LEDs | Count | within | yes |
 | `resistorPower` | Resistor dissipation | Power | within | no |
 
-Design formula (shown in v1, evaluated by the v2 calculator): `R = (supplyVoltage − n·Vf) / ledCurrent` for `n`
+Design formula (shown in v1, evaluated by the value calculator in M4): `R = (supplyVoltage − n·Vf) / ledCurrent` for `n`
 LEDs in series.
 
 ## 2. Voltage divider (`voltage-divider`, order 2)

@@ -94,11 +94,14 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 - Presets: LED forward voltage by colour, common supplies, microcontroller pin current limits.
 - API: calculation endpoint per base circuit (UC10 for third-party developers).
 - Web: calculator on each block page, prefilled with the block's values; calculators index page;
-  input in the catalogue notation (`4.7k`, `20 mA`); shareable link reproducing a calculation.
+  input as a numeric field plus a unit-prefix list with a default per field (kΩ for a resistor,
+  mA for an LED current), as on DigiKey and the other surveyed calculators, which also brings the
+  numeric keypad on phones; shareable link reproducing a calculation.
 - Calculators for base circuits 1–4; the linear regulator's comes with its content in M5.
 
-**Done when**: for base circuits 1–4, a target value gives buildable E12/E24 values with their
-real result, power and warnings, in the web front-end and through the API.
+**Done when**: for base circuits 1–4, both directions work in the web front-end and through the
+API — a target value gives buildable E12/E24 values with their real result, and component values
+give the result — each with resistor power and the base circuit's warnings.
 
 ### M5 — Release v1.0.0 (weeks 11–12)
 
@@ -115,6 +118,13 @@ real result, power and warnings, in the web front-end and through the API.
 
 ## After v1 (backlog, not scheduled)
 
+- **Realistic component view (first item after v1)**: real-looking components drawn on the
+  geometry of each block's KiCad schematic (positions, rotations, values and wires extracted at
+  publication into a small layout file), so every block and variant gets it with no curation and
+  it always matches the schematic. Resistor colour bands follow the value and the LED brightness
+  follows the computed current, live with the calculator. A per-base-circuit breadboard template
+  was rejected (each variant adding a component needs a new template); automatic breadboard
+  placement stays a later evolution built on the same layout data.
 - Natural language → structured filters (LLM), semantic search (pgvector).
 - API keys (UC5): GitHub sign-in, one active key per account, higher quotas — moved out of v1
   when the value calculator took M4.
@@ -143,6 +153,7 @@ milestone deliverable.
 | 7 | KiCad PCB Calculator formulas | Re-implemented, not called (no CLI): E-series rounding, LM317 resistor pair, resistor colour code — feeds the value calculator (UC10) | Domain | — (formulas) | v2 |
 | 8 | KiBot | Replace the importer's `kicad-cli` orchestration only if the pipeline grows beyond a few commands | CI | AGPL-3.0 (tool only) | When needed |
 | 9 | CircuitJS (Falstad) | "See it run" link from each block to an animated simulation | Link to falstad.com | GPL-2.0 (linked, not embedded) | When the catalogue grows |
+| 10 | Wokwi elements | Realistic resistor (colour bands from the value), LED (colour, brightness), potentiometer, photoresistor and thermistor for the realistic component view; transistor, capacitor, LM317 and supply drawn in-house | Browser | MIT | First item after v1 |
 
 Constraints:
 
