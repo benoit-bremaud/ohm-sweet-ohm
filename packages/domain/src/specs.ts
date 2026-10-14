@@ -22,6 +22,9 @@ export abstract class Spec {
   get key(): string {
     return this.definition.key;
   }
+
+  /** The raw value this spec was created from; `definition.createSpec(spec.toRaw())` rebuilds it. */
+  abstract toRaw(): RawSpec;
 }
 
 export class NumericSpec extends Spec {
@@ -31,6 +34,16 @@ export class NumericSpec extends Spec {
   ) {
     super(definition);
   }
+
+  toRaw(): RawSpec {
+    const { quantity } = this.definition;
+    return {
+      key: this.key,
+      min: this.range.min,
+      max: this.range.max,
+      ...(quantity === 'COUNT' ? {} : { quantity }),
+    };
+  }
 }
 
 export class EnumSpec extends Spec {
@@ -39,6 +52,10 @@ export class EnumSpec extends Spec {
     readonly value: string,
   ) {
     super(definition);
+  }
+
+  toRaw(): RawSpec {
+    return { key: this.key, text: this.value };
   }
 }
 
