@@ -53,12 +53,6 @@ function published(...drafts: BlockDraft[]) {
   });
 }
 
-function publishOne(input: BlockDraft) {
-  const [block] = published(input);
-  if (block === undefined) throw new Error('nothing published');
-  return block;
-}
-
 /** Every persisted field of a block as plain data, so a round trip compares all columns. */
 function snapshot(block: Block | undefined) {
   if (block === undefined) return undefined;
@@ -79,6 +73,14 @@ function snapshot(block: Block | undefined) {
   };
 }
 
+/** Mirrors the given blocks, each with a recognisable placeholder schematic. */
+function entries(blocks: readonly Block[]) {
+  return blocks.map((block) => ({ block, svg: `<svg>${block.slug}</svg>` }));
+}
+
+const VARIANT_A = draft({ slug: 'a', parentSlug: 'led-resistor-basic', changeSummary: 'two LEDs' });
+const VARIANT_B = draft({ slug: 'b', parentSlug: 'a', changeSummary: 'three LEDs' });
+
 describe('BlockRepository', () => {
   let container: StartedPostgreSqlContainer;
   let db: Kysely<Database>;
@@ -97,7 +99,7 @@ describe('BlockRepository', () => {
   });
 
   beforeEach(async () => {
-    await sql`truncate blocks, block_specs`.execute(db);
+    await sql`truncate blocks, block_specs, block_schematics`.execute(db);
   });
 
   it('applies migrations only once', async () => {
@@ -120,22 +122,19 @@ describe('BlockRepository', () => {
         source: { title: 'Bench notes' },
       }),
     );
-    for (const block of [root, variant]) if (block !== undefined) await repository.save(block);
+    if (root === undefined || variant === undefined) throw new Error('nothing published');
 
+    await repository.mirror(entries([root, variant]));
     const catalogue = await repository.loadCatalogue([ledResistor]);
 
     expect(snapshot(catalogue.findBlock('led-resistor-basic'))).toEqual(snapshot(root));
     expect(snapshot(catalogue.findBlock('led-two-in-series'))).toEqual(snapshot(variant));
   });
 
-  it('rebuilds the variant tree with parents loaded before their variants', async () => {
-    const blocks = published(
-      draft(),
-      draft({ slug: 'a', parentSlug: 'led-resistor-basic', changeSummary: 'two LEDs' }),
-      draft({ slug: 'b', parentSlug: 'a', changeSummary: 'three LEDs' }),
-    );
-    for (const block of blocks) await repository.save(block);
+  it('writes parents first even when variants are given first', async () => {
+    const blocks = published(draft(), VARIANT_A, VARIANT_B);
 
+    await repository.mirror(entries([...blocks].reverse()));
     const catalogue = await repository.loadCatalogue([ledResistor]);
 
     expect(
@@ -146,23 +145,175 @@ describe('BlockRepository', () => {
     ).toEqual(['led-resistor-basic', 'a', 'b']);
   });
 
-  it('replaces a block and its specs when saved again', async () => {
-    await repository.save(publishOne(draft()));
-    const second = publishOne(
-      draft({
-        name: 'Renamed',
-        rawSpecs: LED_SPECS.filter((spec) => spec.key !== 'resistorPower'),
-      }),
+  it('stores each schematic with its block', async () => {
+    await repository.mirror(entries(published(draft(), VARIANT_A)));
+
+    const rows = await db
+      .selectFrom('block_schematics')
+      .selectAll()
+      .orderBy('block_slug')
+      .execute();
+
+    expect(rows).toEqual([
+      { block_slug: 'a', svg: '<svg>a</svg>' },
+      { block_slug: 'led-resistor-basic', svg: '<svg>led-resistor-basic</svg>' },
+    ]);
+  });
+
+  it('reports added, then unchanged blocks, and rewrites nothing the second time', async () => {
+    const first = await repository.mirror(entries(published(draft(), VARIANT_A)));
+    const [before] = await db
+      .selectFrom('blocks')
+      .select('updated_at')
+      .where('slug', '=', 'a')
+      .execute();
+
+    const second = await repository.mirror(entries(published(draft(), VARIANT_A)));
+    const [after] = await db
+      .selectFrom('blocks')
+      .select('updated_at')
+      .where('slug', '=', 'a')
+      .execute();
+
+    expect(first).toEqual({
+      added: ['led-resistor-basic', 'a'],
+      changed: [],
+      unchanged: [],
+      removed: [],
+    });
+    expect(second).toEqual({
+      added: [],
+      changed: [],
+      unchanged: ['led-resistor-basic', 'a'],
+      removed: [],
+    });
+    expect(after?.updated_at).toEqual(before?.updated_at);
+  });
+
+  it('rewrites a changed block and its specs, keeping its first publication date', async () => {
+    await repository.mirror(entries(published(draft())));
+    const [before] = await db.selectFrom('blocks').select('published_at').execute();
+
+    const summary = await repository.mirror(
+      entries(
+        published(
+          draft({
+            name: 'Renamed',
+            rawSpecs: LED_SPECS.filter((spec) => spec.key !== 'resistorPower'),
+          }),
+        ),
+      ),
+    );
+    const loaded = (await repository.loadCatalogue([ledResistor])).findBlock('led-resistor-basic');
+    const [after] = await db.selectFrom('blocks').select('published_at').execute();
+
+    expect(summary.changed).toEqual(['led-resistor-basic']);
+    expect([loaded?.name, loaded?.specFor('resistorPower')]).toEqual(['Renamed', undefined]);
+    expect(after?.published_at).toEqual(before?.published_at);
+  });
+
+  it('treats a changed schematic alone as a change', async () => {
+    const [block] = published(draft());
+    if (block === undefined) throw new Error('nothing published');
+    await repository.mirror([{ block, svg: '<svg>v1</svg>' }]);
+
+    const summary = await repository.mirror([{ block, svg: '<svg>v2</svg>' }]);
+
+    expect(summary.changed).toEqual(['led-resistor-basic']);
+  });
+
+  it('removes blocks no longer given, with their specs and schematics', async () => {
+    await repository.mirror(entries(published(draft(), VARIANT_A, VARIANT_B)));
+
+    const summary = await repository.mirror(entries(published(draft())));
+
+    expect(summary.removed).toEqual(['a', 'b']);
+    expect(await db.selectFrom('block_specs').select('block_slug').distinct().execute()).toEqual([
+      { block_slug: 'led-resistor-basic' },
+    ]);
+    expect(await db.selectFrom('block_schematics').select('block_slug').execute()).toEqual([
+      { block_slug: 'led-resistor-basic' },
+    ]);
+  });
+
+  it('moves a block to a new parent while its former parent is removed', async () => {
+    await repository.mirror(entries(published(draft(), VARIANT_A, VARIANT_B)));
+    const moved = draft({
+      slug: 'b',
+      parentSlug: 'led-resistor-basic',
+      changeSummary: 'three LEDs',
+    });
+
+    const summary = await repository.mirror(entries(published(draft(), moved)));
+    const catalogue = await repository.loadCatalogue([ledResistor]);
+
+    expect(summary).toEqual({
+      added: [],
+      changed: ['b'],
+      unchanged: ['led-resistor-basic'],
+      removed: ['a'],
+    });
+    expect(
+      catalogue
+        .findBlock('b')
+        ?.path()
+        .map((block) => block.slug),
+    ).toEqual(['led-resistor-basic', 'b']);
+  });
+
+  it('rewrites a changed parent without touching its unchanged variants', async () => {
+    await repository.mirror(entries(published(draft(), VARIANT_A)));
+    const [before] = await db
+      .selectFrom('blocks')
+      .select('updated_at')
+      .where('slug', '=', 'a')
+      .execute();
+
+    const summary = await repository.mirror(
+      entries(published(draft({ name: 'Renamed root' }), VARIANT_A)),
+    );
+    const [after] = await db
+      .selectFrom('blocks')
+      .select('updated_at')
+      .where('slug', '=', 'a')
+      .execute();
+
+    expect(summary).toEqual({
+      added: [],
+      changed: ['led-resistor-basic'],
+      unchanged: ['a'],
+      removed: [],
+    });
+    expect(after?.updated_at).toEqual(before?.updated_at);
+  });
+
+  it('gives the same content hash whatever the order of the specs', async () => {
+    await repository.mirror(entries(published(draft())));
+
+    const summary = await repository.mirror(
+      entries(published(draft({ rawSpecs: [...LED_SPECS].reverse() }))),
     );
 
-    await repository.save(second);
-    const loaded = (await repository.loadCatalogue([ledResistor])).findBlock('led-resistor-basic');
+    expect(summary.unchanged).toEqual(['led-resistor-basic']);
+  });
 
-    expect([loaded?.name, loaded?.specFor('resistorPower')]).toEqual(['Renamed', undefined]);
+  it('leaves the database unchanged when a mirror fails', async () => {
+    await repository.mirror(entries(published(draft(), VARIANT_A)));
+    const orphan = published(
+      draft(),
+      VARIANT_A,
+      draft({ slug: 'orphan', parentSlug: 'a', changeSummary: 'x' }),
+    ).find((block) => block.slug === 'orphan');
+    if (orphan === undefined) throw new Error('nothing published');
+
+    // Given alone, the orphan's parent "a" would be removed, breaking the foreign key mid-mirror.
+    await expect(repository.mirror(entries([orphan]))).rejects.toThrow(/foreign key/);
+    const slugs = await db.selectFrom('blocks').select('slug').orderBy('slug').execute();
+    expect(slugs.map((row) => row.slug)).toEqual(['a', 'led-resistor-basic']);
   });
 
   it('refuses a stored block that breaks a domain rule', async () => {
-    await repository.save(publishOne(draft()));
+    await repository.mirror(entries(published(draft())));
     await db
       .insertInto('block_specs')
       .values({
@@ -180,24 +331,8 @@ describe('BlockRepository', () => {
     );
   });
 
-  it('refuses to save a variant before its parent', async () => {
-    const [, variant] = published(
-      draft(),
-      draft({ slug: 'a', parentSlug: 'led-resistor-basic', changeSummary: 'x' }),
-    );
-    if (variant === undefined) throw new Error('nothing published');
-
-    await expect(repository.save(variant)).rejects.toThrow(/foreign key/);
-    expect(await db.selectFrom('blocks').select('slug').execute()).toEqual([]);
-  });
-
   it('refuses stored blocks whose parents form a cycle', async () => {
-    const blocks = published(
-      draft(),
-      draft({ slug: 'a', parentSlug: 'led-resistor-basic', changeSummary: 'x' }),
-      draft({ slug: 'b', parentSlug: 'a', changeSummary: 'y' }),
-    );
-    for (const block of blocks) await repository.save(block);
+    await repository.mirror(entries(published(draft(), VARIANT_A, VARIANT_B)));
     await db.updateTable('blocks').set({ parent_slug: 'b' }).where('slug', '=', 'a').execute();
 
     await expect(repository.loadCatalogue([ledResistor])).rejects.toThrow(
@@ -206,7 +341,7 @@ describe('BlockRepository', () => {
   });
 
   it('refuses malformed key components stored outside the repository', async () => {
-    await repository.save(publishOne(draft()));
+    await repository.mirror(entries(published(draft())));
     await db.updateTable('blocks').set({ key_components: '[{"partNumber": 1}]' }).execute();
 
     await expect(repository.loadCatalogue([ledResistor])).rejects.toThrow(
@@ -215,7 +350,7 @@ describe('BlockRepository', () => {
   });
 
   it('enforces the variant summary rule in the schema itself', async () => {
-    await repository.save(publishOne(draft()));
+    await repository.mirror(entries(published(draft())));
 
     await expect(
       db

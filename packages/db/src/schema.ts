@@ -22,6 +22,14 @@ export interface BlocksTable {
   kicad_path: string;
   svg_path: string;
   published_at: Generated<Date>;
+  /** SHA-256 of the block's stored content, rendered schematic included. */
+  content_hash: string;
+  updated_at: Generated<Date>;
+}
+
+export interface BlockSchematicsTable {
+  block_slug: string;
+  svg: string;
 }
 
 export interface BlockSpecsTable {
@@ -36,4 +44,5 @@ export interface BlockSpecsTable {
 export interface Database {
   blocks: BlocksTable;
   block_specs: BlockSpecsTable;
+  block_schematics: BlockSchematicsTable;
 }

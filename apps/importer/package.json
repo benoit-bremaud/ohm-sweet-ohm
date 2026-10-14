@@ -1,0 +1,21 @@
+{
+  "name": "@ohm-sweet-ohm/importer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Mirrors the catalogue folder and its rendered schematics into the database",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ohm-sweet-ohm/db": "workspace:*",
+    "@ohm-sweet-ohm/domain": "workspace:*",
+    "@ohm-sweet-ohm/schemas": "workspace:*"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "12.2.1",
+    "tsx": "4.23.15"
+  }
+}

@@ -1,4 +1,5 @@
 export { BaseCircuit, Formula, type SpecsResult } from './base-circuit.js';
+export { BASE_CIRCUITS } from './base-circuits/index.js';
 export { ledResistor } from './base-circuits/led-resistor.js';
 export {
   Block,

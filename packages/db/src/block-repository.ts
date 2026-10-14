@@ -1,4 +1,6 @@
-import type { Kysely, Selectable } from 'kysely';
+import { createHash } from 'node:crypto';
+
+import { type Kysely, type Selectable, sql } from 'kysely';
 
 import {
   type BaseCircuit,
@@ -17,6 +19,23 @@ import {
 import type { BlockSpecsTable, BlocksTable, Database } from './schema.js';
 
 type BlockRow = Selectable<BlocksTable>;
+
+/** Advisory lock key serialising mirrors; any constant unique to this application. */
+const MIRROR_LOCK = 7_013_331;
+
+/** A published block with its rendered, cropped schematic. */
+export interface SchematicBlock {
+  readonly block: Block;
+  readonly svg: string;
+}
+
+/** What a mirror changed, by block slug. */
+export interface MirrorSummary {
+  readonly added: readonly string[];
+  readonly changed: readonly string[];
+  readonly unchanged: readonly string[];
+  readonly removed: readonly string[];
+}
 type SpecRow = Selectable<BlockSpecsTable>;
 type MeasureQuantity = NonNullable<RawSpec['quantity']>;
 
@@ -27,46 +46,69 @@ type MeasureQuantity = NonNullable<RawSpec['quantity']>;
 export class BlockRepository {
   constructor(private readonly db: Kysely<Database>) {}
 
-  /** Inserts or replaces a block and its specs in one transaction. Parents must be saved first. */
-  async save(block: Block): Promise<void> {
-    await this.db.transaction().execute(async (transaction) => {
-      const row = {
-        slug: block.slug,
-        name: block.name,
-        description: block.description,
-        change_summary: block.changeSummary ?? null,
-        base_circuit_slug: block.baseCircuit.slug,
-        parent_slug: block.parent?.slug ?? null,
-        difficulty: block.difficulty,
-        validation_status: block.validationStatus,
-        hazardous: block.hazardous,
-        key_components: JSON.stringify(block.keyComponents),
-        source_title: block.source.title,
-        source_url: block.source.url ?? null,
-        kicad_path: block.schematic.kicadPath,
-        svg_path: block.schematic.svgPath,
-      };
-      await transaction
-        .insertInto('blocks')
-        .values(row)
-        .onConflict((conflict) => conflict.column('slug').doUpdateSet(row))
+  /**
+   * Makes the database an exact mirror of the given blocks, in one transaction: inserts added
+   * blocks, rewrites changed ones (by content hash, so unchanged blocks keep their dates) and
+   * deletes the blocks that are no longer given. Readers see either the old or the new catalogue.
+   */
+  async mirror(entries: readonly SchematicBlock[]): Promise<MirrorSummary> {
+    const ordered = [...entries].sort((a, b) => a.block.path().length - b.block.path().length);
+    return this.db.transaction().execute(async (transaction) => {
+      // Concurrent mirrors (two CI jobs) queue here; readers are never blocked.
+      await sql`select pg_advisory_xact_lock(${MIRROR_LOCK})`.execute(transaction);
+      const stored = await transaction
+        .selectFrom('blocks')
+        .select(['slug', 'content_hash'])
         .execute();
+      const storedHashes = new Map(stored.map((row) => [row.slug, row.content_hash]));
+      const summary: {
+        added: string[];
+        changed: string[];
+        unchanged: string[];
+        removed: string[];
+      } = {
+        added: [],
+        changed: [],
+        unchanged: [],
+        removed: [],
+      };
 
-      await transaction.deleteFrom('block_specs').where('block_slug', '=', block.slug).execute();
-      const specs = block.specs.map((spec) => {
-        const raw = spec.toRaw();
-        return {
-          block_slug: block.slug,
-          key: raw.key,
-          min: raw.min ?? null,
-          max: raw.max ?? null,
-          quantity: raw.quantity ?? null,
-          text: raw.text ?? null,
-        };
-      });
-      if (specs.length > 0) {
-        await transaction.insertInto('block_specs').values(specs).execute();
+      // Parents first, so a new variant's parent row exists before the variant references it.
+      for (const entry of ordered) {
+        const { block } = entry;
+        const row = toRow(block, contentHash(entry));
+        const storedHash = storedHashes.get(block.slug);
+        if (storedHash === row.content_hash) {
+          summary.unchanged.push(block.slug);
+          continue;
+        }
+        (storedHash === undefined ? summary.added : summary.changed).push(block.slug);
+        await transaction
+          .insertInto('blocks')
+          .values(row)
+          .onConflict((conflict) =>
+            conflict.column('slug').doUpdateSet({ ...row, updated_at: sql`now()` }),
+          )
+          .execute();
+        await transaction.deleteFrom('block_specs').where('block_slug', '=', block.slug).execute();
+        const specs = block.specs.map((spec) => toSpecRow(block.slug, spec.toRaw()));
+        if (specs.length > 0) {
+          await transaction.insertInto('block_specs').values(specs).execute();
+        }
+        await transaction
+          .insertInto('block_schematics')
+          .values({ block_slug: block.slug, svg: entry.svg })
+          .onConflict((conflict) => conflict.column('block_slug').doUpdateSet({ svg: entry.svg }))
+          .execute();
       }
+
+      // Deleted last: once every kept block points to its new parent, no kept row references them.
+      const kept = new Set(entries.map((entry) => entry.block.slug));
+      summary.removed = [...storedHashes.keys()].filter((slug) => !kept.has(slug)).sort();
+      if (summary.removed.length > 0) {
+        await transaction.deleteFrom('blocks').where('slug', 'in', summary.removed).execute();
+      }
+      return summary;
     });
   }
 
@@ -95,6 +137,53 @@ export class BlockRepository {
     }
     return catalogue;
   }
+}
+
+function toRow(block: Block, content_hash: string) {
+  return {
+    slug: block.slug,
+    name: block.name,
+    description: block.description,
+    change_summary: block.changeSummary ?? null,
+    base_circuit_slug: block.baseCircuit.slug,
+    parent_slug: block.parent?.slug ?? null,
+    difficulty: block.difficulty,
+    validation_status: block.validationStatus,
+    hazardous: block.hazardous,
+    key_components: JSON.stringify(block.keyComponents),
+    source_title: block.source.title,
+    source_url: block.source.url ?? null,
+    kicad_path: block.schematic.kicadPath,
+    svg_path: block.schematic.svgPath,
+    content_hash,
+  };
+}
+
+function toSpecRow(blockSlug: string, raw: RawSpec) {
+  return {
+    block_slug: blockSlug,
+    key: raw.key,
+    min: raw.min ?? null,
+    max: raw.max ?? null,
+    quantity: raw.quantity ?? null,
+    text: raw.text ?? null,
+  };
+}
+
+/**
+ * Hash of everything stored for a block. Specs are sorted by code point, not locale, so the hash
+ * is the same on every machine. The key order of `toRow` and `toRaw` objects is part of the hash:
+ * reordering their keys marks every block as changed once.
+ */
+function contentHash({ block, svg }: SchematicBlock): string {
+  const content = {
+    ...toRow(block, ''),
+    specs: block.specs
+      .map((spec) => spec.toRaw())
+      .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)),
+    svg,
+  };
+  return createHash('sha256').update(JSON.stringify(content)).digest('hex');
 }
 
 /** Orders rows so that every parent comes before its variants. */
