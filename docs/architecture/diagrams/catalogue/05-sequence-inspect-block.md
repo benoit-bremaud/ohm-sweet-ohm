@@ -66,4 +66,6 @@ sequenceDiagram
   a dropped database connection never crashes the process. Only the very first load can fail.
 - **SVG safety**: schematics are served as images that cannot run code, whatever a contributed
   file contains (`Content-Security-Policy: sandbox`, no script, `nosniff`).
+- **SVG caching**: `Cache-Control: no-cache` with the ETag — caches keep the file but revalidate
+  it on every request (a cheap 304), so a new schematic shows as soon as its block does.
 - **Errors**: every error answers `{ error }`; server errors never expose their cause.

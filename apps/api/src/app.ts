@@ -36,7 +36,8 @@ const SVG_HEADERS = {
   'content-type': 'image/svg+xml; charset=utf-8',
   'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; sandbox",
   'x-content-type-options': 'nosniff',
-  'cache-control': 'public, max-age=300',
+  // Kept by caches but revalidated every time (a cheap 304), so an import shows at once.
+  'cache-control': 'public, no-cache',
 } as const;
 
 export async function buildApp({

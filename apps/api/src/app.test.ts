@@ -98,6 +98,7 @@ describe('GET /blocks/:slug/schematic.svg', () => {
       'content-type': 'image/svg+xml; charset=utf-8',
       etag: '"abc123"',
       'x-content-type-options': 'nosniff',
+      'cache-control': 'public, no-cache',
       'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; sandbox",
     });
   });
