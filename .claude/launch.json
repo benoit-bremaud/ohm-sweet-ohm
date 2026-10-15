@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        ". \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && cd apps/web && node_modules/.bin/astro dev --port 4321"
+      ],
+      "port": 4321
+    }
+  ]
+}

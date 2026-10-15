@@ -1,0 +1,58 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+interface Props {
+  formulas: BlockResponse['formulas'];
+}
+
+const { formulas } = Astro.props;
+---
+
+{formulas.length === 0 ? (
+  <p class="empty">No design formula is recorded for this base circuit.</p>
+) : (
+  <dl>
+    {formulas.map((formula) => (
+      <div class="formula">
+        <dt>{formula.name}</dt>
+        <dd>
+          <code translate="no">{formula.expression}</code>
+          <p>{formula.description}</p>
+        </dd>
+      </div>
+    ))}
+  </dl>
+)}
+
+<style>
+  dl {
+    margin: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: var(--space-1) 0 0;
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  code {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sheet);
+    overflow-wrap: anywhere;
+  }
+
+  dd p,
+  .empty {
+    color: var(--ink-muted);
+    font-size: var(--size-label);
+  }
+</style>

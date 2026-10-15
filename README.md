@@ -43,6 +43,18 @@ DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm --filter @ohm-swee
 documentation is served at `/docs`. A new import is visible within 5 seconds; if the database
 becomes unreachable, the API keeps serving the catalogue already in memory.
 
+Run the web front-end (Astro on Cloudflare Workers, ADR-0003) against that API. It runs in
+`workerd`, the production runtime, and reads the API origin from `API_URL`, set for local work in
+`apps/web/.dev.vars` (git-ignored):
+
+```bash
+echo 'API_URL=http://127.0.0.1:3000' > apps/web/.dev.vars
+pnpm --filter @ohm-sweet-ohm/web dev
+```
+
+Then open `http://localhost:4321/blocks/led-resistor-basic`. `pnpm --filter @ohm-sweet-ohm/web build`
+produces the Worker in `apps/web/dist`; deployment is configured in `apps/web/wrangler.jsonc`.
+
 ## Licenses
 
 - Code: [MIT](LICENSE).

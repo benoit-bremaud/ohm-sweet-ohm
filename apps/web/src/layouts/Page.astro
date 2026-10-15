@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Origins the page loads images from, added to the CSP of this response. */
+  imageOrigins?: readonly string[];
+}
+
+const { title, description, imageOrigins = [] } = Astro.props;
+Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#10161c" media="(prefers-color-scheme: dark)" />
+    <title>{title} · Ohm Sweet Ohm</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <header class="bar">
+      <a class="wordmark" href="/" translate="no">
+        Ohm Sweet Ohm
+      </a>
+      <p class="tagline">Reusable circuit blocks and their variants</p>
+    </header>
+    <main id="main" class="page">
+      <slot />
+    </main>
+    <footer class="bar foot">
+      <p>Schematics are published under CC BY-SA 4.0; the code is MIT.</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    inset-inline-start: var(--space-4);
+    top: -100%;
+    padding: var(--space-2) var(--space-3);
+    background: var(--copper);
+    color: var(--copper-ink);
+  }
+
+  .skip:focus-visible {
+    top: var(--space-2);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-4) max(var(--space-4), env(safe-area-inset-left));
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .foot {
+    border-bottom: 0;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: var(--size-caption);
+  }
+
+  .wordmark {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .wordmark:hover {
+    text-decoration: underline;
+  }
+
+  .tagline {
+    color: var(--ink-muted);
+    font-size: var(--size-label);
+  }
+
+  .page {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: var(--space-8) max(var(--space-4), env(safe-area-inset-left)) var(--space-12);
+  }
+</style>

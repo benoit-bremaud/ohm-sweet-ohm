@@ -1,0 +1,43 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+import { formatSpec, sentence } from '../lib/format';
+
+interface Props {
+  specs: BlockResponse['specs'];
+}
+
+const { specs } = Astro.props;
+---
+
+{specs.length === 0 ? (
+  <p class="empty">This block has no specification yet.</p>
+) : (
+  <table>
+    <caption class="sr-only">Specifications</caption>
+    <tbody>
+      {specs.map((spec) => (
+        <tr>
+          <th scope="row">{spec.label}</th>
+          <td class="value">
+            {spec.kind === 'enum' ? sentence(formatSpec(spec)) : formatSpec(spec)}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+
+<style>
+  .empty {
+    color: var(--ink-muted);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+</style>
