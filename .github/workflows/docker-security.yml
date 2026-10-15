@@ -11,6 +11,8 @@ on:
       - Makefile
       - package.json
       - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - tsconfig.base.json
       - apps/api/**
       - packages/**
       - .github/workflows/docker-security.yml
@@ -23,6 +25,8 @@ on:
       - Makefile
       - package.json
       - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - tsconfig.base.json
       - apps/api/**
       - packages/**
       - .github/workflows/docker-security.yml
