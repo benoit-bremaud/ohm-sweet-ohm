@@ -9,6 +9,12 @@ import SafetyWarning from './SafetyWarning.astro';
 import Schematic from './Schematic.astro';
 import SpecTable from './SpecTable.astro';
 
+const NBSP = ' ';
+
+/** Matches a table row whose header is `label` and whose value cell holds `value`. */
+const row = (label: string, value: string) =>
+  new RegExp(`${label}</th>\\s*<td[^>]*>\\s*${value}\\s*</td>`);
+
 let container: AstroContainer;
 
 beforeAll(async () => {
@@ -19,11 +25,10 @@ describe('SpecTable', () => {
   it('shows every spec with its SI-prefixed unit, enum values capitalised', async () => {
     const html = await container.renderToString(SpecTable, { props: { specs: LED_BLOCK.specs } });
 
-    expect(html).toContain('Supply voltage');
-    expect(html).toContain('5 V');
-    expect(html).toContain('13.6 mA');
-    expect(html).toContain('>Red<');
-    expect(html).toContain('>1<');
+    expect(html).toMatch(row('Supply voltage', `5${NBSP}V`));
+    expect(html).toMatch(row('LED current', `13.6${NBSP}mA`));
+    expect(html).toMatch(row('LED colour', 'Red'));
+    expect(html).toMatch(row('Number of LEDs', '1'));
   });
 
   it('says so when there is no spec', async () => {
@@ -74,33 +79,43 @@ describe('Breadcrumb', () => {
 
     const html = await container.renderToString(Breadcrumb, { props: { block: variant } });
 
-    expect(html).toContain('<nav');
+    expect(html).toMatch(/<ol[^>]*>\s*<li[^>]*>\s*LED with current-limiting resistor\s*<\/li>/);
     expect(html).toContain('href="/blocks/led-resistor-basic"');
     expect(html).not.toContain('href="/blocks/led-resistor-two"');
   });
 });
 
-describe('Formulas and KeyComponents', () => {
-  it('render the expression as code and the part number as such', async () => {
-    const formulas = await container.renderToString(Formulas, {
+describe('Formulas', () => {
+  it('renders the expression as code', async () => {
+    const html = await container.renderToString(Formulas, {
       props: { formulas: LED_BLOCK.formulas },
     });
-    const parts = await container.renderToString(KeyComponents, {
+
+    expect(html).toContain('<code');
+    expect(html).toContain('R = (supplyVoltage − n·Vf) / ledCurrent');
+  });
+
+  it('has an empty state', async () => {
+    const html = await container.renderToString(Formulas, { props: { formulas: [] } });
+
+    expect(html).toContain('No design formula');
+  });
+});
+
+describe('KeyComponents', () => {
+  it('renders the part number and its role', async () => {
+    const html = await container.renderToString(KeyComponents, {
       props: { components: [{ partNumber: 'LM317', role: 'regulator' }] },
     });
 
-    expect(formulas).toContain('<code');
-    expect(formulas).toContain('R = (supplyVoltage − n·Vf) / ledCurrent');
-    expect(parts).toContain('LM317');
-    expect(parts).toContain('regulator');
+    expect(html).toContain('LM317');
+    expect(html).toContain('regulator');
   });
 
-  it('have an empty state each', async () => {
-    const formulas = await container.renderToString(Formulas, { props: { formulas: [] } });
-    const parts = await container.renderToString(KeyComponents, { props: { components: [] } });
+  it('has an empty state', async () => {
+    const html = await container.renderToString(KeyComponents, { props: { components: [] } });
 
-    expect(formulas).toContain('No design formula');
-    expect(parts).toContain('no specific component');
+    expect(html).toContain('no specific component');
   });
 });
 

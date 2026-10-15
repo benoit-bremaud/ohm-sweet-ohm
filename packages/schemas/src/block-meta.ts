@@ -8,7 +8,9 @@ import * as z from 'zod';
 
 import { parseSpecValue, type RawSpecValue } from './spec-value.js';
 
-const slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must be kebab-case');
+/** Kebab-case block identifier: the one rule for meta.yaml, API routes and web routes. */
+export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const slug = z.string().regex(SLUG_PATTERN, 'must be kebab-case');
 const nonEmpty = z.string().trim().min(1, 'must not be empty');
 
 /** One spec of a block, keyed by parameter. */

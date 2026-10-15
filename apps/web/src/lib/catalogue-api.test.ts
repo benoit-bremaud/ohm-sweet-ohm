@@ -36,6 +36,17 @@ describe('fetchBlock', () => {
     );
   });
 
+  it('uses the origin of the API URL only', async () => {
+    const fetchFn = answering(200, JSON.stringify(LED_BLOCK));
+
+    await fetchBlock('http://api.test:8080/v1/', 'led', fetchFn);
+
+    expect(fetchFn).toHaveBeenCalledWith(
+      new URL('http://api.test:8080/blocks/led'),
+      expect.anything(),
+    );
+  });
+
   it('never calls the API for a malformed slug', async () => {
     const fetchFn = answering(200, JSON.stringify(LED_BLOCK));
 
@@ -68,8 +79,10 @@ describe('fetchBlock', () => {
   it('reports a body that is not JSON as unavailable', async () => {
     const lookup = await fetchBlock(API, 'led', answering(200, '<html>'));
 
-    expect(lookup).toMatchObject({ kind: 'unavailable' });
-    expect(lookup).toMatchObject({ reason: expect.stringContaining('not JSON') as string });
+    expect(lookup).toMatchObject({
+      kind: 'unavailable',
+      reason: expect.stringContaining('not JSON') as string,
+    });
   });
 
   it('refuses a response that drifts from the contract', async () => {
@@ -77,7 +90,17 @@ describe('fetchBlock', () => {
 
     const lookup = await fetchBlock(API, 'led', answering(200, JSON.stringify(offContract)));
 
+    expect(lookup).toMatchObject({
+      kind: 'unavailable',
+      reason: expect.stringContaining('off contract') as string,
+    });
+  });
+
+  it('refuses a source link that is not http(s), so no javascript: href reaches the page', async () => {
+    const hostile = { ...LED_BLOCK, source: { title: 'x', url: 'javascript:alert(1)' } };
+
+    const lookup = await fetchBlock(API, 'led', answering(200, JSON.stringify(hostile)));
+
     expect(lookup).toMatchObject({ kind: 'unavailable' });
-    expect(lookup).toMatchObject({ reason: expect.stringContaining('off contract') as string });
   });
 });

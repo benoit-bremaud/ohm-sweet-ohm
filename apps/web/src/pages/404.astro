@@ -2,6 +2,8 @@
 import Page from '../layouts/Page.astro';
 
 Astro.response.status = 404;
+// Short-lived: a block imported after this request shows within the API's freshness window.
+Astro.response.headers.set('cache-control', 'public, max-age=60');
 ---
 
 <Page title="No such page" description="This page does not exist in the catalogue.">

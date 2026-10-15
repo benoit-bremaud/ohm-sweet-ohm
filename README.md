@@ -44,8 +44,8 @@ documentation is served at `/docs`. A new import is visible within 5 seconds; if
 becomes unreachable, the API keeps serving the catalogue already in memory.
 
 Run the web front-end (Astro on Cloudflare Workers, ADR-0003) against that API. It runs in
-`workerd`, the production runtime, and reads the API origin from `API_URL`, set for local work in
-`apps/web/.dev.vars` (git-ignored):
+`workerd`, the production runtime, and reads the API origin (scheme, host and port, no path) from
+`API_URL`, set for local work in `apps/web/.dev.vars` (git-ignored):
 
 ```bash
 echo 'API_URL=http://127.0.0.1:3000' > apps/web/.dev.vars

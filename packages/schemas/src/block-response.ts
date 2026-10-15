@@ -43,7 +43,7 @@ export const blockResponseSchema = z
     path: z.array(reference).describe('From the base circuit root block down to this block'),
     specs: z.array(z.discriminatedUnion('kind', [numericSpec, enumSpec])),
     keyComponents: z.array(z.object({ partNumber: z.string(), role: z.string() })),
-    source: z.object({ title: z.string(), url: z.string().nullable() }),
+    source: z.object({ title: z.string(), url: z.url({ protocol: /^https?$/ }).nullable() }),
     formulas: z.array(
       z.object({ name: z.string(), expression: z.string(), description: z.string() }),
     ),

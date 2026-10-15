@@ -9,7 +9,7 @@ import {
 } from 'fastify-type-provider-zod';
 import * as z from 'zod';
 
-import { blockResponseSchema, errorResponseSchema } from '@ohm-sweet-ohm/schemas';
+import { blockResponseSchema, errorResponseSchema, SLUG_PATTERN } from '@ohm-sweet-ohm/schemas';
 
 import type { CatalogueCache } from './catalogue-cache.js';
 import { toBlockResponse } from './to-block-response.js';
@@ -26,7 +26,7 @@ export interface AppDependencies {
   readonly logger?: boolean;
 }
 
-const slugParams = z.object({ slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) });
+const slugParams = z.object({ slug: z.string().regex(SLUG_PATTERN) });
 
 /**
  * SVGs are served as images that can never run code, even if a future contributed schematic

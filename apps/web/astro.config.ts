@@ -18,7 +18,12 @@ export default defineConfig({
   // Astro hashes its own inline styles; the page adds the API origin for images at request time.
   security: {
     csp: {
-      directives: ["default-src 'none'", "base-uri 'none'", "form-action 'none'"],
+      directives: [
+        "default-src 'none'",
+        "base-uri 'none'",
+        "form-action 'none'",
+        "frame-ancestors 'none'",
+      ],
     },
   },
 });

@@ -33,7 +33,7 @@ sequenceDiagram
     alt API unreachable or 5xx
       Web-->>Browser: 502 page ("catalogue unavailable"), cause logged only
     else 404
-      Web-->>Browser: 404 page ("no block")
+      Web-->>Browser: 404 page ("no such page")
     else 200
       Web->>Schema: parse(json)
       alt response does not match the contract
@@ -41,13 +41,12 @@ sequenceDiagram
       else valid block
         Web->>Web: render name, description, path, specs with units,<br/>key components, formulas, source, validation status,<br/>safety warning when hazardous
         Web-->>Browser: 200 HTML, CSP and security headers
+        Browser->>API: GET {API_URL}/blocks/{slug}/schematic.svg (If-None-Match)
+        API-->>Browser: 200 SVG as inert image, or 304
+        Note over Browser,API: a missing schematic leaves the rest of the page intact (UC3 2b)
       end
     end
   end
-
-  Browser->>API: GET {API_URL}/blocks/{slug}/schematic.svg (If-None-Match)
-  API-->>Browser: 200 SVG as inert image, or 304
-  Note over Browser,API: a missing schematic leaves the rest of the page intact (UC3 2b)
 ```
 
 ## Notes

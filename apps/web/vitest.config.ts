@@ -8,6 +8,12 @@ import 'vitest/config';
 // needs a server environment since Astro 6. The root is explicit because the workspace runs
 // this project from the repository root.
 export default getViteConfig(
-  { test: { name: 'web', environment: 'node', include: ['src/**/*.test.ts'] } },
+  {
+    test: {
+      name: 'web',
+      environment: 'node',
+      include: ['src/**/*.test.ts'],
+    },
+  },
   { root: fileURLToPath(new URL('.', import.meta.url)) },
 );

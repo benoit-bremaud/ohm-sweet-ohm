@@ -142,3 +142,17 @@ td.value {
   text-align: end;
   white-space: nowrap;
 }
+
+/* Empty state of a section: one look everywhere. */
+.empty {
+  color: var(--ink-muted);
+}
+
+/* Read by assistive technology only (table captions). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

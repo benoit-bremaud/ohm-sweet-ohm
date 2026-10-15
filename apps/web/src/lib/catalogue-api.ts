@@ -1,21 +1,24 @@
-import { blockResponseSchema, type BlockResponse } from '@ohm-sweet-ohm/schemas';
+import { blockResponseSchema, SLUG_PATTERN, type BlockResponse } from '@ohm-sweet-ohm/schemas';
 
-/** Same rule as the API's route parameter: a slug is kebab-case, nothing else reaches the network. */
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
+/**
+ * Outcome of a block lookup: `not-found` covers a malformed slug and an API 404 (the 404 page);
+ * `unavailable` covers network errors, non-2xx answers, non-JSON bodies and contract drift (the
+ * 502 page). The reason is for the logs only; pages never show it.
+ */
 export type BlockLookup =
   | { readonly kind: 'found'; readonly block: BlockResponse }
   | { readonly kind: 'not-found' }
-  // The reason is for the logs only; pages never show it.
   | { readonly kind: 'unavailable'; readonly reason: string };
 
+/** True for a kebab-case slug, the catalogue's one rule; anything else never reaches the network. */
 export function isSlug(value: string): boolean {
-  return SLUG.test(value);
+  return SLUG_PATTERN.test(value);
 }
 
 /**
  * Reads one block from the API and checks it against the shared contract, so the page renders
- * either a valid block or an error page, never a half-trusted response.
+ * either a valid block or an error page, never a half-trusted response. `apiUrl` is an origin;
+ * a path in it is ignored.
  */
 export async function fetchBlock(
   apiUrl: string,
@@ -27,11 +30,11 @@ export async function fetchBlock(
   }
   let response: Response;
   try {
-    response = await fetchFn(new URL(`/blocks/${slug}`, apiUrl), {
+    response = await fetchFn(new URL(`/blocks/${slug}`, new URL(apiUrl).origin), {
       headers: { accept: 'application/json' },
     });
   } catch (error) {
-    return { kind: 'unavailable', reason: `API unreachable: ${describe(error)}` };
+    return { kind: 'unavailable', reason: `API unreachable: ${messageOf(error)}` };
   }
   if (response.status === 404) {
     return { kind: 'not-found' };
@@ -43,7 +46,7 @@ export async function fetchBlock(
   try {
     body = await response.json();
   } catch (error) {
-    return { kind: 'unavailable', reason: `API body is not JSON: ${describe(error)}` };
+    return { kind: 'unavailable', reason: `API body is not JSON: ${messageOf(error)}` };
   }
   const parsed = blockResponseSchema.safeParse(body);
   if (!parsed.success) {
@@ -52,6 +55,6 @@ export async function fetchBlock(
   return { kind: 'found', block: parsed.data };
 }
 
-function describe(error: unknown): string {
+function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
