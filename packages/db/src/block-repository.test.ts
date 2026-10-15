@@ -82,13 +82,16 @@ const VARIANT_A = draft({ slug: 'a', parentSlug: 'led-resistor-basic', changeSum
 const VARIANT_B = draft({ slug: 'b', parentSlug: 'a', changeSummary: 'three LEDs' });
 
 describe('BlockRepository', () => {
+  const lostConnections: Error[] = [];
   let container: StartedPostgreSqlContainer;
   let db: Kysely<Database>;
   let repository: BlockRepository;
 
   beforeAll(async () => {
     container = await new PostgreSqlContainer('postgres:17-alpine').start();
-    db = createDatabase(container.getConnectionUri());
+    db = createDatabase(container.getConnectionUri(), (error) => {
+      lostConnections.push(error);
+    });
     await migrateToLatest(db);
     repository = new BlockRepository(db);
   }, 180_000);
@@ -297,6 +300,32 @@ describe('BlockRepository', () => {
     expect(summary.unchanged).toEqual(['led-resistor-basic']);
   });
 
+  it('changes the catalogue version on every mirror that changes something, and only then', async () => {
+    const empty = await repository.catalogueVersion();
+    await repository.mirror(entries(published(draft())));
+    const one = await repository.catalogueVersion();
+    await repository.mirror(entries(published(draft())));
+    const same = await repository.catalogueVersion();
+    await repository.mirror(entries(published(draft(), VARIANT_A)));
+    const two = await repository.catalogueVersion();
+    await repository.mirror(entries(published(draft())));
+    const removed = await repository.catalogueVersion();
+
+    expect(new Set([empty, one, two]).size).toBe(3);
+    expect([same, removed]).toEqual([one, one]);
+  });
+
+  it('finds a block schematic with its content hash, and nothing for an unknown block', async () => {
+    await repository.mirror(entries(published(draft())));
+    const [row] = await db.selectFrom('blocks').select('content_hash').execute();
+
+    expect(await repository.findSchematic('led-resistor-basic')).toEqual({
+      svg: '<svg>led-resistor-basic</svg>',
+      contentHash: row?.content_hash,
+    });
+    expect(await repository.findSchematic('unknown')).toBeUndefined();
+  });
+
   it('leaves the database unchanged when a mirror fails', async () => {
     await repository.mirror(entries(published(draft(), VARIANT_A)));
     const orphan = published(
@@ -359,5 +388,19 @@ describe('BlockRepository', () => {
         .where('slug', '=', 'led-resistor-basic')
         .execute(),
     ).rejects.toThrow(/blocks_variant_summary_check/);
+  });
+
+  it('survives the server dropping an idle connection and reconnects', async () => {
+    const admin = createDatabase(container.getConnectionUri(), () => undefined);
+    await repository.catalogueVersion();
+
+    await sql`
+      select pg_terminate_backend(pid) from pg_stat_activity
+      where datname = current_database() and pid <> pg_backend_pid()
+    `.execute(admin);
+    await admin.destroy();
+    await expect.poll(() => lostConnections.length).toBe(1);
+
+    await expect(repository.catalogueVersion()).resolves.toBeTypeOf('string');
   });
 });

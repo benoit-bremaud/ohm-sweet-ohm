@@ -12,10 +12,17 @@ const MIGRATIONS: Readonly<Record<string, Migration>> = {
   '0002-schematics-and-content-hash': schematicsAndContentHash,
 };
 
-export function createDatabase(connectionString: string): Kysely<Database> {
-  return new Kysely<Database>({
-    dialect: new PostgresDialect({ pool: new pg.Pool({ connectionString }) }),
-  });
+/**
+ * When the server drops an idle connection (restart, outage), the pool emits an error that would
+ * crash the process if nobody listened: it is reported instead, and the next query reconnects.
+ */
+export function createDatabase(
+  connectionString: string,
+  onIdleConnectionError: (error: Error) => void,
+): Kysely<Database> {
+  const pool = new pg.Pool({ connectionString });
+  pool.on('error', onIdleConnectionError);
+  return new Kysely<Database>({ dialect: new PostgresDialect({ pool }) });
 }
 
 /** Applies every pending migration; throws with the failing migration's error. */

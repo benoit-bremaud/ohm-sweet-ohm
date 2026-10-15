@@ -4,7 +4,7 @@ A public API (and its demo web front-end) that helps electronics enthusiasts fin
 a **reusable circuit block** matching a precise need — and explore its variants,
 from the simplest base circuits to more complex ones.
 
-> Status: milestone M0 (foundations & modelling) in progress — tracked in the [GitHub Project](https://github.com/users/benoit-bremaud/projects/61).
+> Status: milestone M1 (first vertical slice) in progress — tracked in the [GitHub Project](https://github.com/users/benoit-bremaud/projects/61).
 
 ## Documentation
 
@@ -32,6 +32,16 @@ DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm catalogue:import
 
 The import mirrors the `catalogue/` folder: it adds, updates and removes blocks so the database
 matches it exactly, and refuses to run when no block is found.
+
+Serve the catalogue (the importer applies the migrations; the API only reads):
+
+```bash
+DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm --filter @ohm-sweet-ohm/api start
+```
+
+`PORT` (default 3000) and `HOST` (default `0.0.0.0`) are optional. The interactive API
+documentation is served at `/docs`. A new import is visible within 5 seconds; if the database
+becomes unreachable, the API keeps serving the catalogue already in memory.
 
 ## Licenses
 

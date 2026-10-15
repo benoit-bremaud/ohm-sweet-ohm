@@ -12,3 +12,4 @@ export {
   type RawSpecValue,
   type SpecValueResult,
 } from './spec-value.js';
+export { type BlockResponse, blockResponseSchema, errorResponseSchema } from './block-response.js';

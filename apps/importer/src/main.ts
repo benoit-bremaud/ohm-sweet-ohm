@@ -20,7 +20,9 @@ async function main(): Promise<number> {
   const launchDir = process.env.INIT_CWD ?? process.cwd();
   const catalogueDir = path.resolve(launchDir, catalogueArgument);
   const renderDir = path.resolve(launchDir, renderArgument);
-  const db = createDatabase(databaseUrl);
+  const db = createDatabase(databaseUrl, (error) => {
+    console.error(`database connection lost: ${error.message}`);
+  });
   try {
     await migrateToLatest(db);
     const result = await importCatalogue({
