@@ -119,3 +119,9 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
   - **Smoke test finding**: a dropped database connection crashed the process (unhandled `pg.Pool` error event), defeating the outage decision. `createDatabase` now requires an idle-connection error callback; mutation-checked reconnect test. Server errors now answer a generic `{ error }` instead of exposing `ECONNREFUSED`.
   - **Independent review before push** (only reviewer): no Must; applied the `{ error }` shape for unknown routes and RFC 9110 `If-None-Match` matching (lists, weak tags, `*`), plus clean shutdown on SIGTERM.
   - **Review by Codex** (back on this PR): P1 applied — the SVG was cacheable for 5 minutes while block data refreshes within 5 seconds, so a page could show new data with an old schematic; now `Cache-Control: public, no-cache` (always revalidated against the ETag, 304 when unchanged).
+
+## 2026-10-15
+
+- **PR #23 merged** (`f72fe6d`) — feat(api): serve catalogue blocks and schematics over HTTP. Closes #17. Codex P1 (SVG cache) applied; merged on green CI.
+- **Decision method** — every choice between several solutions now uses an explicit MCDA matrix (options, 0–5 scores with justifications, weights summing to 100, total out of 500, sensitivity, owner validates the weights, top score wins). Global rule for every project; first applied to the web stack below.
+- **ADR-0003 — web front-end on Astro + Cloudflare Workers** (branch `feat/18-web`, issue #18) — the framing's "Next.js on Vercel" had never been compared with an alternative. Matrix: Astro + Cloudflare 435, Next.js + Vercel 350, Next.js + Cloudflare (OpenNext) 310 out of 500; stable under a doubled portfolio weight. Framing, work plan and issue #18 updated.
