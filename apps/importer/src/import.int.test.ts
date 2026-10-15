@@ -23,7 +23,9 @@ describe('catalogue import against PostgreSQL', () => {
 
   beforeAll(async () => {
     container = await new PostgreSqlContainer('postgres:17-alpine').start();
-    db = createDatabase(container.getConnectionUri());
+    db = createDatabase(container.getConnectionUri(), (error) => {
+      throw error;
+    });
     await migrateToLatest(db);
     repository = new BlockRepository(db);
     root = await mkdtemp(path.join(tmpdir(), 'osh-import-int-'));

@@ -113,6 +113,30 @@ export class BlockRepository {
   }
 
   /**
+   * A fingerprint of the whole stored catalogue: it changes whenever a mirror adds, changes or
+   * removes a block, and costs one cheap query, so readers can reload only when needed.
+   */
+  async catalogueVersion(): Promise<string> {
+    const { rows } = await sql<{ version: string | null }>`
+      select md5(string_agg(slug || ':' || content_hash, ',' order by slug)) as version from blocks
+    `.execute(this.db);
+    return rows[0]?.version ?? 'empty';
+  }
+
+  /** The rendered schematic of a block, with the block's content hash for HTTP caching. */
+  async findSchematic(
+    slug: string,
+  ): Promise<{ readonly svg: string; readonly contentHash: string } | undefined> {
+    const row = await this.db
+      .selectFrom('block_schematics')
+      .innerJoin('blocks', 'blocks.slug', 'block_schematics.block_slug')
+      .select(['block_schematics.svg', 'blocks.content_hash'])
+      .where('block_schematics.block_slug', '=', slug)
+      .executeTakeFirst();
+    return row === undefined ? undefined : { svg: row.svg, contentHash: row.content_hash };
+  }
+
+  /**
    * Rebuilds a catalogue holding every stored block. Throws if a stored block breaks a domain
    * rule, which means the database was changed outside this repository.
    */
