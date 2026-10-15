@@ -37,6 +37,8 @@ describe('block page', () => {
     );
     expect(html).not.toContain('Hazardous voltage');
     expect(html).not.toContain('<script');
+    // No link to a route that does not exist yet (home page comes with M2).
+    expect(html).not.toMatch(/href="\/"/);
   });
 
   it('warns before the schematic when the block is hazardous', async () => {

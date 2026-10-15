@@ -27,9 +27,10 @@ Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
       Skip to content
     </a>
     <header class="bar">
-      <a class="wordmark" href="/" translate="no">
+      {/* Plain text until the home page exists (M2): a link to / would only reach the 404. */}
+      <span class="wordmark" translate="no">
         Ohm Sweet Ohm
-      </a>
+      </span>
       <p class="tagline">Reusable circuit blocks and their variants</p>
     </header>
     <main id="main" class="page">
@@ -72,13 +73,7 @@ Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
   }
 
   .wordmark {
-    color: var(--ink);
     font-weight: 700;
-    text-decoration: none;
-  }
-
-  .wordmark:hover {
-    text-decoration: underline;
   }
 
   .tagline {
