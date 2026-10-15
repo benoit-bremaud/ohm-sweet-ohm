@@ -126,7 +126,8 @@ dashboard); **B** GitHub Actions running `wrangler versions upload` and commenti
 
 **Chosen: A, Workers Builds, 400 points**, as ADR-0003 already named it: B wins on
 reproducibility, A on the absence of secrets and the native comment. **Fallback: B (360)**, a
-drop-in. The dashboard settings are recorded in the deployment README so they can be re-entered.
+drop-in. The dashboard settings are recorded in [docs/deploy.md](../../deploy.md) so they can be
+re-entered.
 
 ## Decision outcome
 
@@ -136,8 +137,10 @@ drop-in. The dashboard settings are recorded in the deployment README so they ca
   nothing in CPU. Secrets: `FLY_API_TOKEN` in GitHub, `DATABASE_URL` in Fly.
 - One Neon project `ohm-sweet-ohm`, free plan, Frankfurt; its direct (unpooled) connection string
   is the `DATABASE_URL` of both the API (Fly secret) and the importer (GitHub secret). The
-  catalogue is imported from CI on every merge to `main` that touches the catalogue, the renderer
-  or the importer's code, after the schematics are rendered in Docker.
+  catalogue is imported from CI on every merge to `main` that touches the catalogue, the renderer,
+  the importer, the shared packages or the lockfile, after the schematics are rendered in Docker.
+  Migrations run in the importer only; a redeployed API may precede the import by a few minutes
+  after a migration lands, which staging accepts.
 - `apps/web` is built and deployed by Workers Builds: production from `main`, a preview per
   branch, the URL commented on the pull request. `API_URL` in `wrangler.jsonc` points at the Fly
   app for both.

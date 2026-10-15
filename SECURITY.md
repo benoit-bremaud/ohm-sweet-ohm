@@ -27,5 +27,7 @@ there is none today, so the file does not exist.
 
 ## Runtime
 
-The API container runs as UID 1000 with no npm, and only reads the database. Secrets live in
-Fly secrets and GitHub Actions secrets, never in the repository (see `docs/deploy.md`).
+The API container runs as UID 1000 with no npm. Its code only reads the database, but it shares
+the importer's credential, which can write and migrate; a read-only Neon role for the API is a
+follow-up. Secrets live in Fly secrets and GitHub Actions secrets, never in the repository (see
+`docs/deploy.md`).

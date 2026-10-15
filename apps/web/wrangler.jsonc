@@ -6,10 +6,11 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "binding": "ASSETS", "directory": "./dist" },
   "observability": { "enabled": true },
-  // Every uploaded version gets its own URL, so a branch preview can be checked before merging.
-  "preview_urls": true,
   // Non-secret variables. API_URL is an origin (scheme, host, port; a path would be ignored):
   // the staging API on Fly.io (ADR-0004, docs/deploy.md), shared by production and the branch
   // previews; local development overrides it in .dev.vars (see README).
   "vars": { "API_URL": "https://ohm-sweet-ohm-api.fly.dev" },
+  // Branch previews (`wrangler preview`, run by Workers Builds on non-production branches) do not
+  // inherit the top-level vars: the block is required and carries its own copy.
+  "previews": { "vars": { "API_URL": "https://ohm-sweet-ohm-api.fly.dev" } },
 }

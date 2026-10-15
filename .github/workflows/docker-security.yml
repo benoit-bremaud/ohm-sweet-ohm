@@ -1,6 +1,8 @@
 name: Docker security
 
 on:
+  # The API image is also rebuilt and started when its source changes: the bundle (apps/api/build.ts)
+  # is the only place where a missing npm dependency or an ESM interop problem shows up.
   pull_request:
     paths:
       - '**/Dockerfile'
@@ -8,9 +10,9 @@ on:
       - .hadolint.yaml
       - Makefile
       - package.json
-      - apps/*/package.json
-      - packages/*/package.json
       - pnpm-lock.yaml
+      - apps/api/**
+      - packages/**
       - .github/workflows/docker-security.yml
   push:
     branches: [main]
@@ -20,9 +22,9 @@ on:
       - .hadolint.yaml
       - Makefile
       - package.json
-      - apps/*/package.json
-      - packages/*/package.json
       - pnpm-lock.yaml
+      - apps/api/**
+      - packages/**
       - .github/workflows/docker-security.yml
   schedule:
     # New CVEs land against unchanged images: weekly rescan.
@@ -66,5 +68,7 @@ jobs:
           restore-keys: trivy-${{ runner.os }}-
       - name: Build the API image
         run: make build-api
+      - name: Start the API image and wait for its health check
+        run: make smoke-api
       - name: Scan the API image for HIGH and CRITICAL vulnerabilities
         run: make scan-docker-image

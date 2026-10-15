@@ -7,3 +7,16 @@ updates:
       - /docker/renderer
     schedule:
       interval: weekly
+  # Actions are pinned by commit SHA; only Dependabot moves them.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  # One grouped pull request a week for the whole pnpm workspace.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        patterns: ['*']

@@ -6,7 +6,7 @@ DOCKERFILES := apps/api/Dockerfile docker/renderer/Dockerfile
 TRIVY_CACHE ?= $(HOME)/.cache/trivy
 IMAGE ?= ohm-sweet-ohm-api
 
-.PHONY: lint-docker scan-docker-config scan-docker-image build-api
+.PHONY: lint-docker scan-docker-config scan-docker-image build-api smoke-api
 
 # The hadolint image has no ENTRYPOINT, only a CMD: the binary name is passed on purpose.
 lint-docker:
@@ -24,6 +24,18 @@ scan-docker-config:
 
 build-api:
 	docker build -f apps/api/Dockerfile -t $(IMAGE) .
+
+# Proves the bundle starts and answers /health as the unprivileged user; the database URL points
+# nowhere on purpose, the health route does not need it.
+smoke-api:
+	docker rm -f osh-api-smoke >/dev/null 2>&1 || true
+	docker run -d --name osh-api-smoke -e DATABASE_URL=postgres://nobody:nothing@127.0.0.1:1/nothing $(IMAGE) >/dev/null
+	for i in $$(seq 1 20); do \
+	  status="$$(docker inspect -f '{{.State.Health.Status}}' osh-api-smoke)"; \
+	  if [ "$$status" = healthy ]; then docker rm -f osh-api-smoke >/dev/null; echo "healthy after $$i s"; exit 0; fi; \
+	  sleep 1; \
+	done; \
+	docker logs osh-api-smoke; docker rm -f osh-api-smoke >/dev/null; echo "not healthy after 20 s"; exit 1
 
 scan-docker-image:
 	mkdir -p "$(TRIVY_CACHE)"

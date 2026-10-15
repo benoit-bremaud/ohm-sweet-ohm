@@ -9,8 +9,12 @@ Actions secrets, Fly secrets and the Neon console.
 | Part | Where | Deployed by | URL |
 | --- | --- | --- | --- |
 | `apps/web` | Cloudflare Workers | Workers Builds (`main` → production, other branches → preview) | `https://ohm-sweet-ohm-web.<account>.workers.dev`, preview URL commented on the PR |
-| `apps/api` | Fly.io, app `ohm-sweet-ohm-api`, region `cdg` | `.github/workflows/deploy-api.yml` on every push to `main` | `https://ohm-sweet-ohm-api.fly.dev` |
-| PostgreSQL | Neon, project `ohm-sweet-ohm`, free plan, `eu-central-1` | `.github/workflows/catalogue.yml` imports the catalogue on every push to `main` | — |
+| `apps/api` | Fly.io, app `ohm-sweet-ohm-api`, region `cdg` | `.github/workflows/deploy-api.yml` on a push to `main` touching the API, `packages/` or the lockfile, or by hand | `https://ohm-sweet-ohm-api.fly.dev` |
+| PostgreSQL | Neon, project `ohm-sweet-ohm`, free plan, `eu-central-1` | `.github/workflows/catalogue.yml` imports the catalogue on a push to `main` touching the catalogue, the renderer, the importer, `packages/` or the lockfile, or by hand (only `main` imports) | — |
+
+Migrations run in the importer only. A merge that adds a migration starts both workflows; the API
+may be redeployed before the import has applied the migration and fail until it does, usually a
+few minutes. Accepted for staging (ADR-0004); a `release_command` on Fly would close the window.
 
 ## Secrets and variables
 
@@ -28,10 +32,19 @@ Cloudflare needs no token in GitHub: Workers Builds authenticates through its Gi
 ### Neon
 
 1. Create the project `ohm-sweet-ohm` (free plan, region `eu-central-1`).
-2. Copy the **direct** connection string, append `?sslmode=verify-full`, and store it as the
-   `DATABASE_URL` secret in GitHub (Settings → Secrets and variables → Actions) and in Fly.
-3. Fill the database once: run the `Catalogue` workflow by hand (`workflow_dispatch`); it
-   renders the schematics in Docker, applies the migrations and mirrors the catalogue.
+2. Copy the **direct** connection string with its query replaced by `?sslmode=verify-full` into
+   a git-ignored `.env.staging` at the repository root (`DATABASE_URL=…`), then feed the secrets
+   from that file so the value never goes through the shell history or the terminal:
+
+   ```bash
+   grep '^DATABASE_URL=' .env.staging | cut -d= -f2- | gh secret set DATABASE_URL
+   flyctl secrets import --app ohm-sweet-ohm-api < .env.staging
+   ```
+
+   With the Neon CLI signed in, `neonctl connection-string --project-id <id>` prints the string
+   and can be piped the same way.
+3. Fill the database once: run the `Catalogue` workflow by hand (`workflow_dispatch` on `main`);
+   it renders the schematics in Docker, applies the migrations and mirrors the catalogue.
 
 Scale to zero is always on: the compute suspends after 5 minutes without connection and wakes on
 the next one. The free plan gives 100 CU-hours a month; the API stops when idle, so it only
@@ -41,8 +54,9 @@ checks the catalogue version while it serves requests.
 
 ```bash
 flyctl apps create ohm-sweet-ohm-api --org personal
-flyctl secrets set DATABASE_URL='<neon direct connection string>' --app ohm-sweet-ohm-api
-flyctl tokens create deploy --app ohm-sweet-ohm-api --expiry 8760h   # → FLY_API_TOKEN in GitHub
+flyctl secrets import --app ohm-sweet-ohm-api < .env.staging          # DATABASE_URL, see Neon
+flyctl tokens create deploy --app ohm-sweet-ohm-api --expiry 8760h --json \
+  | jq -r .token | gh secret set FLY_API_TOKEN                        # never printed
 flyctl deploy --remote-only --ha=false --config apps/api/fly.toml     # from the repository root
 ```
 
@@ -81,7 +95,8 @@ In the Cloudflare dashboard, Workers → the Worker `ohm-sweet-ohm-web` → Sett
 
 Workers Builds uses the `wrangler` version pinned in `apps/web/package.json`. The first build must
 be created by connecting the repository from the dashboard; later changes to `wrangler.jsonc`
-deploy themselves.
+deploy themselves. Branch previews read their variables from the `previews` block of
+`wrangler.jsonc`, not from the top-level `vars`, so `API_URL` is declared in both.
 
 ## Local image checks
 
@@ -89,6 +104,7 @@ deploy themselves.
 make lint-docker          # Hadolint, pinned image
 make scan-docker-config   # Trivy, Dockerfile misconfigurations
 make build-api            # docker build -f apps/api/Dockerfile
+make smoke-api            # the image starts and its health check passes
 make scan-docker-image    # Trivy, HIGH and CRITICAL with a fix
-docker run --rm -p 3000:3000 -e DATABASE_URL=postgres://user:password@host.docker.internal:5432/ohm ohm-sweet-ohm-api
+docker run --rm -p 3000:3000 --env-file .env.staging ohm-sweet-ohm-api   # against the staging database
 ```

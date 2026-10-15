@@ -5,9 +5,10 @@
 app = "ohm-sweet-ohm-api"
 primary_region = "cdg"
 
-# The API finishes in-flight requests and closes its pool on SIGTERM (apps/api/src/main.ts).
+# The API finishes in-flight requests and closes its pool on SIGTERM (apps/api/src/main.ts); the
+# window leaves room for a catalogue reload in flight.
 kill_signal = "SIGTERM"
-kill_timeout = "10s"
+kill_timeout = "30s"
 
 # Relative to this file; the build context is the directory flyctl runs from (the repository root).
 [build]

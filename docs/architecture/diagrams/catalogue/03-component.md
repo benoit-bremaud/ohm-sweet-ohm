@@ -121,7 +121,11 @@ flowchart LR
   connection. The API then checks the catalogue version only while it serves requests, which keeps
   Neon's free compute hours.
 - **Import on merge**: the catalogue workflow renders the schematics in Docker, then runs the
-  importer against the Neon database; the API sees the new catalogue within 5 seconds.
+  importer against the Neon database; the API sees the new catalogue within 5 seconds. Only a run
+  on `main` imports, whether pushed or triggered by hand.
+- **Migrations belong to the importer**: the API assumes the schema is there. A merge that adds a
+  migration starts the API deployment and the import in parallel, so the API can be redeployed a
+  few minutes before the schema changes; accepted for staging (ADR-0004).
 
 ## Notes
 
