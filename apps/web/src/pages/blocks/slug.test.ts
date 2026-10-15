@@ -31,9 +31,10 @@ describe('block page', () => {
     });
 
     expect(html).toMatch(/<h1[^>]*>LED with current-limiting resistor<\/h1>/);
-    // The origin comes from API_URL (wrangler vars or .dev.vars); the path is the contract.
+    // The origin comes from API_URL (wrangler vars: the staging API over https; .dev.vars locally,
+    // usually http); the path is the contract.
     expect(html).toMatch(
-      /<img[^>]+src="http:\/\/[^/]+\/blocks\/led-resistor-basic\/schematic\.svg"/,
+      /<img[^>]+src="https?:\/\/[^/]+\/blocks\/led-resistor-basic\/schematic\.svg"/,
     );
     expect(html).not.toContain('Hazardous voltage');
     expect(html).not.toContain('<script');
