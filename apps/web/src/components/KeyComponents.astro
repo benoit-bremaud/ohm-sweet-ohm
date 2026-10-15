@@ -1,0 +1,27 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+interface Props {
+  components: BlockResponse['keyComponents'];
+}
+
+const { components } = Astro.props;
+---
+
+{components.length === 0 ? (
+  <p class="empty">Built from generic parts: no specific component is required.</p>
+) : (
+  <table>
+    <caption class="sr-only">Key components</caption>
+    <tbody>
+      {components.map((component) => (
+        <tr>
+          <th scope="row" class="mono" translate="no">
+            {component.partNumber}
+          </th>
+          <td>{component.role}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}

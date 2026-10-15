@@ -10,6 +10,12 @@ coverage/
 .env.*
 !.env.example
 
+# Astro and Cloudflare Workers local files (apps/web)
+.astro/
+.wrangler/
+.dev.vars
+worker-configuration.d.ts
+
 # KiCad local artefacts
 *-backups/
 fp-info-cache

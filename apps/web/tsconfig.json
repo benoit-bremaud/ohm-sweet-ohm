@@ -1,0 +1,8 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
+    "types": ["astro/client"]
+  },
+  "include": [".astro/types.d.ts", "src", "astro.config.ts", "vitest.config.ts"],
+  "exclude": ["dist"]
+}

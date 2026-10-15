@@ -1,0 +1,149 @@
+---
+import { API_URL } from 'astro:env/server';
+
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Formulas from '../../components/Formulas.astro';
+import KeyComponents from '../../components/KeyComponents.astro';
+import SafetyWarning from '../../components/SafetyWarning.astro';
+import Schematic from '../../components/Schematic.astro';
+import SpecTable from '../../components/SpecTable.astro';
+import Page from '../../layouts/Page.astro';
+import { fetchBlock } from '../../lib/catalogue-api';
+import { sentence } from '../../lib/format';
+
+const { slug = '' } = Astro.params;
+const lookup = await fetchBlock(API_URL, slug);
+
+if (lookup.kind === 'not-found') {
+  return Astro.rewrite('/404');
+}
+if (lookup.kind === 'unavailable') {
+  // The cause goes to the Worker logs only; the visitor gets a plain sentence.
+  console.error(`block ${slug}: ${lookup.reason}`);
+  Astro.response.status = 502;
+  Astro.response.headers.set('cache-control', 'no-store');
+}
+
+const block = lookup.kind === 'found' ? lookup.block : undefined;
+const api = new URL(API_URL);
+---
+
+{block === undefined ? (
+  <Page title="Catalogue unavailable" description="The catalogue cannot be reached right now.">
+    <h1>Catalogue unavailable</h1>
+    <p class="lead">
+      The catalogue did not answer. This is on our side, not yours: try again in a minute.
+    </p>
+  </Page>
+) : (
+  <Page title={block.name} description={block.description} imageOrigins={[api.origin]}>
+    <article class="block">
+      <header class="head">
+        <Breadcrumb block={block} />
+        <h1>{block.name}</h1>
+        <p class="lead">{block.description}</p>
+        {block.changeSummary !== null && <p class="change">Changes: {block.changeSummary}</p>}
+      </header>
+
+      {block.hazardous && <SafetyWarning />}
+
+      <div class="sheet-and-specs">
+        <Schematic block={block} src={new URL(block.schematicUrl, api).href} />
+        <section aria-labelledby="specs">
+          <h2 id="specs">Specifications</h2>
+          <SpecTable specs={block.specs} />
+        </section>
+      </div>
+
+      <section aria-labelledby="formulas">
+        <h2 id="formulas">Design formulas</h2>
+        <Formulas formulas={block.formulas} />
+      </section>
+
+      <section aria-labelledby="components">
+        <h2 id="components">Key components</h2>
+        <KeyComponents components={block.keyComponents} />
+      </section>
+
+      <section aria-labelledby="about">
+        <h2 id="about">About this block</h2>
+        <dl class="facts">
+          <dt>Validation</dt>
+          <dd>
+            {block.validationStatus === 'tested'
+              ? 'Tested on a real build.'
+              : 'Theoretical: values are computed and have not been checked on a build yet.'}
+          </dd>
+          <dt>Difficulty</dt>
+          <dd>{sentence(block.difficulty)}</dd>
+          <dt>Source</dt>
+          <dd>
+            {block.source.url === null ? (
+              block.source.title
+            ) : (
+              <a href={block.source.url} rel="noopener">
+                {block.source.title}
+              </a>
+            )}
+          </dd>
+        </dl>
+      </section>
+    </article>
+  </Page>
+)}
+
+<style>
+  .block {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .lead {
+    font-size: var(--size-title);
+    line-height: 1.4;
+    max-width: var(--measure);
+  }
+
+  .head {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--measure);
+  }
+
+  .change {
+    color: var(--ink-muted);
+  }
+
+  .sheet-and-specs {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (min-width: 48rem) {
+    .sheet-and-specs {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+  }
+
+  section {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .facts {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--space-2) var(--space-6);
+  }
+
+  .facts dt {
+    font-weight: 600;
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+import { sentence } from '../lib/format';
+
+interface Props {
+  block: BlockResponse;
+  /** Absolute URL of the rendered SVG on the API. */
+  src: string;
+}
+
+const { block, src } = Astro.props;
+const status =
+  block.validationStatus === 'tested'
+    ? 'Tested on a real build'
+    : 'Theoretical: computed, not yet built';
+---
+
+{/* The schematic is an image loaded from the API: it never runs in this page (ADR-0003). */}
+<figure class="sheet">
+  <img src={src} alt={`Schematic of ${block.name}`} width="338" height="398" fetchpriority="high" />
+  <figcaption class="title-block">
+    <span class="name">{block.name}</span>
+    <span class="mono" translate="no">
+      {block.slug}
+    </span>
+    <span>{status}</span>
+    <span>{sentence(block.difficulty)}</span>
+  </figcaption>
+</figure>
+
+<style>
+  /* A datasheet figure: the drawing on its sheet, the title block in the corner. */
+  .sheet {
+    margin: 0;
+    display: grid;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sheet);
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 28rem;
+    object-fit: contain;
+    padding: var(--space-6);
+  }
+
+  .title-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-1) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: var(--size-caption);
+  }
+
+  .name {
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

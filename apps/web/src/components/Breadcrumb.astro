@@ -1,0 +1,44 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+interface Props {
+  block: BlockResponse;
+}
+
+const { block } = Astro.props;
+// From the base circuit down to this block's parent; the block itself is the page title.
+const ancestors = block.path.slice(0, -1);
+---
+
+{
+  /* A root block is its base circuit: no path to show until variants exist (M2). */
+  ancestors.length > 0 && (
+    <nav aria-label="Variants path">
+      <ol>
+        <li>{block.baseCircuit.name}</li>
+        {ancestors.map((step) => (
+          <li>
+            <a href={`/blocks/${step.slug}`}>{step.name}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  ol {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    color: var(--ink-muted);
+    font-size: var(--size-label);
+  }
+
+  li + li::before {
+    content: '/';
+    margin-inline: var(--space-2);
+  }
+</style>

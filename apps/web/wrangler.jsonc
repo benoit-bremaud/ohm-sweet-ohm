@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ohm-sweet-ohm-web",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-10-15",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "binding": "ASSETS", "directory": "./dist" },
+  "observability": { "enabled": true },
+  // Non-secret variables. API_URL is an origin (scheme, host, port; a path would be ignored),
+  // overridden per environment (local: .dev.vars, see README).
+  "vars": { "API_URL": "http://127.0.0.1:3000" },
+}

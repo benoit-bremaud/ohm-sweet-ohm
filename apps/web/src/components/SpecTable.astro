@@ -1,0 +1,27 @@
+---
+import type { BlockResponse } from '@ohm-sweet-ohm/schemas';
+
+import { formatSpec } from '../lib/format';
+
+interface Props {
+  specs: BlockResponse['specs'];
+}
+
+const { specs } = Astro.props;
+---
+
+{specs.length === 0 ? (
+  <p class="empty">This block has no specification yet.</p>
+) : (
+  <table>
+    <caption class="sr-only">Specifications</caption>
+    <tbody>
+      {specs.map((spec) => (
+        <tr>
+          <th scope="row">{spec.label}</th>
+          <td class="value">{formatSpec(spec)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}

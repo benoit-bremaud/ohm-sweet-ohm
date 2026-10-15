@@ -7,7 +7,7 @@ See [FRAMING.md](FRAMING.md) for the decisions behind this plan.
 ## Principles
 
 - **Vertical slices**: from M1 on, every milestone delivers something visible end
-  to end (catalogue → database → API → Next.js page → PR preview), then widens.
+  to end (catalogue → database → API → Astro page → branch preview), then widens.
 - **UML-first**: each milestone models before it codes (diagrams in
   `docs/architecture/diagrams/<feature>/`).
 - **Content grows with code**: one base circuit (with its variants) per milestone.
@@ -20,7 +20,7 @@ Single private repo `ohm-sweet-ohm`, pnpm workspace (no Turborepo/Nx in v1):
 
 ```text
 apps/api          Fastify + Zod, OpenAPI
-apps/web          Next.js (server rendering)
+apps/web          Astro on Cloudflare Workers (server rendering on demand, ADR-0003)
 apps/importer     CLI: validate meta.yaml, kicad-cli → SVG, upsert into PostgreSQL
 packages/schemas  Shared Zod schemas (meta.yaml, API DTOs) — single source of truth
 catalogue/        <base-circuit>/<block>/{schematic.kicad_sch, meta.yaml} + LICENSE (CC BY-SA 4.0)
@@ -58,9 +58,9 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 - PostgreSQL schema + migrations (specs stored in SI units; search runs in memory, ADR-0001).
 - API: `GET /blocks/{slug}` + SVG, OpenAPI + Swagger UI.
 - Web: one block page (SVG, specs, source, validation status, safety warning).
-- Deploy staging: managed PostgreSQL, API container, Vercel PR preview.
+- Deploy staging: managed PostgreSQL, API container, Cloudflare Workers branch preview.
 
-**Done when**: the LED page is reachable on a PR preview URL, fed end to end by the catalogue.
+**Done when**: the LED page is reachable on a branch preview URL, fed end to end by the catalogue.
 
 ### M2 — Variant trees (weeks 5–6)
 

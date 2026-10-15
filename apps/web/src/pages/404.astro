@@ -1,0 +1,22 @@
+---
+import Page from '../layouts/Page.astro';
+
+Astro.response.status = 404;
+// Short-lived: a block imported after this request shows within the API's freshness window.
+Astro.response.headers.set('cache-control', 'public, max-age=60');
+---
+
+<Page title="No such page" description="This page does not exist in the catalogue.">
+  <h1>No such page</h1>
+  <p class="lead">
+    Nothing lives at this address. Block pages look like <code>/blocks/&lt;slug&gt;</code>; check
+    the link that brought you here.
+  </p>
+</Page>
+
+<style>
+  .lead {
+    margin-top: var(--space-4);
+    max-width: var(--measure);
+  }
+</style>

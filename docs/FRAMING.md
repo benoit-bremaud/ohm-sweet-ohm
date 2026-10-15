@@ -25,8 +25,8 @@ architecture) takes precedence over catalogue volume.
 | Spec model | Typed parameters per category, stored as min/max ranges in SI units | — |
 | Backend | TypeScript, Fastify, PostgreSQL as a plain store (search runs in memory, see ADR-0001; pgvector in v2), OpenAPI from Zod schemas | — |
 | Name | **Ohm Sweet Ohm** (repo/domain slug: `ohm-sweet-ohm`) | — |
-| Front-end | Next.js (server rendering: one indexable page per base circuit and variant), typed client generated from OpenAPI | — |
-| Hosting | Managed services: hosted PostgreSQL, API on a container platform, front on Vercel. Environments: local → staging (PR preview) → prod | — |
+| Front-end | Astro (server rendering on demand: one indexable page per base circuit and variant, no client JavaScript until the calculator's React island; see ADR-0003), typed client generated from OpenAPI | — |
+| Hosting | Managed services: hosted PostgreSQL, API on a container platform, front on Cloudflare Workers (ADR-0003). Environments: local → staging (branch preview) → prod | — |
 | Repository | Single repo, pnpm workspace (`apps/api`, `apps/web`, `apps/importer`, `packages/schemas`), catalogue in `catalogue/` with its own CC BY-SA license | Split catalogue repo if community contributions grow |
 | Delivery | Vertical slices from M1; tracked with GitHub Project + milestones + issues. See WORKPLAN.md | — |
 | Value calculator | v1 (M4): per base circuit, both ways, E12/E24 values with real result and deviation, resistor power, base-circuit checks, step-by-step formula, presets, notation input, shareable link; on block pages, an index page and the API. Motivated by the 2026-10-12 survey: calculators are what makers use, but none combines search by need, variants and standard values | Two-resistor combinations, colour code, tolerance and load, curves |

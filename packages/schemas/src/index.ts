@@ -1,5 +1,6 @@
 export {
   readBlockMeta,
+  SLUG_PATTERN,
   type BlockMeta,
   type BlockMetaResult,
   type RawSpec,
