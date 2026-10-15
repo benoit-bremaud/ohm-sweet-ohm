@@ -1,0 +1,23 @@
+# Build context of apps/api/Dockerfile is the repository root: keep it to the manifests, the
+# API and the workspace packages it bundles.
+.git
+.github
+.claude
+docs
+catalogue
+docker
+scripts
+build
+**/node_modules
+**/dist
+**/coverage
+**/.astro
+**/.wrangler
+**/.env*
+**/.dev.vars
+**/*.test.ts
+**/*.md
+apps/importer/src
+apps/web/src
+apps/web/*.ts
+apps/web/*.jsonc

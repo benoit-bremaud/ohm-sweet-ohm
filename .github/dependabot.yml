@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # Base images never move on their own: one entry per Dockerfile.
+  - package-ecosystem: docker
+    directories:
+      - /apps/api
+      - /docker/renderer
+    schedule:
+      interval: weekly

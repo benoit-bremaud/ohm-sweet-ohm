@@ -6,7 +6,10 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "binding": "ASSETS", "directory": "./dist" },
   "observability": { "enabled": true },
-  // Non-secret variables. API_URL is an origin (scheme, host, port; a path would be ignored),
-  // overridden per environment (local: .dev.vars, see README).
-  "vars": { "API_URL": "http://127.0.0.1:3000" },
+  // Every uploaded version gets its own URL, so a branch preview can be checked before merging.
+  "preview_urls": true,
+  // Non-secret variables. API_URL is an origin (scheme, host, port; a path would be ignored):
+  // the staging API on Fly.io (ADR-0004, docs/deploy.md), shared by production and the branch
+  // previews; local development overrides it in .dev.vars (see README).
+  "vars": { "API_URL": "https://ohm-sweet-ohm-api.fly.dev" },
 }

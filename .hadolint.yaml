@@ -1,0 +1,2 @@
+# Warnings fail the lint; accepted findings are suppressed inline in the Dockerfile with a reason.
+failure-threshold: warning
