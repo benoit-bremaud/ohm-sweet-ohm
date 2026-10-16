@@ -53,6 +53,19 @@ describe('block page', () => {
     expect(html.indexOf('Hazardous voltage')).toBeLessThan(html.indexOf('<img'));
   });
 
+  it.each([
+    ['theoretical', 'Theoretical'],
+    ['tested', 'Tested on a build'],
+  ] as const)('stamps a %s block with its validation status', async (status, label) => {
+    serve(200, { ...LED_BLOCK, validationStatus: status });
+
+    const html = await container.renderToString(BlockPage, {
+      params: { slug: 'led-resistor-basic' },
+    });
+
+    expect(html).toMatch(new RegExp(`class="stamp ${status}[^"]*"[^>]*>\\s*${label}\\s*<`));
+  });
+
   it('links the source only when it has a URL', async () => {
     serve(200, { ...LED_BLOCK, source: { title: 'App note', url: 'https://example.com/an' } });
 

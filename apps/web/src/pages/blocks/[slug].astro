@@ -41,6 +41,9 @@ const api = new URL(API_URL);
       <header class="head">
         <Breadcrumb block={block} />
         <h1>{block.name}</h1>
+        <p class:list={['stamp', block.validationStatus]}>
+          {block.validationStatus === 'tested' ? 'Tested on a build' : 'Theoretical'}
+        </p>
         <p class="lead">{block.description}</p>
         {block.changeSummary !== null && <p class="change">Changes: {block.changeSummary}</p>}
       </header>
@@ -55,39 +58,41 @@ const api = new URL(API_URL);
         </section>
       </div>
 
-      <section aria-labelledby="formulas">
-        <h2 id="formulas">Design formulas</h2>
-        <Formulas formulas={block.formulas} />
-      </section>
+      <div class="notes">
+        <section aria-labelledby="formulas">
+          <h2 id="formulas">Design formulas</h2>
+          <Formulas formulas={block.formulas} />
+        </section>
 
-      <section aria-labelledby="components">
-        <h2 id="components">Key components</h2>
-        <KeyComponents components={block.keyComponents} />
-      </section>
+        <section aria-labelledby="components">
+          <h2 id="components">Key components</h2>
+          <KeyComponents components={block.keyComponents} />
+        </section>
 
-      <section aria-labelledby="about">
-        <h2 id="about">About this block</h2>
-        <dl class="facts">
-          <dt>Validation</dt>
-          <dd>
-            {block.validationStatus === 'tested'
-              ? 'Tested on a real build.'
-              : 'Theoretical: values are computed and have not been checked on a build yet.'}
-          </dd>
-          <dt>Difficulty</dt>
-          <dd>{sentence(block.difficulty)}</dd>
-          <dt>Source</dt>
-          <dd>
-            {block.source.url === null ? (
-              block.source.title
-            ) : (
-              <a href={block.source.url} rel="noopener">
-                {block.source.title}
-              </a>
-            )}
-          </dd>
-        </dl>
-      </section>
+        <section aria-labelledby="about">
+          <h2 id="about">About this block</h2>
+          <dl class="facts">
+            <dt>Validation</dt>
+            <dd>
+              {block.validationStatus === 'tested'
+                ? 'Tested on a real build.'
+                : 'Theoretical: values are computed and have not been checked on a build yet.'}
+            </dd>
+            <dt>Difficulty</dt>
+            <dd>{sentence(block.difficulty)}</dd>
+            <dt>Source</dt>
+            <dd>
+              {block.source.url === null ? (
+                block.source.title
+              ) : (
+                <a href={block.source.url} rel="noopener">
+                  {block.source.title}
+                </a>
+              )}
+            </dd>
+          </dl>
+        </section>
+      </div>
     </article>
   </Page>
 )}
@@ -98,6 +103,19 @@ const api = new URL(API_URL);
     gap: var(--space-12);
   }
 
+  /* One entrance on load, staggered by band; reduced motion keeps the fade only. */
+  .block > * {
+    animation: enter var(--duration-enter) var(--ease-out) backwards;
+  }
+
+  .block > :nth-child(2) {
+    animation-delay: var(--stagger);
+  }
+
+  .block > :nth-child(n + 3) {
+    animation-delay: calc(var(--stagger) * 2);
+  }
+
   .lead {
     font-size: var(--size-title);
     line-height: 1.4;
@@ -106,23 +124,48 @@ const api = new URL(API_URL);
 
   .head {
     display: grid;
+    justify-items: start;
     gap: var(--space-3);
     max-width: var(--measure);
+  }
+
+  /* Validation status as an inspection stamp: copper while theoretical, ink once tested. */
+  .stamp {
+    padding: var(--space-1) var(--space-3);
+    border: var(--rule-strong) solid currentColor;
+    border-radius: var(--radius-sheet);
+    font-size: var(--size-label);
+    font-weight: 600;
+  }
+
+  .stamp.theoretical {
+    color: var(--copper);
   }
 
   .change {
     color: var(--ink-muted);
   }
 
-  .sheet-and-specs {
+  .sheet-and-specs,
+  .notes {
     display: grid;
-    gap: var(--space-8);
+    gap: var(--space-8) var(--space-12);
     align-items: start;
   }
 
   @media (min-width: 48rem) {
     .sheet-and-specs {
       grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+
+    .notes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .notes {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 2fr);
     }
   }
 

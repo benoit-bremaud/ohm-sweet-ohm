@@ -22,6 +22,7 @@ export default defineConfig({
         "default-src 'none'",
         "base-uri 'none'",
         "form-action 'none'",
+        "font-src 'self'",
         "frame-ancestors 'none'",
       ],
     },
