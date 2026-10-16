@@ -1,4 +1,8 @@
-/* Design tokens: the single source for colour, type and space (ui-design doctrine). */
+/* Design tokens: the single source for colour, type, space and motion (ui-design doctrine). */
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+
 :root {
   color-scheme: light dark;
 
@@ -10,14 +14,17 @@
   --rule: #cfd5dc;
   --copper: #9a5a1e;
   --copper-ink: #ffffff;
+  --copper-tint: #f6ece2;
+  --grid: #dfe3e8;
   --hazard: #8a1c1c;
   --hazard-bg: #fbe9e7;
 
-  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  /* IBM Plex, self-hosted (OFL): the type of engineering documents, one superfamily. */
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
 
   /* Type roles: display, title, body, label, caption. */
-  --size-display: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  --size-display: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
   --size-title: 1.25rem;
   --size-body: 1rem;
   --size-label: 0.9375rem;
@@ -31,8 +38,25 @@
   --space-8: 2rem;
   --space-12: 3rem;
 
-  --radius-sheet: 4px;
+  --radius-sheet: 2px;
+  --rule-strong: 2px;
+  --grid-step: 24px;
   --measure: 65ch;
+  --sheet-max: 80rem;
+  --target-min: 44px;
+
+  /* Motion (ui-motion tokens): one entrance on load, colour feedback on hover. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-feedback: 120ms;
+  --duration-enter: 280ms;
+  --stagger: 60ms;
+  --enter-distance: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --enter-distance: 0px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,6 +68,8 @@
     --rule: #33404c;
     --copper: #d79a5a;
     --copper-ink: #10161c;
+    --copper-tint: #2a2119;
+    --grid: #1f2830;
     --hazard: #ffb4a8;
     --hazard-bg: #3a1a16;
   }
@@ -66,7 +92,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  /* Drawing paper: a faint dot grid under the sheet. */
+  background: radial-gradient(var(--grid) 1px, transparent 1.5px) 0 0 / var(--grid-step)
+    var(--grid-step) var(--paper);
   color: var(--ink);
   font-size: var(--size-body);
   accent-color: var(--copper);
@@ -87,11 +115,16 @@ h2 {
 
 h1 {
   font-size: var(--size-display);
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 
+/* Section headings sit on a copper rule, like the zones of a drawing. */
 h2 {
   font-size: var(--size-title);
+  font-weight: 600;
+  padding-top: var(--space-2);
+  border-top: var(--rule-strong) solid var(--copper);
 }
 
 p {
@@ -111,6 +144,12 @@ a:hover {
 :focus-visible {
   outline: 2px solid var(--copper);
   outline-offset: 2px;
+}
+
+/* Only 400 and 600 are loaded: bold maps to 600 instead of a synthesised 700. */
+strong,
+b {
+  font-weight: 600;
 }
 
 code,
@@ -141,6 +180,26 @@ th {
 td.value {
   text-align: end;
   white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  tbody tr {
+    transition: background-color var(--duration-feedback) var(--ease-out);
+  }
+
+  tbody tr:hover {
+    background: var(--copper-tint);
+  }
+}
+
+/* Load entrance, used with `animation: enter … backwards`: without animation support the
+   content is simply visible. */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--enter-distance));
+  }
 }
 
 /* Empty state of a section: one look everywhere. */
