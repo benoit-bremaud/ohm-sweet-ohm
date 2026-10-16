@@ -36,41 +36,61 @@ export async function readCatalogue(catalogueDir: string, renderDir: string): Pr
   const errors: ImportError[] = [];
   for (const baseDir of await subdirectories(catalogueDir)) {
     for (const blockDir of await subdirectories(path.join(catalogueDir, baseDir))) {
-      const relativeDir = `${baseDir}/${blockDir}`;
-      const file = `${relativeDir}/meta.yaml`;
-      const metaText = await readOrUndefined(path.join(catalogueDir, file));
-      if (metaText === undefined) {
-        errors.push({ file, field: '', message: 'missing meta.yaml' });
-        continue;
-      }
-      const meta = readBlockMeta(metaText);
-      if (!meta.ok) {
-        errors.push(...meta.errors.map((error) => ({ file, ...error })));
-        continue;
-      }
-      if (meta.meta.slug !== blockDir) {
-        errors.push({ file, field: 'slug', message: `must equal the folder name "${blockDir}"` });
-      }
-      if (meta.meta.baseCircuit !== baseDir) {
-        errors.push({
-          file,
-          field: 'baseCircuit',
-          message: `must equal the folder name "${baseDir}"`,
-        });
-      }
-      const svg = await readOrUndefined(path.join(renderDir, relativeDir, 'schematic.svg'));
-      if (svg === undefined) {
-        errors.push({
-          file,
-          field: '',
-          message: `no rendered schematic in ${renderDir}/${relativeDir}; run the renderer first`,
-        });
-        continue;
-      }
-      entries.push({ draft: toDraft(meta.meta, { relativeDir }), svg, file });
+      const entry = await readBlock(catalogueDir, renderDir, baseDir, blockDir, errors);
+      if (entry !== undefined) entries.push(entry);
     }
   }
   return errors.length > 0 ? { ok: false, errors } : { ok: true, entries };
+}
+
+/** Reads one block folder; every problem goes to `errors`, and an unusable folder yields nothing. */
+async function readBlock(
+  catalogueDir: string,
+  renderDir: string,
+  baseDir: string,
+  blockDir: string,
+  errors: ImportError[],
+): Promise<CatalogueEntry | undefined> {
+  const relativeDir = `${baseDir}/${blockDir}`;
+  const file = `${relativeDir}/meta.yaml`;
+  const metaText = await readOrUndefined(path.join(catalogueDir, file));
+  if (metaText === undefined) {
+    errors.push({ file, field: '', message: 'missing meta.yaml' });
+    return undefined;
+  }
+  const meta = readBlockMeta(metaText);
+  if (!meta.ok) {
+    errors.push(...meta.errors.map((error) => ({ file, ...error })));
+    return undefined;
+  }
+  if (meta.meta.slug !== blockDir) {
+    errors.push({ file, field: 'slug', message: `must equal the folder name "${blockDir}"` });
+  }
+  if (meta.meta.baseCircuit !== baseDir) {
+    errors.push({
+      file,
+      field: 'baseCircuit',
+      message: `must equal the folder name "${baseDir}"`,
+    });
+  }
+  const svg = await readOrUndefined(path.join(renderDir, relativeDir, 'schematic.svg'));
+  if (svg === undefined) {
+    errors.push({
+      file,
+      field: '',
+      message: `no rendered schematic in ${renderDir}/${relativeDir}; run the renderer first`,
+    });
+    return undefined;
+  }
+  return { draft: toDraft(meta.meta, { relativeDir }), svg, file };
+}
+
+/**
+ * Orders strings by UTF-16 code unit, as a bare `sort()` does: unlike `localeCompare`, the order
+ * does not depend on the machine's locale, so the import order and its messages are reproducible.
+ */
+export function byCodeUnit(a: string, b: string): number {
+  return Number(a > b) - Number(a < b);
 }
 
 /**
@@ -86,7 +106,7 @@ async function subdirectories(dir: string): Promise<readonly string[]> {
       : item.isDirectory();
     if (isDirectory) names.push(item.name);
   }
-  return names.sort();
+  return names.sort(byCodeUnit);
 }
 
 async function readOrUndefined(file: string): Promise<string | undefined> {

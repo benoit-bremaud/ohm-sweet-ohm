@@ -93,7 +93,7 @@ function parseUnit(
 }
 
 function significantDigits(number: string): number {
-  return number.replace(/[+\-.]/g, '').replace(/^0+/, '').length;
+  return number.replaceAll(/[+\-.]/g, '').replace(/^0+/, '').length;
 }
 
 /**
