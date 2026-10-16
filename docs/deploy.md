@@ -98,6 +98,30 @@ be created by connecting the repository from the dashboard; later changes to `wr
 deploy themselves. Branch previews read their variables from the `previews` block of
 `wrangler.jsonc`, not from the top-level `vars`, so `API_URL` is declared in both.
 
+## Local gate (stands in for CI)
+
+GitHub Actions does not start jobs on this account, so the workflows in `.github/workflows/` are
+kept as documentation and every check runs on the machine. Each tool runs from an image pinned by
+tag and digest in the `Makefile`.
+
+```bash
+git config core.hooksPath .githooks   # once per clone: the pre-push hook runs make check-fast
+make check-fast    # pnpm check, Semgrep (make sast), gitleaks (make scan-secrets); about a minute
+make check-local   # check-fast + Docker image checks, catalogue render, pnpm audit --prod; before a merge
+```
+
+Both need network access (Semgrep registry rules, `pnpm audit`). The hook refuses to run with
+uncommitted changes, since the checks read the files on disk.
+
+Without CI, the API deploy and the catalogue import are manual from `main`:
+`flyctl deploy --remote-only --ha=false --config apps/api/fly.toml`, then `pnpm catalogue:render`
+and `pnpm catalogue:import` with `DATABASE_URL` loaded from `.env.staging`. The web still deploys
+through Workers Builds.
+
+Semgrep runs the registry rulesets `p/javascript`, `p/typescript` and `p/nodejs` on the files
+tracked by git (`.semgrepignore` lists the exclusions). Suppress a finding only with an inline
+`nosemgrep: <rule-id>` and the reason.
+
 ## Local image checks
 
 ```bash
