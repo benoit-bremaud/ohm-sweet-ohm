@@ -19,6 +19,7 @@ Requires Node.js 22 (see `.nvmrc`) and pnpm 10.
 ```bash
 pnpm install
 pnpm check   # format, lint (TypeScript + Markdown), typecheck, tests
+make check-local   # the full local gate (Semgrep, gitleaks, Docker, audit); see docs/deploy.md
 ```
 
 Integration tests start a disposable PostgreSQL with Testcontainers, so Docker must be running.

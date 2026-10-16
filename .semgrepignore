@@ -1,0 +1,10 @@
+# Replaces Semgrep's default ignore list: generated output, dependencies and prose are not scanned.
+node_modules/
+dist/
+build/
+coverage/
+.wrangler/
+.astro/
+docs/
+.env*
+catalogue/
