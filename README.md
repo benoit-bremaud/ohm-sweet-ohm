@@ -55,6 +55,14 @@ pnpm --filter @ohm-sweet-ohm/web dev
 Then open `http://localhost:4321/blocks/led-resistor-basic`. `pnpm --filter @ohm-sweet-ohm/web build`
 produces the Worker in `apps/web/dist`; deployment is configured in `apps/web/wrangler.jsonc`.
 
+## Deployment
+
+Staging runs on Cloudflare Workers (web, one preview per branch), Fly.io (API container) and
+Neon (PostgreSQL); the catalogue is imported from CI on every merge. Providers, secrets,
+re-creation steps and the container checks (`make lint-docker`, `make scan-docker-config`,
+`make build-api`, `make scan-docker-image`) are in [docs/deploy.md](docs/deploy.md); the decision
+is [ADR-0004](docs/architecture/decisions/0004-staging-hosting.md).
+
 ## Licenses
 
 - Code: [MIT](LICENSE).

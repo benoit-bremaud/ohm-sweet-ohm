@@ -5,10 +5,13 @@
 > [01-use-case.md](01-use-case.md)
 > **Related ADRs**: [ADR-0001 in-memory search](../../decisions/0001-in-memory-search.md),
 > [ADR-0002 schematic rendering](../../decisions/0002-schematic-rendering.md),
-> [ADR-0003 Astro on Cloudflare](../../decisions/0003-web-astro-cloudflare.md)
+> [ADR-0003 Astro on Cloudflare](../../decisions/0003-web-astro-cloudflare.md),
+> [ADR-0004 staging hosting](../../decisions/0004-staging-hosting.md)
 > **Decisions captured**: the web app depends on the shared schemas only, never on the database
 > or the domain; the browser loads schematics straight from the API; the catalogue folder in git
-> is the source of truth, mirrored into PostgreSQL by the importer
+> is the source of truth, mirrored into PostgreSQL by the importer; the API runs on a Fly.io
+> Machine that stops when idle, the database is a Neon project, the web previews come from
+> Workers Builds (issue #19)
 
 ## Context
 
@@ -27,7 +30,7 @@ flowchart TB
     Web["apps/web — Astro<br/>server-rendered pages"]
   end
 
-  subgraph Server ["Container platform"]
+  subgraph Server ["Fly.io Machine (stops when idle)"]
     API["apps/api — Fastify<br/>GET /blocks/{slug}, /blocks/{slug}/schematic.svg, /docs"]
   end
 
@@ -43,7 +46,7 @@ flowchart TB
   end
 
   Catalogue[("catalogue/<br/>*.kicad_sch + meta.yaml")]
-  Postgres[("PostgreSQL")]
+  Postgres[("PostgreSQL<br/>Neon, suspends when idle")]
 
   Browser -->|"HTML page"| Web
   Browser -->|"img: schematic.svg"| API
@@ -68,6 +71,62 @@ flowchart TB
 
 Solid arrows are runtime calls; dotted arrows are compile-time imports.
 
+## Deployment view (staging, issue #19)
+
+Which pipeline puts each component where, and which secret each hop needs. Staging is the
+disposable preview of a pull request for the web app; the API and the database are one
+long-lived staging deployment shared by every preview (ADR-0004).
+
+```mermaid
+flowchart LR
+  subgraph GitHub ["GitHub"]
+    Repo[("repository<br/>main + branches")]
+    Deploy["Actions: deploy-api<br/>flyctl deploy --remote-only"]
+    Import["Actions: catalogue<br/>render in Docker, then catalogue:import"]
+    Security["Actions: docker-security<br/>Hadolint, Trivy config + image"]
+  end
+
+  subgraph Cloudflare ["Cloudflare"]
+    Builds["Workers Builds<br/>build: pnpm build<br/>deploy: wrangler deploy / preview"]
+    Prod["Worker ohm-sweet-ohm-web<br/>main → workers.dev"]
+    Preview["Preview per branch<br/>URL commented on the PR"]
+  end
+
+  subgraph Fly ["Fly.io, region cdg"]
+    Machine["Machine ohm-sweet-ohm-api<br/>Docker image from apps/api/Dockerfile<br/>auto_stop / auto_start"]
+  end
+
+  subgraph Neon ["Neon, eu-central-1"]
+    DB[("project ohm-sweet-ohm<br/>free plan, scale to zero")]
+  end
+
+  Repo -->|"push main"| Deploy
+  Repo -->|"push main (catalogue, importer)"| Import
+  Repo -->|"pull request, push"| Security
+  Repo -->|"GitHub App"| Builds
+  Builds -->|"main"| Prod
+  Builds -->|"other branches"| Preview
+  Deploy -->|"FLY_API_TOKEN (GitHub secret)"| Machine
+  Import -->|"DATABASE_URL (GitHub secret)"| DB
+  Machine -->|"DATABASE_URL (Fly secret)"| DB
+  Prod -->|"API_URL (wrangler.jsonc var)"| Machine
+  Preview -->|"API_URL (wrangler.jsonc var)"| Machine
+```
+
+- **Nothing secret in git**: the Fly deploy token and the Neon connection string live in GitHub
+  Actions secrets and in Fly secrets; `API_URL` is a public origin in `wrangler.jsonc`; Workers
+  Builds authenticates through Cloudflare's GitHub App, so no Cloudflare token is held in GitHub.
+- **Idle costs nothing in compute**: the Fly Machine stops after a few minutes without requests
+  and restarts on the next one; Neon suspends its compute after 5 minutes and wakes on the next
+  connection. The API then checks the catalogue version only while it serves requests, which keeps
+  Neon's free compute hours.
+- **Import on merge**: the catalogue workflow renders the schematics in Docker, then runs the
+  importer against the Neon database; the API sees the new catalogue within 5 seconds. Only a run
+  on `main` imports, whether pushed or triggered by hand.
+- **Migrations belong to the importer**: the API assumes the schema is there. A merge that adds a
+  migration starts the API deployment and the import in parallel, so the API can be redeployed a
+  few minutes before the schema changes; accepted for staging (ADR-0004).
+
 ## Notes
 
 - **Web depends on the contract only**: `apps/web` imports `blockResponseSchema` from
@@ -79,4 +138,5 @@ Solid arrows are runtime calls; dotted arrows are compile-time imports.
   Node.js on a container platform; they share nothing but HTTP and the Zod schema.
 - **The folder is the source of truth**: the importer mirrors `catalogue/` into PostgreSQL
   (ADR-0002, [02-sequence-publish-blocks.md](02-sequence-publish-blocks.md)); the API only reads.
-- **Hosting providers** for the API and the database are decided in issue #19.
+- **Hosting providers**: Fly.io for the API, Neon for the database, Workers Builds for the web
+  previews (ADR-0004, deployment view above).

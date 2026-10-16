@@ -1,0 +1,78 @@
+name: Docker security
+
+on:
+  # The API image is also rebuilt and started when its source changes: the bundle (apps/api/build.ts)
+  # is the only place where a missing npm dependency or an ESM interop problem shows up.
+  pull_request:
+    paths:
+      - '**/Dockerfile'
+      - .dockerignore
+      - .hadolint.yaml
+      - Makefile
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - tsconfig.base.json
+      - apps/api/**
+      - packages/**
+      - .github/workflows/docker-security.yml
+  push:
+    branches: [main]
+    paths:
+      - '**/Dockerfile'
+      - .dockerignore
+      - .hadolint.yaml
+      - Makefile
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - tsconfig.base.json
+      - apps/api/**
+      - packages/**
+      - .github/workflows/docker-security.yml
+  schedule:
+    # New CVEs land against unchanged images: weekly rescan.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Hadolint and Trivy config
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/trivy
+          key: trivy-${{ runner.os }}-${{ github.workflow }}-${{ github.run_id }}
+          restore-keys: trivy-${{ runner.os }}-
+      - name: Lint every Dockerfile
+        run: make lint-docker
+      - name: Scan the Dockerfiles for misconfigurations
+        run: make scan-docker-config
+
+  image:
+    name: Trivy image (API)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/trivy
+          key: trivy-${{ runner.os }}-${{ github.workflow }}-${{ github.run_id }}
+          restore-keys: trivy-${{ runner.os }}-
+      - name: Build the API image
+        run: make build-api
+      - name: Start the API image and wait for its health check
+        run: make smoke-api
+      - name: Scan the API image for HIGH and CRITICAL vulnerabilities
+        run: make scan-docker-image

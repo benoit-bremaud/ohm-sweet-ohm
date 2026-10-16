@@ -1,42 +1,45 @@
-# Local review — ohm-sweet-ohm (feat/18-web)
+# Local review — ohm-sweet-ohm (feat/19-deploy)
 
 - Date: 2026-10-15
-- Commit: `670eb14` (branch head before push)
-- Scope: branch diff main...HEAD (`apps/web`, root tooling, ADR-0003, diagrams 03 and 06, README, project log)
-- Checks run: design · docs · tests · security · correctness (five independent read-only reviewers, reconciled) · `pnpm check` green under Node 22.23.3 (218 tests)
-- Verdict: fix Must Have first · Must 1 · Should 8 · Nice 6
-- Outcome (same day, before push): the Must, every Should and five Nice applied in the follow-up commit (229 tests); the deployment-level Nice (HSTS, `script-src 'none'`) filed as issue #24.
+- Commit: `e41e817` (branch head before push)
+- Scope: branch diff main...HEAD (API image and Fly manifest, three workflows, Makefile, ADR-0004, deployment view, `docs/deploy.md`, `SECURITY.md`, `wrangler.jsonc`)
+- Checks run: design · docs · tests · security · correctness (five independent read-only reviewers, reconciled) · `pnpm check` green under Node 22.23.3, image built, started and scanned locally
+- Verdict: fix Must Have first · Must 1 · Should 10 · Nice 6
+- Outcome (same day, before push): the Must and every Should applied in the follow-up commit; the Nice items filed as issues (owner decision); four findings disagreed with evidence.
 
 ## 🔴 Must Have
 
-- `packages/schemas/src/block-response.ts:46` `[design][security]` · `source.url` is only `z.string()`, so a drifted API could ship a `javascript:` link that the page renders in `href`; the input schema already restricts to http(s) · tighten the shared contract to `z.url({ protocol: /^https?$/ }).nullable()` and add an off-contract test.
+- `apps/web/wrangler.jsonc:10-15` `[correctness]` · Branch previews (`wrangler preview`, run by Workers Builds) do not inherit the top-level `vars` and the command refuses to run without a `previews` block, so every preview would start without `API_URL` and answer 500: the M1 "done when" itself. `preview_urls` governs Version URLs, not previews, and is true by default. · Applied: `previews.vars.API_URL` added, `preview_urls` removed; `wrangler deploy --dry-run` shows the variable.
 
 ## 🟡 Should Have
 
-- `apps/web/src/lib/format.ts:27` `[correctness]` · rounding after choosing the prefix: `0.9996 A` gives `1,000 mA` · round to 3 significant digits first, `useGrouping: false`, tests at both boundaries.
-- `apps/web/src/pages/blocks/[slug].astro:17-48` `[tests][correctness]` · the page's wiring (404 rewrite, 502 with `no-store`, hazard warning before the schematic) has no test · one page-level Container test with `fetch` stubbed.
-- `apps/web/wrangler.jsonc:10`, `apps/web/src/lib/catalogue-api.ts:30` `[docs][correctness][security]` · default `API_URL` port 3100 (local workaround) contradicts the README; `new URL('/blocks/…', API_URL)` would drop a path · origin-only rule: default 3000, `new URL(API_URL).origin`, README says "origin".
-- `apps/web/src/lib/catalogue-api.ts:4` `[design]` · slug regex copied a third time (api, schemas, web) · export `SLUG_PATTERN` from `packages/schemas`, use it in the API and the web app.
-- `apps/web/src/components/{SpecTable,KeyComponents,Formulas}.astro` `[design]` · `.empty` ×3 (already drifting) and `.sr-only` ×2 · define both once in `global.css`.
-- `apps/web/astro.config.ts:19`, `apps/web/src/middleware.ts:3` `[security]` · CSP is sent as a header, so `frame-ancestors 'none'` belongs in it; `Permissions-Policy` missing; middleware comment inaccurate · add both, fix the comment.
-- `apps/web/src/lib/catalogue-api.ts:6,12`, `SafetyWarning.astro:4`, `Schematic.astro:20` `[docs]` · `BlockLookup` and `isSlug` undocumented; HTML comments are shipped to the browser · docstrings; `{/* */}` comments.
-- `apps/web/src/components/components.test.ts:23-26` `[tests]` · invisible literal NBSP, assertions `>1<` / `>Red<` not anchored to their row · `NBSP` constant, row-anchored regexes.
+- `.github/workflows/catalogue.yml:59` `[docs][security][correctness]` · `if: github.event_name != 'pull_request'` let a `workflow_dispatch` from any branch import that branch's catalogue into the shared staging database, against the comment next to it. · Applied: `if: github.ref == 'refs/heads/main'`.
+- `.github/workflows/catalogue.yml:26-28` `[security][correctness]` · Workflow-level `cancel-in-progress: true` cancelled a running import on `main` when a second push landed (the job-level setting could not override it). · Applied: `cancel-in-progress: ${{ github.event_name == 'pull_request' }}`, redundant job-level block removed.
+- `.github/workflows/docker-security.yml:4-14` `[tests]` · No pull request built the bundle when only `apps/api/src` or `packages/` changed; the artefact first ran on `main`. · Applied: `apps/api/**` and `packages/**` in the path filters, `make smoke-api` (container healthy) in the image job.
+- `deploy-api.yml` × `catalogue.yml` `[design]` · Migrations run in the importer only, so a merge that adds one may redeploy the API minutes before the schema changes. · Applied: documented in the deployment view, ADR-0004 and `docs/deploy.md`; a Fly `release_command` is the fix if it ever bites.
+- `package.json#packageManager` `[security]` · `corepack enable` downloaded pnpm at image build without an integrity check. · Applied: `pnpm@10.30.3+sha512.…` written by `corepack use`.
+- `.github/dependabot.yml` `[security]` · Only the `docker` ecosystem: SHA-pinned actions and npm packages would never move. · Applied: `github-actions` and a grouped weekly `npm` entry.
+- `docs/deploy.md:63-64` `[security]` · `flyctl secrets set DATABASE_URL='…'` and a printed deploy token put secrets in the shell history and terminal. · Applied: stdin forms documented (`secrets import < .env.staging`, `… | gh secret set`), which is what was actually done.
+- `apps/api/fly.toml:10` `[correctness]` · `kill_timeout = "10s"` was short for `app.close()` plus `db.destroy()` during a catalogue reload. · Applied: 30 s.
+- `apps/api/Dockerfile:56` `[correctness]` · HEALTHCHECK hard-coded port 3000 while `PORT` is overridable. · Applied: `process.env.PORT`.
+- `docs/deploy.md:12-13`, ADR-0004 lines 129 and 139, `SECURITY.md:30` `[docs]` · "every push to `main`" ignored the path filters; "deployment README" pointed nowhere; the import trigger list missed the packages and lockfile; "only reads the database" hid that the API shares the importer's writable credential. · Applied: wording fixed; read-only Neon role filed as a follow-up.
 
 ## 🔵 Nice to Have
 
-- `apps/web/src/pages/404.astro:3` `[correctness][security]` · no `cache-control` on the 404 · `max-age=60`, the API's freshness window.
-- `apps/web/src/components/SpecTable.astro:23` `[design]` · enum capitalisation split between `formatSpec` and the component · capitalise in `formatSpec`.
-- `apps/web/src/lib/format.ts:17`, `catalogue-api.ts:55` `[design]` · `number` and `describe` are misleading names · `threeDigits`, `messageOf`.
-- `apps/web/src/middleware.ts`, `astro.config.ts` `[security]` · HSTS and `script-src 'none'` · deployment-level (zone HSTS, dev toolbar check); filed as a backlog issue for #19.
-- `docs/architecture/diagrams/catalogue/06-sequence-view-block-page.md:35,47` `[docs]` · SVG request drawn outside the 200 branch; 404 label differs from the page · move the request into the branch, "no such page"; document the nano…giga bounds in `format.ts`.
-- `apps/web/src/lib/format.test.ts`, `components.test.ts:61-105` `[tests]` · no `G` or negative row; breadcrumb first item unchecked; two components per test · add rows, assert the base circuit, split.
+- `apps/api/fly.toml:16-18` `[design]` · `[env]` repeats the Dockerfile's `ENV`. · Filed (issue).
+- `.github/workflows/docker-security.yml:45-48` `[correctness]` · Both jobs save under the same cache key, the second logs a warning; `restore-keys` still serves a rolling cache. · Filed (issue).
+- `apps/api/Dockerfile:16-23` `[design][correctness]` · Workspace manifests listed by hand; a new package fails loudly (`--frozen-lockfile`), `pnpm fetch` would remove the list. · Filed (issue).
+- `Makefile:30`, `docs/deploy.md` `[docs]` · Comment on the Docker socket mount; `host.docker.internal` needs `--add-host` on Linux (the example now uses `--env-file .env.staging`). · Filed (issue).
+- `apps/api/src/main.ts:13` `[correctness]` · Pre-existing (#17): the pool's error callback references `app` before it is assigned; a pool error during `buildApp` would throw a `ReferenceError`. · Filed (issue).
+- `.github/workflows/deploy-api.yml:36` `[tests]` · No `curl` of the public URL after the deploy; the Fly health check already gates the release. · Not applied.
 
 ## ⚪ Disagree / Intentional
 
-- `apps/web/src/lib/catalogue-api.ts:24` `[design]` · `fetchFn` default parameter is the minimal seam to replace the only boundary (network); no adapter layer · architecture skill (proportional seams).
-- `apps/web/src/components/components.test.ts` `[tests]` · experimental Container API accepted with exact version pins · ADR-0003.
-- `apps/web/src/astro-modules.d.ts:7` `[design]` · `export default` inside a module declaration mirrors the shape Astro imposes on components · ESLint override scoped to `*.d.ts`.
+- `docs/deploy.md:78` `[docs][security]` · "`npx wrangler preview` is not a current command": `wrangler preview --help` answers in wrangler 4.151 (open beta) and it is the default Preview command of Workers Builds in Cloudflare's documentation. Kept.
+- `apps/api/build.ts` `[security]` · Source map shipped in the image: not served by Fastify, repository private; to revisit at publication.
+- `Makefile:30` `[correctness]` · `stat -c %g` is GNU-only: the only machine is Linux and CI runs Ubuntu.
+- `.github/workflows/docker-security.yml` `[design]` · YAML anchors for the two path lists: two occurrences, under the rule of three.
 
 ## Per-dimension summary
 
-- Design: dependency rule holds (web → schemas only), proportionate components; one contract gap (URL scheme), two Rule-of-Three duplications · Docs: WHY comments throughout, two missing docstrings, one config/README mismatch · Tests: healthy pyramid (31 unit, 10 component), boundary-only mocking, page wiring untested · Security: SSRF closed by the slug allowlist, auto-escaping everywhere, CSP as a header with `default-src 'none'`; hardening only · Correctness: one rounding bug at prefix boundaries, 404 cache behaviour, otherwise sound including CI on a fresh clone.
+- Design: no over-engineering; two couplings named (hand-listed manifests, importer-owned migrations), the second documented · Docs: six stale sentences fixed, one false Must refuted with the binary · Tests: no test to add; the artefact smoke test in CI was the one real gap · Security: nothing committed, forks cannot reach secrets, hardening checklist met; pnpm integrity pin, Dependabot scope and secret-handling docs tightened · Correctness: the previews block was the only blocking defect; the bundle plugin, `.dockerignore`, layer order, Fly paths and the artifact round-trip were verified correct.

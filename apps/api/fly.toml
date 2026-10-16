@@ -1,0 +1,39 @@
+# Fly.io manifest of the staging API (ADR-0004). Deployed from the repository root:
+#   flyctl deploy --remote-only --ha=false --config apps/api/fly.toml
+# Secrets (DATABASE_URL) are set with `flyctl secrets set`, never here.
+
+app = "ohm-sweet-ohm-api"
+primary_region = "cdg"
+
+# The API finishes in-flight requests and closes its pool on SIGTERM (apps/api/src/main.ts); the
+# window leaves room for a catalogue reload in flight.
+kill_signal = "SIGTERM"
+kill_timeout = "30s"
+
+# Relative to this file; the build context is the directory flyctl runs from (the repository root).
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  # The Machine stops a few minutes after the last request and starts again on the next one, so
+  # an idle staging costs no compute; the cold start is about a second.
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "3s"
+    grace_period = "10s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
