@@ -48,15 +48,22 @@ check-local: check-fast
 	$(MAKE) sonar-scan
 
 # SonarQube analysis with the machine's global analysis token (never a per-project one), waiting
-# for the quality gate. Reads coverage/lcov.info, so it runs after pnpm check. The token goes in
-# by variable name only and is never printed; the checkout and the git dir are mounted at their own paths, as for sast, or git sees no tracked file in a worktree.
+# for the quality gate. It uploads coverage/lcov.info, so it refuses a report older than the
+# sources: run pnpm test:coverage first (check-local does, through pnpm check). The token goes in
+# by variable name only and is never printed. The checkout and the git dir are mounted at their
+# own paths, as for sast, or git sees no tracked file in a worktree.
 sonar-scan:
+	@test -n "$(GIT_COMMON_DIR)" || { echo "sonar-scan: not a git checkout" >&2; exit 1; }
 	@test -f coverage/lcov.info || { echo "sonar-scan: run pnpm test:coverage first" >&2; exit 1; }
+	@test -z "$$(find apps packages -path '*/node_modules' -prune -o -path '*/src/*' -newer coverage/lcov.info -print -quit)" \
+		|| { echo "sonar-scan: coverage/lcov.info is older than the sources; run pnpm test:coverage" >&2; exit 1; }
 	@SONAR_TOKEN="$${SONAR_TOKEN:-$$(cat "$(SONAR_TOKEN_FILE)" 2>/dev/null)}"; \
 	test -n "$$SONAR_TOKEN" || { echo "sonar-scan: no token in SONAR_TOKEN or $(SONAR_TOKEN_FILE)" >&2; exit 1; }; \
 	SONAR_TOKEN="$$SONAR_TOKEN" docker run --rm --network host --user "$$(id -u):$$(id -g)" \
 		-e SONAR_TOKEN -e SONAR_HOST_URL="$(SONAR_HOST_URL)" -e SONAR_USER_HOME=/tmp/sonar \
-		-v "$(CURDIR)":"$(CURDIR)" -w "$(CURDIR)" -e SONAR_SCANNER_OPTS=-Dsonar.projectBaseDir="$(CURDIR)" -v "$(GIT_COMMON_DIR)":"$(GIT_COMMON_DIR)":ro $(SONAR_SCANNER_IMAGE)
+		-e SONAR_SCANNER_OPTS=-Dsonar.projectBaseDir="$(CURDIR)" \
+		-v "$(CURDIR)":"$(CURDIR)" -w "$(CURDIR)" -v "$(GIT_COMMON_DIR)":"$(GIT_COMMON_DIR)":ro \
+		$(SONAR_SCANNER_IMAGE)
 
 # The hadolint image has no ENTRYPOINT, only a CMD: the binary name is passed on purpose.
 lint-docker:

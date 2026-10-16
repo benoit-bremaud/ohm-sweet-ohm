@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 // Floor of the pre-merge gate, applied to every package on its own so that a well-tested package
 // cannot hide an untested one in the global figure.
 const FLOOR = { lines: 80, functions: 80, branches: 80, statements: 80 };
+// Every workspace package: a new one must be added here, or its code has no floor.
 const PACKAGES = [
   'apps/api',
   'apps/importer',

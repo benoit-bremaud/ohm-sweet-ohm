@@ -10,7 +10,7 @@ export class Formula {
   ) {}
 }
 
-/** Outcome of typing raw specs: the specs, or the first validation error. */
+/** Outcome of typing raw specs: the specs, or every validation error found. */
 export type SpecsResult =
   | { readonly ok: true; readonly specs: readonly Spec[] }
   | { readonly ok: false; readonly errors: readonly ValidationError[] };

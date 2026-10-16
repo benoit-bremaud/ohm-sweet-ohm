@@ -21,7 +21,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute();
 }
 
-/** Reverts migration 0002. */
+/** Reverts migration 0002: drops what `up` added, in reverse order. */
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema
     .alterTable('blocks')
