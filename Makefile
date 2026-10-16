@@ -3,6 +3,7 @@
 HADOLINT_IMAGE := hadolint/hadolint:v2.15.1@sha256:32dac94127fd60b7b7e3fbfc65e1383b9b5e25c9bfd7b8536de7a539fe68a12d
 TRIVY_IMAGE := aquasec/trivy:0.76.0@sha256:2416d1f74045b57274df1a340eee6b510cacd73c66a6ccb8da092b117eb7d222
 SEMGREP_IMAGE := semgrep/semgrep:1.178.0-nonroot@sha256:2124de200043ce3ded427d02e924ff3b59d017020614d28c2bb7ce6656bec5d4
+SONAR_SCANNER_IMAGE := sonarsource/sonar-scanner-cli:12.1@sha256:23ca0f137965d9dff2198074043fd48d386280bc5d0ccac8c8349cea4cf096a9
 GITLEAKS_IMAGE := zricethezav/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
 # Named registry rulesets: --config auto would send the project URL and is not reproducible.
 # No p/secrets: Semgrep prints the matched value; gitleaks (scan-secrets) redacts it.
@@ -10,8 +11,10 @@ SEMGREP_RULES := --config p/javascript --config p/typescript --config p/nodejs
 DOCKERFILES := apps/api/Dockerfile docker/renderer/Dockerfile
 TRIVY_CACHE ?= $(HOME)/.cache/trivy
 IMAGE ?= ohm-sweet-ohm-api
+SONAR_HOST_URL ?= http://localhost:9000
+SONAR_TOKEN_FILE ?= $(HOME)/.config/sonarqube/analysis-token
 
-.PHONY: lint-docker scan-docker-config scan-docker-image build-api smoke-api sast scan-secrets \
+.PHONY: lint-docker scan-docker-config scan-docker-image build-api smoke-api sast scan-secrets sonar-scan \
 	check-fast check-local
 
 # Semgrep SAST, blocking on any finding. Rules are fetched from the registry (network needed);
@@ -42,6 +45,25 @@ check-local: check-fast
 	$(MAKE) lint-docker scan-docker-config build-api smoke-api scan-docker-image
 	pnpm catalogue:render
 	pnpm audit --prod
+	$(MAKE) sonar-scan
+
+# SonarQube analysis with the machine's global analysis token (never a per-project one), waiting
+# for the quality gate. It uploads coverage/lcov.info, so it refuses a report older than the
+# sources: run pnpm test:coverage first (check-local does, through pnpm check). The token goes in
+# by variable name only and is never printed. The checkout and the git dir are mounted at their
+# own paths, as for sast, or git sees no tracked file in a worktree.
+sonar-scan:
+	@test -n "$(GIT_COMMON_DIR)" || { echo "sonar-scan: not a git checkout" >&2; exit 1; }
+	@test -f coverage/lcov.info || { echo "sonar-scan: run pnpm test:coverage first" >&2; exit 1; }
+	@test -z "$$(find apps packages -path '*/node_modules' -prune -o -path '*/src/*' -newer coverage/lcov.info -print -quit)" \
+		|| { echo "sonar-scan: coverage/lcov.info is older than the sources; run pnpm test:coverage" >&2; exit 1; }
+	@SONAR_TOKEN="$${SONAR_TOKEN:-$$(cat "$(SONAR_TOKEN_FILE)" 2>/dev/null)}"; \
+	test -n "$$SONAR_TOKEN" || { echo "sonar-scan: no token in SONAR_TOKEN or $(SONAR_TOKEN_FILE)" >&2; exit 1; }; \
+	SONAR_TOKEN="$$SONAR_TOKEN" docker run --rm --network host --user "$$(id -u):$$(id -g)" \
+		-e SONAR_TOKEN -e SONAR_HOST_URL="$(SONAR_HOST_URL)" -e SONAR_USER_HOME=/tmp/sonar \
+		-e SONAR_SCANNER_OPTS=-Dsonar.projectBaseDir="$(CURDIR)" \
+		-v "$(CURDIR)":"$(CURDIR)" -w "$(CURDIR)" -v "$(GIT_COMMON_DIR)":"$(GIT_COMMON_DIR)":ro \
+		$(SONAR_SCANNER_IMAGE)
 
 # The hadolint image has no ENTRYPOINT, only a CMD: the binary name is passed on purpose.
 lint-docker:

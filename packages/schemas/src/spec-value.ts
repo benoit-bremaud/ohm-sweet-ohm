@@ -18,6 +18,7 @@ export type RawSpecValue =
   | { readonly kind: 'count'; readonly value: number }
   | { readonly kind: 'text'; readonly text: string };
 
+/** Outcome of parsing one spec value: the SI value, or why the notation is invalid. */
 export type SpecValueResult =
   | { readonly ok: true; readonly value: RawSpecValue }
   | { readonly ok: false; readonly error: string };
@@ -92,7 +93,7 @@ function parseUnit(
 }
 
 function significantDigits(number: string): number {
-  return number.replace(/[+\-.]/g, '').replace(/^0+/, '').length;
+  return number.replaceAll(/[+\-.]/g, '').replace(/^0+/, '').length;
 }
 
 /**

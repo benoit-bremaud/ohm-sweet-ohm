@@ -1,12 +1,19 @@
 import { BASE_CIRCUITS, Catalogue } from '@ohm-sweet-ohm/domain';
 import type { BlockRepository, MirrorSummary } from '@ohm-sweet-ohm/db';
 
-import { type CatalogueEntry, type ImportError, readCatalogue } from './read-catalogue.js';
+import {
+  byCodeUnit,
+  type CatalogueEntry,
+  type ImportError,
+  readCatalogue,
+} from './read-catalogue.js';
 
+/** Outcome of an import: what was mirrored, or every error found (nothing written then). */
 export type ImportResult =
   | { readonly ok: true; readonly summary: MirrorSummary }
   | { readonly ok: false; readonly errors: readonly ImportError[] };
 
+/** Inputs of an import run. */
 export interface ImportOptions {
   readonly catalogueDir: string;
   readonly renderDir: string;
@@ -69,7 +76,7 @@ function publishInWaves(catalogue: Catalogue, entries: readonly CatalogueEntry[]
     if (wave.length === 0) {
       const cycle = pending
         .map((entry) => entry.draft.slug)
-        .sort()
+        .sort(byCodeUnit)
         .join(', ');
       errors.push(
         ...pending.map((entry) => ({

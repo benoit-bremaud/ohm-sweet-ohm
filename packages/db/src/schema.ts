@@ -27,11 +27,13 @@ export interface BlocksTable {
   updated_at: Generated<Date>;
 }
 
+/** One rendered schematic SVG per block, stored with its content hash. */
 export interface BlockSchematicsTable {
   block_slug: string;
   svg: string;
 }
 
+/** One spec row per block parameter; numeric and enum values share the table. */
 export interface BlockSpecsTable {
   block_slug: string;
   key: string;
@@ -41,6 +43,7 @@ export interface BlockSpecsTable {
   text: string | null;
 }
 
+/** The Kysely database type: table name to row type. */
 export interface Database {
   blocks: BlocksTable;
   block_specs: BlockSpecsTable;

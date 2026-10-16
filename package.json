@@ -15,13 +15,16 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.json && pnpm -r --if-present typecheck",
     "test": "vitest run",
-    "check": "pnpm format:check && pnpm lint && pnpm lint:md && pnpm typecheck && pnpm test",
+    "test:coverage": "vitest run --coverage",
+    "doc:coverage": "node scripts/doc-coverage.mjs",
+    "check": "pnpm format:check && pnpm lint && pnpm lint:md && pnpm typecheck && pnpm test:coverage && pnpm doc:coverage",
     "catalogue:render": "docker build -q -t ohm-sweet-ohm-renderer docker/renderer && mkdir -p build && docker run --rm -u \"$(id -u):$(id -g)\" -e HOME=/tmp -v \"$PWD:/repo\" -w /repo --entrypoint scripts/render-catalogue.sh ohm-sweet-ohm-renderer",
     "catalogue:import": "pnpm --filter @ohm-sweet-ohm/importer start"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.5",
+    "@vitest/coverage-v8": "5.0.3",
     "eslint": "10.12.0",
     "eslint-config-prettier": "10.1.8",
     "markdownlint-cli2": "^0.23.3",

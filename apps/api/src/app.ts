@@ -14,12 +14,14 @@ import { blockResponseSchema, errorResponseSchema, SLUG_PATTERN } from '@ohm-swe
 import type { CatalogueCache } from './catalogue-cache.js';
 import { toBlockResponse } from './to-block-response.js';
 
+/** Where the API reads rendered schematics; resolves to undefined for an unknown slug. */
 export interface SchematicSource {
   findSchematic(
     slug: string,
   ): Promise<{ readonly svg: string; readonly contentHash: string } | undefined>;
 }
 
+/** What buildApp needs from the outside, injected so tests run without a database. */
 export interface AppDependencies {
   readonly catalogue: Pick<CatalogueCache, 'get'>;
   readonly schematics: SchematicSource;
@@ -40,6 +42,7 @@ const SVG_HEADERS = {
   'cache-control': 'public, no-cache',
 } as const;
 
+/** Builds the Fastify app: block and schematic routes, OpenAPI docs and the `{ error }` error shape. */
 export async function buildApp({
   catalogue,
   schematics,

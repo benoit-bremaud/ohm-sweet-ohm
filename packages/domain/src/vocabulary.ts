@@ -15,8 +15,10 @@ export type Quantity = (typeof QUANTITIES)[number];
  */
 export type MatchMode = 'COVERS' | 'WITHIN';
 
+/** How hard a block is to build, from the curator's point of view. */
 export const DIFFICULTIES = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'] as const;
 export type Difficulty = (typeof DIFFICULTIES)[number];
 
+/** Whether a block was built and measured, or only designed. */
 export const VALIDATION_STATUSES = ['TESTED', 'THEORETICAL'] as const;
 export type ValidationStatus = (typeof VALIDATION_STATUSES)[number];

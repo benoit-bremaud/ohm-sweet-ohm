@@ -27,6 +27,7 @@ export abstract class Spec {
   abstract toRaw(): RawSpec;
 }
 
+/** A measured or counted value, held as an SI range. */
 export class NumericSpec extends Spec {
   constructor(
     override readonly definition: NumericParameterDefinition,
@@ -46,6 +47,7 @@ export class NumericSpec extends Spec {
   }
 }
 
+/** A value chosen from the allowed values of its definition. */
 export class EnumSpec extends Spec {
   constructor(
     override readonly definition: EnumParameterDefinition,
@@ -78,6 +80,7 @@ export abstract class ParameterDefinition {
   }
 }
 
+/** Definition of a numeric parameter: its quantity and how a query range matches it. */
 export class NumericParameterDefinition extends ParameterDefinition {
   constructor(
     key: string,
@@ -127,6 +130,7 @@ export class NumericParameterDefinition extends ParameterDefinition {
   }
 }
 
+/** Definition of a parameter whose value is one of a fixed list. */
 export class EnumParameterDefinition extends ParameterDefinition {
   readonly allowedValues: readonly string[];
 

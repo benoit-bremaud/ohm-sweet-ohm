@@ -107,8 +107,14 @@ tag and digest in the `Makefile`.
 ```bash
 git config core.hooksPath .githooks   # once per clone: the pre-push hook runs make check-fast
 make check-fast    # pnpm check, Semgrep (make sast), gitleaks (make scan-secrets); about a minute
-make check-local   # check-fast + Docker image checks, catalogue render, pnpm audit --prod; before a merge
+make check-local   # check-fast + Docker image checks, catalogue render, pnpm audit --prod, SonarQube; before a merge
 ```
+
+`pnpm check` measures test coverage (`pnpm test:coverage`, V8, floor 80 % for each package,
+`main.ts` entry points excluded) and documentation coverage (`pnpm doc:coverage`, share of exported
+declarations with a doc block, floor 90 %). `make sonar-scan` sends the analysis and the lcov report
+to the shared SonarQube at `http://localhost:9000` and fails when the quality gate fails; it uses
+the machine's global analysis token (`SONAR_TOKEN`, or `~/.config/sonarqube/analysis-token`).
 
 Both need network access (Semgrep registry rules, `pnpm audit`). The hook refuses to run with
 uncommitted changes, since the checks read the files on disk.

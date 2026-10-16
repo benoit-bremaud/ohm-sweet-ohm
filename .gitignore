@@ -3,6 +3,7 @@ dist/
 build/
 .next/
 coverage/
+.scannerwork/
 *.log
 
 # Environment files — only .env.example is committed
