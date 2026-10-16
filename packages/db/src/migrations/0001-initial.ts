@@ -56,6 +56,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .execute();
 }
 
+/** Drops the initial schema, children first. */
 export async function down(db: Kysely<unknown>): Promise<void> {
   await db.schema.dropTable('block_specs').execute();
   await db.schema.dropTable('blocks').execute();

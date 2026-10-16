@@ -75,12 +75,14 @@ const blockMetaSchema = z.strictObject({
 /** The raw input of the domain's `BlockDraft`, as read from `meta.yaml`. */
 export type BlockMeta = Readonly<z.infer<typeof blockMetaSchema>>;
 
+/** One problem found in a `meta.yaml`, located by field path. */
 export interface ReadError {
   /** Dotted path of the field, e.g. `specs.ledCurrent`; empty for a whole-file error. */
   readonly field: string;
   readonly message: string;
 }
 
+/** Outcome of reading a `meta.yaml`: the metadata, or every error found. */
 export type BlockMetaResult =
   | { readonly ok: true; readonly meta: BlockMeta }
   | { readonly ok: false; readonly errors: readonly ReadError[] };

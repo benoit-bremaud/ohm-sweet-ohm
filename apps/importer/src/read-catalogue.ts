@@ -13,6 +13,7 @@ export interface ImportError {
   readonly message: string;
 }
 
+/** One block folder of the catalogue, read and checked, ready to be mirrored. */
 export interface CatalogueEntry {
   readonly draft: BlockDraft;
   readonly svg: string;
@@ -20,6 +21,7 @@ export interface CatalogueEntry {
   readonly file: string;
 }
 
+/** Outcome of reading the catalogue: every entry, or every error across all folders. */
 export type ReadResult =
   | { readonly ok: true; readonly entries: readonly CatalogueEntry[] }
   | { readonly ok: false; readonly errors: readonly ImportError[] };

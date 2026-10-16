@@ -3,10 +3,12 @@ import type { BlockRepository, MirrorSummary } from '@ohm-sweet-ohm/db';
 
 import { type CatalogueEntry, type ImportError, readCatalogue } from './read-catalogue.js';
 
+/** Outcome of an import: what was mirrored, or every error found (nothing written then). */
 export type ImportResult =
   | { readonly ok: true; readonly summary: MirrorSummary }
   | { readonly ok: false; readonly errors: readonly ImportError[] };
 
+/** Inputs of an import run. */
 export interface ImportOptions {
   readonly catalogueDir: string;
   readonly renderDir: string;

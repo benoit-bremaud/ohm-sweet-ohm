@@ -27,6 +27,7 @@ const enumSpec = z.object({
   value: z.string(),
 });
 
+/** Body of `GET /blocks/:slug`; also the source of the OpenAPI schema. */
 export const blockResponseSchema = z
   .object({
     slug: z.string(),
@@ -51,6 +52,8 @@ export const blockResponseSchema = z
   })
   .describe('A published circuit block');
 
+/** A block as returned by the API. */
 export type BlockResponse = z.infer<typeof blockResponseSchema>;
 
+/** Body of every error response. */
 export const errorResponseSchema = z.object({ error: z.string() }).describe('An error');

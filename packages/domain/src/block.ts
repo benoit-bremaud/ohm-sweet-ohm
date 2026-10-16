@@ -2,11 +2,13 @@ import type { BaseCircuit } from './base-circuit.js';
 import type { RawSpec, Spec } from './specs.js';
 import type { Difficulty, ValidationStatus } from './vocabulary.js';
 
+/** A part a block depends on, identified by its manufacturer part number. */
 export interface KeyComponent {
   readonly partNumber: string;
   readonly role: string;
 }
 
+/** Where a block's design comes from, for attribution. */
 export interface Source {
   readonly title: string;
   readonly url?: string;
@@ -35,6 +37,7 @@ export interface BlockDraft {
   readonly schematic: SchematicAsset;
 }
 
+/** Everything a block is built from; checked by the Block constructor. */
 export interface BlockProperties {
   readonly slug: string;
   readonly name: string;

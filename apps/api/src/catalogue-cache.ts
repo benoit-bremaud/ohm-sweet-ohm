@@ -1,10 +1,12 @@
 import type { Catalogue } from '@ohm-sweet-ohm/domain';
 
+/** Where the cache loads the catalogue from; the version changes on every import. */
 export interface CatalogueSource {
   loadCatalogue(): Promise<Catalogue>;
   catalogueVersion(): Promise<string>;
 }
 
+/** Tuning and hooks of the cache; `now` is injected so tests control time. */
 export interface CatalogueCacheOptions {
   /** Minimum time between two version checks; the site lags an import by at most this. */
   readonly checkIntervalMs: number;
