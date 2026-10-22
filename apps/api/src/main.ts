@@ -5,7 +5,7 @@ import { pino } from 'pino';
 
 import { buildApp } from './app.js';
 import { CatalogueCache } from './catalogue-cache.js';
-import { idleConnectionErrorHandler } from './logger.js';
+import { idleConnectionErrorHandler } from './pool-error-handler.js';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (databaseUrl === undefined || databaseUrl === '') {

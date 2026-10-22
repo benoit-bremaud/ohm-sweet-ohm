@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { idleConnectionErrorHandler } from './logger.js';
+import { idleConnectionErrorHandler } from './pool-error-handler.js';
 
 describe('idleConnectionErrorHandler', () => {
   it('should log a pool error raised before the app exists', () => {

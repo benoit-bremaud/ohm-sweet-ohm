@@ -1,45 +1,43 @@
-# Local review — ohm-sweet-ohm (chore/local-coverage-sonar)
+# Local review — ohm-sweet-ohm (fix/27-pool-error-callback)
 
-- Date: 2026-10-16
-- Commit: `7d0fd09` reviewed; fixes applied in the next commit
-- Scope: branch diff main...HEAD (coverage-v8 thresholds, doc-coverage counter and 31 doc blocks, `sonar-project.properties`, `make sonar-scan`, importer refactor for Sonar, docs)
+- Date: 2026-10-22
+- Commit: `26e0b69` reviewed; fixes applied in the next commit
+- Scope: branch diff main...HEAD (shared pino logger created before the pool, `idleConnectionErrorHandler`, `buildApp` takes a `FastifyBaseLogger`, `pino` dependency)
 - Checks run: design · docs · tests · security + correctness (four read-only reviewers, reconciled)
-- Verdict: fix Must Have first · Must 1 · Should 5 · Nice 3
-- Outcome (same day, before push): the Must and every Should applied except one Disagree, Nice handled as below.
+- Verdict: no Must Have · Must 0 · Should 2 · Nice 2 · Disagree 1
+- Outcome (same day, before push): both Shoulds and both Nice applied; one Disagree.
 
-## Pre-merge gate (head SHA, after fixes)
+## Pre-merge gate (head SHA: the fix-up commit on top of `26e0b69`)
 
-- **1 Tests**: ✅ 232 unit/integration · ✅ `make smoke-api` (container healthy) · ✅ catalogue render
-- **2 Coverage**: tests 95.5 % stmts / 93.9 % branches / 95 % funcs / 95.9 % lines (floor 80, each package) · docs 100 % (77/77, floor 90)
-- **3 SonarQube**: ✅ PASSED (new coverage 95.7 %, duplication 0 %, 0 new issues)
-- **4 Secrets**: ✅ gitleaks clean (main..HEAD, 3 commits) · no tracked `.env*` · diff read: no token value, only the token variable name and path
-- **5 QA pass**: no-UI tooling diff: `make check-local` run end to end on the real artefacts (API image built, started, healthy; scan uploaded)
+| Step        | Result                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1 Tests     | ✅ 234 unit/integration (`make check-local`) · ✅ `smoke-api` on the built Docker image                                         |
+| 2 Coverage  | tests 95.53 % stmts / 93.9 % branches / 95.12 % funcs / 95.98 % lines (floor 80) · docs 100 % (78/78, floor 90)                 |
+| 3 SonarQube | ✅ PASSED                                                                                                                       |
+| 4 Secrets   | ✅ gitleaks clean (`origin/main..HEAD`) · no tracked `.env` · diff read: nothing sensitive                                      |
+| 5 QA pass   | ✅ no UI: `smoke-api` starts the real image and hits the routes; request logging checked by the new `buildApp logger` unit test |
 
-- Gate: **GREEN — merge authorised** after owner approval.
+- Gate: **GREEN — merge authorised**
 
 ## 🔴 Must Have
 
-- `packages/domain/src/base-circuit.ts:13` `[docs]` · the new doc said "the first validation error" but `SpecsResult` carries every error · fixed: "every validation error found".
+_None._
 
 ## 🟡 Should Have
 
-- `Makefile` `sonar-scan` `[security|correctness]` · an old `coverage/lcov.info` could be uploaded on a direct run · fixed: refuses a report older than any `src` file.
-- `Makefile` `sonar-scan` `[design]` · no empty `GIT_COMMON_DIR` guard unlike `sast`, overlong lines · fixed: same guard, lines wrapped.
-- `apps/importer/src/read-catalogue.test.ts:7` `[tests]` · first assertion restated the implementation, ASCII only · fixed: literal order with a non-ASCII name, equality case.
-- `vitest.config.ts:7` `[tests]` · `PACKAGES` kept by hand · fixed: comment that a new package must be added.
-- `packages/db/src/migrations/0002-schematics-and-content-hash.ts:24` `[docs]` · doc restated the file name · fixed.
+- `pnpm-lock.yaml` `[design|security]` · `pnpm add` re-resolved an unrelated optional peer (`@emnapi/core` 1.11.3 → 1.11.1) and duplicated `@astrojs/compiler-*` snapshots · applied: lockfile restored from `main`, only the `pino` importer entry added (+3 lines), `pnpm install --frozen-lockfile` passes.
+- `apps/api/src/app.ts:52` `[tests]` · the injected-logger branch of `buildApp` was untested · applied: `app.test.ts` `buildApp logger` test injects a pino instance with a capturing stream and asserts the request line carries `req.url`.
 
 ## 🔵 Nice to Have
 
-- `scripts/doc-coverage.mjs` `[correctness]` · a non-doc `/* */` above an export counted; NaN floor always passed · fixed: only `/**` counts, invalid floor exits 2.
-- `.gitignore`, `.dockerignore` `[correctness]` · scanner writes `.scannerwork/` into the checkout · fixed: ignored.
-- `apps/importer/src/read-catalogue.ts` `[design]` · `byCodeUnit` could live in its own module · left: two callers, same module family.
+- `apps/api/src/logger.ts` `[design]` · the module name said "logger" but holds the pool callback · applied: renamed `pool-error-handler.ts`.
+- `apps/api/src/pool-error-handler.ts:3` `[docs]` · docstring gave the why, not the contract · applied: "logs at warn and never rethrows".
 
 ## ⚪ Disagree / Intentional
 
-- `apps/importer/src/read-catalogue.ts:47` `[design]` · `readBlock` appends to the caller's `errors` · kept: it is the single error list `readCatalogue` already built, in folder order; returning and merging lists adds code for the same result.
-- `vitest.config.ts` `[design]` · `export default` · required by Vitest (eslint exception for config files).
+- `apps/api/src/main.ts:17` `[correctness]` · claim: a bare `pino()` passed as `loggerInstance` loses Fastify's `req`/`res`/`err` serializers · not so: Fastify 5.12.7 `lib/logger-factory.js:97-101` wraps the instance in a child with its own serializers merged; the new test sees `req.url` in the request log.
+- `apps/api/src/pool-error-handler.test.ts` `[tests]` · the unit test pins the callback contract, not the TDZ itself (that lives in `main.ts`, excluded from coverage and covered by `smoke-api`); a `not.toThrow` assertion would be tautological, so none was added.
 
 ## Per-dimension summary
 
-- Design: no over-engineering; two Makefile tidy-ups. · Docs: one wrong contract, otherwise accurate. · Tests: suite trustworthy, one weak assertion. · Security: token never printed nor on a command line; stale-report hole closed. · Correctness: refactor preserves behaviour; `byCodeUnit` equals the default sort.
+- Design: correct fix, no over-engineering; lockfile noise removed · Docs: 100 %, fresh · Tests: callback and logger injection covered · Security: nothing new; single pino copy, not bundled (esbuild externals) · Correctness: no bug found.
