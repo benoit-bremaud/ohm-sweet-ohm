@@ -1,8 +1,11 @@
 import { BASE_CIRCUITS } from '@ohm-sweet-ohm/domain';
 import { BlockRepository, createDatabase } from '@ohm-sweet-ohm/db';
 
+import { pino } from 'pino';
+
 import { buildApp } from './app.js';
 import { CatalogueCache } from './catalogue-cache.js';
+import { idleConnectionErrorHandler } from './logger.js';
 
 const databaseUrl = process.env.DATABASE_URL;
 if (databaseUrl === undefined || databaseUrl === '') {
@@ -10,12 +13,12 @@ if (databaseUrl === undefined || databaseUrl === '') {
   process.exit(2);
 }
 
-const db = createDatabase(databaseUrl, (error) => {
-  app.log.warn({ err: error }, 'database connection lost; it reconnects on the next query');
-});
+// Created before the pool: its error callback may fire while buildApp is still running (#27).
+const logger = pino();
+const db = createDatabase(databaseUrl, idleConnectionErrorHandler(logger));
 const repository = new BlockRepository(db);
 const app = await buildApp({
-  logger: true,
+  logger,
   schematics: repository,
   catalogue: new CatalogueCache(
     {
@@ -26,7 +29,7 @@ const app = await buildApp({
       checkIntervalMs: 5_000,
       now: () => Date.now(),
       onCheckFailed: (error) => {
-        app.log.warn({ err: error }, 'catalogue check failed; serving the cached catalogue');
+        logger.warn({ err: error }, 'catalogue check failed; serving the cached catalogue');
       },
     },
   ),

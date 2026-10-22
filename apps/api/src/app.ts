@@ -1,6 +1,6 @@
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import Fastify, { type FastifyError, type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyBaseLogger, type FastifyError, type FastifyInstance } from 'fastify';
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -25,7 +25,8 @@ export interface SchematicSource {
 export interface AppDependencies {
   readonly catalogue: Pick<CatalogueCache, 'get'>;
   readonly schematics: SchematicSource;
-  readonly logger?: boolean;
+  /** Shared with code that logs before the app exists (the pool); omitted, the app stays silent. */
+  readonly logger?: FastifyBaseLogger;
 }
 
 const slugParams = z.object({ slug: z.string().regex(SLUG_PATTERN) });
@@ -46,9 +47,9 @@ const SVG_HEADERS = {
 export async function buildApp({
   catalogue,
   schematics,
-  logger = false,
+  logger,
 }: AppDependencies): Promise<FastifyInstance> {
-  const app = Fastify({ logger });
+  const app = Fastify(logger === undefined ? { logger: false } : { loggerInstance: logger });
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
   // Every error uses the documented { error } shape; server failures never expose internals.
