@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
+import { pino } from 'pino';
 
 import { blockResponseSchema } from '@ohm-sweet-ohm/schemas';
 
@@ -170,5 +171,22 @@ describe('documentation', () => {
       '/blocks/{slug}',
       '/blocks/{slug}/schematic.svg',
     ]);
+  });
+});
+
+describe('buildApp logger', () => {
+  it('should log requests through the injected logger', async () => {
+    const lines: string[] = [];
+    const logged = await buildApp({
+      catalogue: { get: () => Promise.resolve(makeCatalogue()) },
+      schematics: { findSchematic: () => Promise.resolve(undefined) },
+      logger: pino({ level: 'info' }, { write: (line: string) => lines.push(line) }),
+    });
+
+    await logged.inject({ method: 'GET', url: '/blocks/led-pair' });
+    await logged.close();
+
+    const urls = lines.map((line) => (JSON.parse(line) as { req?: { url?: string } }).req?.url);
+    expect(urls).toContain('/blocks/led-pair');
   });
 });

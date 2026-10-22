@@ -18,6 +18,7 @@
     "@ohm-sweet-ohm/schemas": "workspace:*",
     "fastify": "5.12.7",
     "fastify-type-provider-zod": "7.0.0",
+    "pino": "10.4.0",
     "zod": "4.6.5"
   },
   "devDependencies": {
