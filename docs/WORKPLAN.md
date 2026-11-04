@@ -21,13 +21,14 @@ Single public repo `ohm-sweet-ohm` (public since 2026-11-07), pnpm workspace (no
 ```text
 apps/api          Fastify + Zod, OpenAPI
 apps/web          Astro on Cloudflare Workers (server rendering on demand, ADR-0003)
-apps/importer     CLI: validate meta.yaml, kicad-cli → SVG, upsert into PostgreSQL
+apps/importer     CLI: validate meta.yaml, read the SVG rendered by docker/renderer (just render), upsert into PostgreSQL
 packages/schemas  Shared Zod schemas (meta.yaml, API DTOs) — single source of truth
 catalogue/        <base-circuit>/<block>/{schematic.kicad_sch, meta.yaml} + LICENSE (CC BY-SA 4.0)
+studies/          <study>/ README + KiCad files, outside the v1 catalogue + LICENSE (CC BY-SA 4.0), see #47/#56
 docs/             architecture diagrams, API guide
 ```
 
-Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
+Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics); `studies/LICENSE` (created in #56) will be CC BY-SA 4.0 too. Course sheets are CC BY-SA 4.0 as well, in a folder and with a licence file chosen in #58.
 
 ## Tracking
 
@@ -117,6 +118,20 @@ give the result — each with resistor power and the base circuit's warnings.
 
 **Done when**: public URL live with the 5 base circuits, repo public, v1.0.0 tagged.
 
+## Outside the milestones (in parallel, time-boxed)
+
+Two workstreams run alongside v1 for learning purposes. They **never displace a milestone
+deliverable**: they take at most about a quarter of the weekly hours, and v1 issues (M2 first)
+come before them. Decisions and matrices are in `PROJECT_LOG.md` (2026-11-04).
+
+- **Circuit studies** (epic #47): `studies/<study>/` with KiCad schematic, routed PCB and
+  README, status `theoretical`, outside `catalogue/`. First study: the Li-ion charger family
+  (epic #48, sub-issues #51–#55), prerequisites #56 (template, licence, KiCad checks) and #57
+  (Li-ion safety flag decision).
+- **Component course sheets** (epic #50): Markdown sheets, components before circuits; template
+  #58, v1 components #59, charger components #60. Ordering with studies: in parallel, each
+  study pulls the sheets of its own components.
+
 ## After v1 (backlog, not scheduled)
 
 - **Realistic component view (first item after v1)**: real-looking components drawn on the
@@ -131,9 +146,10 @@ give the result — each with resistor power and the base circuit's warnings.
   when the value calculator took M4.
 - Calculator extras: combination of two standard resistors, resistor colour code, tolerance
   worst case and load effect, curves.
-- Side-by-side comparator, guided learning path.
-- Browse by key component, base circuits 6 (NE555) and 7 (op-amp).
-- Source file download, BOM, educational explanations.
+- Side-by-side comparator, guided learning path (a component-first path: #61).
+- Browse by key component (with the component sheets: #61), base circuits 6 (NE555) and 7 (op-amp).
+- Publication of studies and their routed PCBs through importer, API and web (#49).
+- Source file download, BOM, educational explanations (the course sheets above).
 
 ## Electronics tooling backlog
 
@@ -152,7 +168,7 @@ milestone deliverable.
 | 5 | ngspice (KiCad SPICE netlist export) | Simulate blocks at publication, check announced specs, add a `SIMULATED` validation status, publish result curves | CI | BSD-3-Clause / GPL parts (tool) | v2 |
 | 6 | EEcircuit-engine | ngspice in the browser: interactive simulation where the enthusiast changes a value and sees the curve update | Browser | MIT | v2 |
 | 7 | KiCad PCB Calculator formulas | Re-implemented, not called (no CLI): E-series rounding, LM317 resistor pair, resistor colour code — feeds the value calculator (UC10) | Domain | — (formulas) | v2 |
-| 8 | KiBot | Replace the importer's `kicad-cli` orchestration only if the pipeline grows beyond a few commands | CI | AGPL-3.0 (tool only) | When needed |
+| 8 | KiBot | Replace `docker/renderer`'s `kicad-cli` orchestration only if the pipeline grows beyond a few commands | CI | AGPL-3.0 (tool only) | When needed |
 | 9 | CircuitJS (Falstad) | "See it run" link from each block to an animated simulation | Link to falstad.com | GPL-2.0 (linked, not embedded) | When the catalogue grows |
 | 10 | Wokwi elements | Realistic resistor (colour bands from the value), LED (colour, brightness), potentiometer, photoresistor and thermistor for the realistic component view; transistor, capacitor, LM317 and supply drawn in-house | Browser | MIT | First item after v1 |
 
