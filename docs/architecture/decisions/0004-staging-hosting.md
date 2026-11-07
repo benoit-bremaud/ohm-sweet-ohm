@@ -157,6 +157,17 @@ re-entered.
   acceptable for staging, to measure before production.
 - Issue #24 (HSTS, `script-src 'none'`) can proceed on the `workers.dev` host.
 
+### Amended 2026-11-07 (#68)
+
+The pipeline moved to the local CI (skill `local-ci`, `docs/deploy.md` § Local CI): the API is
+deployed by `just deploy staging` from up-to-date `main` after a green `just gate`, not by a
+workflow on every merge; the catalogue is rendered and imported by the same recipe, with the
+importer's `DATABASE_URL` read from the git-ignored `.env.staging`, not from a GitHub secret;
+`prod.yml`, triggered by a signed stable tag, is the only workflow left. Staging and production
+share the one Fly app and the one Neon project until a second app exists (derogation recorded in
+`PROJECT_LOG.md`, 2026-11-07). Hadolint and Trivy run in `just lint`, `just gate` and
+`just nightly`. The decision outcome above is kept as written on 2026-10-15.
+
 ### Revisit when
 
 A production domain and real traffic arrive (Neon compute hours, Fly always-on Machine, a

@@ -1,0 +1,6 @@
+[Unit]
+Description=Desktop notification when the ohm-sweet-ohm nightly local CI fails
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/notify-send --urgency=critical "ohm-sweet-ohm local CI nightly failed" "journalctl --user -u ohm-sweet-ohm-nightly.service"

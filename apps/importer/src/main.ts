@@ -6,7 +6,7 @@ import { importCatalogue } from './import-catalogue.js';
 
 /**
  * Usage, from the repository root: DATABASE_URL=postgres://… pnpm catalogue:import [catalogueDir] [renderDir]
- * Run `pnpm catalogue:render` first; it writes the rendered SVGs to build/catalogue. Paths are
+ * Run `just render` first; it writes the rendered SVGs to build/catalogue. Paths are
  * resolved from the directory where the command was launched (pnpm's INIT_CWD).
  */
 async function main(): Promise<number> {
