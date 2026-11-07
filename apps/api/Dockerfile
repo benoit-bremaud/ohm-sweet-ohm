@@ -6,7 +6,7 @@
 # and runs as the unprivileged `node` user. Alpine rather than Debian slim: no perl, fewer
 # packages to carry vulnerabilities, and the API has no native dependency.
 
-FROM node:22.23.4-alpine3.23@sha256:2cfe8c19bd3df0192ad5dfd2e13e86567743ffa1eb614e750a706891f19606af AS build
+FROM node:26.12.1-alpine3.23@sha256:bc2b334006f15c7167bbeb2f08f28c2df883f7594a0470e04454ebe7560cfe68 AS build
 
 WORKDIR /app
 # pnpm version from package.json#packageManager, through the corepack shipped with Node 22.
@@ -33,7 +33,7 @@ RUN pnpm --filter @ohm-sweet-ohm/api build
 RUN pnpm --filter @ohm-sweet-ohm/api --prod deploy --legacy --config.node-linker=hoisted /prod \
   && rm -rf /prod/node_modules/@ohm-sweet-ohm
 
-FROM node:22.23.4-alpine3.23@sha256:2cfe8c19bd3df0192ad5dfd2e13e86567743ffa1eb614e750a706891f19606af AS runtime
+FROM node:26.12.1-alpine3.23@sha256:bc2b334006f15c7167bbeb2f08f28c2df883f7594a0470e04454ebe7560cfe68 AS runtime
 
 ENV NODE_ENV=production
 ENV PORT=3000
