@@ -16,7 +16,7 @@ See [FRAMING.md](FRAMING.md) for the decisions behind this plan.
 
 ## Repository layout
 
-Single private repo `ohm-sweet-ohm`, pnpm workspace (no Turborepo/Nx in v1):
+Single public repo `ohm-sweet-ohm` (public since 2026-11-07), pnpm workspace (no Turborepo/Nx in v1):
 
 ```text
 apps/api          Fastify + Zod, OpenAPI
@@ -39,7 +39,8 @@ Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics).
 ### M0 — Foundations & modelling (weeks 1–2)
 
 - Repo, branch protection, Conventional Commits, pnpm workspace skeleton.
-- CI: lint, typecheck, tests + security baseline (Gitleaks, CodeQL, dependency review).
+- Checks: lint, typecheck, tests + security baseline (gitleaks, Semgrep, Trivy, `pnpm audit`), local
+  since #68 (`just check` / `just gate`, `docs/deploy.md` § Local CI); GitHub Actions deploys a signed tag only.
 - `README.md`, `PROJECT_LOG.md`, both licenses.
 - UML: use-case diagram (Enthusiast, Third-party developer, Curator) and domain
   class diagram (Block, BaseCircuit, Variant link, ParameterDefinition, SpecRange,
@@ -108,10 +109,10 @@ give the result — each with resistor power and the base circuit's warnings.
 - Content: **5. linear regulator**, with its calculator (LM317 dropout check).
 - Public API: anonymous read with rate limit, admin-only writes; API guide for third-party
   developers; OpenAPI-generated typed client used by web.
-- Production environment; catalogue import runs in CI on merge to `main`.
-- Contribution guide for blocks; public release checklist, then repo goes public; then enable
-  branch protection on `main` (unavailable while private on the free plan) and check that
-  CodeQL and dependency review run.
+- Production environment (second Fly app and Neon branch, ending the shared-app derogation);
+  catalogue import runs in `just deploy staging`.
+- Contribution guide for blocks; rulesets on `main` and on `v*` tags (the repository is public
+  since #68, so they are available).
 - Tag `v1.0.0`, `CHANGELOG.md`, LinkedIn post.
 
 **Done when**: public URL live with the 5 base circuits, repo public, v1.0.0 tagged.

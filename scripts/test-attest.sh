@@ -85,6 +85,12 @@ run 1 "foreign key refused" "not signed by a key" sh scripts/attest.sh verify ga
 printf 'x@example.com %s\n' "$(cat "$work/other.pub")" >> .github/allowed_signers
 run 1 "trust store of the checkout ignored" "not signed by a key" sh scripts/attest.sh verify gate HEAD
 git checkout -q .github/allowed_signers
+# A trusted key signing another payload under a correct header: the cryptographic check itself.
+printf "junk\n" > "$work/junk"
+ssh-keygen -q -Y sign -n local-ci -f "$work/key" "$work/junk" > /dev/null 2>&1
+cat "$work/payload" "$work/junk.sig" | git notes --ref refs/notes/gate add -f -F - "$second"
+git push -q -f origin refs/notes/gate
+run 1 "trusted key, wrong payload refused" "bad signature" sh scripts/attest.sh verify gate HEAD
 git notes --ref refs/notes/gate show "$first" | git notes --ref refs/notes/gate add -f -F - "$second"
 git push -q origin refs/notes/gate
 run 1 "note moved to another commit refused" "names another commit" sh scripts/attest.sh verify gate HEAD
@@ -92,6 +98,7 @@ run 1 "note moved to another commit refused" "names another commit" sh scripts/a
 # Release checks: a signed stable tag on the attested commit passes, anything else is refused.
 git tag -s -m v1.0.0 v1.0.0 "$first"
 run 0 "signed stable tag" "$first" sh scripts/attest.sh release v1.0.0
+[ "$(sh scripts/attest.sh release v1.0.0 2>/dev/null)" = "$first" ] || fail "release must print the SHA alone on stdout"; n=$((n + 1))
 git tag -s -m rc v1.1.0-rc.1 "$first"
 run 1 "pre-release refused" "not a stable release tag" sh scripts/attest.sh release v1.1.0-rc.1
 git tag -a -m unsigned v1.2.0 "$first"

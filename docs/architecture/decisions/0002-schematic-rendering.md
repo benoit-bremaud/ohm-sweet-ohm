@@ -9,7 +9,8 @@
 ## Context and problem statement
 
 Every block ships a KiCad 9 schematic. UC3 shows it rendered, and the API serves it to
-third-party developers, so the rendering must be reproducible in CI and produce an image that
+third-party developers, so the rendering must be reproducible outside a workstation (today the local
+gate, #68) and produce an image that
 fits the drawing. `kicad-cli sch export svg` renders on a full page (A5 for the LED block, 210 ×
 148 mm, with the circuit as a small island in the middle) and has no option to crop to the
 drawing.
@@ -26,7 +27,7 @@ drawing.
 
 ## Considered options
 
-1. **KiCad image plus Inkscape crop in CI** — one derived image, files cropped once at
+1. **KiCad image plus Inkscape crop at publication** — one derived image, files cropped once at
    publication.
 2. **Page-size SVG, cropped in the browser** with `getBBox()` at display time.
 3. **Own cropper** computing the bounding box from the schematic or the SVG.
@@ -55,7 +56,7 @@ front-end, third-party API clients, thumbnails — and are computed once, never 
 - Good: rendering stays outside the domain; the domain only references the asset.
 - Bad: a 1.8 GB image to build in the gate; acceptable because Docker caches its layers on the
   curator's machine. Publishing the image to a registry can cut the build time later if needed.
-- Bad: Inkscape is GPL; it runs as a CI tool producing files and is never distributed with the
+- Bad: Inkscape is GPL; it runs as a build tool producing files and is never distributed with the
   MIT-licensed code.
 
 ### Follow-ups

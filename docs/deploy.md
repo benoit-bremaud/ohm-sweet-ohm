@@ -106,7 +106,7 @@ deploy themselves. Branch previews read their variables from the `previews` bloc
 Every check runs on the machine (#68, skill `local-ci`): the local tiers are deterministic, need no
 agent and cost no Actions minutes (the repository was private and billed until 2026-11-07).
 `mise.toml` pins every tool (Node, pnpm, just, lefthook, gitleaks, typos, actionlint, zizmor, hadolint, trivy, syft,
-trufflehog, act) with checksums in `mise.lock`; docker, flyctl and `sonar-scanner`
+trufflehog, act) with checksums in `mise.lock`; docker, flyctl, `gh`, `ssh-keygen` and `sonar-scanner`
 stay system tools. The hooks run the tools through `mise x --`, so they work whether or not the
 shell activates mise.
 
@@ -115,7 +115,15 @@ just setup     # once per clone: mise install, pnpm install --frozen-lockfile, l
 just fast      # L0, pre-commit hook: gitleaks, eslint, prettier, markdownlint, typos, hadolint… on the staged files
 just check     # L1, pre-push hook: lint + test + security + secrets, under 3 min
 just gate      # L2, before every merge, on the pushed head: check + SonarQube, Trivy, API image smoke, SBOM, render, attestation
-just nightly   # L3, systemd user timer: check + TruffleHog + mise outdated
+just nightly   # L3, systemd user timer: check + Trivy fs and image + TruffleHog + mise outdated --bump
+```
+
+The nightly timer is installed once per machine from `scripts/systemd/` (it runs in the main
+checkout, whatever branch is there, at 04:00, and `notify-send`s a failure):
+
+```bash
+systemctl --user link "$PWD"/scripts/systemd/ohm-sweet-ohm-nightly*.service "$PWD"/scripts/systemd/ohm-sweet-ohm-nightly.timer
+systemctl --user enable --now ohm-sweet-ohm-nightly.timer
 ```
 
 `just test` measures test coverage (`pnpm test:coverage`, V8, floor 80 % for each package,
@@ -128,8 +136,13 @@ uses the machine's global analysis token (`SONAR_TOKEN`, or `~/.config/sonarqube
 `just security` runs Semgrep Community Edition with the registry rulesets `p/javascript`,
 `p/typescript` and `p/nodejs` on the shipped code and the scripts (`.semgrepignore` lists the
 exclusions; suppress a finding only with an inline `nosemgrep: <rule-id>` and the reason) and
-`pnpm audit --prod --audit-level high`; `just gate` adds Trivy on the lockfile. `check` and `gate` need
+`pnpm audit --audit-level high` on every dependency, dev ones included (Trivy skips pnpm dev
+dependencies, so it is the only check that sees them); `just gate` adds Trivy fs on the lockfile. `check` and `gate` need
 network access (registry rules, advisories, SonarQube) and Docker (Testcontainers, images).
+
+The first merge after #68 cannot use `just merge`: the verifier reads `.github/allowed_signers` from
+`origin/main`, which only has it once #68 is merged, so #68 itself merges with `gh pr merge` and the
+recorded waiver; every later PR goes through `just merge`.
 
 `just gate` ends with the attestation (agents-skills ADR-0003): a signed git note on
 `refs/notes/gate` and the commit status `gate` on the pushed head, verified by `just merge <pr>`
@@ -154,7 +167,7 @@ classified and deploys nothing; any other tag fails the run. When Actions cannot
 
 ```bash
 just lint                                                    # Hadolint on both Dockerfiles, among the linters
-trivy config --misconfig-scanners dockerfile .               # Dockerfile misconfigurations
+trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs node_modules,build,dist,coverage,.wrangler .   # as in the gate
 docker build -f apps/api/Dockerfile -t ohm-sweet-ohm-api:gate .
 just smoke                                                   # the image starts and its health check passes
 trivy image --ignore-unfixed --severity HIGH,CRITICAL ohm-sweet-ohm-api:gate

@@ -7,7 +7,7 @@
 # tag against .github/allowed_signers, peel to the commit, status `gate` = success, signed
 # `deploy/staging` note), then runs `scripts/deploy.sh api prod`, the same command as the laptop
 # fallback `just deploy prod <tag>`. The web app deploys through Cloudflare Workers Builds, outside
-# Actions (ADR-0004).
+# Actions (agents-skills ADR-0004).
 #
 # Secret (repository secret, skill environments): FLY_API_TOKEN, a deploy
 # token scoped to the app ohm-sweet-ohm-api (`flyctl tokens create deploy`, docs/deploy.md).

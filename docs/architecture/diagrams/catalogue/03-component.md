@@ -34,7 +34,7 @@ flowchart TB
     API["apps/api — Fastify<br/>GET /blocks/{slug}, /blocks/{slug}/schematic.svg, /docs"]
   end
 
-  subgraph CI ["CI / curator machine"]
+  subgraph CI ["Curator machine (render, import)"]
     Importer["apps/importer — CLI"]
     Renderer["docker/renderer<br/>kicad-cli + Inkscape"]
   end
@@ -132,7 +132,7 @@ flowchart LR
   5 seconds. It refuses anything but an up-to-date, attested `main`.
 - **Migrations belong to the importer**: the API assumes the schema is there. The staging deploy
   imports before it deploys the API, so a migration is applied before the API that needs it
-  starts. A production tag redeploys the API only, on the same app and database (ADR-0004, shared
+  starts. A production tag redeploys the API only, on the same app and database (derogation in PROJECT_LOG.md 2026-11-07, shared
   until a second app exists).
 
 ## Notes

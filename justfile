@@ -7,7 +7,7 @@
 #   L1 check    pre-push hook, review-local --push     lint + test + security + secrets          < 3 min
 #   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + image + render,    5–15 min
 #               before every merge                     then the attestation
-#   L3 nightly  systemd user timer                     check + TruffleHog + mise outdated
+#   L3 nightly  systemd user timer                     check + Trivy fs/image + TruffleHog + mise outdated
 #
 # Then: `just merge <pr>` (refuses without the gate attestation on the head SHA), `just deploy
 # staging` from up-to-date main (API on Fly.io, catalogue into Neon), `just attest staging` after
@@ -63,14 +63,14 @@ test: node-guard
 
 # SAST (Semgrep Community Edition, named registry rulesets: `--config auto` would send the project
 # URL; no p/secrets, which prints the matched value, gitleaks redacts it) on the shipped code and
-# the scripts, then known vulnerabilities in the production dependencies, HIGH and above (the same
-# policy as the former ci.yml; `just gate` adds Trivy on the lockfile). No osv-scanner: it has no
-# severity threshold and would fail on dev-only tooling (markdownlint's markdown-it, katex).
+# the scripts, then known vulnerabilities in every dependency, dev ones included, HIGH and above
+# (pnpm.overrides in package.json pins a vulnerable transitive until its parent moves). No
+# osv-scanner: it has no severity threshold, so every low finding would block.
 # EIO_BACKEND=posix: semgrep-core otherwise opens io_uring rings, charged to the user's
 # RLIMIT_MEMLOCK together with every Electron/Node process, and dies intermittently.
 security:
     EIO_BACKEND=posix {{semgrep}} scan --config p/javascript --config p/typescript --config p/nodejs --error --metrics=off --quiet -j 4 apps/api/src apps/importer/src apps/web/src packages/db/src packages/domain/src packages/schemas/src scripts
-    pnpm audit --prod --audit-level high
+    pnpm audit --audit-level high
 
 # Secrets in the whole git history
 secrets:
@@ -83,9 +83,12 @@ check: lint test security secrets
 # Docker down: the filesystem scans still run, then the recipe exits 3 before the attestation
 # (incomplete, never green). Ends with the gate attestation (agents-skills ADR-0003): commit status
 # `gate` + signed note on HEAD, which must already be pushed, so it runs on the pushed head only.
-gate base="origin/main": check
+gate base="origin/main":
     #!/bin/sh
     set -eu
+    # `check` runs from the body, not as a dependency, so the HEAD it checked is the one attested.
+    start=$(git rev-parse HEAD)
+    just check
     # The full-history gitleaks scan of `check` already covers base..HEAD.
     base={{quote(base)}}
     case "$base" in origin/*) git fetch --quiet origin "${base#origin/}" ;; esac
@@ -106,6 +109,7 @@ gate base="origin/main": check
     changed=$(git diff --name-only --diff-filter=d "$base...HEAD" -- .github/workflows)
     if [ -z "$changed" ]; then echo "gate: no workflow added or changed, rehearse skipped"
     else printf '%s\n' "$changed" | while IFS= read -r w; do just rehearse "$w"; done; fi
+    [ "$(git rev-parse HEAD)" = "$start" ] || { echo "gate: HEAD moved during the gate ($start checked), run it again" >&2; exit 1; }
     sh scripts/attest.sh write gate
 
 # SonarQube analysis on the shared self-hosted instance with the machine's global analysis token
@@ -123,7 +127,8 @@ sonar:
     SONAR_TOKEN="$SONAR_TOKEN" sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL:-http://localhost:9000}"
 
 # Proves the gate's API image starts and answers /health as the unprivileged user; the database URL
-# points nowhere on purpose, the health route does not need it.
+# points nowhere on purpose, the health route does not need it. Private: needs the image `gate` builds.
+[private]
 smoke:
     #!/bin/sh
     set -eu
@@ -169,7 +174,8 @@ rehearse workflow:
       printf '{"ref":"refs/tags/%s"}\n' "$tag" > "$dir/act-event.json"
       if act push -e "$dir/act-event.json" -j classify -P "$img" -W "$w" < /dev/null > "$dir/act.log" 2>&1
       then got=$(sed -n 's/.*::set-output:: channel=//p' "$dir/act.log" | tail -1) # act 0.2.92 log format
-      else got=refused; fi
+      elif grep -q "not a release tag" "$dir/act.log"; then got=refused
+      else got=error; fi
       [ "$got" = "$want" ] || { cat "$dir/act.log"; echo "rehearse: $tag gave '$got', expected $want" >&2; exit 1; }
     done
     echo "rehearse: $w classify ok (stable, prerelease, refused)"
@@ -195,6 +201,7 @@ deploy env tag="":
     [ -z "$(git status --porcelain)" ] || { echo "deploy: commit or stash local changes first" >&2; exit 1; }
     case "$env" in
       staging)
+        [ -z "$tag" ] || { echo "deploy: staging takes no tag (it deploys up-to-date main)" >&2; exit 1; }
         git fetch --quiet origin main
         [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ] \
           || { echo "deploy: staging deploys from up-to-date main only" >&2; exit 1; }
@@ -230,7 +237,10 @@ attest env:
       || { echo "attest: HEAD is not the deployed origin/main" >&2; exit 1; }
     sh scripts/attest.sh write deploy/staging
 
-# L3 — nightly, systemd user timer (no time budget)
+# L3 — nightly, systemd user timer (no time budget): new CVEs against the unchanged lockfile and API
+# image, deep secret history, toolchain drift (`--bump`: without it exact pins report nothing).
 nightly: check
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler .
+    if docker info > /dev/null 2>&1; then docker build -q -f apps/api/Dockerfile -t {{api_image}} . && trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}}; else echo "nightly: WARNING docker unreachable, image scan not run"; fi
     trufflehog git "file://$PWD" --no-verification --fail --no-update
-    mise outdated
+    mise outdated --bump

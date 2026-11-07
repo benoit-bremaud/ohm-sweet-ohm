@@ -35,4 +35,8 @@ commit-msg:
 pre-push:
   jobs:
     - name: just check (L1)
-      run: mise x -- just check
+      # The check runs on the working tree, so it must equal the pushed commits.
+      run: >-
+        git diff --quiet HEAD --
+        || { echo "pre-push: commit or set aside the uncommitted changes first" >&2; exit 1; };
+        mise x -- just check

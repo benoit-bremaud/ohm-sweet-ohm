@@ -30,7 +30,8 @@ for r in fast check gate nightly; do
 done
 deps() { just --show "$1" | grep -E "^$1( |:)" | sed 's/.*: *//'; } # deps <recipe>
 for d in lint test security secrets; do deps check | grep -qw "$d" || fail "check lacks $d"; done
-for r in gate nightly; do deps "$r" | grep -qw check || fail "$r does not depend on check"; done
+deps nightly | grep -qw check || fail "nightly does not depend on check"
+just --show gate | grep -q "^    just check$" || fail "gate does not run check (from its body, before the attestation)"
 for r in setup merge rehearse deploy attest render smoke sonar; do just --show "$r" > /dev/null 2>&1 || fail "recipe $r missing"; n=$((n + 1)); done
 just --show gate | grep -q 'attest.sh write gate' || fail "gate does not write the attestation"
 just --show merge | grep -q 'attest.sh verify gate' || fail "merge does not verify the attestation"
@@ -46,12 +47,23 @@ e3=$(just --show gate | grep -n 'exit 3' | head -1 | cut -d: -f1); at=$(just --s
 [ -n "$e3" ] && [ -n "$at" ] && [ "$e3" -lt "$at" ] || fail "gate must exit 3 (Docker down) before it writes the attestation"
 n=$((n + 10))
 # deploy.sh refusals: no network, exit 1 and a message, before any deploy command runs.
-refuse() { # refuse <args…>: deploy.sh must exit 1 and say "deploy:"
-  if out=$(sh scripts/deploy.sh "$@" 2>&1); then fail "deploy.sh $* did not refuse"; fi
-  case "$out" in deploy:*) ;; *) fail "deploy.sh $* refused without the deploy: prefix: $out" ;; esac
+# Stub flyctl and pnpm first on PATH: a refusal that regressed would otherwise deploy for real.
+mkdir -p "$work/stub"
+for s in flyctl pnpm; do printf "#!/bin/sh\ntouch \"$work/CALLED-$s\"\n" > "$work/stub/$s"; chmod +x "$work/stub/$s"; done
+refuse() { # refuse <expected substring> <args…>: deploy.sh must exit 1, say "deploy: … <expected>", call nothing
+  want=$1; shift
+  if out=$(PATH="$work/stub:$PATH" sh scripts/deploy.sh "$@" 2>&1); then fail "deploy.sh $* did not refuse"; fi
+  printf "%s" "$out" | grep -qE "^deploy:.*($want)" || fail "deploy.sh $* refused with the wrong message: $out"
+  [ ! -e "$work/CALLED-flyctl" ] && [ ! -e "$work/CALLED-pnpm" ] || fail "deploy.sh $* called a deploy command before refusing"
   n=$((n + 1))
 }
-refuse; refuse api; refuse api qa; refuse web prod; refuse catalogue prod
+refuse usage; refuse usage api; refuse "unknown environment" api qa; refuse "unknown component" web prod
+refuse "staging deploy only" catalogue prod; refuse "run just render|no .env.staging" catalogue staging # depends on build/
+# The Node pin is written in four places; they must agree.
+v=$(cat .nvmrc)
+grep -q "^node = \"$v\"" mise.toml && grep -q "^nodejs $v$" .tool-versions \
+  && [ "$(grep -c "^FROM node:$v-" apps/api/Dockerfile)" -eq 2 ] || fail "Node pins diverge from .nvmrc ($v)"
+n=$((n + 1))
 grep -q '{1}' lefthook.yml || fail "commit-msg hook does not pass the message file"
 grep -q 'just check' lefthook.yml || fail "pre-push hook does not run just check"
 n=$((n + 2))

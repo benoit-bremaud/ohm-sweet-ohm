@@ -8,7 +8,7 @@
 #                                   .env.staging (git-ignored) unless already set; run `just render`
 #                                   first, the importer reads build/catalogue
 #
-# The API has one Fly app and one Neon project (ADR-0004): staging and prod are the same target
+# The API has one Fly app and one Neon project (derogation in PROJECT_LOG.md, 2026-11-07): staging and prod are the same target
 # until a second app exists (derogation, PROJECT_LOG.md 2026-11-07). The catalogue is imported by the
 # staging deploy only; a prod tag deploys the API that reads it. Credentials: flyctl session or
 # FLY_API_TOKEN. The caller (justfile, workflow) checks the tree and the attestations.
@@ -30,12 +30,11 @@ case "$component" in
   catalogue)
     [ "$env" = staging ] || die "the catalogue is imported by the staging deploy only (the prod tag deploys the API)"
     [ -d build/catalogue ] || die "build/catalogue missing: run just render first"
-    if [ -z "${DATABASE_URL:-}" ]; then
-      [ -f .env.staging ] || die "DATABASE_URL unset and no .env.staging (docs/deploy.md § Neon)"
-      DATABASE_URL=$(sed -n 's/^DATABASE_URL=//p' .env.staging | head -n 1)
-      [ -n "$DATABASE_URL" ] || die "no DATABASE_URL line in .env.staging"
-      export DATABASE_URL
-    fi
+    # Always the file, never a DATABASE_URL left in the shell (the README local example would win).
+    [ -f .env.staging ] || die "no .env.staging (docs/deploy.md § Neon)"
+    DATABASE_URL=$(sed -n "s/^DATABASE_URL=//p" .env.staging | head -n 1 | tr -d "\r\"'")
+    [ -n "$DATABASE_URL" ] || die "no DATABASE_URL line in .env.staging"
+    export DATABASE_URL
     pnpm catalogue:import
     ;;
   *) die "unknown component $component (api, catalogue)" ;;
