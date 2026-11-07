@@ -1,9 +1,9 @@
 # Local review — ohm-sweet-ohm (ci/68-local-ci-prod-only)
 
 - Date: 2026-11-07
-- Commit: `0bc475a` reviewed (round 1); fixes in `db8ddd1` (round 2) and `55e2817` (round 3)
+- Commit: `0bc475a` reviewed (round 1); fixes in `db8ddd1` (round 2), `55e2817` (round 3) and `79dfa9f` (round 4); head `e580504`
 - Scope: branch diff origin/main (`79e399b`)...HEAD — local CI (just, lefthook, mise, attestation), `prod.yml` as the only workflow, seven workflows and the Makefile removed, dependency security bumps, Node 22.23.4, repository made public
-- Checks run: adversarial (Opus, 2 rounds) · design · docs · tests · containers · security + correctness (six read-only reviewers, reconciled)
+- Checks run: adversarial (Opus, 4 rounds) · design · docs · tests · containers · security + correctness (six read-only reviewers, reconciled)
 - Verdict: fix Must Have first (done in `db8ddd1`) · Must 3 · Should 14 · Nice 9 · Disagree 6
 
 ## Adversarial review (#236)
@@ -11,20 +11,21 @@
 - Round 1 on `0bc475a`: Must 3 · Should 11 · Nice 7 · unverified 0 · Push gate: closed
 - Round 2 on `db8ddd1`: 3 Must + 8 Should + 2 Nice fixed · 0 not fixed · 0 regressed · new Must 2 (stale `catalogue:render` comment in `apps/importer/src/main.ts`, `deploy.sh` header contradicting the code) · Push gate: closed
 - Round 3 on `55e2817`: 2 Must + 2 Should + 2 Nice fixed · 0 not fixed · 0 regressed · new Must 0 · **Push gate: open**
-- Hosted reviewers (filled at the pre-merge run): Copilot not requested (project decision, 2026-10-14) · Codex `@codex review` optional
+- Round 4 on `79dfa9f` (SonarQube S9382 `NOSONAR`, owner MCDA C 480): new Must 0 · Should 1 (the `NOSONAR` comment claimed a rule scope the marker does not have) · **Push gate: open**; fixed in `e580504` (honest wording, `.scannerwork/` ignored by ESLint), a two-line diff re-read by hand
+- Hosted reviewers (filled at the pre-merge run): Copilot not requested (project decision, 2026-10-14) · Codex: quota refused on `0195bcd` (recorded, PR moves on with the local adversarial review alone)
 
-## Pre-merge gate (head SHA `55e2817`, `--push` mode)
+## Pre-merge gate (head SHA `e580504`)
 
 | Step | Result |
 | --- | --- |
 | 0 CI mirror | n/a — no workflow runs on `pull_request` any more; `prod.yml` (tag) rehearsed by `just rehearse` (stable, prerelease, refused: ok) |
 | 1 Tests | ✅ 234 unit/integration (16 files, Vitest, Testcontainers) · ✅ 41 local-CI wiring cases · ✅ 22 attestation cases · E2E/smoke: step 5 |
 | 2 Coverage | tests 95.53 % stmts / 93.90 % branches / 95.12 % funcs / 95.98 % lines (floor 80) · docs 100 % (78/78, floor 90) |
-| 3 SonarQube | ⏸ deferred to the pre-merge run (`--push`) |
+| 3 SonarQube | ✅ `QUALITY GATE STATUS: PASSED` on `e580504` (`just gate`); a first run on `0195bcd` failed on S9382 (sequential `await` in the importer), silenced with a justified `NOSONAR` (owner MCDA, option C 480) |
 | 4 Secrets | ✅ gitleaks clean (origin/main..HEAD and the 44-commit history) · no tracked `.env*` · diff read: only secret names (`FLY_API_TOKEN`, `DATABASE_URL`), one signing e-mail in `.github/allowed_signers` |
-| 5 E2E/smoke | ⏸ deferred to the pre-merge run (`just gate`: API image smoke, Trivy image, render); QA pass on staging after the merge |
+| 5 E2E/smoke | ✅ `just gate` on `e580504`: API image built and smoked, Trivy fs/config/image clean, SBOM, `just render`, `just rehearse` (stable, prerelease, refused); a first run failed on a slow registry download inside the image build (transient, rebuilt green) · QA pass on staging after the merge |
 
-- Gate: `--push`: **pre-push green** — `mise x -- just check` passed on `db8ddd1` and `55e2817` (2 min 40) (lint, tests, coverage, Semgrep, `pnpm audit --audit-level high` 0 high, gitleaks); SonarQube, image smoke, Trivy image, render, attestation deferred to `just gate` on the pushed head. The first merge cannot use `just merge` (`.github/allowed_signers` reaches `origin/main` with this PR): `gh pr merge` with the recorded waiver, then `just gate` on `main`.
+- Gate: **GREEN on `e580504`** — `mise x -- just check` passed on `db8ddd1`, `55e2817` and `e580504` (lint, tests, coverage, Semgrep, `pnpm audit --audit-level high` 0 high, gitleaks); `mise x -- just gate` green on `e580504` (SonarQube passed, image smoke, Trivy, SBOM, render, rehearse), attestation note written on `refs/notes/gate`. `sh scripts/attest.sh verify gate e580504` cannot pass before the merge: the verifier reads `.github/allowed_signers` from `origin/main`, which this PR adds (bootstrap). The first merge therefore uses `gh pr merge --squash --match-head-commit e580504` with the recorded waiver, then `just gate` on `main`.
 
 ## 🔴 Must Have
 
