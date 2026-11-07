@@ -37,7 +37,7 @@ export async function readCatalogue(catalogueDir: string, renderDir: string): Pr
   for (const baseDir of await subdirectories(catalogueDir)) {
     for (const blockDir of await subdirectories(path.join(catalogueDir, baseDir))) {
       // Sequential on purpose: a few folders, and the errors keep the catalogue order.
-      const entry = await readBlock(catalogueDir, renderDir, baseDir, blockDir, errors); // NOSONAR typescript:S9382
+      const entry = await readBlock(catalogueDir, renderDir, baseDir, blockDir, errors); // NOSONAR (silences the whole line; meant for S9382)
       if (entry !== undefined) entries.push(entry);
     }
   }
