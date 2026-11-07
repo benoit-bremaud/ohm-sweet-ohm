@@ -14,10 +14,10 @@ signed release tag (`prod.yml`).
 | --- | --- | --- | --- |
 | Secrets | gitleaks (`just secrets`; staged files on commit) | the whole git history, every push | yes |
 | Static analysis | Semgrep Community Edition (`just security`) | `p/javascript`, `p/typescript`, `p/nodejs` on the shipped code and the scripts | yes |
-| Dependencies | `pnpm audit --audit-level high` (`just security`); Trivy fs (`just gate`, `just nightly`) adds the production lockfile and the API image | every package, dev dependencies included | yes, HIGH and CRITICAL |
+| Dependencies | `pnpm audit --audit-level high` (`just security`); Trivy fs (`just gate`, `just nightly`) adds the production lockfile | every package, dev dependencies included | yes, HIGH and CRITICAL |
 | Dockerfile lint | Hadolint (`just lint`) | `apps/api/Dockerfile`, `docker/renderer/Dockerfile` | yes, warnings included |
 | Dockerfile misconfiguration | Trivy config (`just gate`) | the same two Dockerfiles | yes, HIGH and CRITICAL |
-| Filesystem vulnerabilities | Trivy fs (`just gate`) | the repository | yes, HIGH and CRITICAL |
+| Filesystem vulnerabilities | Trivy fs (`just gate`, `just nightly`) | the repository | yes, HIGH and CRITICAL |
 | Image vulnerabilities | Trivy image (`just gate`, `just nightly`) | the API image, as deployed to Fly.io, plus a Syft SBOM | yes, HIGH and CRITICAL with a fix available |
 | Workflow hygiene | actionlint, zizmor (`just lint`); act rehearsal of a changed workflow (`just gate`) | `.github/workflows/prod.yml` | yes |
 | Deep secret history | TruffleHog, offline (`just nightly`) | the whole git history | yes |
