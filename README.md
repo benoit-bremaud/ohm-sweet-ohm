@@ -14,12 +14,13 @@ from the simplest base circuits to more complex ones.
 
 ## Development
 
-Requires Node.js 22 (see `.nvmrc`) and pnpm 10.
+Requires [mise](https://mise.jdx.dev) and Docker; `mise.toml` pins Node 22, pnpm 10 and every
+check tool (see `docs/deploy.md` § Local CI).
 
 ```bash
-pnpm install
-pnpm check   # format, lint (TypeScript + Markdown), typecheck, tests
-make check-local   # the full local gate (Semgrep, gitleaks, Docker, audit); see docs/deploy.md
+just setup   # once per clone: mise install, pnpm install, git hooks (lefthook)
+just check   # format, lint, typecheck, tests with coverage, Semgrep, audit, gitleaks (pre-push hook)
+just gate    # the pre-merge gate: check + SonarQube, Trivy, API image smoke, catalogue render, attestation
 ```
 
 Integration tests start a disposable PostgreSQL with Testcontainers, so Docker must be running.
@@ -59,10 +60,11 @@ produces the Worker in `apps/web/dist`; deployment is configured in `apps/web/wr
 ## Deployment
 
 Staging runs on Cloudflare Workers (web, one preview per branch), Fly.io (API container) and
-Neon (PostgreSQL); the catalogue is imported from CI on every merge. Providers, secrets,
-re-creation steps and the container checks (`make lint-docker`, `make scan-docker-config`,
-`make build-api`, `make scan-docker-image`) are in [docs/deploy.md](docs/deploy.md); the decision
-is [ADR-0004](docs/architecture/decisions/0004-staging-hosting.md).
+Neon (PostgreSQL); `just deploy staging` imports the catalogue and deploys the API from an attested
+`main`, and a signed release tag deploys production through the only GitHub workflow
+(`prod.yml`). Providers, secrets, re-creation steps, the local CI tiers and the container checks
+are in [docs/deploy.md](docs/deploy.md); the decision is
+[ADR-0004](docs/architecture/decisions/0004-staging-hosting.md).
 
 ## Licenses
 

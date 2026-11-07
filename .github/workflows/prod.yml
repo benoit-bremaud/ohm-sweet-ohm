@@ -1,0 +1,72 @@
+# The only GitHub workflow of this repository (#68; agents-skills ADR-0004, local-first CI/CD, skill
+# release-tag § Prod workflow). Every check runs locally (`just check` on pre-push, `just gate` before
+# merge, skill local-ci); GitHub Actions only promotes a signed stable release tag to production.
+#
+# `classify` names the channel; only a stable `vX.Y.Z` tag reaches `deploy-production`, which
+# re-fetches the tag and `main`, runs the trusted `scripts/attest.sh release` of `main` (SSH-signed
+# tag against .github/allowed_signers, peel to the commit, status `gate` = success, signed
+# `deploy/staging` note), then runs `scripts/deploy.sh api prod`, the same command as the laptop
+# fallback `just deploy prod <tag>`. The web app deploys through Cloudflare Workers Builds, outside
+# Actions (ADR-0004).
+#
+# Secret (repository secret, private Free derogation of skill environments): FLY_API_TOKEN, a deploy
+# token scoped to the app ohm-sweet-ohm-api (`flyctl tokens create deploy`, docs/deploy.md).
+name: prod
+on:
+  push:
+    tags: ['v*']
+permissions: {}
+concurrency:
+  group: prod
+  cancel-in-progress: false # a cancelled flyctl could leave a release half applied
+env:
+  PREFIX: v # `just rehearse` reads it for its fake tags
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      channel: ${{ steps.c.outputs.channel }}
+    steps:
+      - id: c
+        shell: bash
+        run: |
+          SEMVER='(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)'
+          if [[ "$GITHUB_REF_NAME" =~ ^"$PREFIX"$SEMVER$ ]]; then echo channel=stable >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF_NAME" =~ ^"$PREFIX"$SEMVER-(alpha|beta|rc)\.[1-9][0-9]*$ ]]; then echo channel=prerelease >> "$GITHUB_OUTPUT"
+          else echo "::error::not a release tag: $GITHUB_REF_NAME"; exit 1; fi
+
+  deploy-production:
+    needs: classify
+    if: needs.classify.outputs.channel == 'stable'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read # fetch main, the tag and the notes refs
+      statuses: read # attest.sh reads the commit status `gate`
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false # the deploy step runs tagged code: it never gets the token
+      - name: Verify the tag, the gate status and the staging note
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # git auth for this step only (fetches of main, the tag and the notes refs in attest.sh)
+          export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          export GIT_CONFIG_VALUE_0
+          # the annotated tag object itself (checkout may leave only the commit), then the trusted
+          # attest.sh of main, never the tagged one
+          git fetch --quiet --force origin "refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME" main
+          git show origin/main:scripts/attest.sh > "$RUNNER_TEMP/attest.sh"
+          sha=$(sh "$RUNNER_TEMP/attest.sh" release "$GITHUB_REF_NAME")
+          [ "$sha" = "$(git rev-parse HEAD)" ] || { echo "::error::checkout is not $sha"; exit 1; }
+      - uses: superfly/flyctl-actions/setup-flyctl@ed8efb33836e8b2096c7fd3ba1c8afe303ebbff1 # 1.6
+        with:
+          version: 0.5.4 # pinned: it runs with the Fly deploy token in the environment
+      - name: Deploy production
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+        run: sh scripts/deploy.sh api prod # the same command as just deploy prod <tag>

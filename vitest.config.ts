@@ -29,7 +29,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['{apps,packages}/*/src/**/*.{ts,astro}'],
-      // main.ts files only wire the process together; make smoke-api proves the api one starts.
+      // main.ts files only wire the process together; `just smoke` proves the api one starts.
       exclude: ['**/*.test.ts', '**/*.d.ts', '{apps,packages}/*/src/main.ts'],
       // lcov feeds SonarQube (sonar-project.properties).
       reporter: ['text-summary', 'text', 'lcov'],

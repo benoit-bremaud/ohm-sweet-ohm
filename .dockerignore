@@ -22,3 +22,9 @@ apps/web/src
 apps/web/*.ts
 apps/web/*.jsonc
 .scannerwork
+# Local CI files (justfile, hooks, toolchain) never enter the image
+justfile
+lefthook.yml
+mise.toml
+mise.lock
+typos.toml

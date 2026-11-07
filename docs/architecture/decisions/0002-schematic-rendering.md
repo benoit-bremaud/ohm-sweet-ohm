@@ -44,16 +44,17 @@ front-end, third-party API clients, thumbnails — and are computed once, never 
   way of writing `CATALOGUE_DIR` works (checked on eight forms, including a trailing slash, an
   absolute path and a symbolic link). Fails if no schematic is found, and fails on a multi-sheet
   schematic: `kicad-cli` emits one SVG per sheet, and a block has a single rendered schematic.
-- `.github/workflows/catalogue.yml`: runs only when the catalogue or the renderer changes, checks
-  one SVG per schematic, uploads the SVGs as a 7-day artifact.
+- `just render` (originally `.github/workflows/catalogue.yml`, moved to the local gate in #68):
+  builds the renderer image, renders every schematic and checks one SVG per schematic; runs in
+  `just gate` and before every `just deploy staging`.
 - Rendered SVGs are build output (`build/` is git-ignored). The importer (M1) will publish them.
 
 ### Consequences
 
 - Good: one reproducible toolchain, pinned versions, tight images for every consumer.
 - Good: rendering stays outside the domain; the domain only references the asset.
-- Bad: a 1.8 GB image to build in CI; acceptable because the workflow runs only on catalogue or
-  renderer changes. Publishing the image to a registry can cut the build time later if needed.
+- Bad: a 1.8 GB image to build in the gate; acceptable because Docker caches its layers on the
+  curator's machine. Publishing the image to a registry can cut the build time later if needed.
 - Bad: Inkscape is GPL; it runs as a CI tool producing files and is never distributed with the
   MIT-licensed code.
 

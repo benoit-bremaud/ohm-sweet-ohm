@@ -75,20 +75,25 @@ Solid arrows are runtime calls; dotted arrows are compile-time imports.
 
 Which pipeline puts each component where, and which secret each hop needs. Staging is the
 disposable preview of a pull request for the web app; the API and the database are one
-long-lived staging deployment shared by every preview (ADR-0004).
+long-lived deployment shared by every preview (ADR-0004). Since #68 the checks and the staging
+deploy run on the curator's machine (`just gate`, `just deploy staging`, `docs/deploy.md`); GitHub
+Actions keeps the production deploy on a signed tag.
 
 ```mermaid
 flowchart LR
+  subgraph Local ["Curator's machine"]
+    Gate["just gate<br/>check + Sonar, Trivy, image smoke, render<br/>then the gate attestation"]
+    Staging["just deploy staging<br/>render, catalogue:import, flyctl deploy"]
+  end
+
   subgraph GitHub ["GitHub"]
-    Repo[("repository<br/>main + branches")]
-    Deploy["Actions: deploy-api<br/>flyctl deploy --remote-only"]
-    Import["Actions: catalogue<br/>render in Docker, then catalogue:import"]
-    Security["Actions: docker-security<br/>Hadolint, Trivy config + image"]
+    Repo[("repository<br/>main + branches, signed tags")]
+    Prod["Actions: prod<br/>attest.sh release, then flyctl deploy"]
   end
 
   subgraph Cloudflare ["Cloudflare"]
     Builds["Workers Builds<br/>build: pnpm build<br/>deploy: wrangler deploy / preview"]
-    Prod["Worker ohm-sweet-ohm-web<br/>main → workers.dev"]
+    Web["Worker ohm-sweet-ohm-web<br/>main → workers.dev"]
     Preview["Preview per branch<br/>URL commented on the PR"]
   end
 
@@ -100,32 +105,35 @@ flowchart LR
     DB[("project ohm-sweet-ohm<br/>free plan, scale to zero")]
   end
 
-  Repo -->|"push main"| Deploy
-  Repo -->|"push main (catalogue, importer)"| Import
-  Repo -->|"pull request, push"| Security
+  Gate -->|"status gate + signed note"| Repo
+  Repo -->|"up-to-date main, attested"| Staging
+  Repo -->|"signed tag vX.Y.Z"| Prod
   Repo -->|"GitHub App"| Builds
-  Builds -->|"main"| Prod
+  Builds -->|"main"| Web
   Builds -->|"other branches"| Preview
-  Deploy -->|"FLY_API_TOKEN (GitHub secret)"| Machine
-  Import -->|"DATABASE_URL (GitHub secret)"| DB
+  Staging -->|"flyctl session"| Machine
+  Staging -->|"DATABASE_URL (.env.staging)"| DB
+  Prod -->|"FLY_API_TOKEN (repository secret)"| Machine
   Machine -->|"DATABASE_URL (Fly secret)"| DB
-  Prod -->|"API_URL (wrangler.jsonc var)"| Machine
+  Web -->|"API_URL (wrangler.jsonc var)"| Machine
   Preview -->|"API_URL (wrangler.jsonc var)"| Machine
 ```
 
-- **Nothing secret in git**: the Fly deploy token and the Neon connection string live in GitHub
-  Actions secrets and in Fly secrets; `API_URL` is a public origin in `wrangler.jsonc`; Workers
-  Builds authenticates through Cloudflare's GitHub App, so no Cloudflare token is held in GitHub.
+- **Nothing secret in git**: the Neon connection string lives in the git-ignored `.env.staging`
+  and in Fly secrets, the Fly deploy token in one GitHub repository secret; `API_URL` is a public
+  origin in `wrangler.jsonc`; Workers Builds authenticates through Cloudflare's GitHub App, so no
+  Cloudflare token is held in GitHub.
 - **Idle costs nothing in compute**: the Fly Machine stops after a few minutes without requests
   and restarts on the next one; Neon suspends its compute after 5 minutes and wakes on the next
   connection. The API then checks the catalogue version only while it serves requests, which keeps
   Neon's free compute hours.
-- **Import on merge**: the catalogue workflow renders the schematics in Docker, then runs the
-  importer against the Neon database; the API sees the new catalogue within 5 seconds. Only a run
-  on `main` imports, whether pushed or triggered by hand.
-- **Migrations belong to the importer**: the API assumes the schema is there. A merge that adds a
-  migration starts the API deployment and the import in parallel, so the API can be redeployed a
-  few minutes before the schema changes; accepted for staging (ADR-0004).
+- **Import on staging deploy**: `just deploy staging` renders the schematics in Docker, runs the
+  importer against the Neon database, then deploys the API; the API sees the new catalogue within
+  5 seconds. It refuses anything but an up-to-date, attested `main`.
+- **Migrations belong to the importer**: the API assumes the schema is there. The staging deploy
+  imports before it deploys the API, so a migration is applied before the API that needs it
+  starts. A production tag redeploys the API only, on the same app and database (ADR-0004, shared
+  until a second app exists).
 
 ## Notes
 
