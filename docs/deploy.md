@@ -103,9 +103,9 @@ deploy themselves. Branch previews read their variables from the `previews` bloc
 
 ## Local CI
 
-Every check runs on the machine (#68, skill `local-ci`): GitHub Actions bills the minutes of a
-private repository, and the local tiers are deterministic and need no agent. `mise.toml` pins every
-tool (Node, pnpm, just, lefthook, gitleaks, typos, actionlint, zizmor, hadolint, trivy, syft,
+Every check runs on the machine (#68, skill `local-ci`): the local tiers are deterministic, need no
+agent and cost no Actions minutes (the repository was private and billed until 2026-11-07).
+`mise.toml` pins every tool (Node, pnpm, just, lefthook, gitleaks, typos, actionlint, zizmor, hadolint, trivy, syft,
 trufflehog, act) with checksums in `mise.lock`; docker, flyctl and `sonar-scanner`
 stay system tools. The hooks run the tools through `mise x --`, so they work whether or not the
 shell activates mise.

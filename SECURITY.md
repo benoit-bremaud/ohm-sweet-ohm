@@ -2,7 +2,7 @@
 
 ## Reporting
 
-The repository is private; report anything to its owner directly.
+The repository is public (ADR-0005 of agents-skills, 2026-11-07); report a vulnerability privately to its owner (`bbd.concept@gmail.com`), never in a public issue.
 
 ## Continuous checks
 

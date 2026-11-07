@@ -9,7 +9,7 @@
 # fallback `just deploy prod <tag>`. The web app deploys through Cloudflare Workers Builds, outside
 # Actions (ADR-0004).
 #
-# Secret (repository secret, private Free derogation of skill environments): FLY_API_TOKEN, a deploy
+# Secret (repository secret, skill environments): FLY_API_TOKEN, a deploy
 # token scoped to the app ohm-sweet-ohm-api (`flyctl tokens create deploy`, docs/deploy.md).
 name: prod
 on:
