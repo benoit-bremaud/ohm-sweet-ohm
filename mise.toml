@@ -7,7 +7,7 @@
 # Node and pnpm match .nvmrc / package.json#packageManager, so the hooks run the project's own
 # toolchain whether or not the shell activates asdf or mise.
 [tools]
-node = "22.23.3"
+node = "22.23.4"
 pnpm = "10.30.3"
 uv = "0.13.7"            # `uvx semgrep@…`
 just = "1.59.0"
@@ -21,7 +21,6 @@ trufflehog = "3.99.8"
 hadolint = "2.15.1"      # apps/api/Dockerfile, docker/renderer/Dockerfile
 trivy = "0.76.2"         # fs, Dockerfile config, the API image
 syft = "1.57.0"          # SBOM of the API image
-osv-scanner = "2.7.0"    # pnpm-lock.yaml
 act = "0.2.92"           # `just rehearse`; pinned: its log format is parsed (needs docker)
 
 [env]

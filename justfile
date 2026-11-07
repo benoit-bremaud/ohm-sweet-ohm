@@ -63,13 +63,14 @@ test: node-guard
 
 # SAST (Semgrep Community Edition, named registry rulesets: `--config auto` would send the project
 # URL; no p/secrets, which prints the matched value, gitleaks redacts it) on the shipped code and
-# the scripts, then known vulnerabilities in the production dependencies and the lockfile.
+# the scripts, then known vulnerabilities in the production dependencies, HIGH and above (the same
+# policy as the former ci.yml; `just gate` adds Trivy on the lockfile). No osv-scanner: it has no
+# severity threshold and would fail on dev-only tooling (markdownlint's markdown-it, katex).
 # EIO_BACKEND=posix: semgrep-core otherwise opens io_uring rings, charged to the user's
 # RLIMIT_MEMLOCK together with every Electron/Node process, and dies intermittently.
 security:
     EIO_BACKEND=posix {{semgrep}} scan --config p/javascript --config p/typescript --config p/nodejs --error --metrics=off --quiet -j 4 apps/api/src apps/importer/src apps/web/src packages/db/src packages/domain/src packages/schemas/src scripts
     pnpm audit --prod --audit-level high
-    osv-scanner scan source --lockfile pnpm-lock.yaml
 
 # Secrets in the whole git history
 secrets:

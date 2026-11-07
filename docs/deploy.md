@@ -106,7 +106,7 @@ deploy themselves. Branch previews read their variables from the `previews` bloc
 Every check runs on the machine (#68, skill `local-ci`): GitHub Actions bills the minutes of a
 private repository, and the local tiers are deterministic and need no agent. `mise.toml` pins every
 tool (Node, pnpm, just, lefthook, gitleaks, typos, actionlint, zizmor, hadolint, trivy, syft,
-osv-scanner, trufflehog, act) with checksums in `mise.lock`; docker, flyctl and `sonar-scanner`
+trufflehog, act) with checksums in `mise.lock`; docker, flyctl and `sonar-scanner`
 stay system tools. The hooks run the tools through `mise x --`, so they work whether or not the
 shell activates mise.
 
@@ -127,8 +127,8 @@ uses the machine's global analysis token (`SONAR_TOKEN`, or `~/.config/sonarqube
 
 `just security` runs Semgrep Community Edition with the registry rulesets `p/javascript`,
 `p/typescript` and `p/nodejs` on the shipped code and the scripts (`.semgrepignore` lists the
-exclusions; suppress a finding only with an inline `nosemgrep: <rule-id>` and the reason),
-`pnpm audit --prod --audit-level high` and osv-scanner on the lockfile. `check` and `gate` need
+exclusions; suppress a finding only with an inline `nosemgrep: <rule-id>` and the reason) and
+`pnpm audit --prod --audit-level high`; `just gate` adds Trivy on the lockfile. `check` and `gate` need
 network access (registry rules, advisories, SonarQube) and Docker (Testcontainers, images).
 
 `just gate` ends with the attestation (agents-skills ADR-0003): a signed git note on

@@ -14,7 +14,7 @@ signed release tag (`prod.yml`).
 | --- | --- | --- | --- |
 | Secrets | gitleaks (`just secrets`; staged files on commit) | the whole git history, every push | yes |
 | Static analysis | Semgrep Community Edition (`just security`) | `p/javascript`, `p/typescript`, `p/nodejs` on the shipped code and the scripts | yes |
-| Dependencies | `pnpm audit --prod --audit-level high` and osv-scanner on the lockfile (`just security`) | every package | yes |
+| Dependencies | `pnpm audit --prod --audit-level high` (`just security`), Trivy fs on the lockfile (`just gate`) | every package | yes, HIGH and CRITICAL |
 | Dockerfile lint | Hadolint (`just lint`) | `apps/api/Dockerfile`, `docker/renderer/Dockerfile` | yes, warnings included |
 | Dockerfile misconfiguration | Trivy config (`just gate`) | the same two Dockerfiles | yes, HIGH and CRITICAL |
 | Filesystem vulnerabilities | Trivy fs (`just gate`) | the repository | yes, HIGH and CRITICAL |
