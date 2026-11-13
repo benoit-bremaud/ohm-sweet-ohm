@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ohm-sweet-ohm/domain": "workspace:*",
-    "kysely": "0.29.6",
+    "kysely": "0.29.8",
     "pg": "8.23.1"
   },
   "devDependencies": {
