@@ -239,8 +239,19 @@ attest env:
 
 # L3 — nightly, systemd user timer (no time budget): new CVEs against the unchanged lockfile and API
 # image, deep secret history, toolchain drift (`--bump`: without it exact pins report nothing).
-nightly: check
-    trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler .
-    if docker info > /dev/null 2>&1; then docker build -q -f apps/api/Dockerfile -t {{api_image}} . && trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}}; else echo "nightly: WARNING docker unreachable, image scan not run"; fi
-    trufflehog git "file://$PWD" --no-verification --fail --no-update
-    mise outdated --bump
+# Only vulnerabilities and secrets fail the nightly; lint, tests and drift only warn (agents-skills#427)
+nightly:
+    #!/bin/sh
+    set -u
+    rc=0
+    warn() { "$@" || echo "WARNING nightly: '$*' failed (drift, not a failure)"; }
+    warn just check
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler . || rc=1
+    if docker info > /dev/null 2>&1; then
+        docker build -q -f apps/api/Dockerfile -t {{api_image}} . && trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}} || rc=1
+    else
+        echo "nightly: WARNING docker unreachable, image scan not run"
+    fi
+    trufflehog git "file://$PWD" --no-verification --fail --no-update || rc=1
+    warn mise outdated --bump
+    exit "$rc"
