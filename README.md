@@ -4,7 +4,7 @@ A public API (and its demo web front-end) that helps electronics enthusiasts fin
 a **reusable circuit block** matching a precise need — and explore its variants,
 from the simplest base circuits to more complex ones.
 
-> Status: milestone M1 (first vertical slice) in progress — tracked in the [GitHub Project](https://github.com/users/benoit-bremaud/projects/61).
+> Status: milestone M1 (first vertical slice) done, M2 (variant trees) next — tracked in the [GitHub Project](https://github.com/users/benoit-bremaud/projects/61).
 
 ## Documentation
 
@@ -70,3 +70,4 @@ are in [docs/deploy.md](docs/deploy.md); the decision is
 
 - Code: [MIT](LICENSE).
 - Schematics catalogue: [CC BY-SA 4.0](catalogue/LICENSE).
+- Studies and course sheets: CC BY-SA 4.0 (the `studies/LICENSE` file arrives with #56, the course-sheet licence file with #58).
