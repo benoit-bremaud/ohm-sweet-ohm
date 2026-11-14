@@ -6,7 +6,7 @@ export default tseslint.config(
   {
     ignores: [
       '**/node_modules/',
-      // Other sessions' git worktrees (the nightly runs in the main checkout).
+      // Other sessions' git worktrees, seen by a lint run in the main checkout.
       '.claude/',
       // SonarQube scanner work directory, left by `just sonar`.
       '.scannerwork/',
