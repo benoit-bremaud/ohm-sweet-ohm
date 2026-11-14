@@ -1,6 +1,7 @@
 #!/bin/sh
 # Tests for the local CI wiring (#68, skill local-ci rule 7): the four tiers exist and compose
-# (check ⊇ lint + test + security + secrets; gate and nightly ⊇ check), gate ends with the attestation
+# (check ⊇ lint + test + security + secrets; gate ⊇ check; nightly runs check as a warning and fails
+# only on Trivy and TruffleHog, agents-skills#427), gate ends with the attestation
 # and merge / deploy prod verify it (agents-skills ADR-0003/0004), the prod workflow is the only one
 # and takes attest.sh from main, deploy.sh refuses bad arguments before any deploy command,
 # lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
@@ -30,7 +31,11 @@ for r in fast check gate nightly; do
 done
 deps() { just --show "$1" | grep -E "^$1( |:)" | sed 's/.*: *//'; } # deps <recipe>
 for d in lint test security secrets; do deps check | grep -qw "$d" || fail "check lacks $d"; done
-deps nightly | grep -qw check || fail "nightly does not depend on check"
+just --show nightly | grep -q '^    warn just check$' || fail "nightly does not run check as a warning"
+for t in 'trivy fs' 'trivy image' 'trufflehog git'; do
+  just --show nightly | grep "$t" | grep -q '|| rc=1$' || fail "nightly does not fail on $t"
+done
+just --show nightly | tail -1 | grep -q '^    exit "$rc"$' || fail "nightly does not end with exit \"\$rc\""
 just --show gate | grep -q "^    just check$" || fail "gate does not run check (from its body, before the attestation)"
 for r in setup merge rehearse deploy attest render smoke sonar; do just --show "$r" > /dev/null 2>&1 || fail "recipe $r missing"; n=$((n + 1)); done
 just --show gate | grep -q 'attest.sh write gate' || fail "gate does not write the attestation"

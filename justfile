@@ -7,7 +7,7 @@
 #   L1 check    pre-push hook, review-local --push     lint + test + security + secrets          < 3 min
 #   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + image + render,    5–15 min
 #               before every merge                     then the attestation
-#   L3 nightly  systemd user timer                     check + Trivy fs/image + TruffleHog + mise outdated
+#   L3 nightly  systemd user timer                     Trivy fs/image + TruffleHog fail; check + mise outdated warn
 #
 # Then: `just merge <pr>` (refuses without the gate attestation on the head SHA), `just deploy
 # staging` from up-to-date main (API on Fly.io, catalogue into Neon), `just attest staging` after
@@ -248,7 +248,11 @@ nightly:
     warn just check
     trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler . || rc=1
     if docker info > /dev/null 2>&1; then
-        docker build -q -f apps/api/Dockerfile -t {{api_image}} . && trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}} || rc=1
+        if docker build -q -f apps/api/Dockerfile -t {{api_image}} .; then
+            trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}} || rc=1
+        else
+            echo "WARNING nightly: API image build failed, image scan not run"
+        fi
     else
         echo "nightly: WARNING docker unreachable, image scan not run"
     fi

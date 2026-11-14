@@ -115,14 +115,18 @@ just setup     # once per clone: mise install, pnpm install --frozen-lockfile, l
 just fast      # L0, pre-commit hook: gitleaks, eslint, prettier, markdownlint, typos, hadolint… on the staged files
 just check     # L1, pre-push hook: lint + test + security + secrets, under 3 min
 just gate      # L2, before every merge, on the pushed head: check + SonarQube, Trivy, API image smoke, SBOM, render, attestation
-just nightly   # L3, systemd user timer: check + Trivy fs and image + TruffleHog + mise outdated --bump
+just nightly   # L3, systemd user timer: Trivy fs and image + TruffleHog fail; check and mise outdated --bump only warn
 ```
 
-The nightly timer is installed once per machine from `scripts/systemd/` (it runs in the main
-checkout, whatever branch is there, at 04:00, and `notify-send`s a failure):
+The nightly timer runs at 04:00 in a detached worktree of `origin/main` under
+`~/.cache/nightly/ohm-sweet-ohm`, fetched, reset and cleaned each run, never the working checkout
+(#71, agents-skills#427), and `notify-send`s a failure. Only Trivy and TruffleHog findings fail it;
+`just check` and `mise outdated --bump` only warn. Install the units by copying them from
+`origin/main` (a link would follow whatever branch the checkout is on), again after every change:
 
 ```bash
-systemctl --user link "$PWD"/scripts/systemd/ohm-sweet-ohm-nightly*.service "$PWD"/scripts/systemd/ohm-sweet-ohm-nightly.timer
+for f in ohm-sweet-ohm-nightly.service ohm-sweet-ohm-nightly-failed.service ohm-sweet-ohm-nightly.timer; do git show origin/main:scripts/systemd/$f > ~/.config/systemd/user/$f; done
+systemctl --user daemon-reload
 systemctl --user enable --now ohm-sweet-ohm-nightly.timer
 ```
 
