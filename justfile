@@ -254,7 +254,7 @@ nightly:
             echo "WARNING nightly: API image build failed, image scan not run"
         fi
     else
-        echo "nightly: WARNING docker unreachable, image scan not run"
+        echo "WARNING nightly: docker unreachable, image scan not run"
     fi
     trufflehog git "file://$PWD" --no-verification --fail --no-update || rc=1
     warn mise outdated --bump
