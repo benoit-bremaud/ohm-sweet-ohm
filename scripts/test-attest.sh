@@ -6,6 +6,9 @@
 set -e
 # shellcheck disable=SC2046 # one variable name per word
 unset $(git rev-parse --local-env-vars)
+# The user's global config must not leak in: tag.gpgSign = true would sign the "unsigned" tag (#94).
+GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+export GIT_CONFIG_GLOBAL GIT_CONFIG_NOSYSTEM
 root=$(cd "$(dirname "$0")/.." && pwd)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
