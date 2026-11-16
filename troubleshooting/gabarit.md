@@ -6,7 +6,7 @@ Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaqu
 
 *Trois lignes au plus : ce qui tombe le plus souvent en panne sur ce composant, et la mesure qui tranche dans la majorité des cas.*
 
-> **Sécurité** : mesures hors tension → carte débranchée, condensateurs déchargés ; mesures sous tension → alimentation limitée en courant, 50 V au plus partout sur la carte (fiche 00). *Ajouter ici le risque propre au composant, s'il en a un.*
+> **Sécurité** : mesures hors tension → carte débranchée, condensateurs déchargés ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche 00). *Ajouter ici le risque propre au composant, s'il en a un.*
 
 ## Identifier le composant
 
