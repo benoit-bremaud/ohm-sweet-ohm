@@ -181,3 +181,7 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
 ## 2026-11-15
 
 - **Nightly on a clean worktree** (branch `ci/71-nightly-clean-worktree`, issue #71, agents-skills#427) — the systemd unit no longer runs in the working checkout (dirty or on a feature branch in 4 of 9 failed nightlies across repositories): it fetches `origin/main` into `~/.cache/nightly/ohm-sweet-ohm` (detached worktree, `reset --hard` + `clean -ffdq` each run), trusts `mise.toml` and runs `pnpm install --frozen-lockfile --ignore-scripts` before `just nightly`. The recipe now fails only on vulnerabilities (Trivy fs and image) and secrets (TruffleHog); `just check` and `mise outdated --bump` print `WARNING nightly: … (drift, not a failure)`. Duplicate issue #77 closed.
+
+## 2026-11-16
+
+- **Attestation tests isolated from the global git config** (branch `fix/94-attest-tests-global-config`, issue #94) — `just check` and `just gate` were red on every branch on the owner's machine: `tag.gpgSign = true` in `~/.gitconfig` signed the "unsigned" tag of `scripts/test-attest.sh`, so the refusal case got exit 0 (seen on #80). `test-attest.sh` and `test-local-ci.sh` now run with `GIT_CONFIG_GLOBAL=/dev/null` and `GIT_CONFIG_NOSYSTEM=1`, and the unsigned tag is created with `--no-sign`. Production `attest.sh` is unchanged. Follow-up: the same bug in the agents-skills `local-ci` template.

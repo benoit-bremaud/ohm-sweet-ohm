@@ -104,7 +104,7 @@ run 0 "signed stable tag" "$first" sh scripts/attest.sh release v1.0.0
 [ "$(sh scripts/attest.sh release v1.0.0 2>/dev/null)" = "$first" ] || fail "release must print the SHA alone on stdout"; n=$((n + 1))
 git tag -s -m rc v1.1.0-rc.1 "$first"
 run 1 "pre-release refused" "not a stable release tag" sh scripts/attest.sh release v1.1.0-rc.1
-git tag -a -m unsigned v1.2.0 "$first"
+git tag -a --no-sign -m unsigned v1.2.0 "$first"
 run 1 "unsigned tag refused" "is not signed" sh scripts/attest.sh release v1.2.0
 git tag -s -m v2.0.0 v2.0.0 "$second"
 run 1 "tag on a commit with a moved note refused" "names another commit" sh scripts/attest.sh release v2.0.0
