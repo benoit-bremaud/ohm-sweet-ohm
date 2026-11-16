@@ -34,7 +34,7 @@ La pointe rouge est le **+** de la source en ohmmètre, en bipeur et en mode dio
 
 ## Ordres de grandeur par classe d'appareil
 
-Fourchettes typiques ; elles varient d'un modèle à l'autre, d'où l'exercice plus bas.
+Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et des manuels cités en Sources ; elles varient d'un modèle à l'autre, d'où l'exercice plus bas.
 
 | Grandeur | Premier prix (moins de 30 €) | Milieu de gamme | Haut de gamme |
 | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ Fourchettes typiques ; elles varient d'un modèle à l'autre, d'où l'exercice p
 
 **Pourquoi un composant réagit ainsi** :
 
-- **Jonction de semi-conducteur** : ce qui compte est la tension aux bornes du composant pendant la mesure, environ *I × R* et au plus la tension à vide. Une jonction au silicium en parallèle commence à conduire quand cette tension approche 0,4 à 0,5 V, donc surtout en haut de calibre, et la résistance lue chute. Exemple : 1 mA sur 100 Ω ne donne que 0,1 V, la jonction reste bloquée ; 100 µA sur 10 kΩ donne 1 V, elle conduit. Un appareil dont la tension à vide reste sous 0,4 V ne fait jamais conduire de jonction au silicium ; d'anciens appareils avaient un calibre « basse puissance » conçu pour cela, devenu rare (fiche 02).
+- **Jonction de semi-conducteur** : ce qui compte est la tension aux bornes du composant pendant la mesure, environ *I × R* et au plus la tension à vide. Une jonction au silicium en parallèle commence à conduire quand cette tension approche 0,4 à 0,5 V, donc surtout en haut de calibre, et la résistance lue chute. Exemple : 1 mA sur 100 Ω ne donne que 0,1 V, la jonction reste bloquée ; 100 µA sur 10 kΩ donne 1 V, elle conduit. Un appareil dont la tension à vide reste sous 0,4 V ne fait jamais conduire de jonction au silicium ; d'anciens appareils avaient un calibre « basse puissance » conçu pour cela, devenu rare comme calibre séparé : les appareils haut de gamme limitent souvent la tension à pleine échelle de tous leurs calibres (fiche 02).
 - **Condensateur** : la lecture part de presque zéro puis monte pendant que le condensateur se charge, jusqu'à « OL » ou jusqu'à sa résistance de fuite. Inverser les pointes recommence la montée.
 - **Valeurs élevées** : au-delà de quelques MΩ, la mesure devient lente et sensible aux fuites (flux de soudure, humidité, doigts).
 
@@ -80,7 +80,7 @@ Fourchettes typiques ; elles varient d'un modèle à l'autre, d'où l'exercice p
 
 **Pourquoi un condensateur bipe puis se tait** : déchargé, il se comporte comme un court-circuit ; le bipeur sonne. Il se charge ensuite sous le courant de test, sa tension monte et la résistance apparente dépasse le seuil. Ordre de grandeur : avec 1 mA et un seuil de 50 Ω, le bip s'arrête quand le condensateur atteint environ 50 mV, soit après *t = C × V / I* : 5 ms pour 100 µF (bip inaudible), 50 ms pour 1000 µF (inaudible aussi sur un bipeur lent), une demi-seconde pour 10 000 µF. Un rail d'alimentation chargé de gros condensateurs « bipe brièvement » sans être en court-circuit. Un rail qui bipe sans fin est suspect, sans plus : un rail basse tension chargé de circuits intégrés peut lire sous le seuil en étant sain. Lire sa valeur en ohmmètre et la comparer à une carte saine (fiche 93).
 
-**Pourquoi une jonction peut biper** : si la tension à vide du bipeur dépasse la tension directe de la jonction (dès 0,15 V pour une Schottky) et que le seuil du bipeur est élevé, une jonction en sens passant peut sonner : une Schottky à 1 mA se lit comme 150 à 400 Ω, ce qui sonne sur un seuil de 100 Ω ou plus, ou sur un bipeur qui compare une tension. Inverser les pointes : un vrai court-circuit bipe dans les deux sens.
+**Pourquoi une jonction peut biper** : si la tension à vide du bipeur dépasse la tension directe de la jonction (dès 0,15 V pour une Schottky) et que le seuil du bipeur est élevé, une jonction en sens passant peut sonner : une Schottky à 1 mA se lit comme 150 à 400 Ω : elle ne sonne que sur un bipeur qui compare une tension, ou pour une grosse Schottky dont la chute à 1 mA tombe vers 0,1 V. Inverser les pointes : un vrai court-circuit bipe dans les deux sens.
 
 ## Mode diode
 
@@ -142,8 +142,8 @@ flowchart TD
   C -- valeur d'une résistance --> E[Ohmmètre, REL sous 10 Ω, une seule main sur les pointes]
   C -- jonction saine ? --> F[Mode diode, dans les deux sens]
   C -- valeur d'un condensateur --> G[Décharger, puis capacimètre ; ESR en fiche 03]
-  D --> H{Bip bref puis silence ?}
-  H -- oui --> I[Condensateurs qui se chargent : pas un court-circuit]
+  D --> H{Comment sonne-t-il ?}
+  H -- bip bref puis silence --> I[Condensateurs qui se chargent : pas un court-circuit]
   H -- bip continu --> J[Lire la valeur en ohmmètre ; très bas dans les deux sens : court-circuit probable, fiche 92]
   H -- bip dans un seul sens --> L[Jonction : vérifier en mode diode]
   H -- pas de bip --> K[Ouvert, ou plus que le seuil : lire en ohmmètre]
@@ -172,5 +172,5 @@ flowchart TD
 - EEVblog forum, *Multimeters with low ohms function* (calibres « basse puissance » conçus pour ne pas faire conduire les jonctions ; tensions de test relevées sur divers appareils) — <https://www.eevblog.com/forum/testgear/multimeters-with-low-ohms-function/>
 - EEVblog forum, *EEVblog 1622 – Don't make this multimeter mistake* (ohmmètre = voltmètre plus source de courant) — <https://www.eevblog.com/forum/blog/eevblog-1622-dont-make-this-multimeter-mistake>
 - HKJ (lygte-info.dk), *Multimeter and component testing* (mesures comparées du courant et de la tension de test de nombreux appareils) — <https://lygte-info.dk/info/DMMComponentTesting%20UK.html>
-- Corps humain : résistance de quelques centaines de kΩ à quelques MΩ entre les mains, peau sèche, sous faible tension (norme CEI 60479-1, *Effets du courant sur l'homme et les animaux domestiques*, partie 1).
+- Corps humain : la valeur de quelques centaines de kΩ à quelques MΩ entre deux doigts, sous moins de 3 V, est un ordre de grandeur à vérifier soi-même (ohmmètre sur le calibre 20 MΩ, une pointe dans chaque main). La norme CEI 60479-1 donne au contraire quelques kΩ seulement à partir de 25 V, peau sèche et grande surface de contact : la résistance du corps chute quand la tension monte.
 - All About Circuits, *Lessons in Electric Circuits*, vol. 1, ch. 8 « Ohmmeter usage » et vol. 3, ch. 3 « Meter check of a diode » — <https://www.allaboutcircuits.com/textbook/>
