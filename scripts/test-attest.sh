@@ -6,6 +6,9 @@
 set -e
 # shellcheck disable=SC2046 # one variable name per word
 unset $(git rev-parse --local-env-vars)
+# The user's global config must not leak in: tag.gpgSign = true would sign the "unsigned" tag (#94).
+GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+export GIT_CONFIG_GLOBAL GIT_CONFIG_NOSYSTEM
 root=$(cd "$(dirname "$0")/.." && pwd)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
@@ -101,7 +104,7 @@ run 0 "signed stable tag" "$first" sh scripts/attest.sh release v1.0.0
 [ "$(sh scripts/attest.sh release v1.0.0 2>/dev/null)" = "$first" ] || fail "release must print the SHA alone on stdout"; n=$((n + 1))
 git tag -s -m rc v1.1.0-rc.1 "$first"
 run 1 "pre-release refused" "not a stable release tag" sh scripts/attest.sh release v1.1.0-rc.1
-git tag -a -m unsigned v1.2.0 "$first"
+git tag -a --no-sign -m unsigned v1.2.0 "$first"
 run 1 "unsigned tag refused" "is not signed" sh scripts/attest.sh release v1.2.0
 git tag -s -m v2.0.0 v2.0.0 "$second"
 run 1 "tag on a commit with a moved note refused" "names another commit" sh scripts/attest.sh release v2.0.0

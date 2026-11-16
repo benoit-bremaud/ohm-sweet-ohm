@@ -11,6 +11,9 @@
 set -e
 # A hook (pre-push runs `just check`) exports these; they would aim git at the outer repository.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_OBJECT_DIRECTORY GIT_COMMON_DIR
+# The user's global config must not leak in (gpgSign, hooksPath, templateDir) (#94).
+GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+export GIT_CONFIG_GLOBAL GIT_CONFIG_NOSYSTEM
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 work=$(mktemp -d)
