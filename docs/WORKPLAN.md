@@ -25,10 +25,11 @@ apps/importer     CLI: validate meta.yaml, read the SVG rendered by docker/rende
 packages/schemas  Shared Zod schemas (meta.yaml, API DTOs) — single source of truth
 catalogue/        <base-circuit>/<block>/{schematic.kicad_sch, meta.yaml} + LICENSE (CC BY-SA 4.0)
 studies/          <study>/ README + KiCad files, outside the v1 catalogue + LICENSE (CC BY-SA 4.0), see #47/#56
+troubleshooting/  French fault-finding guides (menu README, template, one folder per guide) + LICENSE (CC BY-SA 4.0), epic #79
 docs/             architecture diagrams, API guide
 ```
 
-Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics); `studies/LICENSE` (created in #56) will be CC BY-SA 4.0 too. Course sheets are CC BY-SA 4.0 as well, in a folder and with a licence file chosen in #58.
+Root `LICENSE` is MIT (code); `catalogue/LICENSE` is CC BY-SA 4.0 (schematics); `studies/LICENSE` (created in #56) will be CC BY-SA 4.0 too. Course sheets are CC BY-SA 4.0 as well, in a folder and with a licence file chosen in #58. `troubleshooting/LICENSE` is CC BY-SA 4.0 (#80).
 
 ## Tracking
 

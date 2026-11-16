@@ -6,7 +6,7 @@ Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaqu
 
 *Trois lignes au plus : ce qui tombe le plus souvent en panne sur ce composant, et la mesure qui tranche dans la majorité des cas.*
 
-> **Sécurité** : hors tension, condensateurs déchargés (fiche 00). *Ajouter ici le risque propre au composant, s'il en a un.*
+> **Sécurité** : mesures hors tension → carte débranchée, condensateurs déchargés ; mesures sous tension → alimentation limitée en courant, 50 V au plus partout sur la carte (fiche 00). *Ajouter ici le risque propre au composant, s'il en a un.*
 
 ## Identifier le composant
 
@@ -14,15 +14,15 @@ Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaqu
 
 ## Modes de défaillance
 
-Classés du plus fréquent au plus rare (consensus des réparateurs, voir Sources).
+Classés du plus fréquent au plus rare (consensus des réparateurs et notes de fabricants, voir Sources).
 
 | Mode de défaillance | Fréquence | Cause typique | Ce que la panne implique ailleurs |
 | --- | --- | --- | --- |
 | *ex. ouvert* | *très fréquent, fréquent, occasionnel ou rare* | *…* | *composant en amont ou en aval à vérifier* |
 
-## Niveau 1 — Inspection visuelle
+## Niveau 1 — Inspection par les sens
 
-*Indices visibles à l'œil ou à la loupe, odeur, chauffe au toucher sous tension limitée.*
+*Indices visibles à l'œil ou à la loupe, odeur. Échauffement sous alimentation limitée : caméra thermique, alcool isopropylique qui s'évapore, ou dos du doigt approché brièvement (risque de brûlure, jamais au contact prolongé).*
 
 ## Niveau 2 — Mesure hors circuit
 
@@ -43,7 +43,7 @@ Classés du plus fréquent au plus rare (consensus des réparateurs, voir Source
 ```mermaid
 flowchart TD
   A[Composant suspect, carte hors tension] --> B{Indice visuel ?}
-  B -- oui --> C[Remplacer et chercher la cause en amont ou en aval]
+  B -- oui --> C[Chercher la cause en amont ou en aval, puis remplacer]
   B -- non --> D{Mesure en circuit concluante ?}
   D -- oui, défaut --> C
   D -- oui, sain --> E[Chercher ailleurs]
