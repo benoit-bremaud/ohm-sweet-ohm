@@ -19,7 +19,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 | Fiche | Contenu | Issue |
 | --- | --- | --- |
 | 00 Sécurité | Hors tension, décharge des condensateurs, alimentation limitée en courant | #81 |
-| 01 Comprendre son multimètre | Ce que chaque mode injecte ; pourquoi un condensateur bipe puis se tait, ce qu'affiche le mode diode | #82 |
+| [01 Comprendre son multimètre](01_multimetre/README.md) | Ce que chaque mode injecte ; pourquoi un condensateur bipe puis se tait, ce qu'affiche le mode diode | #82 |
 | 02 Pièges de la mesure en circuit | Chemins parallèles, jonctions qui conduisent, condensateurs qui se chargent, quand dessouder | #83 |
 | 03 Autres instruments | LCR/ESR, testeur de composants, alimentation de labo, oscilloscope, caméra thermique | #84 |
 
@@ -117,11 +117,11 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 
 | Technique | Fiche de base | Utilisée dans |
 | --- | --- | --- |
-| Voltmètre (tensions sous tension) | 01 | — |
-| Ohmmètre | 01 | — |
-| Bipeur (continuité) | 01 | — |
-| Mode diode | 01 | — |
-| Capacimètre | 01 | — |
+| Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | — |
+| Ohmmètre | [01](01_multimetre/README.md) | — |
+| Bipeur (continuité) | [01](01_multimetre/README.md) | — |
+| Mode diode | [01](01_multimetre/README.md) | — |
+| Capacimètre | [01](01_multimetre/README.md) | — |
 | Lever une patte | 02 | — |
 | Mesure ESR | 03 | — |
 | Chute de tension sous tension | 02 | — |
