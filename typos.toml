@@ -1,9 +1,10 @@
-# typos configuration (#68, `just lint` and the pre-commit hook). Everything written here is English;
-# the exclusions are generated or third-party content: KiCad files, lockfiles, build and coverage
-# output, the schematic SVGs.
+# typos configuration (#68, `just lint` and the pre-commit hook). typos only knows English, so the
+# exclusions are generated, third-party or non-English content: KiCad files, lockfiles, build and
+# coverage output, the schematic SVGs, and the French troubleshooting guides (#79).
 [files]
 extend-exclude = [
   "catalogue/",
+  "troubleshooting/",
   "build/",
   "coverage/",
   "dist/",

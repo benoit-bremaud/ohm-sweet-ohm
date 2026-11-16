@@ -11,6 +11,7 @@ from the simplest base circuits to more complex ones.
 - [Project framing](docs/FRAMING.md) — vision, decisions, deferred features.
 - [Work plan](docs/WORKPLAN.md) — v1 milestones (vertical slices, 2-week cadence).
 - [Project log](PROJECT_LOG.md) — chronological operational logbook.
+- [Electronics troubleshooting guides](troubleshooting/README.md) — how to tell whether a component on a board is dead (French).
 
 ## Development
 
@@ -70,4 +71,5 @@ are in [docs/deploy.md](docs/deploy.md); the decision is
 
 - Code: [MIT](LICENSE).
 - Schematics catalogue: [CC BY-SA 4.0](catalogue/LICENSE).
+- Troubleshooting guides: [CC BY-SA 4.0](troubleshooting/LICENSE).
 - Studies and course sheets: CC BY-SA 4.0 (the `studies/LICENSE` file arrives with #56, the course-sheet licence file with #58).
