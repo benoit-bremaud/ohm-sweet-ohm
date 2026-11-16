@@ -6,9 +6,9 @@ Savoir, à l'établi, si un composant monté sur un PCB est mort ou vivant : des
 
 - **Public** : amateur débutant à intermédiaire. Un multimètre et une alimentation limitée en courant (fiche 00) suffisent pour les niveaux 1 à 3 ; le niveau 4 demande d'autres instruments (fiche 03).
 - **Basse tension uniquement** : aucune tension supérieure à 50 V continu (25 V alternatif) **nulle part sur la carte**, pas seulement à l'entrée. Un appareil sur pile ou sur adaptateur peut en produire bien plus (flash photo vers 300 V, onduleur de rétroéclairage, PoE jusqu'à 57 V, batterie 48 V chargée à 54,6 V) : hors périmètre. Un appareil dont l'alimentation secteur est intégrée se confie à un professionnel, en attendant la fiche secteur et isolement.
-- **Niveaux** dans chaque fiche : 1 inspection par les sens (vue, odeur, échauffement), 2 mesure hors circuit, 3 mesure en circuit, 4 méthodes avancées.
+- **Niveaux** dans chaque fiche de composant : 1 inspection par les sens (vue, odeur, échauffement), 2 mesure hors circuit, 3 mesure en circuit, 4 méthodes avancées.
 - **Fréquence de panne** : un classement qualitatif (très fréquent, fréquent, occasionnel, rare) tiré du consensus des réparateurs et des notes de fabricants, sources citées dans chaque fiche. Ce n'est pas une statistique. Dans le menu, il dit à quelle fréquence ce composant est le coupable d'une panne ; dans une fiche, à quelle fréquence chaque mode de défaillance survient.
-- Chaque fiche suit le [gabarit](gabarit.md) et renvoie aux fiches de base de la partie 0 au lieu d'en répéter le contenu.
+- Chaque fiche de composant (familles 1 à 9) suit le [gabarit](gabarit.md) ; les fiches de base (partie 0) ont un plan propre. Chaque fiche renvoie aux fiches de base de la partie 0 au lieu d'en répéter le contenu.
 
 ## Menu
 
