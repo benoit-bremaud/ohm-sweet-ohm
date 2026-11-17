@@ -101,7 +101,7 @@ Résistance sortie de la carte, ou une patte levée (fiche [02](../02_pieges_en_
 ![Deux erreurs de mesure hors circuit. À gauche, calibre 200 Ω : 0,8 Ω lus pour une résistance de 0,47 Ω, les cordons ajoutent 0,3 Ω. À droite, calibre 2 MΩ : 0,833 MΩ lus pour 1 MΩ, un doigt sur chaque pointe met le corps en parallèle](mesure-hors-circuit.svg)
 
 - **Sous 10 Ω**, les cordons et les contacts ajoutent 0,1 à 0,5 Ω. Mettre les pointes en court-circuit, noter la lecture et la retrancher, ou appuyer sur **REL** pointes en court-circuit. Sous 1 Ω, le multimètre ne donne plus qu'un ordre de grandeur : mesure 4 fils (niveau 4).
-- **Dès quelques dizaines de kΩ**, et toujours sur une résistance à 1 %, ne tenir qu'une pointe avec les doigts : le corps, quelques centaines de kΩ à quelques MΩ d'une main à l'autre, se met en parallèle et fait lire trop bas. Poser le composant sur un support isolant propre, ou utiliser des pinces.
+- **Dès quelques dizaines de kΩ**, et plus tôt encore sur une résistance à 1 %, ne tenir qu'une pointe avec les doigts : le corps, quelques centaines de kΩ à quelques MΩ d'une main à l'autre, se met en parallèle et fait lire trop bas. Poser le composant sur un support isolant propre, ou utiliser des pinces.
 - **Au-dessus de 10 MΩ**, une trace de flux ou d'humidité sur le corps suffit à fausser la lecture : nettoyer à l'alcool isopropylique et laisser sécher.
 
 ### Vérifier son multimètre avant de condamner une résistance
@@ -115,7 +115,7 @@ Résistance sortie de la carte, ou une patte levée (fiche [02](../02_pieges_en_
 
 - **Bobinée ou en boîtier céramique** : valeur faible, donc cordons à retrancher. Elle s'ouvre (fil coupé à la sertissure) plus qu'elle ne dérive. Ses soudures sont les premières suspectes. Elle doit rester dégagée de la carte de quelques millimètres.
 - **Réseau SIP à point commun** : la broche 1, repérée par un point, est commune à toutes les résistances ; mesurer entre la broche 1 et chacune des autres, toutes les lectures doivent être égales. **Réseau à résistances isolées** : mesurer par paires de broches (1–2, 3–4…). **Réseau CMS** : chaque résistance relie deux terminaisons face à face. Une seule résistance ouverte suffit à bloquer une ligne de bus.
-- **Cavalier 0 Ω** : il doit lire la même chose que les pointes en court-circuit, à un chiffre près, soit 0,1 Ω sur le calibre 200 Ω (les fabricants garantissent 20 à 50 mΩ au plus, pour 1 à 3,5 A selon le boîtier). Un cavalier ouvert a servi de fusible : chercher la surintensité en aval.
+- **Cavalier 0 Ω** : il doit lire la même chose que les pointes en court-circuit, à quelques dixièmes d'ohm près, la résistance de contact variant d'un appui à l'autre (les fabricants garantissent 20 à 50 mΩ au plus, pour 1 à 3,5 A selon le boîtier) ; un cavalier défectueux lit nettement plus, ou OL. Un cavalier ouvert a servi de fusible : chercher la surintensité en aval.
 
 ## Niveau 3 — Mesure en circuit
 
@@ -140,7 +140,7 @@ Une lecture qui **monte** lentement est un condensateur qui se charge : attendre
 | --- | --- | --- |
 | Rail absent après un claquement ou une odeur de brûlé | résistance série ou résistance fusible à l'entrée du rail | elle s'est ouverte sur une surintensité |
 | Tension de sortie d'un régulateur trop haute ou trop basse | les deux résistances du pont diviseur de contre-réaction | l'une a dérivé : la consigne est fausse |
-| Convertisseur qui ne démarre pas, ou seulement à chaud | résistance de démarrage de forte valeur (100 kΩ à 1 MΩ) | dérivée vers le haut ou ouverte : le contrôleur n'est plus alimenté au démarrage. Dans le périmètre basse tension seulement (convertisseur 24–48 V) ; sur une alimentation secteur, hors périmètre (fiche [00](../00_securite/README.md)) |
+| Convertisseur qui ne démarre pas, ou seulement à chaud | résistance de démarrage de forte valeur (100 kΩ à 1 MΩ) | dérivée vers le haut ou ouverte : le contrôleur n'est plus alimenté au démarrage. Dans le périmètre basse tension seulement (50 V continu au plus partout sur la carte, par exemple un convertisseur alimenté en 12 ou 24 V) ; batterie 48 V ou alimentation secteur : hors périmètre (fiche [00](../00_securite/README.md)) |
 | Limitation de courant qui déclenche trop tôt, ou plus du tout | shunt de mesure de courant | dérivé vers le haut, fissuré, ou soudure résistante |
 | MOSFET remplacé qui chauffe ou ne commute pas | résistance de grille, shunt de source | souvent détruits avec le MOSFET |
 | Entrée logique flottante, bouton capricieux, bus I²C muet | résistance de tirage (*pull-up*), réseau de résistances | ouverte : la ligne n'est plus ramenée à un niveau défini |
@@ -161,7 +161,7 @@ Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe
 | Toute la tension du rail | résistance ouverte (ou charge en court-circuit franc) |
 | 0 V | aucun courant : circuit coupé en amont ou en aval, ou résistance court-circuitée (pont de soudure) |
 
-Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance. Si elle est dépassée, comme sur la figure, couper la sortie dès la lecture faite. Régler la limite de l'alimentation juste au-dessus du courant attendu (fiche [00](../00_securite/README.md)) : le voyant CC signale alors le défaut avant toute mesure.
+Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance. Si elle est dépassée, comme sur la figure, couper la sortie dès la lecture faite. Régler la limite de l'alimentation juste au-dessus du courant attendu (fiche [00](../00_securite/README.md)) : le voyant CC signale alors le défaut avant toute mesure. Sur la figure, la limite a été remontée par paliers pour localiser le défaut (fiche 00, « Lire »).
 
 ### Brûlée : chercher le court-circuit en aval
 
@@ -222,7 +222,7 @@ flowchart TD
   Q --> R{Dans la tolérance ?}
   R -- oui --> M
   R -- au-dessus --> K
-  R -- en dessous --> S[Exceptionnel : revoir la lecture des anneaux, les doigts, le calibre]
+  R -- en dessous --> S[Exceptionnel : revoir la lecture des anneaux, les doigts, le calibre ; remplacer si confirmé]
 ```
 
 ## Remplacer le composant
@@ -245,7 +245,7 @@ Avant de remettre sous tension : la cause est trouvée et réparée ; la résist
 - Lire la valeur attendue **avant** de mesurer : anneaux, code CMS (103 = 10 kΩ, 4R7 = 4,7 Ω, 01C = 10 kΩ en EIA-96), schéma.
 - Une résistance tombe en panne vers le haut : ouverte ou dérivée. Presque jamais en court-circuit.
 - En circuit, hors tension : au-dessus de la nominale plus la tolérance, pointes sur des pattes propres, lecture stable = défectueuse. En dessous : rien de prouvé.
-- Sous 10 Ω : retrancher les cordons ou touche REL. Au-dessus de 100 kΩ : une seule pointe dans les doigts.
+- Sous 10 Ω : retrancher les cordons ou touche REL. Dès quelques dizaines de kΩ : une seule pointe dans les doigts.
 - Brûlée = symptôme : chercher le court-circuit en aval avant de remplacer.
 - Sous tension, V continu aux bornes : *I = U / R*, *P = U × I*.
 - Aspect neuf ne veut pas dire saine ; brunie ne veut pas dire morte : mesurer.
