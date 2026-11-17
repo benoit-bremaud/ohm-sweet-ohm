@@ -27,7 +27,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 
 | Fiche | Fréquence de panne |
 | --- | --- |
-| 10 Résistance | — |
+| [10 Résistance](10_resistance/README.md) | fréquent |
 | 11 Potentiomètre | — |
 | 12 Thermistance CTN/CTP | — |
 | 13 Résistance fusible et fusible | — |
@@ -118,15 +118,15 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Technique | Fiche de base | Utilisée dans |
 | --- | --- | --- |
 | Décharge d'un condensateur | [00](00_securite/README.md) | — |
-| Alimentation limitée en courant | [00](00_securite/README.md) | — |
-| Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | — |
-| Ohmmètre | [01](01_multimetre/README.md) | — |
-| Bipeur (continuité) | [01](01_multimetre/README.md) | — |
+| Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md) |
+| Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md) |
+| Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md) |
+| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md) |
 | Mode diode | [01](01_multimetre/README.md) | — |
 | Capacimètre | [01](01_multimetre/README.md) | — |
-| Lever une patte | [02](02_pieges_en_circuit/README.md) | — |
+| Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md) |
 | Mesure ESR | 03 | — |
-| Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | — |
+| Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md) |
 | Injection de courant | 92 | — |
 
 ## Licence

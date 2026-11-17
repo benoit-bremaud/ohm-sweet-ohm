@@ -14,6 +14,7 @@ from pathlib import Path
 import guide_00
 import guide_01
 import guide_02
+import guide_10
 
 ROOT = Path(__file__).resolve().parents[2] / "troubleshooting"
 
@@ -22,6 +23,7 @@ GUIDES = {
     "00_securite": guide_00.FIGURES,
     "01_multimetre": guide_01.FIGURES,
     "02_pieges_en_circuit": guide_02.FIGURES,
+    "10_resistance": guide_10.FIGURES,
 }
 
 
