@@ -10,6 +10,7 @@ from elements import (
     diode_v,
     lead,
     meter,
+    probe,
     res_v,
     side_hookup,
     svg,
@@ -283,18 +284,22 @@ def fig_diode() -> str:
         red_end, blk_end = (top, bot) if forward else (bot, top)
         xi = x0 + 208
 
+        # probes: one lying on the anode lead, one standing under the cathode lead
+        p_top, (tex, _) = probe(dx, top, -1, 0, forward, 10, 34)
+        p_bot, (_, bey) = probe(dx, bot, 0, 1, not forward, 10, 34)
+
         def inner(jx: float) -> str:
             return (
                 f"V{jy + 16} C{jx:.1f} {jy + 60} {xi} {jy + 66} {xi} 300 V240 "
-                f"C{xi} {top + 12} {xi + 24} {top} {dx} {top}"
+                f"C{xi} {top + 14} {xi + 8} {top} {tex:.1f} {top}"
             )
 
         def outer(jx: float) -> str:
-            return f"V{jy + 40} C{jx:.1f} {jy + 100} {dx} {jy + 100} {dx} {bot}"
+            return f"V{jy + 40} C{jx:.1f} {jy + 100} {dx} {jy + 100} {dx} {bey:.1f}"
 
         if forward:
             o += lead(jacks.com, outer(cx), False) + lead(jacks.v, inner(vx), True)
-            o += f'  <path class="flow fb" d="M{dx - 22} {top + 8} V{bot - 8}"/>\n'
+            o += f'  <path class="flow fb" d="M{dx - 22} {top + 18} V{bot - 8}"/>\n'
             o += text(dx + 22, 254, "≈ 1 mA", "blue", 12, weight=700)
         else:
             o += lead(jacks.v, outer(vx), True) + lead(jacks.com, inner(cx), False)
@@ -302,7 +307,10 @@ def fig_diode() -> str:
                 dx + 22, 269, "courant", "mut", 12
             )
         o += f'  <circle cx="{dx}" cy="{red_end}" r="5" fill="#dc2626"/><circle class="blkf" cx="{dx}" cy="{blk_end}" r="5"/>\n'
-        o += text(dx - 12, red_end + (-8 if forward else 20), "+", "no", 16, "end", 700)
+        o += p_top + p_bot
+        o += text(
+            dx - 14, red_end + (-14 if forward else 20), "+", "no", 16, "end", 700
+        )
         o += text(x0 + 190, 478, verdict[0], "ok", 14, "middle", 700)
         o += text(x0 + 190, 496, verdict[1], "mut", 12, "middle")
         return o
@@ -384,14 +392,16 @@ def fig_current() -> str:
         o += text(xl - 6, yt, "+", "no", 15, "end", 700) + text(
             xr + 8, yt, "−", "fg", 15, weight=700
         )
-        red = f"V{jy + 16} C{ax:.1f} {jy + 60} {x0 + 208} {jy + 66} {x0 + 208} 300 V240 C{x0 + 208} 212 {x0 + 232} {yt + 14} {xl} {yt + 14}"
+        p_red, (rex, _) = probe(xl, yt + 14, -1, 0, True, 10, 34)
+        red = f"V{jy + 16} C{ax:.1f} {jy + 60} {x0 + 208} {jy + 66} {x0 + 208} 300 V240 C{x0 + 208} 216 {x0 + 210} {yt + 14} {rex:.1f} {yt + 14}"
         if trap:
             o += f'  <path class="wire" d="M{xl} 178 V{yt + 14} M{xr} 178 V{yt + 14}"/>\n'
+            p_blk, (bex, bey) = probe(xr, yt + 14, 0.5, 0.866, False, 10, 34)
             blk = (
                 f"V{jy + 36} C{cx:.1f} {jy + 78} {x0 + 250} {jy + 78} {xr} {jy + 78} "
-                f"C{x0 + 366} {jy + 78} {x0 + 366} 330 {x0 + 366} 280 C{x0 + 366} 230 {x0 + 352} {yt + 14} {xr} {yt + 14}"
+                f"C{x0 + 366} {jy + 78} {x0 + 366} 330 {x0 + 366} 290 C{x0 + 366} 268 {bex + 6:.1f} {bey + 12:.1f} {bex:.1f} {bey:.1f}"
             )
-            o += lead(jacks.com, blk, False) + lead(jacks.a, red, True)
+            o += lead(jacks.com, blk, False) + lead(jacks.a, red, True) + p_red + p_blk
             o += f'  <circle cx="{ax:.1f}" cy="{jy:.1f}" r="15" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="4 3"/>\n'
             o += f'  <path class="flow fr" d="M{xl + 9} 186 V{yt + 24} M{xr - 9} {yt + 24} V186"/>\n'
             o += text(x0 + 296, 262, "✗", "no", 34, "middle", 700)
@@ -407,8 +417,9 @@ def fig_current() -> str:
             yq, yload = yt + 44, 290
             o += f'  <path class="wire" d="M{xl} 178 V{yt + 14} M{xl} {yq} V{yload} M{xr} 178 V{yload}"/>\n'
             o += box(x0 + 246, yload, 100, 50, "Charge")
-            blk = f"V{jy + 40} C{cx:.1f} {jy + 92} {x0 + 230} {jy + 92} {x0 + 230} 330 V270 C{x0 + 230} 246 {x0 + 244} {yq} {xl} {yq}"
-            o += lead(jacks.com, blk, False) + lead(jacks.a, red, True)
+            p_blk, (bex, bey) = probe(xl, yq, -0.5, 0.866, False, 10, 34)
+            blk = f"V{jy + 40} C{cx:.1f} {jy + 92} {x0 + 230} {jy + 92} {x0 + 230} 330 C{x0 + 230} 305 {bex - 6:.1f} {bey + 12:.1f} {bex:.1f} {bey:.1f}"
+            o += lead(jacks.com, blk, False) + lead(jacks.a, red, True) + p_red + p_blk
             o += f'  <path class="flow fb" d="M{xr + 9} {yload - 6} V186"/>\n'
             o += text(xr + 18, 244, "I", "blue", 13, weight=700)
             o += text(x0 + 296, 372, "Le courant traverse", "mut", 12, "middle")

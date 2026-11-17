@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 import generate
+import guide_01
 from elements import POS, UNITS, bench_supply, dial_angle, meter, probe
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -64,6 +65,17 @@ def test_probe_without_direction_is_refused() -> None:
         probe(0, 0, 0, 0, red=False)
 
 
+def test_probe_with_a_handle_too_short_is_refused() -> None:
+    with pytest.raises(ValueError, match="handle too short"):
+        probe(0, 0, 1, 0, red=True, handle=23)
+
+
+@pytest.mark.parametrize(("red", "colour"), [(True, "red"), (False, "black")])
+def test_probe_records_its_colour(red: bool, colour: str) -> None:
+    drawing, _ = probe(0, 0, 1, 0, red=red)
+    assert f'data-probe="{colour}"' in drawing
+
+
 @pytest.mark.parametrize("mode", ["CV", "CC"])
 def test_bench_supply_records_its_mode(mode: str) -> None:
     drawing, minus, plus = bench_supply(0, 0, "5.00", "0.100", mode)
@@ -95,6 +107,25 @@ def test_figure_meters_are_on_the_expected_positions(
     path: Path, draw, positions: list[str]
 ) -> None:
     assert re.findall(r'data-sel="([^"]+)"', draw()) == positions
+
+
+@pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)
+def test_figure_draws_one_probe_pair_per_meter(
+    path: Path, draw, positions: list[str]
+) -> None:
+    probes = re.findall(r'data-probe="([^"]+)"', draw())
+    assert probes.count("red") == probes.count("black") == len(positions)
+
+
+def test_diode_figure_puts_the_red_probe_on_the_anode_then_on_the_cathode() -> None:
+    tips = re.findall(
+        r'data-probe="(red|black)" transform="translate\(([\d.]+) ([\d.]+)\)',
+        guide_01.fig_diode(),
+    )
+    (c1, _, y1), (c2, _, y2), (c3, _, y3), (c4, _, y4) = tips
+    # the anode is drawn above the cathode in both panels
+    assert (c1, c2) == ("red", "black") and float(y1) < float(y2)  # forward
+    assert (c3, c4) == ("black", "red") and float(y3) < float(y4)  # reversed
 
 
 @pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)

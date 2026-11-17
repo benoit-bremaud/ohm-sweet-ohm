@@ -126,11 +126,18 @@ def fig_junction() -> str:
         o += text(x0 + 280, 332, "10 kΩ", "mut", 10) + text(
             x0 + 332, 332, "diode", "mut", 10
         )
+        p_red, (rx, ry) = probe(x0 + 232, 300, -0.775, 0.632, True, 10, 30)
+        p_blk, (_, by) = probe(x0 + 232, 356, 0, 1, False, 10, 30)
         o += lead(
-            v, f"C{v[0] + 4:.1f} {v[1] + 34:.1f} {x0 + 205} 322 {x0 + 232} 300", True
+            v,
+            f"C{v[0] + 4:.1f} {v[1] + 34:.1f} {rx - 14:.1f} {ry + 11:.1f} {rx:.1f} {ry:.1f}",
+            True,
         )
-        o += lead(com, f"V380 C{com[0]:.1f} 404 {x0 + 232} 404 {x0 + 232} 356", False)
+        o += lead(
+            com, f"V380 C{com[0]:.1f} 408 {x0 + 232} 418 {x0 + 232} {by:.1f}", False
+        )
         o += f'  <circle cx="{x0 + 232}" cy="300" r="4" fill="#dc2626"/><circle class="blkf" cx="{x0 + 232}" cy="356" r="4"/>\n'
+        o += p_red + p_blk
         o += text(x0 + 190, 428, l2[0], "ok" if good else "no", 14, "middle", 700)
         o += text(x0 + 190, 446, l2[1], "mut", 12, "middle")
         return o

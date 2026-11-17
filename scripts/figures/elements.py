@@ -151,6 +151,15 @@ def meter(
     o.append(
         '    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>\n'
     )
+    # glass reflection and the two function keys under the display
+    o.append(
+        '    <path d="M30 28 H150 L138 36 H30 Z" fill="#ffffff" fill-opacity="0.22"/>\n'
+    )
+    for bx, lab in ((24, "HOLD"), (118, "LIGHT")):
+        o.append(
+            f'    <rect x="{bx}" y="84" width="38" height="11" rx="5.5" fill="#3b4049" stroke="#16191e"/>\n'
+            f'    <text x="{bx + 19}" y="92" font-size="6.5" font-weight="700" text-anchor="middle" fill="#aeb6c2">{lab}</text>\n'
+        )
     if flag:
         o.append(
             f'    <text x="31" y="38" font-size="10" font-weight="700" fill="#1a2016">{flag}</text>\n'
@@ -190,6 +199,10 @@ def meter(
     o.append(
         f'    <circle cx="{cx}" cy="{cy}" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>\n'
     )
+    # knurled rim of the knob
+    o.append(
+        f'    <circle cx="{cx}" cy="{cy}" r="31" fill="none" stroke="#16191e" stroke-opacity="0.6" stroke-width="4" stroke-dasharray="2 3.4"/>\n'
+    )
     o.append(
         f'    <g transform="rotate({a_sel} {cx} {cy})"><rect x="{cx - 8}" y="{cy - 33}" width="16" height="66" rx="8" fill="#555c68"/>'
         f'<path d="M{cx} {cy - 28} V{cy - 8}" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>\n'
@@ -216,7 +229,10 @@ def lead(jack: Point, d: str, red: bool) -> str:
     jx, jy = jack
     return (
         f'  <path {col} stroke-width="4" fill="none" stroke-linecap="round" d="M{jx:.1f} {jy:.1f} {d}"/>\n'
+        # shrouded banana plug seen end-on: sleeve, rim and the cable entry
         f'  <circle {fill} cx="{jx:.1f}" cy="{jy:.1f}" r="6.5"/>\n'
+        f'  <circle cx="{jx:.1f}" cy="{jy:.1f}" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>\n'
+        f'  <circle cx="{jx:.1f}" cy="{jy:.1f}" r="1.6" fill="#000000" fill-opacity="0.35"/>\n'
     )
 
 
@@ -226,8 +242,8 @@ def probe(
     dx: float,
     dy: float,
     red: bool,
-    tip: float = 14,
-    handle: float = 46,
+    tip: float = 16,
+    handle: float = 54,
 ) -> tuple[str, Point]:
     """Probe whose metal tip touches (tx, ty); (dx, dy) points from the tip to the cable.
 
@@ -236,13 +252,30 @@ def probe(
     n = math.hypot(dx, dy)
     if n == 0:
         raise ValueError("probe direction (dx, dy) must not be the null vector")
+    if handle < 24:
+        raise ValueError("probe handle too short to draw (24 at least)")
     dx, dy = dx / n, dy / n
-    hx, hy = tx + dx * tip, ty + dy * tip
-    ex, ey = hx + dx * handle, hy + dy * handle
-    col = 'stroke="#dc2626"' if red else 'class="blk"'
+    length = tip + handle
+    ex, ey = tx + dx * length, ty + dy * length
+    fill = 'fill="#dc2626"' if red else 'class="blkf"'
+    # Drawn along +x from the tip at the origin, then rotated onto (dx, dy).
+    guard, relief = tip + 7, length - 10
+    ridges = "".join(
+        f"M{guard + 10 + 4.5 * i:.1f} -5.6 v11.2 "
+        for i in range(4)
+        if guard + 10 + 4.5 * i < relief - 2
+    )
     return (
-        f'  <path d="M{tx:.1f} {ty:.1f} L{hx:.1f} {hy:.1f}" stroke="#aab2bd" stroke-width="3" stroke-linecap="round"/>\n'
-        f'  <path {col} d="M{hx:.1f} {hy:.1f} L{ex:.1f} {ey:.1f}" stroke-width="9" stroke-linecap="round"/>\n'
+        f'  <g data-probe="{"red" if red else "black"}" transform="translate({tx:.1f} {ty:.1f}) rotate({math.degrees(math.atan2(dy, dx)):.1f})">\n'
+        # needle: sharp point, then the metal shank
+        f'    <path d="M0 0 L{tip * 0.45:.1f} -2.1 H{tip + 1:.1f} V2.1 H{tip * 0.45:.1f} Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>\n'
+        # insulating collar, finger guard, handle, strain relief
+        f'    <rect {fill} x="{tip:.1f}" y="-3.8" width="8" height="7.6" rx="1.8"/>\n'
+        f'    <path {fill} d="M{guard + 3:.1f} -5.6 H{relief:.1f} L{length:.1f} -3 V3 L{relief:.1f} 5.6 H{guard + 3:.1f} Z" stroke-linejoin="round"/>\n'
+        f'    <rect {fill} x="{guard:.1f}" y="-8.5" width="4.5" height="17" rx="1.8"/>\n'
+        f'    <path d="{ridges}M{relief + 3.5:.1f} -4.6 v9.2 M{relief + 7:.1f} -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>\n'
+        f'    <path d="M{guard + 7:.1f} -3.2 H{relief - 2:.1f}" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>\n'
+        "  </g>\n"
     ), (ex, ey)
 
 
@@ -393,8 +426,11 @@ def clip(x: float, y: float, red: bool) -> str:
     """Crocodile clip gripping the point (x, y)."""
     col = "#dc2626" if red else "#20242b"
     return (
+        # insulating boot, then the two toothed metal jaws closed on the point
         f'  <rect x="{x - 7}" y="{y - 12}" width="14" height="24" rx="4" fill="{col}" stroke="#8b949e"/>\n'
-        f'  <path d="M{x - 4} {y - 4} h8 M{x - 4} {y} h8 M{x - 4} {y + 4} h8" stroke="#c9d0d9" stroke-width="1.2"/>\n'
+        f'  <path d="M{x - 5} {y - 6} h10 l-1.5 12 h-7 Z" fill="#c9d0d9" stroke="#7d8794" stroke-width="0.8" stroke-linejoin="round"/>\n'
+        f'  <path d="M{x} {y - 6} v12 M{x - 3.5} {y - 2} h7 M{x - 3} {y + 2} h6" stroke="#5f6b7a" stroke-width="1" fill="none"/>\n'
+        f'  <circle cx="{x}" cy="{y - 9}" r="1.5" fill="#c9d0d9"/>\n'
     )
 
 

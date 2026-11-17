@@ -29,6 +29,11 @@
     <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
     <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
     <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <path d="M30 28 H150 L138 36 H30 Z" fill="#ffffff" fill-opacity="0.22"/>
+    <rect x="24" y="84" width="38" height="11" rx="5.5" fill="#3b4049" stroke="#16191e"/>
+    <text x="43" y="92" font-size="6.5" font-weight="700" text-anchor="middle" fill="#aeb6c2">HOLD</text>
+    <rect x="118" y="84" width="38" height="11" rx="5.5" fill="#3b4049" stroke="#16191e"/>
+    <text x="137" y="92" font-size="6.5" font-weight="700" text-anchor="middle" fill="#aeb6c2">LIGHT</text>
     <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">0.582</text>
     <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">V</text>
     <path d="M160.3 155.1 A71 71 0 0 1 46.3 220.9" fill="none" stroke="#6b7482" stroke-width="1.5"/>
@@ -61,6 +66,7 @@
     <text x="57.0" y="120.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">A</text>
     <path d="M63.0 113.5 h9 M63.0 117.5 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
     <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <circle cx="90" cy="165" r="31" fill="none" stroke="#16191e" stroke-opacity="0.6" stroke-width="4" stroke-dasharray="2 3.4"/>
     <g transform="rotate(270 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
     <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
     <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#f59e0b" stroke-width="2"/>
@@ -75,14 +81,34 @@
   <text class="mut" x="312" y="204" font-size="12">anode</text>
   <text class="mut" x="312" y="304" font-size="12">cathode</text>
   <text class="mut" x="312" y="319" font-size="11">(bague)</text>
-  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M105.0 370.7 V410.70000000000005 C105.0 470.70000000000005 290 470.70000000000005 290 310"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M105.0 370.7 V410.70000000000005 C105.0 470.70000000000005 290 470.70000000000005 290 354.0"/>
   <circle class="blkf" cx="105.0" cy="370.7" r="6.5"/>
-  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M145.5 370.7 V386.70000000000005 C145.5 430.70000000000005 208 436.70000000000005 208 300 V240 C208 202 232 190 290 190"/>
+  <circle cx="105.0" cy="370.7" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
+  <circle cx="105.0" cy="370.7" r="1.6" fill="#000000" fill-opacity="0.35"/>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M145.5 370.7 V386.70000000000005 C145.5 430.70000000000005 208 436.70000000000005 208 300 V240 C208 204 216 190 246.0 190"/>
   <circle fill="#dc2626" cx="145.5" cy="370.7" r="6.5"/>
-  <path class="flow fb" d="M268 198 V302"/>
+  <circle cx="145.5" cy="370.7" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
+  <circle cx="145.5" cy="370.7" r="1.6" fill="#000000" fill-opacity="0.35"/>
+  <path class="flow fb" d="M268 208 V302"/>
   <text class="blue" x="312" y="254" font-size="12" font-weight="700">≈ 1 mA</text>
   <circle cx="290" cy="190" r="5" fill="#dc2626"/><circle class="blkf" cx="290" cy="310" r="5"/>
-  <text class="no" x="278" y="182" font-size="16" text-anchor="end" font-weight="700">+</text>
+  <g data-probe="red" transform="translate(290.0 190.0) rotate(180.0)">
+    <path d="M0 0 L4.5 -2.1 H11.0 V2.1 H4.5 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
+    <rect fill="#dc2626" x="10.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
+    <path fill="#dc2626" d="M20.0 -5.6 H34.0 L44.0 -3 V3 L34.0 5.6 H20.0 Z" stroke-linejoin="round"/>
+    <rect fill="#dc2626" x="17.0" y="-8.5" width="4.5" height="17" rx="1.8"/>
+    <path d="M27.0 -5.6 v11.2 M31.5 -5.6 v11.2 M37.5 -4.6 v9.2 M41.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
+    <path d="M24.0 -3.2 H32.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g data-probe="black" transform="translate(290.0 310.0) rotate(90.0)">
+    <path d="M0 0 L4.5 -2.1 H11.0 V2.1 H4.5 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
+    <rect class="blkf" x="10.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
+    <path class="blkf" d="M20.0 -5.6 H34.0 L44.0 -3 V3 L34.0 5.6 H20.0 Z" stroke-linejoin="round"/>
+    <rect class="blkf" x="17.0" y="-8.5" width="4.5" height="17" rx="1.8"/>
+    <path d="M27.0 -5.6 v11.2 M31.5 -5.6 v11.2 M37.5 -4.6 v9.2 M41.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
+    <path d="M24.0 -3.2 H32.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <text class="no" x="276" y="176" font-size="16" text-anchor="end" font-weight="700">+</text>
   <text class="ok" x="190" y="478" font-size="14" text-anchor="middle" font-weight="700">✓ 0,5 à 0,7 V : la jonction conduit</text>
   <text class="mut" x="190" y="496" font-size="12" text-anchor="middle">sens passant, diode au silicium</text>
   <text class="fg" x="400" y="100" font-size="15" font-weight="700">Pointes inversées</text>
@@ -91,6 +117,11 @@
     <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
     <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
     <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <path d="M30 28 H150 L138 36 H30 Z" fill="#ffffff" fill-opacity="0.22"/>
+    <rect x="24" y="84" width="38" height="11" rx="5.5" fill="#3b4049" stroke="#16191e"/>
+    <text x="43" y="92" font-size="6.5" font-weight="700" text-anchor="middle" fill="#aeb6c2">HOLD</text>
+    <rect x="118" y="84" width="38" height="11" rx="5.5" fill="#3b4049" stroke="#16191e"/>
+    <text x="137" y="92" font-size="6.5" font-weight="700" text-anchor="middle" fill="#aeb6c2">LIGHT</text>
     <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">OL</text>
     <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">V</text>
     <path d="M160.3 155.1 A71 71 0 0 1 46.3 220.9" fill="none" stroke="#6b7482" stroke-width="1.5"/>
@@ -123,6 +154,7 @@
     <text x="57.0" y="120.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">A</text>
     <path d="M63.0 113.5 h9 M63.0 117.5 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
     <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <circle cx="90" cy="165" r="31" fill="none" stroke="#16191e" stroke-opacity="0.6" stroke-width="4" stroke-dasharray="2 3.4"/>
     <g transform="rotate(270 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
     <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
     <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#f59e0b" stroke-width="2"/>
@@ -137,14 +169,34 @@
   <text class="mut" x="692" y="204" font-size="12">anode</text>
   <text class="mut" x="692" y="304" font-size="12">cathode</text>
   <text class="mut" x="692" y="319" font-size="11">(bague)</text>
-  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M525.5 370.7 V410.70000000000005 C525.5 470.70000000000005 670 470.70000000000005 670 310"/>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M525.5 370.7 V410.70000000000005 C525.5 470.70000000000005 670 470.70000000000005 670 354.0"/>
   <circle fill="#dc2626" cx="525.5" cy="370.7" r="6.5"/>
-  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M485.0 370.7 V386.70000000000005 C485.0 430.70000000000005 588 436.70000000000005 588 300 V240 C588 202 612 190 670 190"/>
+  <circle cx="525.5" cy="370.7" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
+  <circle cx="525.5" cy="370.7" r="1.6" fill="#000000" fill-opacity="0.35"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M485.0 370.7 V386.70000000000005 C485.0 430.70000000000005 588 436.70000000000005 588 300 V240 C588 204 596 190 626.0 190"/>
   <circle class="blkf" cx="485.0" cy="370.7" r="6.5"/>
+  <circle cx="485.0" cy="370.7" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
+  <circle cx="485.0" cy="370.7" r="1.6" fill="#000000" fill-opacity="0.35"/>
   <text class="mut" x="692" y="254" font-size="12">aucun</text>
   <text class="mut" x="692" y="269" font-size="12">courant</text>
   <circle cx="670" cy="310" r="5" fill="#dc2626"/><circle class="blkf" cx="670" cy="190" r="5"/>
-  <text class="no" x="658" y="330" font-size="16" text-anchor="end" font-weight="700">+</text>
+  <g data-probe="black" transform="translate(670.0 190.0) rotate(180.0)">
+    <path d="M0 0 L4.5 -2.1 H11.0 V2.1 H4.5 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
+    <rect class="blkf" x="10.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
+    <path class="blkf" d="M20.0 -5.6 H34.0 L44.0 -3 V3 L34.0 5.6 H20.0 Z" stroke-linejoin="round"/>
+    <rect class="blkf" x="17.0" y="-8.5" width="4.5" height="17" rx="1.8"/>
+    <path d="M27.0 -5.6 v11.2 M31.5 -5.6 v11.2 M37.5 -4.6 v9.2 M41.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
+    <path d="M24.0 -3.2 H32.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g data-probe="red" transform="translate(670.0 310.0) rotate(90.0)">
+    <path d="M0 0 L4.5 -2.1 H11.0 V2.1 H4.5 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
+    <rect fill="#dc2626" x="10.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
+    <path fill="#dc2626" d="M20.0 -5.6 H34.0 L44.0 -3 V3 L34.0 5.6 H20.0 Z" stroke-linejoin="round"/>
+    <rect fill="#dc2626" x="17.0" y="-8.5" width="4.5" height="17" rx="1.8"/>
+    <path d="M27.0 -5.6 v11.2 M31.5 -5.6 v11.2 M37.5 -4.6 v9.2 M41.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
+    <path d="M24.0 -3.2 H32.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <text class="no" x="656" y="330" font-size="16" text-anchor="end" font-weight="700">+</text>
   <text class="ok" x="570" y="478" font-size="14" text-anchor="middle" font-weight="700">✓ OL : la jonction bloque</text>
   <text class="mut" x="570" y="496" font-size="12" text-anchor="middle">sens inverse, tension hors plage</text>
   <text class="mut" x="24" y="524" font-size="12">Proche de 0 V dans les deux sens : court-circuit.</text>
