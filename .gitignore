@@ -27,3 +27,8 @@ fp-info-cache
 
 # Local CI (just gate): SBOM of the API image
 sbom-*.spdx.json
+
+# Python caches (figure generator, scripts/figures)
+__pycache__/
+.pytest_cache/
+.ruff_cache/

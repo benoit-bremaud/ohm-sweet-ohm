@@ -18,6 +18,7 @@
 set shell := ["sh", "-eu", "-c"]
 
 semgrep := "uvx semgrep@1.182.1" # via uv, not mise: a mise pipx install needs a mise-managed Python
+ruff := "uvx ruff@0.15.8"
 api_image := "ohm-sweet-ohm-api:gate"
 renderer_image := "ohm-sweet-ohm-renderer"
 
@@ -30,6 +31,10 @@ setup:
     mise x -- pnpm install --frozen-lockfile
     mise x -- lefthook install
 
+# Regenerate the SVG figures of the troubleshooting guides (scripts/figures, #101)
+figures:
+    python3 -B scripts/figures/generate.py
+
 # L0 — the pre-commit checks on the staged files (< 10 s)
 fast:
     lefthook run pre-commit
@@ -40,7 +45,8 @@ fast:
 node-guard:
     @node -e 'const want=require("fs").readFileSync(".nvmrc","utf8").trim().split(".")[0]; const v=process.versions.node; if (v.split(".")[0] !== want) { console.error("Node " + v + " found, Node " + want + " required (.nvmrc). Run: mise x -- just <recipe>"); process.exit(1) }'
 
-# Format, eslint, markdownlint, tsc, typos, the prod workflow, the Dockerfiles, the shell scripts, the hooks
+# Format, eslint, markdownlint, tsc, typos, the prod workflow, the Dockerfiles, the shell scripts, the
+# figure generator (ruff), the hooks
 lint: node-guard
     pnpm format:check
     pnpm lint
@@ -51,15 +57,19 @@ lint: node-guard
     zizmor --quiet .github/workflows
     hadolint --config .hadolint.yaml apps/api/Dockerfile docker/renderer/Dockerfile
     shellcheck --severity=warning scripts/*.sh
+    {{ruff}} format --check scripts/figures
+    {{ruff}} check scripts/figures
     lefthook validate
 
 # Unit and integration suites (Testcontainers: Docker must run) with the per-package coverage floor
-# of vitest.config.ts (80 %), the doc coverage floor (90 %) and the local CI wiring tests
+# of vitest.config.ts (80 %), the doc coverage floor (90 %), the local CI wiring tests and the
+# figure generator tests (committed SVGs equal to the generated ones)
 test: node-guard
     pnpm test:coverage
     pnpm doc:coverage
     sh scripts/test-local-ci.sh
     sh scripts/test-attest.sh
+    sh scripts/test-figures.sh
 
 # SAST (Semgrep Community Edition, named registry rulesets: `--config auto` would send the project
 # URL; no p/secrets, which prints the matched value, gitleaks redacts it) on the shipped code and

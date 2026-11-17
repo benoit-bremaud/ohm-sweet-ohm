@@ -1,0 +1,3 @@
+# Measure the generator, not its tests (scripts/test-figures.sh).
+[run]
+omit = */test_*.py
