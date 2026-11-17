@@ -18,7 +18,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 
 | Fiche | Contenu | Issue |
 | --- | --- | --- |
-| 00 Sécurité | Hors tension, décharge des condensateurs, alimentation limitée en courant | #81 |
+| [00 Sécurité](00_securite/README.md) | Périmètre basse tension, hors tension, décharge des condensateurs, alimentation limitée en courant | #81 |
 | [01 Comprendre son multimètre](01_multimetre/README.md) | Ce que chaque mode injecte ; pourquoi un condensateur bipe puis se tait, ce qu'affiche le mode diode | #82 |
 | 02 Pièges de la mesure en circuit | Chemins parallèles, jonctions qui conduisent, condensateurs qui se chargent, quand dessouder | #83 |
 | 03 Autres instruments | LCR/ESR, testeur de composants, alimentation de labo, oscilloscope, caméra thermique | #84 |
