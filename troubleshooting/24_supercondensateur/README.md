@@ -81,9 +81,11 @@ Exemple : 1 F chargé à 5,5 V dans 100 Ω. Au départ, 55 mA et 0,3 W dans la r
 | Lecture | Verdict |
 | --- | --- |
 | La tension monte régulièrement, dans la durée prévue, puis le courant retombe | il se charge : poursuivre avec les deux mesures suivantes |
-| La tension reste proche de 0 V, l'alimentation reste en limitation de courant | court-circuit : à remplacer |
+| La tension ne monte pas du tout, ou bien moins vite que le rythme prévu, l'alimentation reste en limitation de courant | court-circuit : à remplacer |
 | La tension est tout de suite à la valeur réglée **et le courant tombe à zéro en une ou deux secondes** | capacité presque nulle ou circuit ouvert : à remplacer |
 | Le courant ne retombe pas après plusieurs minutes | fuite : confirmer par la mesure d'autodécharge |
+
+**Le rythme prévu dépend de la capacité** : *I / C* volts par seconde, soit 0,1 V par seconde pour 1 F sous 100 mA, mais 1 mV par seconde pour 100 F et 0,1 mV par seconde pour 1000 F. Une grosse cellule saine semble donc rester à 0 V : relever sa tension au voltmètre, sur le calibre millivolts, à une minute d'intervalle (60 mV de plus pour 100 F, 6 mV pour 1000 F) avant de conclure. Sa charge complète prend des heures sous 100 mA.
 
 Un modèle de sauvegarde à forte résistance interne peut ne jamais faire passer l'alimentation en limitation : c'est alors le **courant** qu'on lit. Sur un composant sain, il reste sous la limite et décroît lentement ; sur un composant ouvert, il est nul presque aussitôt.
 
@@ -170,8 +172,8 @@ flowchart TD
   C --> D{Boîtier gonflé, fuite, monté à l'envers ?}
   D -- oui --> R[Remplacer]
   D -- non --> E[Essai de charge : tension marquée au plus, soit 5 V pour un 5,5 V et 2,5 V pour une cellule de 2,7 V, limite 100 mA]
-  E --> F{La tension monte régulièrement ?}
-  F -- reste à 0 V --> R
+  E --> F{La tension monte au rythme prévu, I / C ?}
+  F -- ne monte pas, même au rythme prévu pour sa capacité --> R
   F -- à la tension réglée d'emblée, courant nul presque aussitôt --> R
   F -- à la tension réglée d'emblée, courant qui décroît lentement --> G
   F -- oui --> G[Maintenir la charge 30 minutes, puis décharge dans 1 kΩ : chronométrer de 80 % à 40 % de la tension de charge]
