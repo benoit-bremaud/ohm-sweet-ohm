@@ -52,13 +52,13 @@ OHM_RANGES = ("2M", "200k", "20k", "2k", "200")
 DIAL_STEP = 360 // len(POS)
 # Units each dial position can display; `meter` refuses any other.
 UNITS = {
-    "OFF": {""},
-    "V~": {"V"},
-    "VDC": {"V"},
-    **dict.fromkeys((*OHM_RANGES, "BEEP"), {"Ω", "kΩ", "MΩ"}),
-    "DIODE": {"V"},
-    "CAP": {"nF", "µF"},
-    "ADC": {"A"},
+    "OFF": frozenset({""}),
+    "V~": frozenset({"V"}),
+    "VDC": frozenset({"V"}),
+    **dict.fromkeys((*OHM_RANGES, "BEEP"), frozenset({"Ω", "kΩ", "MΩ"})),
+    "DIODE": frozenset({"V"}),
+    "CAP": frozenset({"nF", "µF"}),
+    "ADC": frozenset({"A"}),
 }
 
 

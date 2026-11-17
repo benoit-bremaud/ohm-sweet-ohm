@@ -91,7 +91,7 @@ def fig_supply() -> str:
         verdict = (
             (
                 "✗ Voyant CC, tension proche de 0 V",
-                "court-circuit probable : couper, chercher, limite inchangée",
+                "court-circuit : couper, chercher avant de monter la limite",
             )
             if shorted
             else (

@@ -241,7 +241,7 @@ def fig_beeper() -> str:
         "Bipeur de continuité : un seuil, pas une mesure",
         "Un multimètre, sélecteur sur continuité, cordon rouge dans la douille V ohms, a ses pointes sur les deux pastilles d'une piste de circuit imprimé, hors tension. "
         "Il lit 0,3 Ω et sonne. L'appareil sonne sous un seuil de 10 à 100 Ω selon le modèle : "
-        "un court-circuit de 0,1 Ω sonne, une résistance de 47 Ω sonne aussi, 1 kΩ reste silencieux.",
+        "un court-circuit de 0,1 Ω sonne, une résistance de 47 Ω sonne souvent aussi, selon le seuil, 1 kΩ reste silencieux.",
         b,
     )
 
