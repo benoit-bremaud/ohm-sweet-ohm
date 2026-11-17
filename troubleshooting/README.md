@@ -40,7 +40,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 | [21 Condensateur film](21_condensateur_film/README.md) | occasionnel |
 | [22 Condensateur électrolytique aluminium](22_condensateur_electrolytique/README.md) | très fréquent |
 | [23 Condensateur tantale](23_condensateur_tantale/README.md) | fréquent |
-| 24 Supercondensateur | — |
+| [24 Supercondensateur](24_supercondensateur/README.md) | occasionnel |
 
 ### 3. Magnétiques — #87
 
