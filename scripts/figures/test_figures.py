@@ -4,13 +4,29 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from pathlib import Path
 
 import pytest
 
 import generate
 import guide_01
-from elements import POS, UNITS, bench_supply, dial_angle, meter, probe
+from elements import (
+    BAND_COLOURS,
+    BAND_WIDTH,
+    BLUE,
+    POS,
+    UNITS,
+    band_offsets,
+    bands,
+    bench_supply,
+    chip,
+    dial_angle,
+    meter,
+    probe,
+    res_h,
+    res_v,
+)
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
 FIGURES = [
@@ -86,6 +102,49 @@ def test_bench_supply_records_its_mode(mode: str) -> None:
 def test_bench_supply_unknown_mode_is_refused() -> None:
     with pytest.raises(ValueError, match="unknown supply mode"):
         bench_supply(0, 0, "5.00", "0.100", "OFF")
+
+
+def test_bands_translate_colour_names_in_reading_order() -> None:
+    assert bands("brown", "black", "orange", "gold") == [
+        BAND_COLOURS[name] for name in ("brown", "black", "orange", "gold")
+    ]
+
+
+@pytest.mark.parametrize("count", [3, 6])
+def test_resistor_with_a_wrong_band_count_is_refused(count: int) -> None:
+    with pytest.raises(ValueError, match="4 or 5 bands"):
+        bands(*["red"] * count)
+
+
+def test_unknown_band_colour_is_refused() -> None:
+    with pytest.raises(ValueError, match="unknown band colour"):
+        bands("brown", "black", "pink", "gold")
+
+
+@pytest.mark.parametrize("count", [4, 5])
+def test_tolerance_band_stands_apart_and_every_band_fits_the_body(count: int) -> None:
+    offsets = band_offsets(count)
+    gaps = [b - a for a, b in zip(offsets, offsets[1:], strict=False)]
+    assert len(offsets) == count
+    assert gaps[-1] > max(gaps[:-1])
+    assert offsets[0] > 0
+    assert offsets[-1] + BAND_WIDTH < 1
+
+
+@pytest.mark.parametrize("draw", [res_h, res_v])
+def test_resistor_draws_its_bands_in_order(draw: Callable[..., str]) -> None:
+    colours = bands("yellow", "violet", "black", "red", "brown")
+    drawing = draw(0, 100, 50, colours=colours)
+    found = re.findall(r'fill="(#[0-9a-f]{6})"', drawing)
+    assert [c for c in found if c in colours] == colours
+
+
+def test_resistor_body_colour_is_selectable() -> None:
+    assert f'fill="{BLUE[0]}"' in res_h(0, 100, 50, body=BLUE)
+
+
+def test_chip_prints_its_marking() -> None:
+    assert ">4R7</text>" in chip(0, 0, "4R7")
 
 
 @pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)

@@ -8,6 +8,7 @@ on the page background uses the CSS classes of STYLE so it follows the light or 
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from typing import NamedTuple
 
 Point = tuple[float, float]
@@ -279,30 +280,89 @@ def probe(
     ), (ex, ey)
 
 
-BANDS = ["#7b3f00", "#111111", "#f97316", "#c9a227"]  # 10 kΩ 5 %
+# Colour code of IEC 60062: the ten digit colours, then the two metallic ones.
+BAND_COLOURS = {
+    "black": "#111111",
+    "brown": "#7b3f00",
+    "red": "#dc2626",
+    "orange": "#f97316",
+    "yellow": "#facc15",
+    "green": "#16a34a",
+    "blue": "#2563eb",
+    "violet": "#7c3aed",
+    "grey": "#8b949e",
+    "white": "#f8fafc",
+    "gold": "#c9a227",
+    "silver": "#c0c7d0",
+}
+# Body and outline colours of an axial resistor: carbon film (tan), metal film (blue).
+TAN = ("#d9b88c", "#8a6d45")
+BLUE = ("#8fbfe0", "#3f6f96")
+
+
+def bands(*names: str) -> list[str]:
+    """Fill colours of the 4 or 5 bands `names` (keys of BAND_COLOURS), tolerance band last."""
+    if len(names) not in (4, 5):
+        raise ValueError(f"a resistor carries 4 or 5 bands, got {len(names)}")
+    unknown = [name for name in names if name not in BAND_COLOURS]
+    if unknown:
+        raise ValueError(
+            f"unknown band colour {unknown[0]!r}, expected one of {list(BAND_COLOURS)}"
+        )
+    return [BAND_COLOURS[name] for name in names]
+
+
+BANDS = tuple(bands("brown", "black", "orange", "gold"))  # 10 kΩ 5 %
+BAND_WIDTH = 0.09  # fraction of the body length
+
+
+def band_offsets(n: int) -> list[float]:
+    """Start of each of `n` bands as a fraction of the body length; the last one sits apart."""
+    return [0.16 + 0.68 / n * i + (0.1 if i == n - 1 else 0) for i in range(n)]
 
 
 def res_v(
-    x: float, y1: float, y2: float, w: float = 24, h: float = 64, cls: str = "wire"
+    x: float,
+    y1: float,
+    y2: float,
+    w: float = 24,
+    h: float = 64,
+    cls: str = "wire",
+    colours: Sequence[str] = BANDS,
 ) -> str:
-    """Vertical axial resistor centred on the wire from (x, y1) to (x, y2)."""
+    """Vertical axial resistor centred on the wire from (x, y1) to (x, y2); `colours` are its bands."""
     cy = (y1 + y2) / 2
     o = f'  <path class="{cls}" d="M{x} {y1} V{y2}"/>\n'
-    o += f'  <rect x="{x - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="{w / 3:.1f}" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>\n'
-    for i, c in enumerate(BANDS):
-        by = cy - h / 2 + h * (0.16 + 0.17 * i) + (h * 0.1 if i == 3 else 0)
-        o += f'  <rect x="{x - w / 2}" y="{by:.1f}" width="{w}" height="{h * 0.09:.1f}" fill="{c}"/>\n'
+    o += f'  <rect x="{x - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="{w / 3:.1f}" fill="{TAN[0]}" stroke="{TAN[1]}" stroke-width="1.5"/>\n'
+    for c, off in zip(colours, band_offsets(len(colours)), strict=True):
+        o += f'  <rect x="{x - w / 2}" y="{cy - h / 2 + h * off:.1f}" width="{w}" height="{h * BAND_WIDTH:.1f}" fill="{c}"/>\n'
     return o
 
 
-def res_h(x1: float, x2: float, y: float, h: float = 28) -> str:
-    """Horizontal axial resistor body from x1 to x2 (no leads)."""
+def res_h(
+    x1: float,
+    x2: float,
+    y: float,
+    h: float = 28,
+    colours: Sequence[str] = BANDS,
+    body: tuple[str, str] = TAN,
+) -> str:
+    """Horizontal axial resistor body from x1 to x2 (no leads); `body` is (fill, outline)."""
     w = x2 - x1
-    o = f'  <rect x="{x1}" y="{y - h / 2}" width="{w}" height="{h}" rx="9" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>\n'
-    for i, c in enumerate(BANDS):
-        bx = x1 + w * (0.16 + 0.17 * i) + (w * 0.1 if i == 3 else 0)
-        o += f'  <rect x="{bx:.1f}" y="{y - h / 2}" width="{w * 0.09:.1f}" height="{h}" fill="{c}"/>\n'
+    o = f'  <rect x="{x1}" y="{y - h / 2}" width="{w}" height="{h}" rx="9" fill="{body[0]}" stroke="{body[1]}" stroke-width="1.5"/>\n'
+    for c, off in zip(colours, band_offsets(len(colours)), strict=True):
+        o += f'  <rect x="{x1 + w * off:.1f}" y="{y - h / 2}" width="{w * BAND_WIDTH:.1f}" height="{h}" fill="{c}"/>\n'
     return o
+
+
+def chip(x: float, y: float, marking: str, w: float = 64, h: float = 32) -> str:
+    """Chip (surface-mount) resistor seen from above, centred on (x, y), with its printed marking."""
+    t = w * 0.18  # metal termination at each end
+    return (
+        f'  <rect x="{x - w / 2}" y="{y - h / 2}" width="{w}" height="{h}" rx="2" fill="#c9d0d9" stroke="#7d8794"/>\n'
+        f'  <rect x="{x - w / 2 + t:.1f}" y="{y - h / 2}" width="{w - 2 * t:.1f}" height="{h}" fill="#20242b"/>\n'
+        f'  <text x="{x}" y="{y + h * 0.18:.1f}" font-size="{h * 0.5:.1f}" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#ffffff">{marking}</text>\n'
+    )
 
 
 def diode_v(

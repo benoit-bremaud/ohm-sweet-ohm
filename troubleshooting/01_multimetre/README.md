@@ -168,7 +168,7 @@ flowchart TD
 - Rouge = + de la source en ohmmètre, en bipeur et en mode diode.
 - Ohmmètre : une jonction en parallèle conduit dès que *I × R* approche 0,4 à 0,5 V.
 - Sous 10 Ω : REL pointes court-circuitées.
-- Au-dessus de 100 kΩ : une seule main sur les pointes.
+- Dès quelques dizaines de kΩ : une seule main sur les pointes.
 - Bipeur = « moins de 10 à 100 Ω », pas « 0 Ω » : lire la valeur.
 - Bip bref puis silence = condensateur qui se charge.
 - Mode diode = tension à environ 1 mA ; comparer, pas lire dans l'absolu.
