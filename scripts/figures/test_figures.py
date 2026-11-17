@@ -32,6 +32,7 @@ from elements import (
     probe,
     res_h,
     res_v,
+    tile,
     verdict,
 )
 
@@ -202,6 +203,15 @@ def test_mlcc_terminations_follow_its_orientation() -> None:
     assert (left, right) == (pytest.approx((76, 50)), pytest.approx((124, 50)))
     _, top, bottom = mlcc(100, 50, w=60, vertical=True)
     assert (top, bottom) == (pytest.approx((100, 26)), pytest.approx((100, 74)))
+
+
+def test_tile_prints_the_code_above_its_meaning() -> None:
+    code, head, sub = (
+        tile(10, 20, "47", "chiffres significatifs", "ici 47").strip().splitlines()[1:]
+    )
+    assert ">47</text>" in code
+    assert 'class="blue"' in head and ">chiffres significatifs</text>" in head
+    assert 'class="mut"' in sub and ">ici 47</text>" in sub
 
 
 @pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)

@@ -635,3 +635,14 @@ def mlcc(
     o = f'  <rect x="{cx - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="2" fill="#c9d0d9" stroke="#7d8794"/>\n'
     o += f'  <rect x="{cx - w / 2 + t:.1f}" y="{cy - h / 2}" width="{w - 2 * t:.1f}" height="{h}" fill="#c8a97e" stroke="#8a6d45"/>\n'
     return o, (cx - w / 2 + t / 2, cy), (cx + w / 2 - t / 2, cy)
+
+
+def tile(x: float, y: float, code: str, head: str, sub: str) -> str:
+    """Dark tile showing one part of a marking, with its meaning under it."""
+    o = f'  <rect x="{x}" y="{y}" width="60" height="34" rx="5" fill="#20242b" stroke="#7d8794"/>\n'
+    o += f'  <text x="{x + 30}" y="{y + 23}" font-size="17" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#ffffff">{code}</text>\n'
+    return (
+        o
+        + text(x, y + 54, head, "blue", 13, weight=700)
+        + text(x, y + 71, sub, "mut", 12)
+    )

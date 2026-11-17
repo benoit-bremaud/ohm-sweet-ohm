@@ -12,22 +12,12 @@ from elements import (
     mlcc,
     svg,
     text,
+    tile,
     verdict,
 )
 
 BOARD = "#1f7a4d"
 RED = "#dc2626"
-
-
-def _tile(x: float, y: float, code: str, head: str, sub: str) -> str:
-    """Dark tile showing one part of a marking, with its meaning under it."""
-    o = f'  <rect x="{x}" y="{y}" width="60" height="34" rx="5" fill="#20242b" stroke="#7d8794"/>\n'
-    o += f'  <text x="{x + 30}" y="{y + 23}" font-size="17" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#ffffff">{code}</text>\n'
-    return (
-        o
-        + text(x, y + 54, head, "blue", 13, weight=700)
-        + text(x, y + 71, sub, "mut", 12)
-    )
 
 
 # ---------------------------------------------------------------- figure 1
@@ -81,7 +71,7 @@ def fig_marking() -> str:
             ("K", "tolérance ±10 %", "J : ±5 %, M : ±20 %"),
         )
     ):
-        b += _tile(200 + 184 * i, 312, code, head, sub)
+        b += tile(200 + 184 * i, 312, code, head, sub)
     b += text(
         200,
         420,
