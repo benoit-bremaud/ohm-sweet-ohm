@@ -104,7 +104,7 @@ Un modèle de sauvegarde à forte résistance interne peut ne jamais faire passe
 
 Pourquoi 0,69 : dans une résistance, la tension d'un condensateur est divisée par deux toutes les *0,69 × R × C* secondes, quel que soit le point de départ. Mesurer entre 4 V et 2 V évite d'avoir à déclencher le chronomètre à l'instant exact du branchement. Pour une autre tension, chronométrer de 80 % à 40 % de la tension de charge : de 2 V à 1 V pour une cellule chargée à 2,5 V.
 
-Limite : la résistance interne du supercondensateur s'ajoute à la résistance de 1 kΩ, donc la méthode surestime un peu la capacité. Elle suffit pour repérer une perte de 30 %.
+Limite : la résistance interne du supercondensateur s'ajoute à la résistance de 1 kΩ, donc la méthode surestime un peu la capacité. Elle suffit pour repérer une perte de 30 %. Sur un modèle à forte résistance interne (celui qui ne fait pas passer l'alimentation en limitation pendant l'essai de charge), le résultat n'est qu'une **borne haute** : une capacité déjà trop faible condamne le composant, une capacité correcte ne prouve rien.
 
 ### Mesurer l'autodécharge
 
