@@ -134,7 +134,8 @@ En montage diviseur, carte sur alimentation limitée en courant, sélecteur sur 
 | --- | --- |
 | Varie régulièrement d'une limite à l'autre | potentiomètre sain : chercher en aval |
 | Saute ou décroche à certains endroits | contact du curseur |
-| Reste collée à la tension d'un bout, quelle que soit la position | l'autre bout de la piste est ouvert (borne, soudure ou piste), ou le curseur ne touche plus la piste |
+| Reste collée à la tension d'un bout, quelle que soit la position | l'autre bout de la piste est ouvert (borne, soudure ou piste) |
+| Reste fixe entre les deux limites, quelle que soit la position | curseur qui ne touche plus la piste ou ne suit plus l'axe : test du curseur hors tension |
 | Aucune tension sur les bornes 1 et 3 | le potentiomètre n'est pas alimenté : chercher en amont |
 
 Sur un **ajustable**, ne pas tourner pour « voir » : mesurer d'abord la grandeur qu'il règle (tension de sortie, courant de repos) et la comparer à la valeur attendue. Si un réglage est nécessaire, repérer la position de départ (trait de feutre sur un monotour, nombre de tours compté sur un multitour) et procéder par petites retouches en surveillant la mesure.

@@ -146,7 +146,7 @@ def fig_continuity() -> str:
             ("Quelques dixièmes", "d'ohm, pointes", "comprises."),
             "ok",
             (
-                "✓ bip continu, proche des pointes en court-circuit",
+                "✓ bip continu, comme pointes contre pointes",
                 "le fusible conduit",
             ),
         ),

@@ -107,7 +107,7 @@
     <path d="M33.0 -5.6 v11.2 M37.5 -5.6 v11.2 M42.0 -5.6 v11.2 M46.5 -5.6 v11.2 M63.5 -4.6 v9.2 M67.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
     <path d="M30.0 -3.2 H58.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
   </g>
-  <text class="ok" x="190" y="478" font-size="14" text-anchor="middle" font-weight="700">✓ bip continu, proche des pointes en court-circuit</text>
+  <text class="ok" x="190" y="478" font-size="14" text-anchor="middle" font-weight="700">✓ bip continu, comme pointes contre pointes</text>
   <text class="mut" x="190" y="496" font-size="12" text-anchor="middle">le fusible conduit</text>
   <text class="fg" x="400" y="100" font-size="15" font-weight="700">Fusible fondu : silence</text>
   <g data-sel="BEEP" transform="translate(404 116) scale(0.9)">
