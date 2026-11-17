@@ -180,7 +180,7 @@ flowchart TD
   H -- oui --> I[Recharger, isoler, relever la tension à 1 h et 24 h]
   I --> J{La tension tient ?}
   J -- non --> R
-  J -- oui --> K[Supercondensateur sain : contrôler le chemin de charge et la consommation]
+  J -- oui --> K[Aucun défaut trouvé : contrôler le chemin de charge et la consommation]
   R --> L[Contrôler la tension de charge, l'équilibrage et la chaleur voisine]
   L --> M[Essai sur alimentation limitée en courant]
 ```
