@@ -36,7 +36,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 
 | Fiche | Fréquence de panne |
 | --- | --- |
-| 20 Condensateur céramique (MLCC) | — |
+| [20 Condensateur céramique (MLCC)](20_condensateur_ceramique/README.md) | fréquent |
 | 21 Condensateur film | — |
 | 22 Condensateur électrolytique aluminium | — |
 | 23 Condensateur tantale | — |
