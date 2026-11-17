@@ -10,28 +10,28 @@ Ces fiches ne valent que si **aucune tension ne dépasse 50 V continu ni 25 V al
 
 ## Le périmètre : 50 V continu, 25 V alternatif
 
-**Pourquoi ces seuils** : le courant qui traverse le corps dépend de sa résistance, et cette résistance **chute quand la tension monte**. Sous quelques volts, la peau sèche oppose des centaines de kΩ ; selon la norme CEI 60479-1, à partir de 25 V environ l'impédance du corps entre deux mains tombe à quelques kΩ, et le courant devient dangereux pour le cœur. Le seuil alternatif est plus bas que le seuil continu parce que le courant alternatif à 50 Hz est plus dangereux à intensité égale (fibrillation). Ces limites sont plus prudentes que la très basse tension des normes d'installation : elles laissent une marge pour la peau humide, une coupure ou un contact sur une grande surface.
+**Pourquoi ces seuils** : le courant qui traverse le corps dépend de sa résistance, et cette résistance **chute quand la tension monte**. Sous quelques volts et du bout des doigts, la peau sèche oppose des centaines de kΩ. Selon la norme CEI 60479-1, avec une grande surface de contact (main serrée sur une pièce métallique), l'impédance entre deux mains n'est plus que de quelques kΩ dès 25 V, et baisse encore quand la tension monte ; à 50 V alternatif, le courant atteint alors le seuil de non-lâcher (environ 10 mA), où les muscles se contractent et la main ne peut plus lâcher. Le seuil alternatif (valeur efficace, soit 35 V crête) est plus bas que le seuil continu parce que le courant alternatif à 50 Hz est plus dangereux à intensité égale. Ces limites sont plus prudentes que la très basse tension des normes d'installation (50 V alternatif, 120 V continu) : elles reprennent les valeurs retenues pour les lieux humides et laissent une marge pour la peau mouillée ou une coupure.
 
 **Partout sur la carte, pas seulement à l'entrée** : un appareil sur pile ou sur adaptateur peut fabriquer en interne bien plus que sa tension d'entrée.
 
 | Exemple | Tension interne | Pourquoi |
 | --- | --- | --- |
 | Flash d'appareil photo (même jetable sur pile AA) | environ 300 V | condensateur de flash chargé par un élévateur, garde sa charge appareil éteint |
-| Onduleur de rétroéclairage à tube (CCFL, anciens écrans) | plusieurs centaines de volts alternatifs | transformateur élévateur |
+| Onduleur de rétroéclairage à tube (CCFL, anciens écrans) | 500 à 1500 V alternatifs, 1 à 2 kV à l'amorçage | transformateur élévateur |
 | Équipement PoE (Power over Ethernet) | jusqu'à 57 V continu | norme IEEE 802.3 |
 | Batterie 48 V (vélo électrique, stockage) | 54,6 V en fin de charge | 13 éléments lithium à 4,2 V |
 | Allumeur, tube Geiger, ioniseur, taser | centaines à milliers de volts | élévateur dédié |
 
-Si un composant porte un marquage de tension élevée (condensateur de 160 V, 250 V, 400 V), un transformateur inattendu ou un avertissement « high voltage », considérer la carte comme hors périmètre jusqu'à preuve du contraire, et ne la mesurer qu'après décharge vérifiée.
+Si un composant porte un marquage de tension élevée (condensateur de 160 V, 250 V, 400 V), un transformateur inattendu ou un avertissement « high voltage », considérer la carte comme hors périmètre et s'arrêter là (ligne « oui ou je ne sais pas » de l'arbre) : ne pas la mesurer ni la décharger avec la méthode de cette fiche, prévue pour 50 V au plus. Seul un schéma ou la fiche technique peut lever le doute. Règle rapide pour les batteries : plus de 11 éléments lithium en série dépasse 50 V en fin de charge (12 éléments Li-ion « 44 V » : 50,4 V ; 16 éléments LiFePO4 « 48 V » : 58,4 V).
 
-> **Variac et transformateur d'isolement** : un Variac (autotransformateur réglable) **n'isole pas** du secteur. Sa sortie reste reliée électriquement au réseau, même réglée à quelques volts, et une erreur de câblage ou de réglage remet 230 V sur la carte. Un transformateur d'isolement supprime la référence à la terre mais ne rend pas inoffensif le contact entre ses deux bornes de sortie. Les deux relèvent du travail sur secteur : fiche secteur et isolement, à venir.
+> **Variac et transformateur d'isolement** : un Variac (autotransformateur réglable) **n'isole pas** du secteur. Sa sortie reste reliée électriquement au réseau, même réglée à quelques volts : selon le sens de la prise (non polarisée en France), une borne de sortie est à 230 V par rapport à la terre quel que soit le réglage, et une erreur de réglage remet 230 V entre les bornes. Un transformateur d'isolement supprime la référence à la terre mais ne rend pas inoffensif le contact entre ses deux bornes de sortie. Les deux relèvent du travail sur secteur : fiche secteur et isolement, à venir.
 
 ## Travailler hors tension
 
 La plupart des mesures (ohmmètre, bipeur, mode diode, capacimètre : fiche [01](../01_multimetre/README.md)) se font carte **hors tension**. Hors tension veut dire :
 
 1. **Débrancher** l'adaptateur, le câble USB, le câble réseau (PoE) : un interrupteur peut ne couper qu'une partie de la carte.
-2. **Retirer les piles et batteries**, y compris la pile bouton de l'horloge et une batterie soudée si on peut la déconnecter par son connecteur.
+2. **Retirer les piles et batteries**, y compris la pile bouton de l'horloge, et une batterie interne par son connecteur. Si elle est soudée et ne peut pas être déconnectée, la carte n'est pas hors tension : la traiter comme alimentée (voltmètre seulement), ou dessouder une patte de la batterie et isoler ses bornes.
 3. **Attendre** que les condensateurs se déchargent par la carte, puis **vérifier au voltmètre** (section suivante) : une LED éteinte ne prouve rien.
 
 ## Décharger un condensateur
@@ -47,10 +47,10 @@ Un condensateur garde sa charge carte débranchée, parfois des heures ou des jo
 **Méthode** :
 
 1. Mesurer la tension aux bornes du condensateur (voltmètre continu, calibre adapté).
-2. Choisir une résistance : le courant de décharge de départ vaut *V / R*, la puissance de départ *V² / R*, et la tension tombe à moins de 1 % en environ *5 × R × C*. Une valeur de 100 Ω à 1 kΩ et une puissance de 2 à 5 W conviennent dans ce périmètre. Exemple : 1000 µF sous 35 V dans 1 kΩ : 35 mA et 1,2 W au départ, déchargé en environ 5 s. Une résistance de 1/4 W fait l'affaire pour les petits condensateurs ; pour les gros, la chaleur se concentre au début de la décharge et une résistance trop petite chauffe ou casse.
+2. Choisir une résistance : le courant de décharge de départ vaut *V / R*, la puissance de départ *V² / R*, et la tension tombe à moins de 1 % en environ *5 × R × C*. Une valeur de 100 Ω à 1 kΩ et une puissance de 2 à 5 W conviennent dans ce périmètre. Exemple : 1000 µF sous 35 V dans 1 kΩ : 35 mA et 1,2 W au départ, déchargé en environ 5 s. Pire cas du périmètre : 50 V dans 100 Ω, soit 0,5 A et 25 W au départ, douze fois la puissance d'une résistance de 2 W ; c'est acceptable pour une résistance bobinée ou cimentée de 5 W tant que l'énergie reste de l'ordre de la dizaine de joules, sinon prendre 1 kΩ. Une résistance de 1/4 W suffit sous 0,1 J environ ; au-delà, la chaleur se concentre au début de la décharge et une résistance trop petite chauffe ou casse.
 3. Tenir la résistance avec des pinces crocodile ou des pointes isolées, jamais à mains nues, et la maintenir le temps calculé.
 4. **Vérifier au voltmètre** que la tension est tombée sous 1 V environ.
-5. Revérifier avant la mesure suivante : un électrolytique peut remonter de quelques pour cent de sa tension après décharge (absorption diélectrique).
+5. Revérifier avant la mesure suivante : un électrolytique aluminium peut remonter jusqu'à 10 à 15 % de sa tension après décharge (absorption diélectrique).
 
 **Jamais de tournevis** en court-circuit sur les bornes : le pic de courant abîme le condensateur et les pistes, projette du métal fondu et, sur un condensateur hors périmètre, fait un arc violent. Certains réparateurs le font par habitude ; ce n'est pas une méthode.
 
@@ -61,17 +61,18 @@ Pour remettre une carte sous tension pendant un dépannage, une alimentation de 
 **Régler** :
 
 1. Sorties **déconnectées** de la carte, régler la **tension** à la valeur nominale de la carte (lue sur l'adaptateur ou le schéma), jamais au-dessus.
-2. Régler la **limite de courant** : selon l'appareil, afficher la consigne (touche de réglage) ou court-circuiter brièvement les cordons de sortie et tourner le bouton de courant jusqu'à la valeur voulue. Le voyant **CC** (courant constant) s'allume en court-circuit : la limite fonctionne.
+2. Régler la **limite de courant** : selon l'appareil, afficher la consigne (touche de réglage), ou tourner le bouton de courant au minimum, court-circuiter les cordons de sortie, puis monter jusqu'à la valeur voulue. Le voyant **CC** (courant constant) s'allume en court-circuit : la limite fonctionne.
 3. **Partir bas** : environ 50 à 100 mA pour une petite carte logique ou un module à microcontrôleur, quelques centaines de mA pour une carte avec moteur, relais ou rétroéclairage. Ce sont des points de départ, pas des valeurs de fonctionnement : le courant de la carte en marche se lit sur sa fiche technique, son adaptateur ou une carte saine.
-4. Connecter la carte, mettre la sortie en marche et **regarder l'afficheur de courant** pendant les premières secondes.
+4. Sortie coupée (ou alimentation éteinte si elle n'a pas de touche OUTPUT), connecter la carte, mettre la sortie en marche et **regarder l'afficheur de courant** pendant les premières secondes.
 
 **Lire** :
 
-- Le voyant **CC** reste allumé et la tension s'effondre : la carte demande plus que la limite. Soit la limite est trop basse pour elle (appel de courant au démarrage, qui retombe ensuite), soit il y a un court-circuit : couper, et chercher (fiche 92) avant d'augmenter.
-- Le courant se stabilise sous la limite : remonter la limite par paliers jusqu'au fonctionnement normal, sans dépasser le courant nominal de l'adaptateur d'origine.
+- Voyant **CC** allumé, tension proche de 0 V : court-circuit probable. Couper, et chercher (fiche 92) avant d'augmenter la limite.
+- Voyant **CC** allumé, tension partielle, rien ne chauffe : la limite est trop basse pour cette carte (un régulateur à découpage sous-alimenté tire même davantage et reste bloqué ainsi). Remonter la limite par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine.
+- Courant stable sous la limite, voyant CC éteint : la carte fonctionne ; laisser la limite juste au-dessus du courant mesuré.
 - Un composant qui chauffe pendant ce temps (section Chaleur) signale où passe le courant.
 
-Respecter la **polarité** : une inversion détruit souvent la carte en une fraction de seconde, même avec une limite basse. Brancher toujours le moins (noir) en premier.
+Respecter la **polarité** : une inversion peut détruire la carte, et un condensateur tantale inversé peut prendre feu, même avec une limite basse. Brancher toujours le moins (noir) en premier.
 
 ## Les batteries : faible tension, énergie élevée
 
@@ -87,7 +88,8 @@ Une batterie de quelques volts ne présente pas de risque d'électrocution, mais
 
 - **Fer à souder** : la panne est à 300 à 400 °C. Le reposer toujours dans son support, jamais sur l'établi ; le débrancher en quittant le poste.
 - **Composants chauds** : une résistance de puissance, un régulateur linéaire ou un transistor peuvent dépasser 100 °C en fonctionnement normal, et restent chauds après la coupure.
-- **Test au doigt** : seulement dans ce périmètre basse tension, carte de préférence coupée juste avant, en effleurant **brièvement du bout ou du dos du doigt**, jamais en saisissant. Un composant qu'on ne peut pas toucher plus d'une seconde dépasse environ 60 °C. Mieux : un thermomètre à thermocouple, une caméra thermique (fiche 03), ou une goutte d'alcool isopropylique qui s'évapore vite sur le point chaud.
+- **Trouver le point chaud** : de préférence un thermomètre à thermocouple ou une caméra thermique (fiche 03), ou une seule goutte d'alcool isopropylique qui s'évapore vite sur le point chaud ; l'alcool est très inflammable : pas de fer ni d'étincelle à proximité.
+- **Test au doigt**, en dernier recours, seulement dans ce périmètre basse tension, carte de préférence coupée juste avant : approcher d'abord le dos du doigt sans toucher (on sent la chaleur rayonnée), puis effleurer **brièvement**, jamais saisir. Un composant qu'on ne peut pas toucher plus d'une seconde est trop chaud pour être normal sur une carte basse puissance.
 - **Fumée, odeur de brûlé, gonflement** : couper l'alimentation tout de suite, avant de chercher d'où ça vient.
 
 ## L'électricité statique (ESD)
@@ -107,7 +109,7 @@ flowchart TD
   B -- non --> C{Mesure prévue}
   C -- voltmètre sous tension --> D[Alimentation limitée en courant, limite basse, polarité vérifiée]
   D --> E{Voyant CC allumé ou composant chaud ?}
-  E -- oui --> F[Couper, chercher le court-circuit avant d'augmenter la limite]
+  E -- oui --> F[Couper ; tension proche de 0 V : chercher le court-circuit, fiche 92]
   E -- non --> G[Mesurer, une seule pointe tenue, l'autre en pince crocodile]
   C -- ohmmètre, bipeur, diode, capacité --> H[Débrancher, retirer piles et batteries]
   H --> I[Mesurer la tension des gros condensateurs]
@@ -134,10 +136,10 @@ flowchart TD
 
 - CEI 60479-1, *Effets du courant sur l'homme et les animaux domestiques — Partie 1 : aspects généraux* (impédance du corps en fonction de la tension, seuils de fibrillation en courant continu et alternatif) ; norme payante, résumée par la plupart des cours de sécurité électrique.
 - CEI 61140, *Protection contre les chocs électriques* (classes de très basse tension), pour situer les seuils de ces fiches, plus prudents.
-- Fluke, *ABCs of multimeter safety* (catégories de mesure, fusibles des entrées courant, cordons) — <https://www.fluke.com/en-us/learn/blog/safety>
-- Keysight, notes d'application sur les alimentations de laboratoire (modes tension constante et courant constant, réglage de la limite) — <https://www.keysight.com/us/en/products/dc-power-supplies.html>
+- Fluke, *ABCs of multimeter safety*, note d'application (catégories de mesure, fusibles des entrées courant, cordons) ; à chercher sous ce titre sur fluke.com.
+- Keysight, *Understanding Constant Voltage and Constant Current Operation* et le guide d'utilisation de ses alimentations E36100 (modes tension constante et courant constant, réglage de la limite) ; à chercher sous ces titres sur keysight.com.
 - Battery University, *BU-304a: Safety Concerns with Li-ion* (court-circuit, emballement thermique) — <https://batteryuniversity.com/article/bu-304a-safety-concerns-with-li-ion>
 - Battery University, *BU-703: Health Concerns with Batteries* (hydrogène des batteries au plomb, piles bouton avalées) — <https://batteryuniversity.com/article/bu-703-health-concerns-with-batteries>
-- IEEE 802.3bt, alimentation par Ethernet (tension jusqu'à 57 V).
-- EEVblog forum, fils sur la décharge des condensateurs et les dangers des flashs d'appareils photo — <https://www.eevblog.com/forum/>
-- ESD Association, ANSI/ESD S20.20 (bracelet relié à la terre à travers 1 MΩ).
+- IEEE 802.3 (af, at, bt), alimentation par Ethernet (tension de sortie jusqu'à 57 V).
+- EEVblog forum, section *Beginners*, nombreux fils sur la décharge des condensateurs et les flashs d'appareils photo jetables (environ 300 V) — <https://www.eevblog.com/forum/beginners/>
+- ESD Association, ANSI/ESD S1.1 (bracelets : résistance série de 1 MΩ) et ANSI/ESD S20.20 (programme de protection ESD).

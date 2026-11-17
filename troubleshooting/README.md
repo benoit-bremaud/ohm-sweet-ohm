@@ -117,6 +117,8 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 
 | Technique | Fiche de base | Utilisée dans |
 | --- | --- | --- |
+| Décharge d'un condensateur | [00](00_securite/README.md) | — |
+| Alimentation limitée en courant | [00](00_securite/README.md) | — |
 | Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | — |
 | Ohmmètre | [01](01_multimetre/README.md) | — |
 | Bipeur (continuité) | [01](01_multimetre/README.md) | — |
