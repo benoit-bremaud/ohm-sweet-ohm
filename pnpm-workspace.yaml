@@ -7,3 +7,9 @@ auditConfig:
     # braces DoS via deeply nested patterns: no patched version exists; only reached through
     # markdownlint-cli2 (dev tool) on the repository's own glob patterns, never untrusted input.
     - GHSA-vfj7-8cjw-p6xm
+    # picomatch ReDoS through single-branch repeated extglobs (#112): no patched version exists
+    # (2.x via astro > unstorage > anymatch and markdownlint-cli2 > micromatch; 4.x via astro,
+    # vite, tinyglobby, typescript-eslint). It needs an attacker-supplied glob pattern; every pattern here comes from
+    # the repository or its config (astro route cache not enabled, sessions off), never from a
+    # request. Remove once patched 2.x and 4.x releases are in the lockfile.
+    - GHSA-fc5q-39xc-vjpf
