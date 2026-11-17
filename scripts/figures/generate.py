@@ -21,6 +21,7 @@ import guide_13
 import guide_20
 import guide_21
 import guide_22
+import guide_23
 
 ROOT = Path(__file__).resolve().parents[2] / "troubleshooting"
 
@@ -36,6 +37,7 @@ GUIDES = {
     "20_condensateur_ceramique": guide_20.FIGURES,
     "21_condensateur_film": guide_21.FIGURES,
     "22_condensateur_electrolytique": guide_22.FIGURES,
+    "23_condensateur_tantale": guide_23.FIGURES,
 }
 
 

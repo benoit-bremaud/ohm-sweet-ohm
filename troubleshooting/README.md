@@ -39,7 +39,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 | [20 Condensateur céramique (MLCC)](20_condensateur_ceramique/README.md) | fréquent |
 | [21 Condensateur film](21_condensateur_film/README.md) | occasionnel |
 | [22 Condensateur électrolytique aluminium](22_condensateur_electrolytique/README.md) | très fréquent |
-| 23 Condensateur tantale | — |
+| [23 Condensateur tantale](23_condensateur_tantale/README.md) | fréquent |
 | 24 Supercondensateur | — |
 
 ### 3. Magnétiques — #87

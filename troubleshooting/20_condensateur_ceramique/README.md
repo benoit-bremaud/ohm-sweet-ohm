@@ -118,7 +118,7 @@ Les MLCC de découplage sont tous branchés de la même façon : une terminaison
 Ce que cette mesure ne dit pas :
 
 - **Lequel** des composants est en court-circuit : la lecture est la même sur C1, C2 et C3, à quelques centièmes d'ohm près que le multimètre ne distingue pas.
-- Si c'est un condensateur : une diode de protection, un transistor ou un circuit intégré du même rail donne exactement la même lecture. Le condensateur céramique est le suspect le plus courant avec le condensateur tantale (fiche 23), pas le seul.
+- Si c'est un condensateur : une diode de protection, un transistor ou un circuit intégré du même rail donne exactement la même lecture. Le condensateur céramique est le suspect le plus courant avec le condensateur tantale (fiche [23](../23_condensateur_tantale/README.md)), pas le seul.
 
 Le capacimètre en circuit additionne tous les condensateurs du rail et ne renseigne pas sur l'un d'eux. L'ohmmètre ne voit pas non plus un MLCC ouvert : ses voisins le masquent.
 

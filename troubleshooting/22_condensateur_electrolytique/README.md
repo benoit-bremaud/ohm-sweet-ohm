@@ -31,7 +31,7 @@ Repère **C** sur la carte. Le dessus des boîtiers porte souvent des entailles 
 
 - **Radial** : la bande imprimée sur le côté du boîtier, avec ses signes −, longe la patte **négative**. Sur un composant neuf, la patte négative est aussi la plus courte.
 - **CMS** : le secteur ou la barre de couleur sur le dessus du boîtier est du côté **négatif**.
-- **Piège** : sur un condensateur tantale, et sur un condensateur aluminium à électrolyte solide (polymère), le repère désigne le **positif** (fiche 23). Vérifier la famille du composant avant de se fier à une bande.
+- **Piège** : sur un condensateur tantale, et sur un condensateur aluminium à électrolyte solide (polymère), le repère désigne le **positif** (fiche [23](../23_condensateur_tantale/README.md)). Vérifier la famille du composant avant de se fier à une bande.
 
 Pourquoi le sens compte : la couche d'oxyde qui sert d'isolant ne tient qu'**1 à 1,5 V** à l'envers. Au-delà, le condensateur conduit, chauffe et produit du gaz : l'évent s'ouvre, ou le condensateur se met en court-circuit.
 
