@@ -137,7 +137,7 @@ Carte alimentée, sélecteur sur **V continu**, pointe noire à la masse, pointe
 
 | Amont | Aval | Verdict |
 | --- | --- | --- |
-| Tension du rail | même tension | le fusible conduit : chercher plus loin |
+| Tension du rail | même tension | le fusible conduit, sauf si le rail aval peut être alimenté par une autre source (seconde alimentation, pile, protection interne d'un circuit intégré) : dans ce cas, confirmer hors tension au bipeur ; sinon chercher plus loin |
 | Tension du rail | 0 V, ou une tension résiduelle faible | fusible ouvert |
 | 0 V | 0 V | l'alimentation n'arrive pas : chercher en amont |
 
