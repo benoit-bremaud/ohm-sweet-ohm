@@ -118,14 +118,17 @@ def test_figure_draws_one_probe_pair_per_meter(
 
 
 def test_diode_figure_puts_the_red_probe_on_the_anode_then_on_the_cathode() -> None:
+    svg = guide_01.fig_diode()
     tips = re.findall(
-        r'data-probe="(red|black)" transform="translate\(([\d.]+) ([\d.]+)\)',
-        guide_01.fig_diode(),
+        r'data-probe="(red|black)" transform="translate\(([\d.]+) ([\d.]+)\)', svg
     )
     (c1, _, y1), (c2, _, y2), (c3, _, y3), (c4, _, y4) = tips
-    # the anode is drawn above the cathode in both panels
+    # the anode is labelled above the cathode in both panels
     assert (c1, c2) == ("red", "black") and float(y1) < float(y2)  # forward
     assert (c3, c4) == ("black", "red") and float(y3) < float(y4)  # reversed
+    # the red contact dot sits under the red probe tip
+    red_dots = re.findall(r'cy="([\d.]+)" r="5" fill="#dc2626"', svg)
+    assert [float(y) for y in red_dots] == [float(y1), float(y4)]
 
 
 @pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)
