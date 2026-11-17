@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 558" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Mode courant : mesure en série, et piège du cordon oublié sur la douille 10 A</title>
+  <desc id="d">À gauche, la mesure : sélecteur sur ampères continus, cordon rouge dans la douille 10 A, l'appareil est inséré en série dans le fil coupé entre une alimentation limitée et sa charge ; il lit 0,150 A. À droite, le piège : sélecteur sur volts continus mais cordon rouge resté dans la douille 10 A, pointes en parallèle sur une batterie ; le shunt de l'appareil court-circuite la source, des dizaines d'ampères circulent, et la douille 10 A est souvent sans fusible.</desc>
+  <style>
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}
+    .wire{stroke:#1f2933;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .panel{fill:#f3f5f8;stroke:#d5dbe3}.grid{stroke:#d5dbe3;stroke-width:1.5;stroke-dasharray:5 5;fill:none}
+    .ok{fill:#15803d}.no{fill:#b91c1c}.warn{fill:#b45309}.blue{fill:#2563eb}.amber{fill:#b45309}
+    .blk{stroke:#20242b}.blkf{fill:#20242b}
+    .flow{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:1 13;animation:run 1.1s linear infinite}
+    .fb{stroke:#2563eb}.fa{stroke:#d97706}.fr{stroke:#dc2626}
+    @keyframes run{to{stroke-dashoffset:-14}}
+    @media (prefers-reduced-motion: reduce){.flow{animation:none}}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.wire{stroke:#c9d1d9}
+      .panel{fill:#161b22;stroke:#30363d}.grid{stroke:#30363d}
+      .ok{fill:#4ade80}.no{fill:#f87171}.warn{fill:#fbbf24}.blue{fill:#60a5fa}.amber{fill:#fbbf24}
+      .blk{stroke:#8b949e}.blkf{fill:#8b949e}.fb{stroke:#60a5fa}.fa{stroke:#fbbf24}.fr{stroke:#f87171}
+    }
+  </style>
+  <rect class="bg" width="760" height="558" rx="16"/>
+  <text class="fg" x="24" y="38" font-size="20" font-weight="700">Mode courant : en série, et jamais oublié sur la douille 10 A</text>
+  <text class="mut" x="24" y="60" font-size="14">Entre les douilles 10 A et COM, l'appareil est un fil (shunt de quelques milliohms)</text>
+  <path class="grid" d="M380 84 V480"/>
+  <text class="fg" x="20" y="100" font-size="15" font-weight="700">La mesure : en série, circuit ouvert</text>
+  <g data-sel="ADC" transform="translate(24 116) scale(0.9)">
+    <rect width="180" height="310" rx="24" fill="#f2a900"/>
+    <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
+    <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
+    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">0.150</text>
+    <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">A</text>
+    <path d="M160.3 155.1 A71 71 0 0 1 46.3 220.9" fill="none" stroke="#6b7482" stroke-width="1.5"/>
+    <text x="131.0" y="240.0" font-size="13" font-weight="700" text-anchor="middle" fill="#aeb6c2">Ω</text>
+    <path d="M90.0 128.0 L90.0 122.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="113.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">OFF</text>
+    <path d="M108.5 133.0 L111.5 127.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="118.0" y="120.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V~</text>
+    <path d="M122.0 146.5 L127.2 143.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="133.5" y="141.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V</text>
+    <path d="M139.5 134.0 h9 M139.5 138.0 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <path d="M127.0 165.0 L133.0 165.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="146.0" y="169.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2M</text>
+    <path d="M122.0 183.5 L127.2 186.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="138.5" y="197.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200k</text>
+    <path d="M108.5 197.0 L111.5 202.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="118.0" y="217.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">20k</text>
+    <path d="M90.0 202.0 L90.0 208.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="225.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2k</text>
+    <path d="M71.5 197.0 L68.5 202.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="62.0" y="217.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200</text>
+    <path d="M58.0 183.5 L52.8 186.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="35.5" cy="193.0" r="2" fill="#aeb6c2"/>
+    <path d="M39.5 190.0 q3 3 0 6 M43.5 188.0 q5 5 0 10 M47.5 186.0 q7 7 0 14" stroke="#aeb6c2" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M53.0 165.0 L47.0 165.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M26.0 165.0 h14 M30.0 161.0 v8 l7 -4 z M37.0 161.0 v8" stroke="#aeb6c2" stroke-width="1.3" fill="#aeb6c2"/>
+    <path d="M58.0 146.5 L52.8 143.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M33.5 137.0 h6 M39.5 132.0 v10 M43.5 132.0 v10 M43.5 137.0 h6" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <path d="M71.5 133.0 L68.5 127.8" stroke="#ffd54a" stroke-width="3" stroke-linecap="round"/>
+    <text x="57.0" y="120.5" font-size="12" text-anchor="middle" font-weight="700" fill="#ffd54a">A</text>
+    <path d="M63.0 113.5 h9 M63.0 117.5 h2 m1.5 0 h2 m1.5 0 h2" stroke="#ffd54a" stroke-width="1.8" fill="none"/>
+    <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <g transform="rotate(330 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
+    <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
+    <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#f59e0b" stroke-width="2"/>
+    <text x="90" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">COM</text>
+    <circle cx="90" cy="283" r="8" fill="#0c0e11" stroke="#9aa7b4" stroke-width="2"/>
+    <text x="135" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">VΩ</text>
+    <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <rect class="panel" x="246" y="116" width="100" height="62" rx="8" stroke-width="1.5"/>
+  <text class="fg" x="296.0" y="145.0" font-size="13" text-anchor="middle" font-weight="700">Alim. 12 V</text>
+  <text class="mut" x="296.0" y="162.0" font-size="11" text-anchor="middle">limitée</text>
+  <text class="no" x="256" y="190" font-size="15" text-anchor="end" font-weight="700">+</text>
+  <text class="fg" x="338" y="190" font-size="15" font-weight="700">−</text>
+  <path class="wire" d="M262 178 V204 M262 234 V290 M330 178 V290"/>
+  <rect class="panel" x="246" y="290" width="100" height="50" rx="8" stroke-width="1.5"/>
+  <text class="fg" x="296.0" y="320.0" font-size="13" text-anchor="middle" font-weight="700">Charge</text>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M105.0 370.7 V410.70000000000005 C105.0 462.70000000000005 230 462.70000000000005 230 330 V270 C230 246 244 234 262 234"/>
+  <circle class="blkf" cx="105.0" cy="370.7" r="6.5"/>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M64.5 370.7 V386.70000000000005 C64.5 430.70000000000005 208 436.70000000000005 208 300 V240 C208 212 232 204 262 204"/>
+  <circle fill="#dc2626" cx="64.5" cy="370.7" r="6.5"/>
+  <path class="flow fb" d="M339 284 V186"/>
+  <text class="blue" x="348" y="244" font-size="13" font-weight="700">I</text>
+  <text class="mut" x="296" y="372" font-size="12" text-anchor="middle">Le courant traverse</text>
+  <text class="mut" x="296" y="388" font-size="12" text-anchor="middle">l'appareil : 150 mA</text>
+  <circle cx="262" cy="204" r="5" fill="#dc2626"/>
+  <circle class="blkf" cx="262" cy="234" r="5"/>
+  <text class="fg" x="400" y="100" font-size="15" font-weight="700">Le piège : en parallèle, cordon resté sur 10 A</text>
+  <g data-sel="VDC" transform="translate(404 116) scale(0.9)">
+    <rect width="180" height="310" rx="24" fill="#f2a900"/>
+    <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
+    <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
+    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">0.00</text>
+    <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">V</text>
+    <path d="M160.3 155.1 A71 71 0 0 1 46.3 220.9" fill="none" stroke="#6b7482" stroke-width="1.5"/>
+    <text x="131.0" y="240.0" font-size="13" font-weight="700" text-anchor="middle" fill="#aeb6c2">Ω</text>
+    <path d="M90.0 128.0 L90.0 122.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="113.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">OFF</text>
+    <path d="M108.5 133.0 L111.5 127.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="118.0" y="120.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V~</text>
+    <path d="M122.0 146.5 L127.2 143.5" stroke="#ffd54a" stroke-width="3" stroke-linecap="round"/>
+    <text x="133.5" y="141.0" font-size="12" text-anchor="middle" font-weight="700" fill="#ffd54a">V</text>
+    <path d="M139.5 134.0 h9 M139.5 138.0 h2 m1.5 0 h2 m1.5 0 h2" stroke="#ffd54a" stroke-width="1.8" fill="none"/>
+    <path d="M127.0 165.0 L133.0 165.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="146.0" y="169.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2M</text>
+    <path d="M122.0 183.5 L127.2 186.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="138.5" y="197.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200k</text>
+    <path d="M108.5 197.0 L111.5 202.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="118.0" y="217.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">20k</text>
+    <path d="M90.0 202.0 L90.0 208.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="225.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2k</text>
+    <path d="M71.5 197.0 L68.5 202.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="62.0" y="217.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200</text>
+    <path d="M58.0 183.5 L52.8 186.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="35.5" cy="193.0" r="2" fill="#aeb6c2"/>
+    <path d="M39.5 190.0 q3 3 0 6 M43.5 188.0 q5 5 0 10 M47.5 186.0 q7 7 0 14" stroke="#aeb6c2" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M53.0 165.0 L47.0 165.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M26.0 165.0 h14 M30.0 161.0 v8 l7 -4 z M37.0 161.0 v8" stroke="#aeb6c2" stroke-width="1.3" fill="#aeb6c2"/>
+    <path d="M58.0 146.5 L52.8 143.5" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M33.5 137.0 h6 M39.5 132.0 v10 M43.5 132.0 v10 M43.5 137.0 h6" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <path d="M71.5 133.0 L68.5 127.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="57.0" y="120.5" font-size="9.5" text-anchor="middle" fill="#aeb6c2">A</text>
+    <path d="M63.0 113.5 h9 M63.0 117.5 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <g transform="rotate(60 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
+    <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
+    <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#f59e0b" stroke-width="2"/>
+    <text x="90" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">COM</text>
+    <circle cx="90" cy="283" r="8" fill="#0c0e11" stroke="#9aa7b4" stroke-width="2"/>
+    <text x="135" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">VΩ</text>
+    <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <rect class="panel" x="626" y="116" width="100" height="62" rx="8" stroke-width="1.5"/>
+  <text class="fg" x="676.0" y="138.0" font-size="13" text-anchor="middle" font-weight="700">Batterie</text>
+  <text class="mut" x="676.0" y="155.0" font-size="11" text-anchor="middle">ou alim.</text>
+  <text class="mut" x="676.0" y="169.0" font-size="11" text-anchor="middle">non limitée</text>
+  <text class="no" x="636" y="190" font-size="15" text-anchor="end" font-weight="700">+</text>
+  <text class="fg" x="718" y="190" font-size="15" font-weight="700">−</text>
+  <path class="wire" d="M642 178 V204 M710 178 V204"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M485.0 370.7 V406.70000000000005 C485.0 448.70000000000005 630 448.70000000000005 710 448.70000000000005 C746 448.70000000000005 746 330 746 280 C746 230 732 204 710 204"/>
+  <circle class="blkf" cx="485.0" cy="370.7" r="6.5"/>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M444.5 370.7 V386.70000000000005 C444.5 430.70000000000005 588 436.70000000000005 588 300 V240 C588 212 612 204 642 204"/>
+  <circle fill="#dc2626" cx="444.5" cy="370.7" r="6.5"/>
+  <circle cx="444.5" cy="370.7" r="15" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="4 3"/>
+  <path class="flow fr" d="M651 186 V214 M701 214 V186"/>
+  <text class="no" x="676" y="262" font-size="34" text-anchor="middle" font-weight="700">✗</text>
+  <text class="no" x="676" y="288" font-size="13" text-anchor="middle" font-weight="700">court-circuit</text>
+  <text class="mut" x="676" y="308" font-size="12" text-anchor="middle">des dizaines</text>
+  <text class="mut" x="676" y="324" font-size="12" text-anchor="middle">d'ampères</text>
+  <text class="mut" x="676" y="350" font-size="12" text-anchor="middle">douille 10 A</text>
+  <text class="mut" x="676" y="366" font-size="12" text-anchor="middle">souvent</text>
+  <text class="mut" x="676" y="382" font-size="12" text-anchor="middle">sans fusible</text>
+  <circle cx="642" cy="204" r="5" fill="#dc2626"/>
+  <circle class="blkf" cx="710" cy="204" r="5"/>
+  <text class="ok" x="190" y="478" font-size="14" text-anchor="middle" font-weight="700">✓ Sélecteur sur A, cordon rouge sur 10 A</text>
+  <text class="mut" x="190" y="496" font-size="12" text-anchor="middle">le circuit est coupé, l'appareil le referme</text>
+  <text class="no" x="570" y="478" font-size="14" text-anchor="middle" font-weight="700">✗ Sélecteur sur V, cordon rouge resté sur 10 A</text>
+  <text class="mut" x="570" y="496" font-size="12" text-anchor="middle">« pour lire la tension » : la source est court-circuitée</text>
+  <text class="mut" x="24" y="524" font-size="12">Remettre le cordon rouge dans la douille VΩ avant chaque mesure de tension.</text>
+  <text class="mut" x="24" y="541" font-size="12">La mesure de courant elle-même relève de la fiche 91.</text>
+</svg>

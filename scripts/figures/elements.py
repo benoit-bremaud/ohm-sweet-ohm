@@ -1,0 +1,406 @@
+"""Drawing elements shared by the troubleshooting figures (plain SVG strings, standard library only).
+
+Every element returns SVG markup positioned in the figure's coordinates; the instruments also
+return the points a lead or a wire attaches to. Instrument colours are fixed; everything drawn
+on the page background uses the CSS classes of STYLE so it follows the light or dark theme.
+"""
+
+from __future__ import annotations
+
+import math
+from typing import NamedTuple
+
+Point = tuple[float, float]
+
+FONT = "system-ui, -apple-system, Segoe UI, sans-serif"
+MONO = "ui-monospace, Menlo, Consolas, monospace"
+
+STYLE = """
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}
+    .wire{stroke:#1f2933;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .panel{fill:#f3f5f8;stroke:#d5dbe3}.grid{stroke:#d5dbe3;stroke-width:1.5;stroke-dasharray:5 5;fill:none}
+    .ok{fill:#15803d}.no{fill:#b91c1c}.warn{fill:#b45309}.blue{fill:#2563eb}.amber{fill:#b45309}
+    .blk{stroke:#20242b}.blkf{fill:#20242b}
+    .flow{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:1 13;animation:run 1.1s linear infinite}
+    .fb{stroke:#2563eb}.fa{stroke:#d97706}.fr{stroke:#dc2626}
+    @keyframes run{to{stroke-dashoffset:-14}}
+    @media (prefers-reduced-motion: reduce){.flow{animation:none}}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.wire{stroke:#c9d1d9}
+      .panel{fill:#161b22;stroke:#30363d}.grid{stroke:#30363d}
+      .ok{fill:#4ade80}.no{fill:#f87171}.warn{fill:#fbbf24}.blue{fill:#60a5fa}.amber{fill:#fbbf24}
+      .blk{stroke:#8b949e}.blkf{fill:#8b949e}.fb{stroke:#60a5fa}.fa{stroke:#fbbf24}.fr{stroke:#f87171}
+    }
+"""
+
+# Dial positions of the multimeter, clockwise from the top, one every DIAL_STEP degrees.
+POS = [
+    "OFF",
+    "V~",
+    "VDC",
+    "2M",
+    "200k",
+    "20k",
+    "2k",
+    "200",
+    "BEEP",
+    "DIODE",
+    "CAP",
+    "ADC",
+]
+OHM_RANGES = ("2M", "200k", "20k", "2k", "200")
+DIAL_STEP = 360 // len(POS)
+
+
+class Jacks(NamedTuple):
+    """Centres of the multimeter input jacks: current (10 A), common, volts and ohms."""
+
+    a: Point
+    com: Point
+    v: Point
+
+
+def svg(w: int, h: int, title: str, desc: str, body: str) -> str:
+    """Wrap `body` in a standalone, accessible SVG document of w × h user units."""
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" role="img" '
+        f'aria-labelledby="t d" font-family="{FONT}">\n'
+        f'  <title id="t">{title}</title>\n  <desc id="d">{desc}</desc>\n'
+        f"  <style>{STYLE}  </style>\n"
+        f'  <rect class="bg" width="{w}" height="{h}" rx="16"/>\n' + body + "</svg>\n"
+    )
+
+
+def text(
+    x: float,
+    y: float,
+    s: str,
+    cls: str = "fg",
+    size: float = 13,
+    anchor: str = "start",
+    weight: int | None = None,
+) -> str:
+    """One line of text; `cls` is a theme class of STYLE."""
+    w = f' font-weight="{weight}"' if weight else ""
+    a = f' text-anchor="{anchor}"' if anchor != "start" else ""
+    return (
+        f'  <text class="{cls}" x="{x}" y="{y}" font-size="{size}"{a}{w}>{s}</text>\n'
+    )
+
+
+def dial_angle(sel: str) -> int:
+    """Clockwise angle of dial position `sel`, in degrees from the top; ValueError if unknown."""
+    if sel not in POS:
+        raise ValueError(f"unknown dial position {sel!r}, expected one of {POS}")
+    return POS.index(sel) * DIAL_STEP
+
+
+def _dial_label(name: str, px: float, py: float, on: bool, col: str) -> str:
+    size = 12 if on else 9.5
+    wt = ' font-weight="700"' if on else ""
+    sw = 1.8 if on else 1.3
+    if name in ("VDC", "ADC"):  # letter plus the direct-current symbol
+        return (
+            f'    <text x="{px - 5:.1f}" y="{py + 4:.1f}" font-size="{size}" text-anchor="middle"{wt} fill="{col}">{name[0]}</text>\n'
+            f'    <path d="M{px + 1:.1f} {py - 3:.1f} h9 M{px + 1:.1f} {py + 1:.1f} h2 m1.5 0 h2 m1.5 0 h2" stroke="{col}" stroke-width="{sw}" fill="none"/>\n'
+        )
+    if name == "DIODE":
+        return f'    <path d="M{px - 8:.1f} {py:.1f} h14 M{px - 4:.1f} {py - 4:.1f} v8 l7 -4 z M{px + 3:.1f} {py - 4:.1f} v8" stroke="{col}" stroke-width="{sw}" fill="{col}"/>\n'
+    if name == "BEEP":  # continuity: a dot and three sound waves
+        return (
+            f'    <circle cx="{px - 6:.1f}" cy="{py:.1f}" r="2" fill="{col}"/>\n'
+            f'    <path d="M{px - 2:.1f} {py - 3:.1f} q3 3 0 6 M{px + 2:.1f} {py - 5:.1f} q5 5 0 10 M{px + 6:.1f} {py - 7:.1f} q7 7 0 14" stroke="{col}" stroke-width="{sw}" fill="none" stroke-linecap="round"/>\n'
+        )
+    if name == "CAP":  # capacitance: two plates
+        return f'    <path d="M{px - 8:.1f} {py:.1f} h6 M{px - 2:.1f} {py - 5:.1f} v10 M{px + 2:.1f} {py - 5:.1f} v10 M{px + 2:.1f} {py:.1f} h6" stroke="{col}" stroke-width="{sw}" fill="none"/>\n'
+    return f'    <text x="{px:.1f}" y="{py + 4:.1f}" font-size="{size}" text-anchor="middle"{wt} fill="{col}">{name}</text>\n'
+
+
+def meter(
+    x: float, y: float, s: float, sel: str, lcd: str, unit: str, flag: str = ""
+) -> tuple[str, Jacks]:
+    """Hand-held multimeter at (x, y), scale `s`, dial on `sel`, display `lcd` + `unit`.
+
+    `flag` is the small annunciator in the display corner (AC, the beeper...). The group carries
+    `data-sel` so a test can check the drawn position. Returns (svg, Jacks).
+    """
+    a_sel = dial_angle(sel)
+    cx, cy = 90, 165
+    o = [f'  <g data-sel="{sel}" transform="translate({x} {y}) scale({s})">\n']
+    o.append('    <rect width="180" height="310" rx="24" fill="#f2a900"/>\n')
+    o.append(
+        '    <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>\n'
+    )
+    o.append(
+        '    <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>\n'
+    )
+    o.append(
+        '    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>\n'
+    )
+    if flag:
+        o.append(
+            f'    <text x="31" y="38" font-size="10" font-weight="700" fill="#1a2016">{flag}</text>\n'
+        )
+    o.append(
+        f'    <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="{MONO}" fill="#1a2016">{lcd}</text>\n'
+    )
+    o.append(
+        f'    <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">{unit}</text>\n'
+    )
+
+    def pt(a: float, r: float) -> Point:
+        return cx + r * math.sin(math.radians(a)), cy - r * math.cos(math.radians(a))
+
+    # bracket and symbol over the ohm ranges
+    a1, a2 = dial_angle(OHM_RANGES[0]) - 8, dial_angle(OHM_RANGES[-1]) + 8
+    x1, y1 = pt(a1, 71)
+    x2, y2 = pt(a2, 71)
+    o.append(
+        f'    <path d="M{x1:.1f} {y1:.1f} A71 71 0 0 1 {x2:.1f} {y2:.1f}" fill="none" stroke="#6b7482" stroke-width="1.5"/>\n'
+    )
+    ox, oy = pt((a1 + a2) / 2, 82)
+    o.append(
+        f'    <text x="{ox:.1f}" y="{oy + 4:.1f}" font-size="13" font-weight="700" text-anchor="middle" fill="#aeb6c2">Ω</text>\n'
+    )
+    for name in POS:
+        a = dial_angle(name)
+        on = name == sel
+        col = "#ffd54a" if on else "#aeb6c2"
+        tx1, ty1 = pt(a, 37)
+        tx2, ty2 = pt(a, 43)
+        o.append(
+            f'    <path d="M{tx1:.1f} {ty1:.1f} L{tx2:.1f} {ty2:.1f}" stroke="{col}" stroke-width="{3 if on else 1.5}" stroke-linecap="round"/>\n'
+        )
+        px, py = pt(a, 56)
+        o.append(_dial_label(name, px, py, on, col))
+    o.append(
+        f'    <circle cx="{cx}" cy="{cy}" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>\n'
+    )
+    o.append(
+        f'    <g transform="rotate({a_sel} {cx} {cy})"><rect x="{cx - 8}" y="{cy - 33}" width="16" height="66" rx="8" fill="#555c68"/>'
+        f'<path d="M{cx} {cy - 28} V{cy - 8}" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>\n'
+    )
+    for jx, lab, ring in (
+        (45, "10A", "#f59e0b"),
+        (90, "COM", "#9aa7b4"),
+        (135, "VΩ", "#dc2626"),
+    ):
+        o.append(
+            f'    <text x="{jx}" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">{lab}</text>\n'
+        )
+        o.append(
+            f'    <circle cx="{jx}" cy="283" r="8" fill="#0c0e11" stroke="{ring}" stroke-width="2"/>\n'
+        )
+    o.append("  </g>\n")
+    return "".join(o), Jacks(*((x + jx * s, y + 283 * s) for jx in (45, 90, 135)))
+
+
+def lead(jack: Point, d: str, red: bool) -> str:
+    """Test lead from a jack: plug plus cable; `d` is the path after the jack point."""
+    col = 'stroke="#dc2626"' if red else 'class="blk"'
+    fill = 'fill="#dc2626"' if red else 'class="blkf"'
+    jx, jy = jack
+    return (
+        f'  <path {col} stroke-width="4" fill="none" stroke-linecap="round" d="M{jx:.1f} {jy:.1f} {d}"/>\n'
+        f'  <circle {fill} cx="{jx:.1f}" cy="{jy:.1f}" r="6.5"/>\n'
+    )
+
+
+def probe(
+    tx: float,
+    ty: float,
+    dx: float,
+    dy: float,
+    red: bool,
+    tip: float = 14,
+    handle: float = 46,
+) -> tuple[str, Point]:
+    """Probe whose metal tip touches (tx, ty); (dx, dy) points from the tip to the cable.
+
+    Returns (svg, cable end), the point where the lead leaves the handle.
+    """
+    n = math.hypot(dx, dy)
+    if n == 0:
+        raise ValueError("probe direction (dx, dy) must not be the null vector")
+    dx, dy = dx / n, dy / n
+    hx, hy = tx + dx * tip, ty + dy * tip
+    ex, ey = hx + dx * handle, hy + dy * handle
+    col = 'stroke="#dc2626"' if red else 'class="blk"'
+    return (
+        f'  <path d="M{tx:.1f} {ty:.1f} L{hx:.1f} {hy:.1f}" stroke="#aab2bd" stroke-width="3" stroke-linecap="round"/>\n'
+        f'  <path {col} d="M{hx:.1f} {hy:.1f} L{ex:.1f} {ey:.1f}" stroke-width="9" stroke-linecap="round"/>\n'
+    ), (ex, ey)
+
+
+BANDS = ["#7b3f00", "#111111", "#f97316", "#c9a227"]  # 10 kΩ 5 %
+
+
+def res_v(
+    x: float, y1: float, y2: float, w: float = 24, h: float = 64, cls: str = "wire"
+) -> str:
+    """Vertical axial resistor centred on the wire from (x, y1) to (x, y2)."""
+    cy = (y1 + y2) / 2
+    o = f'  <path class="{cls}" d="M{x} {y1} V{y2}"/>\n'
+    o += f'  <rect x="{x - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="{w / 3:.1f}" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>\n'
+    for i, c in enumerate(BANDS):
+        by = cy - h / 2 + h * (0.16 + 0.17 * i) + (h * 0.1 if i == 3 else 0)
+        o += f'  <rect x="{x - w / 2}" y="{by:.1f}" width="{w}" height="{h * 0.09:.1f}" fill="{c}"/>\n'
+    return o
+
+
+def res_h(x1: float, x2: float, y: float, h: float = 28) -> str:
+    """Horizontal axial resistor body from x1 to x2 (no leads)."""
+    w = x2 - x1
+    o = f'  <rect x="{x1}" y="{y - h / 2}" width="{w}" height="{h}" rx="9" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>\n'
+    for i, c in enumerate(BANDS):
+        bx = x1 + w * (0.16 + 0.17 * i) + (w * 0.1 if i == 3 else 0)
+        o += f'  <rect x="{bx:.1f}" y="{y - h / 2}" width="{w * 0.09:.1f}" height="{h}" fill="{c}"/>\n'
+    return o
+
+
+def diode_v(
+    x: float,
+    y1: float,
+    y2: float,
+    cathode_top: bool,
+    w: float = 16,
+    h: float = 40,
+    cls: str = "wire",
+) -> str:
+    """Vertical diode on the wire from (x, y1) to (x, y2); the black band marks the cathode."""
+    cy = (y1 + y2) / 2
+    by = cy - h / 2 + (3 if cathode_top else h - 10)
+    return (
+        f'  <path class="{cls}" d="M{x} {y1} V{y2}"/>\n'
+        f'  <rect x="{x - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="6" fill="#e2703a" stroke="#8a3d1c" stroke-width="1.5"/>\n'
+        f'  <rect x="{x - w / 2}" y="{by}" width="{w}" height="7" fill="#111111"/>\n'
+    )
+
+
+def box(
+    x: float, y: float, w: float, h: float, title: str, lines: tuple[str, ...] = ()
+) -> str:
+    """Themed block (a supply, a load) with a bold title and optional muted lines, centred."""
+    o = f'  <rect class="panel" x="{x}" y="{y}" width="{w}" height="{h}" rx="8" stroke-width="1.5"/>\n'
+    cx = x + w / 2
+    top = y + h / 2 + 5 - 7 * len(lines)
+    o += text(cx, top, title, "fg", 13, "middle", 700)
+    for i, s in enumerate(lines):
+        o += text(cx, top + 17 + 14 * i, s, "mut", 11, "middle")
+    return o
+
+
+def bench_supply(
+    x: float, y: float, volts: str, amps: str, mode: str, s: float = 1
+) -> tuple[str, Point, Point]:
+    """Bench power supply front panel: voltage and current displays, CV / CC lamps, terminals.
+
+    `mode` is "CV" (constant voltage, green lamp) or "CC" (current limit active, red lamp).
+    The group carries `data-mode`. Returns (svg, minus terminal, plus terminal).
+    """
+    if mode not in ("CV", "CC"):
+        raise ValueError(f"unknown supply mode {mode!r}, expected 'CV' or 'CC'")
+    o = [f'  <g data-mode="{mode}" transform="translate({x} {y}) scale({s})">\n']
+    o.append(
+        '    <rect width="230" height="170" rx="10" fill="#e5e7eb" stroke="#9aa3ae" stroke-width="2"/>\n'
+    )
+    o.append(
+        '    <rect x="10" y="10" width="210" height="150" rx="6" fill="#2a2e35"/>\n'
+    )
+    for dx, val, unit, col in (
+        (20, volts, "V", "#f87171"),
+        (118, amps, "A", "#4ade80"),
+    ):
+        o.append(
+            f'    <rect x="{dx}" y="20" width="92" height="40" rx="4" fill="#0c0e11" stroke="#11151a"/>\n'
+        )
+        o.append(
+            f'    <text x="{dx + 68}" y="49" font-size="24" font-weight="700" text-anchor="end" font-family="{MONO}" fill="{col}">{val}</text>\n'
+        )
+        o.append(
+            f'    <text x="{dx + 73}" y="49" font-size="13" font-weight="700" fill="{col}">{unit}</text>\n'
+        )
+    for lx, name, lit in ((40, "CV", "#22c55e"), (138, "CC", "#ef4444")):
+        on = name == mode
+        o.append(
+            f'    <circle cx="{lx}" cy="76" r="5" fill="{lit if on else "#4b5563"}"'
+            + (f' stroke="{lit}" stroke-opacity="0.45" stroke-width="5"' if on else "")
+            + "/>\n"
+        )
+        o.append(
+            f'    <text x="{lx + 12}" y="80" font-size="11" font-weight="700" fill="{"#ffffff" if on else "#8b949e"}">{name}</text>\n'
+        )
+    for kx, lab in ((66, "TENSION"), (164, "COURANT")):
+        o.append(
+            f'    <circle cx="{kx}" cy="112" r="16" fill="#555c68" stroke="#16191e" stroke-width="2"/>\n'
+        )
+        o.append(
+            f'    <path d="M{kx} 112 l7 -11" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>\n'
+        )
+        o.append(
+            f'    <text x="{kx}" y="146" font-size="8" text-anchor="middle" fill="#aeb6c2">{lab}</text>\n'
+        )
+    for tx, lab, col in ((100, "−", "#20242b"), (130, "+", "#dc2626")):
+        o.append(
+            f'    <circle cx="{tx}" cy="140" r="8" fill="{col}" stroke="#aeb6c2" stroke-width="2"/>\n'
+        )
+        o.append(
+            f'    <text x="{tx}" y="126" font-size="11" font-weight="700" text-anchor="middle" fill="#ffffff">{lab}</text>\n'
+        )
+    o.append("  </g>\n")
+    return "".join(o), (x + 100 * s, y + 140 * s), (x + 130 * s, y + 140 * s)
+
+
+def cap_v(x: float, y1: float, y2: float, w: float = 46, h: float = 86) -> str:
+    """Vertical electrolytic capacitor on the wire from (x, y1) to (x, y2), plus lead on top.
+
+    The light stripe with minus signs marks the negative end.
+    """
+    cy = (y1 + y2) / 2
+    top = cy - h / 2
+    o = f'  <path class="wire" d="M{x} {y1} V{y2}"/>\n'
+    o += f'  <rect x="{x - w / 2}" y="{top}" width="{w}" height="{h}" rx="6" fill="#1e3a8a" stroke="#172554" stroke-width="1.5"/>\n'
+    o += f'  <rect x="{x - w / 2}" y="{top + h * 0.12:.1f}" width="{w}" height="3" fill="#172554"/>\n'
+    o += f'  <rect x="{x - w / 2}" y="{top + h * 0.62:.1f}" width="{w}" height="{h * 0.26:.1f}" fill="#cbd5e1"/>\n'
+    for dx in (-0.28, 0, 0.28):
+        o += f'  <rect x="{x + w * dx - 4:.1f}" y="{top + h * 0.74:.1f}" width="8" height="3" fill="#1e3a8a"/>\n'
+    return o
+
+
+def power_resistor(x1: float, x2: float, y: float, label: str, h: float = 30) -> str:
+    """Cement power resistor body from x1 to x2 with its value printed on it (no leads)."""
+    return (
+        f'  <rect x="{x1}" y="{y - h / 2}" width="{x2 - x1}" height="{h}" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>\n'
+        f'  <text x="{(x1 + x2) / 2}" y="{y + 4}" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2933">{label}</text>\n'
+    )
+
+
+def clip(x: float, y: float, red: bool) -> str:
+    """Crocodile clip gripping the point (x, y)."""
+    col = "#dc2626" if red else "#20242b"
+    return (
+        f'  <rect x="{x - 7}" y="{y - 12}" width="14" height="24" rx="4" fill="{col}" stroke="#8b949e"/>\n'
+        f'  <path d="M{x - 4} {y - 4} h8 M{x - 4} {y} h8 M{x - 4} {y + 4} h8" stroke="#c9d0d9" stroke-width="1.2"/>\n'
+    )
+
+
+NODE_A: Point = (300, 130)
+NODE_B: Point = (300, 280)
+
+
+def side_hookup(red_jack: Point, com_jack: Point, polarity: bool = True) -> str:
+    """Leads and probes of a scale-1 meter drawn at (30, 80): red on NODE_A, black on NODE_B.
+
+    `polarity` adds the + and − marks beside the probe tips.
+    """
+    o = ""
+    for (tx, ty), jack, red, d in (
+        (NODE_A, red_jack, True, "V395 C{jx:g} 425 232 425 236 340 C240 260 235 215"),
+        (NODE_B, com_jack, False, "V398 C{jx:g} 442 262 446"),
+    ):
+        p, (ex, ey) = probe(tx, ty, -0.6, 0.8, red)
+        o += lead(jack, f"{d.format(jx=jack[0])} {ex:.1f} {ey:.1f}", red) + p
+    if polarity:
+        o += text(284, 124, "+", "no", 16, "end", 700)
+        o += text(284, 274, "−", "fg", 16, "end", 700)
+    return o

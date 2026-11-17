@@ -1,0 +1,8 @@
+# Lint and format of the figure generator (#101, `just lint`).
+line-length = 88
+
+[lint]
+select = ["E", "F", "I", "UP", "B"]
+# E501: the SVG fragments and the French captions are single string literals; wrapping them
+# would split paths and sentences without making them easier to read.
+ignore = ["E501"]

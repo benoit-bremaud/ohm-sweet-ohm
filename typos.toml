@@ -1,10 +1,12 @@
 # typos configuration (#68, `just lint` and the pre-commit hook). typos only knows English, so the
 # exclusions are generated, third-party or non-English content: KiCad files, lockfiles, build and
-# coverage output, the schematic SVGs, and the French troubleshooting guides (#79).
+# coverage output, the schematic SVGs, the French troubleshooting guides (#79) and the French
+# captions of their figures (#101).
 [files]
 extend-exclude = [
   "catalogue/",
   "troubleshooting/",
+  "scripts/figures/guide_*.py",
   "build/",
   "coverage/",
   "dist/",
