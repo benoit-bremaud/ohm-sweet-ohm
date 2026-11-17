@@ -19,7 +19,7 @@ Le condensateur film est fait de deux armatures séparées par un film plastique
 
 Repère **C** sur la carte, comme tous les condensateurs. Deux lettres donnent parfois la matière : **MKT** ou **MKS** pour le polyester (PET), **MKP** pour le polypropylène (PP) ; le **M** signifie film **métallisé**.
 
-![Trois condensateurs film portant la même valeur : un boîtier rectangulaire rouge marqué 0,47 µF J 100 V, un modèle enrobé vert marqué 474J 100V et un modèle axial jaune marqué 47n 63V. En dessous, le code 474J décodé : 47 pour les chiffres significatifs, 4 pour le nombre de zéros en picofarads, J pour la tolérance de 5 % ; 474 vaut 470 nF, soit 0,47 µF](lire-le-marquage.svg)
+![Trois condensateurs film portant la même valeur : un boîtier rectangulaire rouge marqué 0,47 µF J 100 V, un modèle enrobé vert marqué 474J 100V et un modèle axial jaune marqué 470n 63V. En dessous, le code 474J décodé : 47 pour les chiffres significatifs, 4 pour le nombre de zéros en picofarads, J pour la tolérance de 5 % ; 474 vaut 470 nF, soit 0,47 µF](lire-le-marquage.svg)
 
 ### Lire la valeur
 
@@ -165,7 +165,9 @@ flowchart TD
   F -- lecture impossible --> I{Ohmmètre, calibre le plus élevé}
   F -- oui --> I
   I -- valeur fixe ou proche de 0 Ω --> J[Fuite ou court-circuit : remplacer]
+  F -- juste hors tolérance --> N[Vérifier le capacimètre sur un condensateur neuf]
   I -- OL après une montée brève --> K{Capacité conforme ?}
+  I -- OL d'emblée --> K
   K -- oui --> L[Condensateur sain : chercher ailleurs]
   K -- non --> G
   G --> M[Chercher surtension, impulsions trop fortes ou humidité]

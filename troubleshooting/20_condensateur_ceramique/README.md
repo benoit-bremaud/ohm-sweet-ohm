@@ -62,7 +62,7 @@ Une fissure n'agit pas toujours tout de suite : le condensateur peut d'abord sem
 
 ## Niveau 2 — Mesure hors circuit
 
-Condensateur dessoudé : un boîtier CMS ne permet pas de lever une seule patte. Le dessouder à l'air chaud ou avec deux fers, sans faire levier, puis le poser sur un support isolant.
+Condensateur entièrement dessoudé : sur un MLCC, chauffer une seule extrémité pour la soulever (fiche [02](../02_pieges_en_circuit/README.md)) risque de fissurer la céramique. Le dessouder à l'air chaud ou avec deux fers, sans faire levier, puis le poser sur un support isolant.
 
 ### À l'ohmmètre : l'isolement
 
@@ -89,6 +89,7 @@ Pourquoi la lecture monte avant d'afficher OL : l'ohmmètre injecte un petit cou
 | --- | --- |
 | Dans la tolérance | sain, si l'isolement est bon lui aussi |
 | Classe II, un peu en dessous de la tolérance | plausible : la capacité d'une classe II baisse avec l'âge (environ 2,5 % chaque fois que l'âge est multiplié par dix pour un X7R, jusqu'à 7 % pour un Z5U). Douteux seulement si le circuit montre un symptôme |
+| Entre les deux : nettement sous la tolérance, sans atteindre la moitié | douteux : comparer avec un condensateur neuf de même référence, remplacer au moindre symptôme |
 | Nettement en dessous (la moitié ou moins), ou instable | fissure qui a coupé des électrodes : à remplacer |
 | Lecture impossible, « OL » ou dépassement | court-circuit ou fuite : revenir à l'ohmmètre |
 
@@ -134,6 +135,8 @@ Le court-circuit dissipe de la chaleur là où il se trouve, et seulement là. O
 
 La méthode complète (injection sous tension réduite, suivi des millivolts le long du rail) est dans la fiche 92. Si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur.
 
+**Rail qui porte des condensateurs tantale** (fiche [23](../23_condensateur_tantale/README.md)) : un tantale en court-circuit peut s'enflammer. Ne relever la limite que par paliers, lunettes de protection portées, sans se pencher au-dessus de la carte, de préférence avec une caméra thermique, et couper au premier échauffement.
+
 Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber le rail : la carte fonctionne, mais consomme trop, la batterie se vide en veille, et le condensateur est tiède. La même recherche du point chaud, carte alimentée normalement sur alimentation limitée, le désigne.
 
 ### Du symptôme au condensateur suspect
@@ -150,7 +153,7 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 
 ## Niveau 4 — Méthodes avancées
 
-- **Essai d'isolement sous tension de service**, condensateur dessoudé : le multimètre teste l'isolement sous moins d'un volt, alors qu'une fissure fuit surtout sous la tension du rail. Mettre en série l'alimentation de laboratoire (tension du rail, **jamais plus que la tension de service du condensateur ni que 50 V**, limite 10 mA), une résistance de 1 kΩ et le condensateur ; mesurer en V continu aux bornes de la résistance. Après la charge, un céramique sain donne 0,0 mV ; **1 mV correspond à 1 µA de fuite**. Une lecture stable de plusieurs millivolts, ou qui augmente, condamne le condensateur. Le décharger ensuite dans la résistance.
+- **Essai d'isolement sous tension de service**, condensateur dessoudé : le multimètre teste l'isolement sous moins d'un volt, alors qu'une fissure fuit surtout sous la tension du rail. Mettre en série l'alimentation de laboratoire (tension du rail, **jamais plus que la tension de service du condensateur ni que 50 V**, limite 10 mA), une résistance de 1 kΩ et le condensateur ; mesurer en V continu aux bornes de la résistance. Lire après une minute : un céramique sain donne 0,0 mV, ou presque pour une forte valeur ; **1 mV correspond à 1 µA de fuite**. Dans le doute, comparer avec un condensateur neuf identique : une lecture nettement plus élevée que la sienne, ou qui augmente, condamne le condensateur. Le décharger ensuite dans la résistance.
 - **Millivolts le long du rail** : avec le courant injecté du niveau 3, la chute de tension dans les pistes est la plus forte en direction du court-circuit. Un multimètre qui résout 0,01 mV suffit (fiche 92).
 - **Pont LCR** : mesure la capacité à une fréquence et une tension définies, ainsi que les pertes ; certains appliquent une tension continue et montrent la capacité réelle d'une classe II en service (fiche 03).
 - **Oscilloscope** : l'ondulation et les parasites sur un rail augmentent quand un condensateur de découplage est ouvert ; comparer avec une carte saine (fiche 93).
@@ -161,19 +164,21 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ```mermaid
 flowchart TD
   A[Rail suspect, carte débranchée et déchargée] --> B{Bipeur entre le rail et la masse}
-  B -- bip continu, moins de 1 Ω --> C[Court-circuit franc sur le rail]
+  B -- bip continu, moins de 1 Ω --> C[Court-circuit ou fuite sur le rail]
   B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine ?}
   D -- oui --> E[Charge normale du rail : chercher ailleurs]
   D -- non, plus bas ici, ou pas de carte saine --> C
   B -- bip bref puis lecture qui monte --> F{Symptôme de fuite ou de découplage manquant ?}
   F -- non --> E
   F -- oui --> G[Alimentation limitée : chercher un condensateur tiède, ou comparer l'ondulation, niveau 4]
-  G --> J
+  G --> G2{Un condensateur tiède ?}
+  G2 -- oui --> J
+  G2 -- non --> L
   C --> H[Injecter un courant limité à la tension du rail au plus, chercher le point chaud]
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
-  I -- rien, même à 1 A --> L[Fiche 92 : millivolts le long du rail]
+  I -- rien, à la limite maximale atteinte --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
   M -- encore un court-circuit --> H
   M -- plus de court-circuit --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}

@@ -145,7 +145,6 @@
   <text class="mut" x="585.0" y="398" font-size="12" text-anchor="middle">temps (minutes)</text>
   <text class="mut" x="442" y="138" font-size="12">tension aux bornes (V)</text>
   <path class="blk" stroke-width="1" stroke-dasharray="4 4" fill="none" d="M450.0 325.0 H720.0"/>
-  <text class="mut" x="716.0" y="320.0" font-size="11" text-anchor="end"></text>
   <path class="fb" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M450.0 167.5 L454.5 185.8 L459.0 202.4 L463.5 217.4 L468.0 231.0 L472.5 243.2 L477.0 254.4 L481.5 264.4 L486.0 273.5 L490.5 281.7 L495.0 289.2 L499.5 295.9 L504.0 302.0 L508.5 307.5 L513.0 312.5 L517.5 317.0 L522.0 321.1 L526.5 324.8 L531.0 328.2 L535.5 331.2 L540.0 333.9 L544.5 336.4 L549.0 338.7 L553.5 340.7 L558.0 342.5 L562.5 344.2 L567.0 345.7 L571.5 347.1 L576.0 348.3 L580.5 349.4 L585.0 350.4 L589.5 351.3 L594.0 352.2 L598.5 352.9 L603.0 353.6 L607.5 354.2 L612.0 354.7 L616.5 355.2 L621.0 355.7 L625.5 356.1 L630.0 356.5 L634.5 356.8 L639.0 357.1 L643.5 357.4 L648.0 357.6 L652.5 357.9 L657.0 358.1 L661.5 358.2 L666.0 358.4 L670.5 358.6 L675.0 358.7 L679.5 358.8 L684.0 358.9 L688.5 359.0 L693.0 359.1 L697.5 359.2 L702.0 359.3 L706.5 359.4 L711.0 359.4 L715.5 359.5 L720.0 359.5"/>
   <circle class="fb" cx="526.7" cy="325.0" r="4.5" fill="#ffffff" stroke-width="2.5"/>
   <circle class="fb" cx="675.0" cy="358.7" r="4.5" fill="#ffffff" stroke-width="2.5"/>

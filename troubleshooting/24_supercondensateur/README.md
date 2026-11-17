@@ -74,20 +74,22 @@ Exemple : 1 F chargé à 5,5 V dans 100 Ω. Au départ, 55 mA et 0,3 W dans la r
 
 ### Essai de charge sur alimentation limitée
 
-1. Régler l'alimentation de laboratoire **à la tension marquée au plus** (5 V pour un modèle 5,5 V) et la limite de courant à **100 mA**.
-2. Brancher le + de l'alimentation sur le + du composant, le − sur le −.
-3. Observer : l'alimentation passe en limitation de courant, la tension monte régulièrement (environ 0,1 V par seconde pour 1 F sous 100 mA, soit 5 V en 50 s environ), puis le courant retombe vers zéro.
+1. Régler l'alimentation de laboratoire **à la tension marquée au plus** (5 V pour un modèle 5,5 V) et la limite de courant à **100 mA**. Sortie coupée.
+2. Brancher le + de l'alimentation sur le + du composant, le − sur le −, puis activer la sortie.
+3. Observer : l'alimentation passe en limitation de courant, la tension monte régulièrement (environ 0,1 V par seconde pour 1 F sous 100 mA, soit 5 V en 50 s environ ; durée ≈ *C × U / I*), puis le courant retombe vers zéro.
 
 | Lecture | Verdict |
 | --- | --- |
-| La tension monte en quelques dizaines de secondes, puis le courant retombe | il se charge : poursuivre avec les deux mesures suivantes |
+| La tension monte régulièrement, dans la durée prévue, puis le courant retombe | il se charge : poursuivre avec les deux mesures suivantes |
 | La tension reste proche de 0 V, l'alimentation reste en limitation de courant | court-circuit : à remplacer |
-| La tension saute tout de suite à 5 V, sans phase de limitation | capacité presque nulle ou circuit ouvert : à remplacer |
+| La tension est tout de suite à la valeur réglée **et le courant tombe à zéro en une ou deux secondes** | capacité presque nulle ou circuit ouvert : à remplacer |
 | Le courant ne retombe pas après plusieurs minutes | fuite : confirmer par la mesure d'autodécharge |
+
+Un modèle de sauvegarde à forte résistance interne peut ne jamais faire passer l'alimentation en limitation : c'est alors le **courant** qu'on lit. Il part de quelques dizaines de milliampères et décroît pendant plusieurs minutes sur un composant sain.
 
 ### Mesurer la capacité au chronomètre
 
-1. Charger à 5 V (essai précédent), débrancher l'alimentation.
+1. Charger à 5 V (essai précédent) et **maintenir cette tension 30 minutes** : après une charge trop brève, la tension retombe toute seule et fausse la mesure. Débrancher ensuite l'alimentation.
 2. Brancher une résistance de **1 kΩ** entre les deux pattes, voltmètre aux bornes.
 3. Démarrer le chronomètre quand la tension passe par **4 V**, l'arrêter à **2 V**.
 4. Calculer : **C = durée / (0,69 × R)**, durée en secondes, R en ohms, C en farads.
@@ -100,13 +102,13 @@ Exemple : 1 F chargé à 5,5 V dans 100 Ω. Au départ, 55 mA et 0,3 W dans la r
 | Moins de 485 s (8 min 5 s), soit moins de 0,7 F | fin de vie : à remplacer |
 | 347 s (5 min 47 s), soit 0,5 F | usé : à remplacer |
 
-Pourquoi 0,69 : dans une résistance, la tension d'un condensateur est divisée par deux toutes les *0,69 × R × C* secondes, quel que soit le point de départ. Mesurer entre 4 V et 2 V évite d'avoir à déclencher le chronomètre à l'instant exact du branchement.
+Pourquoi 0,69 : dans une résistance, la tension d'un condensateur est divisée par deux toutes les *0,69 × R × C* secondes, quel que soit le point de départ. Mesurer entre 4 V et 2 V évite d'avoir à déclencher le chronomètre à l'instant exact du branchement. Pour une autre tension, chronométrer de 80 % à 40 % de la tension de charge : de 2 V à 1 V pour une cellule chargée à 2,5 V.
 
 Limite : la résistance interne du supercondensateur s'ajoute à la résistance de 1 kΩ, donc la méthode surestime un peu la capacité. Elle suffit pour repérer une perte de 30 %.
 
 ### Mesurer l'autodécharge
 
-1. Charger à la tension de service, puis débrancher : **rien** ne reste branché aux bornes.
+1. Charger à la tension de service, l'y maintenir 30 minutes au moins, puis débrancher : **rien** ne reste branché aux bornes.
 2. Relever la tension après 1 heure, 24 heures, puis une semaine.
 
 ![Courbes de la tension aux bornes d'un supercondensateur 5,5 V chargé puis laissé seul pendant 600 heures. Supercondensateur sain : il reste encore 3 V après 600 heures, soit 25 jours. Supercondensateur défectueux, à titre d'exemple : la tension passe sous 3 V en une journée](autodecharge.svg)
@@ -167,11 +169,11 @@ flowchart TD
   B --> C[Décharger dans 100 Ω 2 W, attendre moins de 1 V]
   C --> D{Boîtier gonflé, fuite, monté à l'envers ?}
   D -- oui --> R[Remplacer]
-  D -- non --> E[Essai de charge : 5 V au plus, limite 100 mA]
-  E --> F{La tension monte en quelques dizaines de secondes ?}
+  D -- non --> E[Essai de charge : tension marquée au plus, soit 5 V pour un 5,5 V et 2,5 V pour une cellule de 2,7 V, limite 100 mA]
+  E --> F{La tension monte régulièrement ?}
   F -- reste à 0 V --> R
-  F -- saute à 5 V tout de suite --> R
-  F -- oui --> G[Décharge dans 1 kΩ : chronométrer de 4 V à 2 V]
+  F -- à la tension réglée d'emblée, courant nul presque aussitôt --> R
+  F -- oui --> G[Maintenir la charge 30 minutes, puis décharge dans 1 kΩ : chronométrer de 80 % à 40 % de la tension de charge]
   G --> H{Capacité supérieure à 70 % de la valeur marquée ?}
   H -- non --> R
   H -- oui --> I[Recharger, isoler, relever la tension à 1 h et 24 h]
@@ -231,5 +233,5 @@ Avant de remettre sous tension :
 
 Les faits ci-dessous sont reformulés ; les fréquences de panne sont un classement qualitatif, pas une statistique.
 
-- Wikipédia (en), *Supercapacitor* : cellules limitées à 2,5 à 2,7 V, mise en série avec équilibrage passif (résistances en parallèle) ou actif, surtension menant à un dégagement de gaz ou à un court-circuit, autodécharge d'un modèle double cellule de 5,5 V à 3 V en 600 heures, fin de vie à 30 % de capacité perdus ou résistance interne multipliée par 4, durée de vie doublée pour 10 °C de moins, barre sur la gaine repérant le négatif, charge inverse réduisant la capacité sans défaillance catastrophique en général, énergie *½ × C × V²*, courants de crête de l'ordre de 1 000 A pour les cellules de plus de 1 000 F, mesure de la capacité par décharge à courant constant de 80 % à 40 % de la tension nominale (CEI 62391, 1 mA par farad pour la classe sauvegarde), ESR à 1 kHz nettement plus faible que la résistance interne en continu. <https://en.wikipedia.org/wiki/Supercapacitor>
+- Wikipédia (en), *Supercapacitor* : cellules limitées à 2,5 à 2,7 V, mise en série avec équilibrage passif (résistances en parallèle) ou actif, surtension menant à un dégagement de gaz ou à un court-circuit, autodécharge d'un modèle double cellule de 5,5 V à 3 V en 600 heures, fin de vie à 30 % de capacité perdus ou résistance interne multipliée par 4, durée de vie doublée pour 10 °C de moins, barre sur la gaine repérant le négatif, charge inverse réduisant la capacité sans défaillance catastrophique en général, énergie *½ × C × V²*, courants de crête de l'ordre de 1 000 A pour les cellules de plus de 1 000 F, mesure de la capacité par décharge à courant constant de 80 % à 40 % de la tension nominale après 30 minutes de charge à la tension nominale (CEI 62391, 1 mA par farad pour la classe sauvegarde), relaxation de la tension après une charge, ESR à 1 kHz nettement plus faible que la résistance interne en continu. <https://en.wikipedia.org/wiki/Supercapacitor>
 - Samuel M. Goldwasser, *Capacitor Testing, Safe Discharging and Other Related Information* : décharge dans une résistance plutôt que par un court-circuit, test à l'ohmmètre faussé par la charge du condensateur. <https://www.repairfaq.org/sam/captest.htm>

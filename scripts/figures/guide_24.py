@@ -56,11 +56,11 @@ def _decay(v0: float, tau: float, xmax: float, steps: int = 60) -> list[Point]:
 
 
 def _level(at, xmax: float, volts: float, label: str) -> str:
-    """Dashed horizontal line across a chart at `volts`, labelled at its right end."""
+    """Dashed horizontal line across a chart at `volts`, labelled at its right end when `label` is set."""
     (x1, y), (x2, _) = at(0, volts), at(xmax, volts)
+    line = f'  <path class="blk" stroke-width="1" stroke-dasharray="4 4" fill="none" d="M{x1:.1f} {y:.1f} H{x2:.1f}"/>\n'
     return (
-        f'  <path class="blk" stroke-width="1" stroke-dasharray="4 4" fill="none" d="M{x1:.1f} {y:.1f} H{x2:.1f}"/>\n'
-        + text(x2 - 4, round(y - 5, 1), label, "mut", 11, "end")
+        line + text(x2 - 4, round(y - 5, 1), label, "mut", 11, "end") if label else line
     )
 
 

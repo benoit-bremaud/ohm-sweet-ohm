@@ -231,7 +231,7 @@ def _sawtooth(top: float, low: float) -> list[Point]:
 def fig_ripple() -> str:
     b = heading(
         "Sous tension : un condensateur de filtrage usé laisse plonger le rail",
-        "Rail 12 V derrière un redresseur, alimenté en 50 Hz : le condensateur est rechargé 100 fois par seconde",
+        "Rail 12 V derrière un redresseur, adaptateur alternatif 50 Hz : le condensateur est rechargé 100 fois par seconde",
     )
     axes, at = chart(
         70,
@@ -278,7 +278,7 @@ def fig_ripple() -> str:
         760,
         420,
         "Ondulation d'un rail filtré par un condensateur électrolytique sain ou usé",
-        "Graphique de la tension d'un rail 12 V en fonction du temps, sur 40 millisecondes, derrière un redresseur alimenté en 50 Hz : le condensateur de filtrage est rechargé 100 fois par seconde, toutes les 10 millisecondes. "
+        "Graphique de la tension d'un rail 12 V en fonction du temps, sur 40 millisecondes, derrière un redresseur alimenté par un adaptateur alternatif 50 Hz : le condensateur de filtrage est rechargé 100 fois par seconde, toutes les 10 millisecondes. "
         "Avec un condensateur sain, la tension dessine de petites dents de scie entre 12 V et 11,6 V : ondulation faible, 0,4 V. "
         "Avec un condensateur usé, elle plonge de 12 V à 8,5 V entre deux recharges : des creux de 3,5 V à chaque période. "
         "Entre deux recharges, le condensateur alimente seul la carte ; usé, il se vide trop vite, ce qui donne un régulateur qui décroche, un ronflement, des redémarrages. "

@@ -176,7 +176,7 @@ def fig_short() -> str:
         "Contrôle d'un condensateur tantale au bipeur",
         "Deux multimètres, sélecteur sur le bipeur, mesurent un condensateur tantale CMS 47 µF 16 V dessoudé, pointe rouge sur le côté positif repéré par la barre, pointe noire sur le côté négatif. "
         "À gauche, condensateur sain : OL, le bipeur se tait après un bip bref possible pendant que le condensateur se charge ; pas de court-circuit, il reste à contrôler la fuite. "
-        "À droite, condensateur claqué, boîtier noirci : 0,4 Ω et bip continu dans les deux sens, court-circuit franc ; à remplacer, puis chercher la surtension ou l'inversion en cause. "
+        "À droite, condensateur claqué, boîtier noirci : 0,4 Ω et bip continu, court-circuit franc ; à remplacer, puis chercher la surtension ou l'inversion en cause. "
         "En circuit, le bip continu désigne tout le rail : le tantale est le premier suspect, à confirmer une patte levée.",
         b,
     )

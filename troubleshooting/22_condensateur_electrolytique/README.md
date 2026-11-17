@@ -6,7 +6,7 @@ Reconnaître un condensateur électrolytique usé, y compris quand il a encore b
 
 Le condensateur électrolytique aluminium loge une forte capacité dans un petit boîtier cylindrique, grâce à un électrolyte **liquide**. C'est aussi ce qui le condamne : l'électrolyte s'évapore lentement, d'autant plus vite qu'il fait chaud. C'est le composant qui s'use le plus vite sur une carte, et le **premier à contrôler** dans une alimentation en panne. Il est **polarisé** : monté à l'envers, il chauffe, gonfle et peut s'ouvrir brutalement. En vieillissant, sa **résistance série (ESR) monte bien avant que sa capacité ne baisse** : un capacimètre, ou l'ohmmètre, peut donc déclarer bon un condensateur qui ne filtre plus rien. L'œil trouve les cas flagrants (dessus bombé, dépôt), l'**ESR-mètre** trouve les autres.
 
-> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). C'est le condensateur qui stocke le plus d'énergie sur une carte : **le décharger dans une résistance** (100 Ω à 1 kΩ, 2 à 5 W), jamais avec un tournevis, puis vérifier au voltmètre qu'il reste moins de 1 V. **La tension remonte toute seule** après une décharge trop brève (absorption diélectrique) : vérifier une seconde fois avant de toucher. Un condensateur marqué **200 V et plus** (souvent 400 ou 450 V) est le réservoir d'une alimentation reliée au secteur : il garde une charge dangereuse appareil débranché, **hors du périmètre de ces fiches**. Ne jamais se pencher au-dessus d'un électrolytique sous tension : son évent peut s'ouvrir en projetant de l'électrolyte.
+> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). C'est le condensateur qui stocke le plus d'énergie sur une carte : **le décharger dans une résistance** (100 Ω à 1 kΩ, 2 à 5 W), jamais avec un tournevis, puis vérifier au voltmètre qu'il reste moins de 1 V. **La tension remonte toute seule** après une décharge trop brève (absorption diélectrique) : vérifier une seconde fois avant de toucher. Un condensateur marqué **160 V et plus** (souvent 200, 400 ou 450 V) est le réservoir d'une alimentation reliée au secteur : il garde une charge dangereuse appareil débranché, **hors du périmètre de ces fiches**. Ne jamais se pencher au-dessus d'un électrolytique sous tension : son évent peut s'ouvrir en projetant de l'électrolyte.
 
 ## Identifier le composant
 
@@ -31,7 +31,7 @@ Repère **C** sur la carte. Le dessus des boîtiers porte souvent des entailles 
 
 - **Radial** : la bande imprimée sur le côté du boîtier, avec ses signes −, longe la patte **négative**. Sur un composant neuf, la patte négative est aussi la plus courte.
 - **CMS** : le secteur ou la barre de couleur sur le dessus du boîtier est du côté **négatif**.
-- **Piège** : sur un condensateur tantale, et sur un condensateur aluminium à électrolyte solide (polymère), le repère désigne le **positif** (fiche [23](../23_condensateur_tantale/README.md)). Vérifier la famille du composant avant de se fier à une bande.
+- **Piège** : sur un condensateur tantale, et sur un condensateur polymère en boîtier **rectangulaire** moulé (aluminium ou tantale), le repère désigne le **positif** (fiche [23](../23_condensateur_tantale/README.md)). Un condensateur polymère **cylindrique** garde son repère côté **négatif**, comme un électrolytique ordinaire. Vérifier la famille et la forme du composant, et la sérigraphie de la carte, avant de se fier à une bande.
 
 Pourquoi le sens compte : la couche d'oxyde qui sert d'isolant ne tient qu'**1 à 1,5 V** à l'envers. Au-delà, le condensateur conduit, chauffe et produit du gaz : l'évent s'ouvre, ou le condensateur se met en court-circuit.
 
@@ -78,7 +78,7 @@ Condensateur déchargé, **une patte dessoudée** ou composant retiré (fiche [0
 | Lecture | Verdict |
 | --- | --- |
 | Part de bas, puis grimpe régulièrement vers OL | il se charge : ni coupé, ni en court-circuit. **Son ESR reste inconnue** |
-| OL d'emblée, sur une valeur de plusieurs µF ou plus | plus de capacité : desséché ou circuit ouvert, à remplacer |
+| OL d'emblée, sur une valeur de 10 µF ou plus (en dessous, la charge est trop brève pour être vue) | plus de capacité : desséché ou circuit ouvert, à remplacer |
 | Valeur basse qui ne monte pas | fuite ou court-circuit : à remplacer |
 | Proche de 0 Ω, bip continu au bipeur | court-circuit : à remplacer |
 
@@ -93,6 +93,7 @@ L'ohmmètre injecte un petit courant qui charge le condensateur ; la tension mon
 | Lecture | Verdict |
 | --- | --- |
 | Dans la tolérance | capacité correcte. **Cela ne prouve pas qu'il est bon** : mesurer l'ESR |
+| Sous la tolérance, à moins de 30 % du marquage (de 330 à 376 µF pour un 470 µF) | douteux : mesurer l'ESR |
 | Plus de 30 % sous le marquage (moins de 330 µF pour un 470 µF) | en fin de vie : à remplacer |
 | Presque nulle | desséché ou circuit ouvert : à remplacer |
 | Très supérieure au marquage, instable, ou lecture impossible | fuite ou court-circuit probables : vérifier à l'ohmmètre |
@@ -138,7 +139,7 @@ Pourquoi l'ESR-mètre fonctionne en circuit : sa tension de mesure est trop faib
 
 Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe noire à la masse, pointe rouge sur la patte positive du condensateur de filtrage.
 
-![Graphique de la tension d'un rail 12 V sur 40 millisecondes, derrière un redresseur alimenté en 50 Hz. Avec un condensateur sain, de petites dents de scie entre 12 V et 11,6 V. Avec un condensateur usé, la tension plonge à 8,5 V entre deux recharges. Le voltmètre en continu n'affiche que la moyenne : il ne voit pas les creux](ondulation-sur-le-rail.svg)
+![Graphique de la tension d'un rail 12 V sur 40 millisecondes, derrière un redresseur alimenté par un adaptateur alternatif 50 Hz. Avec un condensateur sain, de petites dents de scie entre 12 V et 11,6 V. Avec un condensateur usé, la tension plonge à 8,5 V entre deux recharges. Le voltmètre en continu n'affiche que la moyenne : il ne voit pas les creux](ondulation-sur-le-rail.svg)
 
 | Lecture | Verdict |
 | --- | --- |
@@ -147,14 +148,16 @@ Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe
 | Tension qui s'effondre ou hésite dès que la carte consomme | condensateur de filtrage ou de sortie suspect |
 | Tension supérieure à la tension de service marquée sur le condensateur | couper : la surtension détruit le condensateur ; chercher sa cause en amont |
 
+L'exemple de la figure est une carte alimentée par un adaptateur basse tension **alternatif** (25 V~ au plus), qui porte son propre redresseur. Sur une alimentation de laboratoire, qui fournit du continu, il n'y a pas d'ondulation à 100 Hz : le même défaut se montre par une tension qui s'effondre dès que la carte consomme.
+
 Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par seconde et moyenne tout ce qui bouge plus vite (fiche [01](../01_multimetre/README.md)). Le mode V alternatif donne au mieux un ordre de grandeur de l'ondulation, selon l'appareil ; seul l'oscilloscope la montre (niveau 4).
 
 ### Du symptôme au condensateur suspect
 
 | Symptôme | Condensateur à contrôler en premier | Pourquoi |
 | --- | --- | --- |
-| Appareil qui ne démarre qu'après plusieurs essais, ou seulement une fois chaud | condensateurs de sortie de l'alimentation, petit condensateur de démarrage du circuit de commande | ESR trop élevée à froid |
-| Ronflement dans le son, barres ou ondulations à l'image | condensateur de filtrage principal | ondulation du rail |
+| Appareil qui ne démarre qu'après plusieurs essais, ou seulement une fois chaud | condensateurs de sortie de l'alimentation ; petit condensateur de démarrage du circuit de commande (au primaire d'un bloc secteur : **hors périmètre**) | ESR trop élevée à froid |
+| Ronflement dans le son, barres ou ondulations à l'image | condensateur de filtrage principal, côté basse tension (côté secteur : **hors périmètre**) | ondulation du rail |
 | Redémarrages, blocages aléatoires | condensateurs de découplage du rail logique | creux de tension |
 | Alimentation qui siffle, tension de sortie instable | condensateurs de sortie du régulateur à découpage | ESR élevée : la régulation devient instable |
 | Régulateur ou transistor qui chauffe anormalement | condensateur d'entrée et de sortie de ce régulateur | ondulation excessive à absorber |
@@ -173,14 +176,16 @@ Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par
 
 ```mermaid
 flowchart TD
-  A[Électrolytique suspect, carte débranchée] --> B{Marqué 200 V ou plus, ou relié au secteur ?}
+  A[Électrolytique suspect, carte débranchée] --> B{Marqué 160 V ou plus, ou relié au secteur ?}
   B -- oui --> C[Hors périmètre : professionnel]
   B -- non --> D[Décharger dans une résistance, vérifier moins de 1 V]
   D --> E{Dessus bombé, dépôt, fond repoussé ?}
   E -- oui --> R[Remplacer, nettoyer la carte, contrôler ses voisins]
   E -- non --> F{Bipeur : bip continu ?}
   F -- oui --> G[Court-circuit sur le rail : lever une patte pour désigner le coupable]
-  G --> R
+  G --> G2{Le court-circuit disparaît, patte levée ?}
+  G2 -- oui --> R
+  G2 -- non --> G3[Un autre composant du rail : fiche 92]
   F -- non --> H{ESR-mètre disponible ?}
   H -- oui --> I{ESR en circuit}
   I -- élevée --> R
@@ -229,7 +234,7 @@ Avant de remettre sous tension : sens de montage vérifié une dernière fois, c
 - ESR-mètre, en circuit, hors tension et déchargé : une ESR élevée condamne, une ESR basse ne prouve pas tout.
 - Fin de vie : capacité −30 % ou ESR × 3 par rapport au neuf.
 - Le voltmètre en continu ne voit pas l'ondulation.
-- Marqué 200 V et plus : secteur, hors périmètre.
+- Marqué 160 V et plus : secteur, hors périmètre.
 - Remplacement : même capacité, tension et température au moins égales, faible ESR en découpage, sens vérifié deux fois.
 
 ## Mini-glossaire
@@ -248,7 +253,8 @@ Avant de remettre sous tension : sens de montage vérifié une dernière fois, c
 
 Les faits ci-dessous sont reformulés ; les fréquences de panne sont un classement qualitatif, pas une statistique.
 
-- Wikipédia (en), *Aluminum electrolytic capacitor* : électrolyte liquide et évaporation, critères de fin de vie (capacité −30 %, ESR ou impédance × 3), durée de vie divisée par deux tous les 10 °C et exemple de 2 000 heures à 105 °C, repérage du négatif (bande latérale, patte plus courte, demi-cercle ou barre sur le dessus des CMS) et du positif sur les modèles à électrolyte solide, tenue en tension inverse de 1 à 1,5 V et dégagement de gaz, évent de sécurité, courant de fuite (0,01 × C × U + 3 µA après 2 ou 5 minutes), reformage à la tension de service à travers 1 kΩ pendant une heure, absorption diélectrique de 10 à 15 %, échauffement interne par le courant d'ondulation dans l'ESR, condensateurs bipolaires. <https://en.wikipedia.org/wiki/Aluminum_electrolytic_capacitor>
+- Wikipédia (en), *Aluminum electrolytic capacitor* : électrolyte liquide et évaporation, critères de fin de vie (capacité −30 %, ESR ou impédance × 3), durée de vie divisée par deux tous les 10 °C et exemple de 2 000 heures à 105 °C, repérage du négatif (bande latérale, patte plus courte, demi-cercle ou barre sur le dessus des CMS), tenue en tension inverse de 1 à 1,5 V et dégagement de gaz, évent de sécurité, courant de fuite (0,01 × C × U + 3 µA après 2 ou 5 minutes), reformage à la tension de service à travers 1 kΩ pendant une heure, absorption diélectrique de 10 à 15 %, échauffement interne par le courant d'ondulation dans l'ESR, condensateurs bipolaires. <https://en.wikipedia.org/wiki/Aluminum_electrolytic_capacitor>
+- Wikipédia (en), *Polymer capacitor*, « Polarity marking » : repère du côté positif sur les condensateurs polymère rectangulaires (tantale ou aluminium), du côté négatif sur les modèles cylindriques. <https://en.wikipedia.org/wiki/Polymer_capacitor>
 - Wikipédia (en), *Capacitor plague* : séries à électrolyte défectueux de 1999 à 2007, dessus bombé, dépôt brun ou roux, bouchon repoussé, colle de maintien à ne pas confondre avec de l'électrolyte. <https://en.wikipedia.org/wiki/Capacitor_plague>
 - Wikipédia (en), *ESR meter* : impulsions de courant trop brèves pour charger le condensateur, tension trop faible pour faire conduire les jonctions (mesure en circuit), appareil vulnérable à un condensateur chargé, court-circuit lu comme une ESR idéale, pas de mesure de capacité, ESR excessive à chaud seulement. <https://en.wikipedia.org/wiki/ESR_meter>
 - Wikipédia (en), *Equivalent series resistance* : l'ESR des électrolytiques augmente avec l'âge et la chaleur, jusqu'à la panne du circuit, alors que la capacité mesurée peut rester correcte. <https://en.wikipedia.org/wiki/Equivalent_series_resistance>

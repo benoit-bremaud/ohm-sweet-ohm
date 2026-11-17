@@ -38,14 +38,14 @@ def _bodies() -> str:
     # axial
     o += f'  <path d="M548 149 H712" stroke="{METAL}" stroke-width="3" stroke-linecap="round"/>\n'
     o += '  <rect x="574" y="126" width="112" height="46" rx="8" fill="#eab308" stroke="#a16207" stroke-width="1.5"/>\n'
-    o += f'  <text x="630" y="154" font-size="14" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#1f2933">47n 63V</text>\n'
+    o += f'  <text x="630" y="154" font-size="14" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#1f2933">470n 63V</text>\n'
     o += text(630, 248, "axial : notation avec lettre", "mut", 12, "middle")
     return o
 
 
 def fig_marking() -> str:
     b = heading(
-        "Lire un condensateur film : trois façons d'écrire la même chose",
+        "Lire un condensateur film : trois façons d'écrire la même capacité",
         "Aucune polarité : il se monte dans les deux sens. La tension marquée est la tension maximale de service",
     )
     b += text(24, 100, "Trois présentations courantes", size=15, weight=700)
@@ -84,7 +84,7 @@ def fig_marking() -> str:
         760,
         480,
         "Lire le marquage d'un condensateur film",
-        "En haut, trois présentations courantes du condensateur film, toutes sans polarité : un boîtier rectangulaire rouge marqué en clair 0,47 µF J 100 V ; un modèle enrobé vert marqué du code 474J 100V ; un modèle axial jaune marqué 47n 63V. "
+        "En haut, trois présentations courantes du condensateur film, toutes sans polarité : un boîtier rectangulaire rouge marqué en clair 0,47 µF J 100 V ; un modèle enrobé vert marqué du code 474J 100V ; un modèle axial jaune marqué 470n 63V. "
         "En bas, le décodage de 474J : les deux premiers chiffres, 47, sont les chiffres significatifs ; le troisième, 4, est le nombre de zéros, en picofarads ; la lettre J donne la tolérance, ±5 % (K : ±10 %, M : ±20 %). "
         "474 se lit donc 47 suivi de 4 zéros, soit 470 000 pF, 470 nF ou 0,47 µF. "
         "Dans la notation avec lettre, la lettre remplace la virgule, qui s'efface trop facilement : n47 vaut 0,47 nF, 4n7 vaut 4,7 nF et 47n vaut 47 nF. "

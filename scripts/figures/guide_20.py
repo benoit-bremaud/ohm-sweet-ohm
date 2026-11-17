@@ -248,7 +248,7 @@ def fig_rail_short() -> str:
             ("Bip continu,", "0,3 Ω : rail en", "court-circuit."),
             "no",
             "✗ 0,3 Ω sur C1, sur C2 et sur C3",
-            "le bipeur ne dit pas lequel : voir le niveau 4",
+            "le bipeur ne dit pas lequel : voir le niveau 3",
         ),
     ):
         o, v, com = half_meter(x0, "BEEP", lcd, "Ω", title, notes, flag)
@@ -270,7 +270,7 @@ def fig_rail_short() -> str:
         "Deux multimètres, sélecteur sur le bipeur, mesurent entre un rail 3,3 V et la masse, carte débranchée et déchargée ; trois condensateurs céramique C1, C2 et C3 sont en parallèle entre ce rail et la masse. "
         "À gauche, rail sain : un bip bref est possible pendant que les condensateurs se chargent, puis l'appareil se tait et affiche OL ; il n'y a aucun court-circuit franc. "
         "À droite, C2 est fissuré : l'appareil sonne en continu et lit 0,3 Ω, la même valeur sur C1, sur C2 et sur C3, puisque les trois sont en parallèle. "
-        "Le bipeur ne dit pas lequel est en cause : il faut une méthode du niveau 4. "
+        "Le bipeur ne dit pas lequel est en cause : il faut la méthode du niveau 3, sous tension. "
         "Des condensateurs en parallèle se mesurent ensemble : un seul en court-circuit et tous lisent la même chose.",
         b,
     )
