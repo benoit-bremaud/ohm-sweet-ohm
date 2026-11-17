@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from pathlib import Path
 
 import pytest
@@ -131,7 +132,7 @@ def test_tolerance_band_stands_apart_and_every_band_fits_the_body(count: int) ->
 
 
 @pytest.mark.parametrize("draw", [res_h, res_v])
-def test_resistor_draws_its_bands_in_order(draw) -> None:
+def test_resistor_draws_its_bands_in_order(draw: Callable[..., str]) -> None:
     colours = bands("yellow", "violet", "black", "red", "brown")
     drawing = draw(0, 100, 50, colours=colours)
     found = re.findall(r'fill="(#[0-9a-f]{6})"', drawing)

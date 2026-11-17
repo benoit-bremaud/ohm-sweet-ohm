@@ -15,7 +15,7 @@ Une thermistance est une résistance dont la valeur dépend fortement de la temp
 | Type | Aspect | Où on la trouve | Valeur à 25 °C |
 | --- | --- | --- | --- |
 | CTN de mesure | perle d'époxy ou de verre sur deux fils fins, boîtier CMS sans marquage, ou sonde au bout d'un câble | contre un radiateur, une batterie, une tête d'imprimante 3D, dans un pack de batteries (troisième contact) | souvent 10 kΩ ; de quelques ohms à quelques centaines de kΩ |
-| CTN de puissance | disque noir ou vert de 5 à 20 mm, pattes épaisses | en série avec l'entrée d'une alimentation, avant les gros condensateurs | de 1 à quelques dizaines d'ohms |
+| CTN de puissance | disque noir ou vert de 5 à 20 mm, pattes épaisses | en série avec une entrée d'alimentation, avant de gros condensateurs. Dans le périmètre : entrée continue basse tension seulement (12 ou 24 V, gros condensateurs d'un amplificateur ou d'une commande de moteur) | de 1 à quelques dizaines d'ohms |
 | CTP polymère (fusible réarmable) | pastille jaune ou orangée à pattes, ou boîtier CMS ; repère F ou PTC sur la carte | entrée USB, sortie d'alimentation, pack de batteries | d'une fraction d'ohm à quelques ohms |
 | CTP céramique | disque ou pastille, parfois dans un boîtier plastique | démagnétisation des anciens téléviseurs, éléments chauffants autorégulés, protection de surintensité | selon l'usage |
 
@@ -47,11 +47,11 @@ Classés du plus fréquent au plus rare (classement qualitatif d'après les sour
 | --- | --- | --- | --- |
 | CTN de mesure ouverte | fréquent | fil de sonde coupé ou arraché, patte cassée, corps fissuré par une contrainte mécanique, connecteur débranché | le circuit lit une température extrême, le plus souvent très basse, et se met en défaut ou refuse de démarrer |
 | CTP polymère qui a basculé | fréquent | elle a joué son rôle : court-circuit ou surcharge en aval | **le défaut est en aval** : le chercher ; la CTP se réarme seule une fois refroidie |
-| CTN de puissance fissurée ou ouverte | occasionnel | surcharge, allumages répétés à chaud, choc | appareil totalement mort ; contrôler ce qui suit (pont redresseur, condensateurs, transistor de découpage) |
+| CTN de puissance fissurée ou ouverte | occasionnel | surcharge, allumages répétés à chaud, choc | appareil totalement mort ; contrôler ce qui suit sur le rail (condensateurs, court-circuit en aval). Sur une alimentation secteur : hors périmètre (fiche [00](../00_securite/README.md)) |
 | CTN de mesure qui a dérivé | occasionnel | vieillissement à chaud, humidité sous l'enrobage, surchauffe au soudage ; la résistance dérive le plus souvent vers le haut | température lue fausse de quelques degrés : régulation décalée, sécurité qui déclenche trop tôt ou trop tard, sans message d'erreur |
-| CTN de mesure en court-circuit ou très basse | rare | humidité ou corrosion dans la sonde, câble écrasé, surchauffe | le circuit lit une température très haute : arrêt de sécurité, ventilateur à fond |
 | CTP polymère fatiguée | occasionnel | basculements répétés ou prolongés : la résistance à froid reste plus élevée qu'à l'état neuf | chute de tension sur le rail, déclenchements pour un courant normal |
 | Mauvais contact thermique | occasionnel | CTN décollée de la pièce qu'elle surveille, pâte thermique absente | la CTN est saine mais mesure l'air : réaction lente, surchauffe non détectée |
+| CTN de mesure en court-circuit ou très basse | rare | humidité ou corrosion dans la sonde, câble écrasé, surchauffe | le circuit lit une température très haute : arrêt de sécurité, ventilateur à fond |
 
 ## Niveau 1 — Inspection par les sens
 
@@ -114,10 +114,11 @@ La règle de la fiche [02](../02_pieges_en_circuit/README.md) s'applique : les c
 
 | Lecture stabilisée, carte hors tension | Verdict |
 | --- | --- |
-| Au-dessus de la valeur attendue à cette température, ou OL | thermistance ouverte ou dérivée vers le haut |
+| Nettement au-dessus de la valeur attendue à cette température (plus que la tolérance, et 4 % par degré d'incertitude sur la température), ou OL | thermistance ouverte ou dérivée vers le haut |
 | Proche de la valeur attendue, et qui baisse en chauffant la CTN | probablement saine |
 | En dessous de la valeur attendue | rien de prouvé : débrancher la sonde ou lever une patte |
-| CTP polymère ou CTN de puissance : proche de 0 Ω | saine ; OL : ouverte |
+| CTP polymère : d'une fraction d'ohm à quelques ohms | saine ; OL : ouverte |
+| CTN de puissance froide : valeur marquée à ± 20 % près | probablement saine ; en dessous : rien de prouvé (chemin parallèle, fiche 02) ; OL : ouverte |
 
 Une sonde au bout d'un câble se mesure sans rien dessouder : débrancher son connecteur et mesurer côté sonde.
 
@@ -143,18 +144,18 @@ Repères pour ce montage : ≈ 2,5 V à 0 °C, ≈ 1,8 V à 20 °C, 1,65 V à 25
 
 - **Montage inverse** (CTN vers le rail, résistance fixe vers la masse) : tout s'inverse. La tension monte quand la CTN chauffe, une CTN ouverte donne 0 V et une CTN en court-circuit donne la tension du rail.
 - **Tension juste mais température affichée fausse** : le défaut est après le point milieu (entrée de mesure, logiciel), pas dans la CTN.
-- **Pack de batteries** : la CTN est entre le contact de température (souvent repéré T) et le négatif du pack. Elle se mesure à l'ohmmètre, pack débranché du chargeur.
+- **Pack de batteries** : la CTN est entre le contact de température (souvent repéré T) et le négatif du pack. Elle se mesure à l'ohmmètre, pack débranché du chargeur. Le pack, lui, reste sous tension : isoler son contact + avec un adhésif, utiliser des pointes fines et ne jamais laisser une pointe glisser vers le + (fiche [00](../00_securite/README.md)).
 
 ### Sous tension : CTP polymère et CTN de puissance
 
-Sélecteur sur V continu, une pointe de chaque côté du composant, carte en fonctionnement :
+Sélecteur sur V continu, une pointe de chaque côté du composant, carte en fonctionnement. Pour une CTN de puissance, uniquement sur une entrée continue de 50 V au plus : celle d'une alimentation secteur est hors périmètre.
 
 | Composant | Lecture aux bornes | Ce qu'elle dit |
 | --- | --- | --- |
 | CTP polymère | quelques millivolts à quelques dixièmes de volt | elle conduit : chercher ailleurs |
 | CTP polymère | presque toute la tension du rail, composant brûlant | elle a basculé : court-circuit ou surcharge en aval |
 | CTN de puissance | une fraction de volt après quelques secondes | elle a chauffé et conduit : normal |
-| CTN de puissance | toute la tension d'entrée, rien en aval | ouverte |
+| CTN de puissance | toute la tension de l'entrée basse tension, rien en aval | ouverte |
 
 Une CTP qui a basculé reste dans cet état tant que la tension est présente : un faible courant la maintient chaude. **Couper l'alimentation**, chercher le défaut en aval (ohmmètre entre l'aval et la masse, fiche [13](../13_fusible/README.md), puis fiche 92), laisser refroidir, puis remettre sous tension avec une limite de courant réglée juste au-dessus de la consommation attendue.
 
@@ -168,15 +169,15 @@ Une CTP qui a basculé reste dans cet état tant que la tension est présente : 
 | Régulation de température décalée de quelques degrés | dérive de la CTN, mauvaise pièce de rechange (B différent) | courbe fausse sans défaut franc |
 | Port USB ou sortie sans tension, composant brûlant à l'entrée | CTP polymère, puis ce qu'elle alimente | elle a basculé sur un défaut en aval |
 | Rail qui s'effondre dès que la charge augmente | CTP polymère fatiguée, ou placée près d'une source de chaleur | son courant de maintien baisse quand elle est chaude |
-| Appareil totalement mort, pas de court-circuit | CTN de puissance à l'entrée | disque fissuré, circuit ouvert |
-| Fusible d'entrée qui fond à l'allumage, surtout après une coupure brève | CTN de puissance | rallumée chaude, elle ne limite plus le courant d'appel |
+| Appareil alimenté en continu basse tension totalement mort, pas de court-circuit | CTN de puissance à l'entrée continue | disque fissuré, circuit ouvert ; sur une entrée secteur : hors périmètre |
+| Fusible de l'entrée basse tension qui fond à l'allumage, surtout après une coupure brève | CTN de puissance | rallumée chaude, elle ne limite plus le courant d'appel ; fusible d'entrée secteur : hors périmètre |
 
 ## Niveau 4 — Méthodes avancées
 
 - **Point de référence à 0 °C** : CTN dans un sachet étanche, plongée dans un mélange d'eau et de glace pilée bien remué. La lecture se compare à la valeur à 0 °C de la fiche technique (de l'ordre de 33 kΩ pour une CTN de 10 kΩ). Avec la lecture à température ambiante mesurée par un thermomètre, on a deux points.
 - **Retrouver le coefficient B d'une CTN inconnue** à partir de deux points (températures en kelvins) : B = ln(R1 / R2) / (1/T1 − 1/T2). C'est le moyen d'identifier une CTN sans marquage, encore en état, avant de commander sa remplaçante.
 - **Auto-échauffement** : une CTN parcourue par un courant s'échauffe et lit plus chaud que la réalité. La fiche technique donne un facteur de dissipation en milliwatts par degré (quelques mW/°C pour une perle à pattes, dans l'air calme). Un pont diviseur dont la résistance fixe a été remplacée par une valeur beaucoup plus faible fausse la mesure de cette manière.
-- **Résistance fixe à la place de la CTN** : pour savoir si le reste de la chaîne de mesure fonctionne, brancher provisoirement une résistance fixe égale à R25 ; l'appareil doit afficher environ 25 °C. Essai bref, sous surveillance, **jamais** sur un pack de batteries en charge ni sur un élément chauffant en service : la protection thermique est alors neutralisée.
+- **Résistance fixe à la place de la CTN** : pour savoir si le reste de la chaîne de mesure fonctionne, brancher provisoirement une résistance fixe égale à R25 ; l'appareil doit afficher environ 25 °C. Essai bref, sous surveillance, **jamais** sur un pack ou un chargeur de batteries au lithium, ni sur un élément chauffant en service : la protection thermique est alors neutralisée.
 - **Caméra thermique** : une CTP polymère qui a basculé et le composant en court-circuit qu'elle alimente ressortent immédiatement (fiche 03).
 - **Courant de maintien selon la température** : une CTP polymère prévue pour 0,25 A à 23 °C ne tient plus qu'une fraction de ce courant à 85 °C. Avant de la condamner, mesurer la température autour d'elle et le courant réel du rail.
 
@@ -202,6 +203,7 @@ flowchart TD
   C -- CTN de puissance --> L{Ohmmètre à froid, après deux minutes de refroidissement}
   L -- OL --> R
   L -- valeur marquée à 20 % près --> M[CTN saine : chercher ailleurs]
+  L -- bien en dessous, hors circuit et froide --> R
 ```
 
 ## Remplacer le composant

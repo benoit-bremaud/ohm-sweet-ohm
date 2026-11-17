@@ -121,7 +121,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
 | Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
 | Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [13](13_fusible/README.md) |
+| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
 | Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md) |
 | Capacimètre | [01](01_multimetre/README.md) | — |
 | Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md) |

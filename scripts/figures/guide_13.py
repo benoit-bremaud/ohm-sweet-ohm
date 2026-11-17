@@ -145,7 +145,10 @@ def fig_continuity() -> str:
             "Fusible bon : il sonne",
             ("Quelques dixièmes", "d'ohm, pointes", "comprises."),
             "ok",
-            ("✓ bip continu, moins de 1 Ω", "le fusible conduit"),
+            (
+                "✓ bip continu, proche des pointes en court-circuit",
+                "le fusible conduit",
+            ),
         ),
         (
             380,

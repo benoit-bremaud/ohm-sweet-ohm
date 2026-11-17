@@ -62,8 +62,8 @@ def fig_identify() -> str:
     b += _radial(64, 250, 54, 54, 27, DISC)
     b += f'  <text x="64" y="255" font-size="13" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#ffffff">5D-11</text>\n'
     b += text(120, 240, "CTN de puissance", "blue", 14, weight=700)
-    b += text(120, 258, "disque noir ou vert à l'entrée d'une alimentation", "mut", 12)
-    b += text(120, 274, "5D-11 : 5 Ω à 25 °C, disque de 11 mm", "mut", 12)
+    b += text(120, 258, "disque de 11 mm en série avec une entrée", "mut", 12)
+    b += text(120, 274, "5D-11 : 5 Ω à 25 °C ; secteur : hors périmètre", "mut", 12)
     b += _radial(64, 368, 46, 40, 5, POLYMER)
     b += text(120, 358, "CTP polymère", "amber", 14, weight=700)
     b += text(120, 376, "fusible réarmable, pastille jaune ou boîtier CMS", "mut", 12)
@@ -96,7 +96,7 @@ def fig_identify() -> str:
         470,
         "Reconnaître une thermistance CTN ou CTP",
         "À gauche, trois boîtiers. La CTN de mesure : une perle d'époxy, parfois au bout de deux fils, marquée 103 ou non marquée, 10 kΩ à 25 °C. "
-        "La CTN de puissance : un disque noir ou vert à l'entrée d'une alimentation, marqué 5D-11, soit 5 Ω à 25 °C et un disque de 11 mm. "
+        "La CTN de puissance : un disque noir ou vert en série avec une entrée d'alimentation (côté secteur : hors périmètre), marqué 5D-11, soit 5 Ω à 25 °C et un disque de 11 mm. "
         "La CTP polymère, ou fusible réarmable : une pastille jaune ou un boîtier CMS, d'une fraction d'ohm à quelques ohms à froid. "
         "À droite, l'allure de la résistance selon la température : celle de la CTN baisse régulièrement quand la température monte ; "
         "celle de la CTP reste presque nulle à froid, puis bondit au-delà de sa température de basculement.",
@@ -112,7 +112,14 @@ def fig_warm() -> str:
     )
     b += '  <path class="grid" d="M380 84 V470"/>\n'
 
-    def half(x0, title, lcd, notes, warm, verdict) -> str:
+    def half(
+        x0: float,
+        title: str,
+        lcd: str,
+        notes: tuple[str, ...],
+        warm: bool,
+        verdict: tuple[str, str],
+    ) -> str:
         o = text(x0 + 20, 100, title, size=15, weight=700)
         m, (_, com, v) = meter(x0 + 24, 116, 0.9, "20k", lcd, "kΩ")
         o += m

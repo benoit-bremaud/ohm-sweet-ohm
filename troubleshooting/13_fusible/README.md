@@ -6,7 +6,7 @@ Savoir si un fusible ou une résistance fusible est ouvert, comprendre pourquoi,
 
 Un fusible est le maillon volontairement faible d'un circuit : un fil calibré qui fond quand le courant dépasse ce que le circuit supporte. Il n'a que deux états, **il conduit ou il est ouvert**, et le bipeur tranche en quelques secondes. La difficulté n'est pas la mesure : c'est la suite. Un fusible fondu est presque toujours la **conséquence** d'un défaut en aval (un composant en court-circuit, une surcharge) ; le remplacer sans chercher ce défaut fait fondre le suivant, ou pire. La résistance fusible joue le même rôle sous l'apparence d'une résistance ordinaire.
 
-> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). **Ne jamais remplacer un fusible par un calibre supérieur, ni le ponter** avec un fil ou du papier d'aluminium : le maillon faible devient alors une piste, un composant ou le câble, et le défaut se termine en incendie. Le fusible d'entrée secteur d'un appareil est hors du périmètre de ces fiches : s'il a fondu, le défaut est du côté secteur.
+> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). **Ne jamais remplacer un fusible par un calibre supérieur, ni le ponter** avec un fil ou du papier d'aluminium : le maillon faible devient alors une piste, un composant ou le câble, et le défaut se termine en incendie. Le fusible d'entrée secteur d'un appareil est hors du périmètre de ces fiches : s'il a fondu, la recherche passe par le côté secteur.
 
 ## Identifier le composant
 
@@ -14,7 +14,7 @@ Un fusible est le maillon volontairement faible d'un circuit : un fil calibré q
 | --- | --- | --- |
 | Fusible cartouche en verre | tube de verre, deux capsules métalliques, fil visible ; le plus courant mesure 5 × 20 mm | porte-fusible ou clips sur la carte, entrée d'alimentation |
 | Fusible cartouche céramique | même format, corps opaque blanc ou beige, souvent rempli de sable | là où le courant de court-circuit peut être élevé |
-| Fusible à pattes radiales ou axiales | petit cylindre ou boîtier moulé soudé sur la carte | alimentations compactes, chargeurs |
+| Fusible à pattes radiales ou axiales | petit cylindre ou boîtier moulé soudé sur la carte | cartes compactes, entrées et sorties basse tension |
 | Fusible CMS | boîtier de résistance CMS (1206, 0603), une lettre ou un chiffre pour marquage ; repère **F** sur la carte | entrée USB, rails d'une carte dense |
 | Fusible automobile à lame | boîtier plastique coloré, deux lames, calibre en chiffres sur le dessus | véhicules, équipements 12 V et 24 V |
 | Résistance fusible | ressemble à une résistance à couches, vernis gris ou mat ininflammable, faible valeur | en série à l'entrée d'un rail |
@@ -56,10 +56,10 @@ Classés du plus fréquent au plus rare (consensus des réparateurs, voir Source
 | --- | --- | --- | --- |
 | Fondu sur un court-circuit en aval | très fréquent | semi-conducteur en court-circuit (diode, transistor, régulateur), condensateur en court-circuit, inversion de polarité | **le défaut est toujours là** : le trouver avant de remplacer |
 | Fondu sur une surcharge | fréquent | charge trop forte, moteur bloqué, sortie en court-circuit momentané | supprimer la surcharge ; contrôler ce qui a chauffé |
+| Résistance fusible ouverte | fréquent | elle a joué son rôle : surintensité en aval | même recherche que pour un fusible fondu |
 | Fondu à la mise sous tension | occasionnel | fusible rapide monté à la place d'un temporisé, ou calibre trop juste pour l'appel de courant des condensateurs | vérifier le type et le calibre d'origine avant de soupçonner la carte |
 | Ouvert par fatigue | occasionnel sur un appareil ancien | cycles thermiques répétés : le fil finit par casser sans défaut en aval, souvent sans trace visible | rien, mais cela se prouve : essai sur alimentation limitée |
 | Mauvais contact du porte-fusible | occasionnel | clips détendus ou oxydés, soudures fissurées | panne intermittente, porte-fusible bruni par l'échauffement |
-| Résistance fusible ouverte | fréquent dans les alimentations | elle a joué son rôle : surintensité en aval | même recherche que pour un fusible fondu |
 | Fusible thermique ouvert | occasionnel | surchauffe réelle (ventilation bouchée, thermostat collé), ou chaleur du fer à souder lors d'un remplacement | trouver la cause de la surchauffe |
 
 Un fusible ne tombe **pas** en court-circuit. Le défaut inverse existe pourtant : un calibre trop fort ou un pont monté par un précédent dépanneur. Comparer le calibre monté à celui que la carte ou le schéma indique.
@@ -82,14 +82,16 @@ Un fusible ne tombe **pas** en court-circuit. Le défaut inverse existe pourtant
 | --- | --- |
 | Bip continu, lecture proche de celle des pointes en court-circuit | fusible bon |
 | OL, pas de bip | fusible ouvert |
-| Quelques ohms, bip ou non | normal pour un petit calibre (voir ci-dessous) ; anormal à partir de 500 mA |
+| Quelques ohms, bip ou non | normal pour un calibre de 200 mA ou moins (voir ci-dessous) ; au-delà, comparer à la résistance à froid de la fiche technique : nettement au-dessus, fusible douteux |
 | Lecture qui saute quand on bouge le fusible | fil rompu qui se touche encore : fusible à remplacer |
 
 **La résistance d'un fusible bon dépend de son calibre** : plus le courant assigné est faible, plus le fil est fin. Ordres de grandeur pour un fusible rapide de 5 × 20 mm :
 
 | Courant assigné | Résistance à froid |
 | --- | --- |
+| 32 à 50 mA | de 15 Ω à plus de 250 Ω |
 | 100 mA | environ 6 Ω |
+| 200 mA | environ 1,7 Ω |
 | 500 mA | environ 0,2 Ω |
 | 1 A | environ 0,1 Ω |
 | 5 A et plus | environ 0,01 Ω : indiscernable des cordons |
@@ -108,9 +110,9 @@ Le contrôle au bipeur reste valable fusible en place : un fusible bon court-cir
 
 | Lecture stabilisée, carte hors tension | Verdict |
 | --- | --- |
-| Proche de 0 Ω, bip | fusible bon |
+| Proche de 0 Ω, bip (petit calibre : la résistance à froid de son calibre, tableau du niveau 2) | fusible bon |
 | OL | fusible ouvert |
-| Quelques dizaines d'ohms ou plus, parfois un bip bref puis plus rien | fusible **ouvert** : on mesure le reste de la carte à travers lui (chemin parallèle, condensateur qui se charge, fiche [02](../02_pieges_en_circuit/README.md)) |
+| Nettement au-dessus de la résistance à froid de son calibre, parfois un bip bref puis plus rien | fusible **ouvert** : on mesure le reste de la carte à travers lui (chemin parallèle, condensateur qui se charge, fiche [02](../02_pieges_en_circuit/README.md)) |
 
 **Avant de remplacer un fusible ouvert**, chercher le défaut en aval, toujours hors tension :
 
@@ -159,7 +161,7 @@ Pour séparer le fusible de son porte-fusible : mesurer la chute entre la capsul
 
 | Symptôme | À contrôler en premier | Pourquoi |
 | --- | --- | --- |
-| Appareil totalement mort | fusible d'entrée, résistance fusible du rail principal | premier maillon de l'alimentation |
+| Appareil totalement mort | fusible de l'entrée basse tension (après l'adaptateur ou la batterie), résistance fusible du rail principal | premier maillon de l'alimentation |
 | Une seule fonction morte, le reste marche | fusible ou résistance fusible du rail correspondant | chaque rail peut avoir sa protection |
 | Le fusible neuf fond aussitôt | court-circuit en aval | défaut toujours présent |
 | Le fusible fond seulement à la mise sous tension | type du fusible (rapide au lieu de temporisé), condensateurs d'entrée | appel de courant |
@@ -170,7 +172,7 @@ Pour séparer le fusible de son porte-fusible : mesurer la chute entre la capsul
 ## Niveau 4 — Méthodes avancées
 
 - **Mesurer le courant réel** : ampèremètre en série à la place du fusible, sur alimentation limitée, pour comparer la consommation au courant assigné. En service continu, un fusible est choisi pour ne conduire qu'environ les trois quarts de son courant assigné à 25 °C ; un courant mesuré au-dessus explique un fusible qui fatigue.
-- **Estimer le courant sans ouvrir le circuit** : chute de tension aux bornes du fusible divisée par sa résistance à froid (mesurée ou lue dans la fiche technique). L'ordre de grandeur suffit pour repérer une surcharge.
+- **Estimer le courant sans ouvrir le circuit** : chute de tension aux bornes du fusible divisée par sa résistance à froid (mesurée ou lue dans la fiche technique). Le résultat est un **majorant** : près du courant assigné, la résistance du fil chaud vaut deux à plusieurs fois sa résistance à froid. L'ordre de grandeur suffit pour repérer une surcharge franche.
 - **Caméra thermique ou doigt prudent** sur le rail alimenté à courant limité : le composant en court-circuit chauffe (fiches 03 et 92).
 - **Oscilloscope sur une résistance de mesure en série** : visualiser l'appel de courant à la mise sous tension, pour départager un fusible mal choisi d'un défaut réel.
 - **Lire la courbe temps-courant** de la fiche technique : un fusible ne fond pas à son courant assigné. Selon la norme, il tient ce courant indéfiniment et ne fond en moins d'une heure qu'à partir d'une surcharge de plusieurs dizaines de pour cent ; une petite surcharge peut durer longtemps.
@@ -179,13 +181,17 @@ Pour séparer le fusible de son porte-fusible : mesurer la chute entre la capsul
 
 ```mermaid
 flowchart TD
-  A[Fusible ou résistance fusible suspect, carte hors tension et déchargée] --> B{Bipeur d'une capsule à l'autre}
+  A[Fusible ou résistance fusible suspect, carte hors tension et déchargée] --> T{Quel composant ?}
+  T -- fusible --> B{Bipeur d'une capsule à l'autre}
+  T -- résistance fusible --> U{Ohmmètre : lecture comparée à la valeur marquée}
+  U -- valeur marquée, à la tolérance près --> V[Résistance fusible bonne : chercher ailleurs]
+  U -- OL ou au moins cent fois la valeur marquée --> G
   B -- bip, proche de 0 Ω --> C{Porte-fusible : bip de patte à patte, fusible en place ?}
   C -- oui --> D[Fusible et contacts bons : chercher ailleurs]
   C -- non --> E[Nettoyer ou remplacer le porte-fusible, refaire les soudures]
-  B -- quelques ohms --> F{Calibre de 250 mA ou moins ?}
+  B -- quelques ohms --> F{Calibre de 200 mA ou moins ?}
   F -- oui --> C
-  F -- non --> G[Fusible ouvert ou douteux]
+  F -- non --> G[Ouvert ou douteux]
   B -- OL --> G
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
   H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
@@ -222,7 +228,7 @@ Avant de remettre sous tension : la cause est trouvée, le fusible monté est ce
 - Bipeur d'une capsule à l'autre, hors tension : bip = bon, OL = ouvert.
 - Un fil qui a l'air entier ne prouve rien : mesurer.
 - Petit calibre : quelques ohms sont normaux (100 mA ≈ 6 Ω).
-- En circuit, fusible bon = proche de 0 Ω ; toute autre lecture = ouvert.
+- En circuit, fusible bon = proche de 0 Ω, ou la résistance à froid de son calibre ; nettement plus = ouvert.
 - Sous tension : rail en amont, rien en aval = ouvert.
 - Verre clair, fil fondu : surcharge. Verre noirci : court-circuit.
 - Avant de remplacer : ohmmètre entre l'aval et la masse, puis recherche du court-circuit.

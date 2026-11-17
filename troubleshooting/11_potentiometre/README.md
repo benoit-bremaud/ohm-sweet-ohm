@@ -15,7 +15,7 @@ Un potentiomètre est une résistance à trois bornes : une **piste** fixe entre
 | Potentiomètre rotatif de façade | boîtier rond ou carré, axe à bouton, 3 bornes (6 pour un modèle double, stéréo) | volume, tonalité, consigne réglée par l'utilisateur |
 | Potentiomètre à glissière | boîtier long, curseur à tirette | tables de mixage, égaliseurs |
 | Ajustable monotour | petit boîtier ouvert ou capoté, fente de tournevis, environ trois quarts de tour | réglages d'usine : tension de sortie, seuil, contraste |
-| Ajustable multitour | boîtier rectangulaire bleu, vis de réglage en laiton sur le dessus ou le côté, 25 tours | réglages fins : référence de tension, étalonnage |
+| Ajustable multitour | boîtier rectangulaire bleu, vis de réglage en laiton sur le dessus ou le côté, souvent 15 à 25 tours | réglages fins : référence de tension, étalonnage |
 | Potentiomètre avec interrupteur | rotatif avec un clic en début de course et deux bornes de plus à l'arrière | marche-arrêt couplé au volume |
 
 Un **codeur rotatif** ressemble à un potentiomètre de façade mais tourne sans butée, souvent avec des crans : ce n'est pas une résistance et cette fiche ne s'applique pas.
@@ -27,7 +27,7 @@ Un **codeur rotatif** ressemble à un potentiomètre de façade mais tourne sans
 - **Les trois bornes** : la piste entre les bornes 1 et 3, le curseur sur la borne 2, presque toujours celle du milieu. Dans le doute, la mesure le dit : la paire de bornes dont la lecture **ne change pas** quand on tourne l'axe est la piste ; la troisième borne est le curseur.
 - **La valeur** est celle de la piste entière, en clair (10K) ou en code à 3 chiffres comme une résistance CMS (103 = 10 kΩ, 502 = 5 kΩ, 104 = 100 kΩ).
 - **La lettre** désigne la loi de variation, et elle n'est pas normalisée : sur les pièces asiatiques et américaines, B = linéaire et A = logarithmique (volume) ; sur les pièces européennes, A = linéaire et le logarithmique porte B ou C. Trancher par la mesure : curseur à mi-course, un modèle linéaire lit à peu près la moitié de la valeur totale entre le curseur et chaque bout ; un modèle logarithmique en est très loin (souvent autour de 10 % d'un côté).
-- **Ajustable multitour** : la vis fait 25 tours d'un bout à l'autre de la piste, et le curseur **débraye** en fin de course au lieu de buter. On ne sent donc pas la fin de course : seule la mesure dit où est le curseur.
+- **Ajustable multitour** : la vis fait de nombreux tours d'un bout à l'autre de la piste (25 sur un Bourns 3296), et le curseur **débraye** en fin de course au lieu de buter. On ne sent donc pas la fin de course : seule la mesure dit où est le curseur.
 
 ### Les deux montages
 
@@ -78,7 +78,7 @@ La tolérance d'un potentiomètre est large : ± 20 % pour un modèle de façade
 
 ### 2. Le curseur, entre les bornes 1 et 2 puis 2 et 3
 
-![Deux multimètres sur Ω, pointes sur les bornes 1 et 2 pendant qu'on tourne l'axe : à gauche la lecture monte régulièrement de 0 à 10 kΩ, à droite elle passe à OL à certains endroits](mesure-du-curseur.svg)
+![Deux multimètres sur Ω, pointes sur les bornes 1 et 2 pendant qu'on tourne l'axe : à gauche la lecture monte régulièrement de quelques ohms à 10 kΩ, à droite elle passe à OL à certains endroits](mesure-du-curseur.svg)
 
 1. Une pointe sur la borne 1, l'autre sur la borne 2. Des pinces libèrent les mains.
 2. Tourner l'axe **lentement** d'une butée à l'autre en regardant l'afficheur.
@@ -134,7 +134,7 @@ En montage diviseur, carte sur alimentation limitée en courant, sélecteur sur 
 | --- | --- |
 | Varie régulièrement d'une limite à l'autre | potentiomètre sain : chercher en aval |
 | Saute ou décroche à certains endroits | contact du curseur |
-| Reste collée à la tension d'un bout, quelle que soit la position | l'autre bout de la piste est ouvert (borne, soudure ou piste) |
+| Reste collée à la tension d'un bout, quelle que soit la position | l'autre bout de la piste est ouvert (borne, soudure ou piste), ou le curseur ne touche plus la piste |
 | Aucune tension sur les bornes 1 et 3 | le potentiomètre n'est pas alimenté : chercher en amont |
 
 Sur un **ajustable**, ne pas tourner pour « voir » : mesurer d'abord la grandeur qu'il règle (tension de sortie, courant de repos) et la comparer à la valeur attendue. Si un réglage est nécessaire, repérer la position de départ (trait de feutre sur un monotour, nombre de tours compté sur un multitour) et procéder par petites retouches en surveillant la mesure.
@@ -176,6 +176,7 @@ flowchart TD
   J -- oui --> H
   J -- non, ou ils reviennent --> R
   D -- OL sur toute la course --> R
+  D -- reste proche de 0 Ω ou du total sur toute la course --> R
 ```
 
 ## Remplacer le composant
@@ -190,7 +191,7 @@ flowchart TD
 | Brochage | vérifier quelle borne est le curseur sur la pièce neuve : il n'est pas toujours au milieu sur les ajustables |
 | Interrupteur, modèle double | identiques |
 
-**Avant de dessouder un ajustable**, mesurer hors tension la résistance entre son curseur et chaque bout, la noter, et régler la pièce neuve sur ces valeurs **avant** de la souder. Si l'ancien est trop abîmé pour être mesuré, partir de la mi-course. Après remontage, reprendre le réglage sous tension, sur alimentation limitée, en suivant la grandeur réglée, puis bloquer la vis d'une goutte de vernis.
+**Pour remplacer un ajustable**, le dessouder **sans toucher à sa vis**, puis mesurer hors circuit la résistance entre son curseur et chaque bout (en circuit, ces valeurs sont faussées par les chemins parallèles, fiche [02](../02_pieges_en_circuit/README.md)), la noter, et régler la pièce neuve sur ces valeurs **avant** de la souder. Si l'ancien est trop abîmé pour être mesuré, partir de la position qui donne la plus faible grandeur réglée (tension de sortie la plus basse, d'après le schéma), charge débranchée si possible : la mi-course peut démarrer un régulateur au-dessus de sa consigne, et la limite de courant ne protège pas d'une surtension. Après remontage, reprendre le réglage sous tension, sur alimentation limitée, en suivant la grandeur réglée, puis bloquer la vis d'une goutte de vernis.
 
 Avant de remettre sous tension un appareil dont le potentiomètre avait une piste brûlée : la cause de la surintensité est trouvée et réparée.
 
@@ -203,7 +204,7 @@ Avant de remettre sous tension un appareil dont le potentiomètre avait une pist
 - En circuit, les chemins parallèles ne créent pas de coupures : le test du curseur reste valable.
 - Sous tension, en diviseur : la tension du curseur doit glisser d'une limite à l'autre.
 - Crachements : nettoyant pour potentiomètres, vingt allers-retours ; s'ils reviennent, piste usée.
-- Ajustable : repérer la position avant de toucher, mesurer avant de dessouder, prérégler le neuf.
+- Ajustable : repérer la position, dessouder sans toucher la vis, mesurer hors circuit, prérégler le neuf.
 - La lettre A ou B ne prouve pas la loi : mesurer à mi-course.
 - Piste brûlée = symptôme : chercher la surintensité en aval.
 

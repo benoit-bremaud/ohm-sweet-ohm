@@ -73,7 +73,7 @@ def fig_identify() -> str:
             ("B10K", "10 kΩ, loi linéaire", "lettre : loi de variation"),
             ("A50K", "50 kΩ, loi logarithmique", "réglage de volume"),
             ("103", "10 × 10³ = 10 kΩ", "ajustable : code à 3 chiffres"),
-            ("W103", "10 kΩ, multitour", "25 tours de vis, sans butée franche"),
+            ("W103", "10 kΩ, multitour 3296W", "25 tours de vis, sans butée franche"),
         )
     ):
         y = 124 + 62 * i
@@ -94,7 +94,7 @@ def fig_identify() -> str:
         "et un curseur, contact mobile porté par l'axe et relié à la borne 2 du milieu, glisse sur cette piste. "
         "Entre les bornes 1 et 3 se lit la résistance totale, fixe ; entre la borne 2 et chacune des deux autres, une résistance qui varie avec l'axe et dont la somme fait le total. "
         "À droite, quatre marquages : B10K, 10 kΩ à loi linéaire ; A50K, 50 kΩ à loi logarithmique pour un réglage de volume ; "
-        "103, ajustable de 10 kΩ ; W103, ajustable multitour de 10 kΩ, 25 tours de vis sans butée franche. "
+        "103, ajustable de 10 kΩ ; W103, ajustable multitour 3296W de 10 kΩ, 25 tours de vis sans butée franche. "
         "Les lettres A et B ont changé de sens selon l'époque et l'origine : vérifier à mi-course, un modèle linéaire y lit la moitié du total.",
         b,
     )
@@ -181,7 +181,16 @@ def fig_wiper() -> str:
     )
     b += '  <path class="grid" d="M380 84 V600"/>\n'
 
-    def half(x0, title, lcd, turn, notes, dropouts, cls, verdict) -> str:
+    def half(
+        x0: float,
+        title: str,
+        lcd: str,
+        turn: float,
+        notes: tuple[str, ...],
+        dropouts: bool,
+        cls: str,
+        verdict: tuple[str, str],
+    ) -> str:
         o = text(x0 + 20, 100, title, size=15, weight=700)
         m, (_, com, v) = meter(x0 + 24, 116, 0.9, "20k", lcd, "kΩ")
         o += m
@@ -222,7 +231,10 @@ def fig_wiper() -> str:
         ("La lecture suit l'axe,", "sans saut ni retour", "en arrière."),
         False,
         "ok",
-        ("✓ de 0 à 10 kΩ sans à-coup", "puis même essai entre les bornes 2 et 3"),
+        (
+            "✓ de quelques ohms à 10 kΩ sans à-coup",
+            "puis même essai entre les bornes 2 et 3",
+        ),
     )
     b += half(
         380,
@@ -239,7 +251,7 @@ def fig_wiper() -> str:
         612,
         "Mesure du curseur d'un potentiomètre en tournant l'axe",
         "Deux multimètres, sélecteur sur ohms calibre 20 kΩ, ont une pointe sur la borne 1 et l'autre sur la borne 2, le curseur, d'un potentiomètre de 10 kΩ dont on tourne l'axe lentement. "
-        "À gauche, curseur sain : l'appareil lit 4,87 kΩ à mi-course et la lecture monte de 0 à 10 kΩ sans à-coup, comme le montre la courbe régulière de la lecture en fonction de la rotation ; refaire l'essai entre les bornes 2 et 3. "
+        "À gauche, curseur sain : l'appareil lit 4,87 kΩ à mi-course et la lecture monte de quelques ohms à 10 kΩ sans à-coup, comme le montre la courbe régulière de la lecture en fonction de la rotation ; refaire l'essai entre les bornes 2 et 3. "
         "À droite, curseur usé : l'appareil passe à OL à certains endroits de la course, la courbe montre deux coupures ; la piste est usée ou encrassée, il faut nettoyer ou remplacer.",
         b,
     )

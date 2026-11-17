@@ -161,7 +161,7 @@ Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe
 | Toute la tension du rail | résistance ouverte (ou charge en court-circuit franc) |
 | 0 V | aucun courant : circuit coupé en amont ou en aval, ou résistance court-circuitée (pont de soudure) |
 
-Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance. Si elle est dépassée, comme sur la figure, couper la sortie dès la lecture faite. Régler la limite de l'alimentation juste au-dessus du courant attendu (fiche [00](../00_securite/README.md)) : le voyant CC signale alors le défaut avant toute mesure. Sur la figure, la limite a été remontée par paliers pour localiser le défaut (fiche 00, « Lire »).
+Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance. Si elle est dépassée, comme sur la figure, couper la sortie dès la lecture faite. Régler la limite de l'alimentation juste au-dessus du courant attendu (fiche [00](../00_securite/README.md)) : le voyant CC signale alors le défaut avant toute mesure. Sur la figure, la limite a été remontée par paliers pour localiser le défaut (fiche 00, « Lire ») : on s'arrête au premier palier où un composant chauffe, on fait la lecture, on coupe la sortie, et on ne monte pas plus haut.
 
 ### Brûlée : chercher le court-circuit en aval
 

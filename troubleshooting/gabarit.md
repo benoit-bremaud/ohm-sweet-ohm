@@ -65,7 +65,7 @@ flowchart TD
 
 ## Mini-glossaire
 
-Facultatif : les quelques termes propres à ce composant, une ligne chacun, avec un renvoi à sa fiche de cours quand elle existe.
+*Facultatif : les quelques termes propres à ce composant, une ligne chacun, avec un renvoi à sa fiche de cours quand elle existe.*
 
 ## Sources
 
