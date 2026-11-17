@@ -6,7 +6,7 @@ Savoir si une thermistance réagit encore à la température comme elle le doit,
 
 Une thermistance est une résistance dont la valeur dépend fortement de la température. Celle d'une **CTN** (coefficient de température négatif) baisse quand elle chauffe ; celle d'une **CTP** (coefficient de température positif) monte, brutalement au-delà d'un seuil. On les rencontre dans trois rôles : **capteur de température** (CTN de mesure), **limiteur de courant d'appel** (CTN de puissance), **fusible réarmable** (CTP polymère). Une thermistance ne se juge donc pas sur une seule lecture : on mesure sa valeur à température ambiante, **puis on la chauffe** et on vérifie que la lecture part dans le bon sens.
 
-> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Une CTN de puissance en service et une CTP qui a basculé sont **brûlantes** : ne pas les toucher sous tension ni juste après la coupure. La CTN d'un pack ou d'un chargeur de batteries est une sécurité : ne jamais la remplacer par une résistance fixe pour « faire charger ». Les CTN et CTP placées du côté secteur d'une alimentation sont hors du périmètre de ces fiches.
+> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Une CTN de puissance en service et une CTP qui a basculé sont **brûlantes** : ne pas les toucher sous tension ni juste après la coupure. La CTN d'un pack ou d'un chargeur de batteries, ou d'un élément chauffant, est une sécurité : ne jamais la remplacer par une résistance fixe. Les CTN et CTP placées du côté secteur d'une alimentation sont hors du périmètre de ces fiches.
 
 ## Identifier le composant
 
@@ -90,8 +90,8 @@ Sélecteur sur Ω, plus petit calibre, résistance des cordons retranchée (fich
 
 | Lecture à froid | Verdict |
 | --- | --- |
-| Valeur marquée, à ± 20 % près à 25 °C (environ 4 % de plus par degré en dessous), qui baisse en la réchauffant | saine |
-| OL, ou nettement au-dessus de la valeur marquée | ouverte ou dégradée (disque fissuré) : remplacer |
+| Valeur marquée, à ± 20 % près à 25 °C (environ 4 % de plus par degré en dessous, de moins par degré au-dessus), qui baisse en la réchauffant | saine |
+| OL, ou nettement au-dessus de la valeur marquée corrigée de la température | ouverte ou dégradée (disque fissuré) : remplacer |
 | Bien en dessous de la valeur marquée alors qu'elle est froide | attendre : elle met une à deux minutes à refroidir après la coupure ; si la lecture reste basse, remplacer |
 
 ### CTP polymère (fusible réarmable)
@@ -118,7 +118,7 @@ La règle de la fiche [02](../02_pieges_en_circuit/README.md) s'applique : les c
 | Proche de la valeur attendue, et qui baisse en chauffant la CTN | probablement saine |
 | En dessous de la valeur attendue | rien de prouvé : débrancher la sonde ou lever une patte |
 | CTP polymère, une heure après la coupure : dans la plage de la fiche technique | probablement saine ; nettement au-dessus : fatiguée ; en dessous : rien de prouvé ; OL : ouverte |
-| CTN de puissance froide : valeur marquée à ± 20 % près | probablement saine ; nettement au-dessus : dégradée ; en dessous : rien de prouvé (chemin parallèle, fiche 02) ; OL : ouverte |
+| CTN de puissance froide : valeur marquée à ± 20 % près | probablement saine ; nettement au-dessus de la valeur marquée corrigée de la température (niveau 2) : dégradée ; en dessous : rien de prouvé (chemin parallèle, fiche 02) ; OL : ouverte |
 
 Une sonde au bout d'un câble se mesure sans rien dessouder : débrancher son connecteur et mesurer côté sonde.
 
@@ -197,11 +197,11 @@ flowchart TD
   F -- oui --> G[CTN saine : contrôler le pont diviseur sous tension, le contact thermique, puis l'entrée de mesure]
   C -- CTP polymère --> H{Ohmmètre à froid, une heure après la coupure}
   H -- OL ou bien au-dessus de la fiche technique --> R
-  H -- faible --> I{Ohmmètre entre l'aval et la masse}
+  H -- dans la plage de la fiche technique --> I{Ohmmètre entre l'aval et la masse}
   I -- proche de 0 Ω --> J[Court-circuit en aval : le trouver, fiche 92]
   I -- pas de court-circuit --> K[Essai sur alimentation limitée : mesurer le courant réel et la température autour de la CTP]
   C -- CTN de puissance --> L{Ohmmètre à froid, après deux minutes de refroidissement}
-  L -- OL ou nettement au-dessus de la valeur marquée --> R
+  L -- OL ou nettement au-dessus de la valeur marquée corrigée de la température --> R
   L -- valeur marquée à 20 % près --> M[CTN probablement saine : chercher ailleurs]
   L -- bien en dessous, hors circuit et froide --> R
 ```

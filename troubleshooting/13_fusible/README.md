@@ -75,7 +75,7 @@ Un fusible ne tombe **pas** en court-circuit. Le défaut inverse existe pourtant
 ![Deux multimètres sur le bipeur, une pointe sur chaque capsule d'un fusible : à gauche l'appareil sonne et lit 0,2 Ω, fusible bon ; à droite pas de bip et OL, fusible fondu](bipeur-hors-tension.svg)
 
 1. Carte débranchée et déchargée. Sortir le fusible de son porte-fusible si c'est possible.
-2. Sélecteur sur le **bipeur**. Pour un calibre de 50 mA ou moins, sélecteur sur Ω, calibre 2 kΩ (ou automatique) : un fil aussi fin ne fait pas sonner l'appareil. Vérifier les cordons : pointes en court-circuit, l'appareil sonne.
+2. Sélecteur sur le **bipeur**. Pour un calibre de 50 mA ou moins, sélecteur sur Ω, calibre 2 kΩ (ou automatique) : un fil aussi fin peut ne pas faire sonner l'appareil. Vérifier les cordons : pointes en court-circuit, l'appareil sonne (en Ω : quelques dixièmes d'ohm).
 3. Une pointe sur chaque capsule.
 
 | Lecture | Verdict |
@@ -106,14 +106,15 @@ Un fusible de 100 mA qui lit 6 Ω est donc bon. Un fusible CMS de 1 A lit moins 
 
 ### Hors tension
 
-Le contrôle au bipeur reste valable fusible en place : un fusible bon de 200 mA ou plus court-circuite pratiquement tout ce qui est en parallèle avec lui. Pour un calibre plus petit, sa résistance à froid compte : comparer la lecture au tableau du niveau 2.
+Le contrôle au bipeur reste valable fusible en place : un fusible bon de 200 mA ou plus court-circuite pratiquement tout ce qui est en parallèle avec lui. Pour un calibre plus petit, sa résistance à froid compte : comparer la lecture au tableau du niveau 2. Calibre de 50 mA ou moins : sélecteur sur Ω, calibre 2 kΩ, comme au niveau 2.
 
 | Lecture stabilisée, carte hors tension | Verdict |
 | --- | --- |
-| Proche de 0 Ω, bip (petit calibre : la résistance à froid de son calibre, tableau du niveau 2) | fusible bon |
-| En dessous de la résistance à froid d'un petit calibre (100 mA ou moins) | rien de prouvé : un chemin parallèle fait baisser la lecture ; sortir le fusible ou lever une patte |
-| OL | fusible ouvert |
-| Nettement au-dessus de la résistance à froid de son calibre, parfois un bip bref puis plus rien | fusible **ouvert** : on mesure le reste de la carte à travers lui (chemin parallèle, condensateur qui se charge, fiche [02](../02_pieges_en_circuit/README.md)) |
+| Calibre de 200 mA ou plus : proche de 0 Ω, bip | fusible bon |
+| Calibre de moins de 200 mA : la résistance à froid de son calibre (tableau du niveau 2) | fusible bon |
+| Calibre de moins de 200 mA : nettement en dessous de la résistance à froid de son calibre | rien de prouvé : un chemin parallèle fait baisser la lecture ; sortir le fusible ou lever une patte |
+| OL (lu en Ω pour un calibre de 50 mA ou moins) | fusible ouvert |
+| Nettement au-dessus de la résistance à froid de son calibre, parfois un bip bref puis plus rien | fusible **ouvert ou dégradé** : le sortir et le mesurer seul. S'il est ouvert, la lecture était celle du reste de la carte (chemin parallèle, condensateur qui se charge, fiche [02](../02_pieges_en_circuit/README.md)) |
 
 **Avant de remplacer un fusible ouvert**, chercher le défaut en aval, toujours hors tension :
 
@@ -187,12 +188,14 @@ flowchart TD
   T -- résistance fusible --> U{Ohmmètre : lecture comparée à la valeur marquée}
   U -- valeur marquée, à la tolérance près --> V[Résistance fusible bonne : chercher ailleurs]
   U -- OL ou au-dessus de la tolérance --> G
-  B -- bip, proche de 0 Ω --> C{Porte-fusible : bip de patte à patte, fusible en place ?}
+  U -- en dessous de la tolérance, en circuit --> P
+  B -- bip, proche de 0 Ω, calibre de 200 mA ou plus --> C{Porte-fusible : même lecture de patte à patte, fusible en place ?}
   C -- oui --> D[Fusible et contacts bons : chercher ailleurs]
   C -- non --> E[Nettoyer ou remplacer le porte-fusible, refaire les soudures]
-  B -- de quelques ohms à quelques centaines d'ohms --> F{Lecture proche de la résistance à froid de son calibre ?}
+  B -- quelques ohms ou plus, ou calibre de moins de 200 mA --> F{Lecture proche de la résistance à froid de son calibre ?}
   F -- oui --> C
   F -- non, nettement au-dessus --> G[Ouvert ou douteux]
+  F -- non, nettement en dessous, en circuit --> P[Rien de prouvé : sortir le composant ou lever une patte, refaire la mesure]
   B -- OL --> G
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
   H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
@@ -228,8 +231,8 @@ Avant de remettre sous tension : la cause est trouvée, le fusible monté est ce
 
 - Bipeur d'une capsule à l'autre, hors tension : bip = bon, OL = ouvert.
 - Un fil qui a l'air entier ne prouve rien : mesurer.
-- Petit calibre : quelques ohms sont normaux (100 mA ≈ 6 Ω) ; 50 mA ou moins : 15 à 260 Ω, pas de bip, lire en Ω.
-- En circuit, fusible bon = proche de 0 Ω, ou la résistance à froid de son calibre ; nettement plus = ouvert.
+- Petit calibre : quelques ohms sont normaux (100 mA ≈ 6 Ω) ; 50 mA ou moins : de 15 Ω à plus de 250 Ω, bip incertain, lire en Ω.
+- En circuit : 200 mA ou plus, proche de 0 Ω = bon ; calibre plus petit, sa résistance à froid = bon, en dessous = rien de prouvé ; nettement plus = ouvert ou dégradé.
 - Sous tension : rail en amont, rien en aval = ouvert.
 - Verre clair, fil fondu : surcharge. Verre noirci : court-circuit.
 - Avant de remplacer : ohmmètre entre l'aval et la masse, puis recherche du court-circuit.
