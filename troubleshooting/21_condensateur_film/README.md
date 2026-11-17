@@ -165,7 +165,7 @@ flowchart TD
   F -- lecture impossible --> I{Ohmmètre, calibre le plus élevé}
   F -- oui --> I
   I -- valeur fixe ou proche de 0 Ω --> J[Fuite ou court-circuit : remplacer]
-  F -- juste hors tolérance --> N[Vérifier le capacimètre sur un condensateur neuf]
+  F -- juste hors tolérance --> V[Vérifier le capacimètre sur un condensateur neuf] --> I
   I -- OL après une montée brève --> K{Capacité conforme ?}
   I -- OL d'emblée --> K
   K -- oui --> L[Condensateur sain : chercher ailleurs]

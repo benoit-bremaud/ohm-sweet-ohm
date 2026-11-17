@@ -89,8 +89,8 @@ Pourquoi la lecture monte avant d'afficher OL : l'ohmmètre injecte un petit cou
 | --- | --- |
 | Dans la tolérance | sain, si l'isolement est bon lui aussi |
 | Classe II, un peu en dessous de la tolérance | plausible : la capacité d'une classe II baisse avec l'âge (environ 2,5 % chaque fois que l'âge est multiplié par dix pour un X7R, jusqu'à 7 % pour un Z5U). Douteux seulement si le circuit montre un symptôme |
-| Entre les deux : nettement sous la tolérance, sans atteindre la moitié | douteux : comparer avec un condensateur neuf de même référence, remplacer au moindre symptôme |
-| Nettement en dessous (la moitié ou moins), ou instable | fissure qui a coupé des électrodes : à remplacer |
+| Classe II, entre les deux : nettement sous la tolérance, sans atteindre la moitié | douteux : comparer avec un condensateur neuf de même référence, remplacer au moindre symptôme |
+| Nettement en dessous (la moitié ou moins), instable, ou classe I hors tolérance | fissure qui a coupé des électrodes : à remplacer |
 | Lecture impossible, « OL » ou dépassement | court-circuit ou fuite : revenir à l'ohmmètre |
 
 Deux limites à connaître :

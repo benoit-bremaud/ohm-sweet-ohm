@@ -85,11 +85,11 @@ Exemple : 1 F chargé à 5,5 V dans 100 Ω. Au départ, 55 mA et 0,3 W dans la r
 | La tension est tout de suite à la valeur réglée **et le courant tombe à zéro en une ou deux secondes** | capacité presque nulle ou circuit ouvert : à remplacer |
 | Le courant ne retombe pas après plusieurs minutes | fuite : confirmer par la mesure d'autodécharge |
 
-Un modèle de sauvegarde à forte résistance interne peut ne jamais faire passer l'alimentation en limitation : c'est alors le **courant** qu'on lit. Il part de quelques dizaines de milliampères et décroît pendant plusieurs minutes sur un composant sain.
+Un modèle de sauvegarde à forte résistance interne peut ne jamais faire passer l'alimentation en limitation : c'est alors le **courant** qu'on lit. Sur un composant sain, il reste sous la limite et décroît lentement ; sur un composant ouvert, il est nul presque aussitôt.
 
 ### Mesurer la capacité au chronomètre
 
-1. Charger à 5 V (essai précédent) et **maintenir cette tension 30 minutes** : après une charge trop brève, la tension retombe toute seule et fausse la mesure. Débrancher ensuite l'alimentation.
+1. Charger à la tension de l'essai précédent (5 V pour un modèle 5,5 V, 2,5 V pour une cellule de 2,7 V) et **maintenir cette tension 30 minutes** : après une charge trop brève, la tension retombe toute seule et fausse la mesure. Débrancher ensuite l'alimentation.
 2. Brancher une résistance de **1 kΩ** entre les deux pattes, voltmètre aux bornes.
 3. Démarrer le chronomètre quand la tension passe par **4 V**, l'arrêter à **2 V**.
 4. Calculer : **C = durée / (0,69 × R)**, durée en secondes, R en ohms, C en farads.
@@ -108,7 +108,7 @@ Limite : la résistance interne du supercondensateur s'ajoute à la résistance 
 
 ### Mesurer l'autodécharge
 
-1. Charger à la tension de service, l'y maintenir 30 minutes au moins, puis débrancher : **rien** ne reste branché aux bornes.
+1. Charger à la tension de l'essai de charge (tension marquée au plus), l'y maintenir 30 minutes au moins, puis débrancher : **rien** ne reste branché aux bornes.
 2. Relever la tension après 1 heure, 24 heures, puis une semaine.
 
 ![Courbes de la tension aux bornes d'un supercondensateur 5,5 V chargé puis laissé seul pendant 600 heures. Supercondensateur sain : il reste encore 3 V après 600 heures, soit 25 jours. Supercondensateur défectueux, à titre d'exemple : la tension passe sous 3 V en une journée](autodecharge.svg)
@@ -173,6 +173,7 @@ flowchart TD
   E --> F{La tension monte régulièrement ?}
   F -- reste à 0 V --> R
   F -- à la tension réglée d'emblée, courant nul presque aussitôt --> R
+  F -- à la tension réglée d'emblée, courant qui décroît lentement --> G
   F -- oui --> G[Maintenir la charge 30 minutes, puis décharge dans 1 kΩ : chronométrer de 80 % à 40 % de la tension de charge]
   G --> H{Capacité supérieure à 70 % de la valeur marquée ?}
   H -- non --> R
