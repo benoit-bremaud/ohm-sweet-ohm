@@ -37,7 +37,9 @@ def _heading(title: str, subtitle: str) -> str:
 
 
 # ---------------------------------------------------------------- figure 1
-def _banded(y: int, names: tuple[str, ...], labels: tuple[str, ...], body) -> str:
+def _banded(
+    y: int, names: tuple[str, ...], labels: tuple[str, ...], body: tuple[str, str]
+) -> str:
     """Large axial resistor with one label under each band."""
     x1, x2 = 110, 330
     o = f'  <path {LEG} d="M50 {y} H{x1} M{x2} {y} H390"/>\n'
@@ -292,7 +294,7 @@ def fig_out() -> str:
     )
     b += half(
         380,
-        "Au-dessus de 100 kΩ : pas les doigts",
+        "Fortes valeurs : pas les doigts",
         "2M",
         "0.833",
         "MΩ",
@@ -301,7 +303,7 @@ def fig_out() -> str:
         ),
         (
             "Deux doigts sur les pointes :",
-            "le corps, quelques MΩ,",
+            "le corps, ici 5 MΩ,",
             "se met en parallèle.",
         ),
         True,
@@ -332,10 +334,10 @@ def fig_in() -> str:
     m, jacks = meter(30, 80, 1, "200k", "148.3", "kΩ")
     b += m
     b += f'  <path class="wire" d="M300 {YA} H545 V165 M300 {YB} H545 V245"/>\n'
-    b += res_v(390, YA, YB, colours=bands("brown", "black", "yellow", "gold"))
+    b += res_v(300, YA, YB, colours=bands("brown", "black", "yellow", "gold"))
     b += f'  <circle class="fg" cx="300" cy="{YA}" r="5"/><circle class="fg" cx="300" cy="{YB}" r="5"/>\n'
-    b += text(390, 112, "R1 · 100 kΩ", "blue", 13, "middle", 700)
-    b += text(390, 306, "mesurée", "blue", 12, "middle")
+    b += text(322, 196, "R1 · 100 kΩ", "blue", 13, weight=700)
+    b += text(322, 214, "mesurée", "blue", 12)
     b += box(480, 165, 130, 80, "Reste du circuit", ("chemins parallèles", "inconnus"))
     b += text(626, 190, "Un chemin parallèle", "mut", 12)
     b += text(626, 206, "ne peut que faire", "mut", 12)
@@ -391,7 +393,9 @@ def fig_drop() -> str:
         13,
         weight=700,
     )
-    b += text(300, 164, "elle brunit, puis elle s'ouvre.", "no", 13, weight=700)
+    b += text(
+        300, 164, "elle surchauffe : couper dès la lecture faite.", "no", 13, weight=700
+    )
     y = 250
     b += box(300, y - 40, 90, 80, "Alim. 12 V", ("limitée", "à 300 mA"))
     b += box(640, y - 40, 90, 80, "Charge", ("en défaut",))
@@ -416,7 +420,7 @@ def fig_drop() -> str:
         "Mesurer la chute de tension aux bornes d'une résistance pour connaître le courant",
         "Un multimètre, sélecteur sur volts continus, a sa pointe rouge côté alimentation et sa pointe noire côté charge d'une résistance série de 10 Ω, 0,25 W. "
         "La carte est alimentée en 12 V par une alimentation limitée à 300 mA. L'appareil lit 2,35 V : le courant vaut 2,35 V divisé par 10 Ω, soit 235 mA, "
-        "alors que 50 mA sont attendus. La résistance dissipe 0,55 W, plus du double de sa puissance : elle brunit puis s'ouvre. "
+        "alors que 50 mA sont attendus. La résistance dissipe 0,55 W, plus du double de sa puissance : elle surchauffe, il faut couper dès la lecture faite. "
         "Le défaut est dans la charge, en aval.",
         b,
     )

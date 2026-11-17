@@ -8,6 +8,7 @@ on the page background uses the CSS classes of STYLE so it follows the light or 
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from typing import NamedTuple
 
 Point = tuple[float, float]
@@ -311,7 +312,7 @@ def bands(*names: str) -> list[str]:
     return [BAND_COLOURS[name] for name in names]
 
 
-BANDS = bands("brown", "black", "orange", "gold")  # 10 kΩ 5 %
+BANDS = tuple(bands("brown", "black", "orange", "gold"))  # 10 kΩ 5 %
 BAND_WIDTH = 0.09  # fraction of the body length
 
 
@@ -327,9 +328,9 @@ def res_v(
     w: float = 24,
     h: float = 64,
     cls: str = "wire",
-    colours: list[str] = BANDS,
+    colours: Sequence[str] = BANDS,
 ) -> str:
-    """Vertical axial resistor centred on the wire from (x, y1) to (x, y2)."""
+    """Vertical axial resistor centred on the wire from (x, y1) to (x, y2); `colours` are its bands."""
     cy = (y1 + y2) / 2
     o = f'  <path class="{cls}" d="M{x} {y1} V{y2}"/>\n'
     o += f'  <rect x="{x - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="{w / 3:.1f}" fill="{TAN[0]}" stroke="{TAN[1]}" stroke-width="1.5"/>\n'
@@ -343,7 +344,7 @@ def res_h(
     x2: float,
     y: float,
     h: float = 28,
-    colours: list[str] = BANDS,
+    colours: Sequence[str] = BANDS,
     body: tuple[str, str] = TAN,
 ) -> str:
     """Horizontal axial resistor body from x1 to x2 (no leads); `body` is (fill, outline)."""

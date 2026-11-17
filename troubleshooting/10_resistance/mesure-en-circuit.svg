@@ -74,15 +74,15 @@
     <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
   </g>
   <path class="wire" d="M300 130 H545 V165 M300 280 H545 V245"/>
-  <path class="wire" d="M390 130 V280"/>
-  <rect x="378.0" y="173.0" width="24" height="64" rx="8.0" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>
-  <rect x="378.0" y="183.2" width="24" height="5.8" fill="#7b3f00"/>
-  <rect x="378.0" y="194.1" width="24" height="5.8" fill="#111111"/>
-  <rect x="378.0" y="205.0" width="24" height="5.8" fill="#facc15"/>
-  <rect x="378.0" y="222.3" width="24" height="5.8" fill="#c9a227"/>
+  <path class="wire" d="M300 130 V280"/>
+  <rect x="288.0" y="173.0" width="24" height="64" rx="8.0" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>
+  <rect x="288.0" y="183.2" width="24" height="5.8" fill="#7b3f00"/>
+  <rect x="288.0" y="194.1" width="24" height="5.8" fill="#111111"/>
+  <rect x="288.0" y="205.0" width="24" height="5.8" fill="#facc15"/>
+  <rect x="288.0" y="222.3" width="24" height="5.8" fill="#c9a227"/>
   <circle class="fg" cx="300" cy="130" r="5"/><circle class="fg" cx="300" cy="280" r="5"/>
-  <text class="blue" x="390" y="112" font-size="13" text-anchor="middle" font-weight="700">R1 · 100 kΩ</text>
-  <text class="blue" x="390" y="306" font-size="12" text-anchor="middle">mesurée</text>
+  <text class="blue" x="322" y="196" font-size="13" font-weight="700">R1 · 100 kΩ</text>
+  <text class="blue" x="322" y="214" font-size="12">mesurée</text>
   <rect class="panel" x="480" y="165" width="130" height="80" rx="8" stroke-width="1.5"/>
   <text class="fg" x="545.0" y="196.0" font-size="13" text-anchor="middle" font-weight="700">Reste du circuit</text>
   <text class="mut" x="545.0" y="213.0" font-size="11" text-anchor="middle">chemins parallèles</text>

@@ -117,7 +117,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 
 | Technique | Fiche de base | Utilisée dans |
 | --- | --- | --- |
-| Décharge d'un condensateur | [00](00_securite/README.md) | — |
+| Décharge d'un condensateur | [00](00_securite/README.md) | [10](10_resistance/README.md) |
 | Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md) |
 | Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md) |
 | Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md) |
@@ -128,6 +128,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Mesure ESR | 03 | — |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md) |
 | Injection de courant | 92 | — |
+| Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md) |
 
 ## Licence
 

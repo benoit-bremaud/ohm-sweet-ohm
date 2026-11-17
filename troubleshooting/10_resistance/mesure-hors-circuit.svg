@@ -107,7 +107,7 @@
   </g>
   <text class="no" x="190" y="492" font-size="14" text-anchor="middle" font-weight="700">✗ 0,8 Ω lus pour 0,47 Ω</text>
   <text class="mut" x="190" y="510" font-size="12" text-anchor="middle">retrancher les 0,3 Ω des cordons, ou touche REL : 0,5 Ω</text>
-  <text class="fg" x="400" y="100" font-size="15" font-weight="700">Au-dessus de 100 kΩ : pas les doigts</text>
+  <text class="fg" x="400" y="100" font-size="15" font-weight="700">Fortes valeurs : pas les doigts</text>
   <g data-sel="2M" transform="translate(404 116) scale(0.9)">
     <rect width="180" height="310" rx="24" fill="#f2a900"/>
     <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
@@ -160,7 +160,7 @@
     <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
   </g>
   <text class="mut" x="585" y="138" font-size="12">Deux doigts sur les pointes :</text>
-  <text class="mut" x="585" y="154" font-size="12">le corps, quelques MΩ,</text>
+  <text class="mut" x="585" y="154" font-size="12">le corps, ici 5 MΩ,</text>
   <text class="mut" x="585" y="170" font-size="12">se met en parallèle.</text>
   <path stroke="#aab2bd" stroke-width="4" fill="none" stroke-linecap="round" d="M594 214 H726"/>
   <rect x="620" y="200.0" width="80" height="28" rx="9" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>

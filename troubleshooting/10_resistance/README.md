@@ -25,8 +25,8 @@ Une résistance ne tombe presque jamais en panne seule : elle **s'ouvre** ou **d
 
 ![Lecture d'une résistance à 4 anneaux (marron, noir, orange, or : 10 kΩ à 5 %) et à 5 anneaux (jaune, violet, noir, rouge, marron : 47 kΩ à 1 %), tableau des chiffres par couleur, et marquages CMS 103, 4702, 4R7, 01C et 0](lire-la-valeur.svg)
 
-- **Anneaux** : les premiers anneaux sont des chiffres, l'avant-dernier le multiplicateur, le dernier la tolérance. L'anneau de tolérance est plus écarté des autres ; commencer par l'autre bout. Dans le doute entre deux lectures, une seule tombe en général sur une valeur normalisée (séries E12 et E24 : 10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82 et leurs intermédiaires).
-- **Couleurs altérées par la chaleur** : le rouge vire au marron, l'orange au brun, le jaune pâlit. Sur une résistance qui a chauffé, confirmer la lecture par la mesure ou le schéma.
+- **Anneaux** : les premiers anneaux sont des chiffres, l'avant-dernier le multiplicateur, le dernier la tolérance. L'anneau de tolérance est plus écarté des autres ; commencer par l'autre bout. Dans le doute entre deux lectures d'une résistance à 4 anneaux, une seule tombe en général sur une valeur normalisée (séries E12 et E24 : 10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82 et leurs intermédiaires). Sur une 5 anneaux à 1 %, la série E96 est trop dense pour trancher : mesurer.
+- **Couleurs altérées par la chaleur** : le rouge vire au marron, l'orange au rouge ou au marron, le jaune pâlit. Sur une résistance qui a chauffé, confirmer la lecture par la mesure ou le schéma.
 - **CMS à 3 ou 4 caractères** : deux ou trois chiffres significatifs puis le nombre de zéros ; un R tient lieu de virgule (4R7 = 4,7 Ω, R010 = 0,010 Ω).
 - **CMS au code EIA-96** (séries à 1 % en boîtier 0603) : deux chiffres désignent une valeur dans une table de 96 valeurs (01 = 100, 02 = 102… 96 = 976), suivis d'une lettre multiplicatrice (A = × 1, B = × 10, C = × 100, D = × 1 000 ; X = × 0,1, Y = × 0,01). 01C = 100 × 100 = 10 kΩ. Ne pas le lire comme un code à 3 chiffres.
 - **Boîtier 0402 et plus petit** : le plus souvent sans marquage. Valeur par le schéma, une carte saine ou la mesure.
@@ -78,7 +78,7 @@ Carte sur alimentation limitée en courant (fiche [00](../00_securite/README.md)
 Une résistance qui chauffe fatigue ses soudures : un **anneau sombre** se forme autour de la patte, parfois visible seulement à la loupe, en éclairage rasant. Indices : panne qui apparaît à chaud ou disparaît en tapotant la carte.
 
 - Hors tension : bipeur entre **chaque patte et sa pastille** (pas entre les deux pattes), en appuyant légèrement sur le composant avec un outil isolant.
-- Sous tension, alimentation limitée : voltmètre entre la patte et la pastille ; toute lecture autre que 0 mV signale un contact résistant.
+- Sous tension, alimentation limitée : voltmètre entre la patte et la pastille ; plus de quelques mV, ou nettement plus que sur l'autre patte ou sur une carte saine, signale un contact résistant.
 - Réparation : retirer l'ancienne soudure, en remettre de la neuve. Refaire d'office les soudures des autres composants chauds de la zone.
 
 ## Niveau 2 — Mesure hors circuit
@@ -101,7 +101,7 @@ Résistance sortie de la carte, ou une patte levée (fiche [02](../02_pieges_en_
 ![Deux erreurs de mesure hors circuit. À gauche, calibre 200 Ω : 0,8 Ω lus pour une résistance de 0,47 Ω, les cordons ajoutent 0,3 Ω. À droite, calibre 2 MΩ : 0,833 MΩ lus pour 1 MΩ, un doigt sur chaque pointe met le corps en parallèle](mesure-hors-circuit.svg)
 
 - **Sous 10 Ω**, les cordons et les contacts ajoutent 0,1 à 0,5 Ω. Mettre les pointes en court-circuit, noter la lecture et la retrancher, ou appuyer sur **REL** pointes en court-circuit. Sous 1 Ω, le multimètre ne donne plus qu'un ordre de grandeur : mesure 4 fils (niveau 4).
-- **Au-dessus de 100 kΩ**, ne tenir qu'une pointe avec les doigts : le corps, quelques MΩ d'une main à l'autre, se met en parallèle et fait lire trop bas. Poser le composant sur un support isolant propre, ou utiliser des pinces.
+- **Dès quelques dizaines de kΩ**, et toujours sur une résistance à 1 %, ne tenir qu'une pointe avec les doigts : le corps, quelques centaines de kΩ à quelques MΩ d'une main à l'autre, se met en parallèle et fait lire trop bas. Poser le composant sur un support isolant propre, ou utiliser des pinces.
 - **Au-dessus de 10 MΩ**, une trace de flux ou d'humidité sur le corps suffit à fausser la lecture : nettoyer à l'alcool isopropylique et laisser sécher.
 
 ### Vérifier son multimètre avant de condamner une résistance
@@ -115,7 +115,7 @@ Résistance sortie de la carte, ou une patte levée (fiche [02](../02_pieges_en_
 
 - **Bobinée ou en boîtier céramique** : valeur faible, donc cordons à retrancher. Elle s'ouvre (fil coupé à la sertissure) plus qu'elle ne dérive. Ses soudures sont les premières suspectes. Elle doit rester dégagée de la carte de quelques millimètres.
 - **Réseau SIP à point commun** : la broche 1, repérée par un point, est commune à toutes les résistances ; mesurer entre la broche 1 et chacune des autres, toutes les lectures doivent être égales. **Réseau à résistances isolées** : mesurer par paires de broches (1–2, 3–4…). **Réseau CMS** : chaque résistance relie deux terminaisons face à face. Une seule résistance ouverte suffit à bloquer une ligne de bus.
-- **Cavalier 0 Ω** : il doit lire la même chose que les pointes en court-circuit, à 0,05 Ω près (les fabricants garantissent 20 à 50 mΩ au plus, pour 1 à 3,5 A selon le boîtier). Un cavalier ouvert a servi de fusible : chercher la surintensité en aval.
+- **Cavalier 0 Ω** : il doit lire la même chose que les pointes en court-circuit, à un chiffre près, soit 0,1 Ω sur le calibre 200 Ω (les fabricants garantissent 20 à 50 mΩ au plus, pour 1 à 3,5 A selon le boîtier). Un cavalier ouvert a servi de fusible : chercher la surintensité en aval.
 
 ## Niveau 3 — Mesure en circuit
 
@@ -127,7 +127,7 @@ Conditions : carte hors tension, nœuds déchargés (quelques mV au plus au volt
 
 | Lecture stabilisée | Verdict |
 | --- | --- |
-| Au-dessus de la nominale plus la tolérance | résistance défectueuse, ou soudure fissurée : contrôler patte-pastille au bipeur |
+| Au-dessus de la nominale plus la tolérance | résistance défectueuse : coupée ou dérivée |
 | Proche de la nominale | probablement saine |
 | En dessous | rien de prouvé : pointes inversées, calibre au-dessus, schéma, carte saine, puis lever une patte (fiche [02](../02_pieges_en_circuit/README.md)) |
 | OL | ouverte, sans aucun chemin parallèle |
@@ -140,7 +140,7 @@ Une lecture qui **monte** lentement est un condensateur qui se charge : attendre
 | --- | --- | --- |
 | Rail absent après un claquement ou une odeur de brûlé | résistance série ou résistance fusible à l'entrée du rail | elle s'est ouverte sur une surintensité |
 | Tension de sortie d'un régulateur trop haute ou trop basse | les deux résistances du pont diviseur de contre-réaction | l'une a dérivé : la consigne est fausse |
-| Convertisseur qui ne démarre pas, ou seulement à chaud | résistance de démarrage de forte valeur (100 kΩ à 1 MΩ) | dérivée vers le haut ou ouverte : le contrôleur n'est plus alimenté au démarrage |
+| Convertisseur qui ne démarre pas, ou seulement à chaud | résistance de démarrage de forte valeur (100 kΩ à 1 MΩ) | dérivée vers le haut ou ouverte : le contrôleur n'est plus alimenté au démarrage. Dans le périmètre basse tension seulement (convertisseur 24–48 V) ; sur une alimentation secteur, hors périmètre (fiche [00](../00_securite/README.md)) |
 | Limitation de courant qui déclenche trop tôt, ou plus du tout | shunt de mesure de courant | dérivé vers le haut, fissuré, ou soudure résistante |
 | MOSFET remplacé qui chauffe ou ne commute pas | résistance de grille, shunt de source | souvent détruits avec le MOSFET |
 | Entrée logique flottante, bouton capricieux, bus I²C muet | résistance de tirage (*pull-up*), réseau de résistances | ouverte : la ligne n'est plus ramenée à un niveau défini |
@@ -159,15 +159,15 @@ Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe
 | Conforme à *U = R × I* attendu | résistance et courant normaux |
 | Trop élevée, résistance de bonne valeur | trop de courant : défaut **en aval** |
 | Toute la tension du rail | résistance ouverte (ou charge en court-circuit franc) |
-| 0 V | aucun courant : circuit coupé en amont ou en aval |
+| 0 V | aucun courant : circuit coupé en amont ou en aval, ou résistance court-circuitée (pont de soudure) |
 
-Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance.
+Le courant vaut *I = U / R* et la puissance dissipée *P = U × I* : à comparer à la puissance nominale de la résistance. Si elle est dépassée, comme sur la figure, couper la sortie dès la lecture faite. Régler la limite de l'alimentation juste au-dessus du courant attendu (fiche [00](../00_securite/README.md)) : le voyant CC signale alors le défaut avant toute mesure.
 
 ### Brûlée : chercher le court-circuit en aval
 
 Une résistance ne brûle pas d'elle-même. Avant de la remplacer :
 
-1. Hors tension, mesurer la résistance entre le côté **aval** de la résistance brûlée et la masse. Quelques ohms ou moins : un composant du rail est en court-circuit.
+1. Hors tension, mesurer la résistance entre le côté **aval** de la résistance brûlée et la masse. Quelques ohms ou moins, et nettement moins que sur une carte saine ou un rail jumeau : un composant du rail est en court-circuit. Un rail sain chargé de circuits intégrés peut lire bas lui aussi (fiche [01](../01_multimetre/README.md)) : c'est la comparaison qui tranche.
 2. Suspects habituels, dans l'ordre : condensateur céramique ou tantale de découplage, diode de protection (TVS, Zener), transistor ou MOSFET, circuit intégré alimenté par ce rail.
 3. Localiser le court-circuit (fiche 92), le réparer, **puis** remplacer la résistance.
 4. Remettre sous tension sur alimentation limitée et contrôler la chute de tension aux bornes de la résistance neuve.
@@ -188,7 +188,7 @@ Sous 1 Ω (shunts, résistances de puissance, cavaliers), la résistance des cor
 4. *R = U / I*. La tension affichée par l'alimentation ne sert pas : elle inclut ses propres cordons.
 5. Couper la sortie avant de déplacer une pince.
 
-Choisir le courant pour rester sous la puissance de la pièce (*P = R × I²*) : 1 A dans 0,1 Ω dissipe 0,1 W ; pour un shunt CMS de 10 mΩ, 1 A donne 10 mV et 10 mW. La précision est celle de l'ampèremètre de l'alimentation : la vérifier une fois avec le multimètre en série. Un pont RLC ou un milliohmmètre fait la même mesure directement (fiche 03).
+Choisir le courant pour rester sous la puissance de la pièce (*P = R × I²*) : 1 A dans 0,1 Ω dissipe 0,1 W ; pour un shunt CMS de 10 mΩ, 1 A donne 10 mV et 10 mW. La précision est celle de l'ampèremètre de l'alimentation : la vérifier une fois avec le multimètre en série, cordon rouge dans la douille 10 A, puis remettre le cordon en VΩ avant toute mesure de tension (fiche [01](../01_multimetre/README.md)). Un pont RLC ou un milliohmmètre fait la même mesure directement (fiche 03).
 
 ### Sulfuration des CMS
 
@@ -202,28 +202,27 @@ Elle montre en quelques secondes la résistance en surcharge, et surtout le comp
 
 ```mermaid
 flowchart TD
-  A[Résistance suspecte, carte hors tension et déchargée] --> B{Brûlée, fendue ou brunie ?}
+  A[Résistance suspecte, carte hors tension et déchargée] --> B{Carbonisée ou fendue ?}
   B -- oui --> C[Relever sa valeur et sa taille : anneaux, schéma, résistance jumelle]
   C --> D{Court-circuit entre son côté aval et la masse ?}
   D -- oui --> E[Trouver et réparer le composant en court-circuit, fiche 92]
   E --> F
   D -- non --> F[Remplacer par une résistance équivalente]
   F --> G[Remise sous tension sur alimentation limitée : contrôler la chute de tension]
-  B -- non --> H{Lecture en circuit stabilisée, comparée à la nominale plus tolérance}
-  H -- au-dessus --> I{Bipeur entre chaque patte et sa pastille : contact franc ?}
-  I -- non --> J[Soudure fissurée : la refaire, puis remesurer]
-  I -- oui --> K[Résistance coupée ou dérivée : chercher la cause, chaleur ou surcharge]
+  B -- non, même brunie --> H{Lecture en circuit stabilisée, comparée à la nominale plus tolérance}
+  H -- au-dessus --> K[Résistance coupée ou dérivée : chercher la cause, chaleur ou surcharge]
   K --> F
   H -- proche --> L{Panne intermittente, à chaud ou au choc ?}
-  L -- non --> M[Résistance saine : chercher ailleurs]
-  L -- oui --> N[Loupe, appui léger à l'outil isolant, voltmètre patte-pastille sous tension]
+  L -- non --> M[Résistance saine : chercher ailleurs ; si elle est brunie, chercher pourquoi elle chauffe]
+  L -- oui --> N[Soudures : loupe, bipeur patte-pastille en appuyant à l'outil isolant, voltmètre patte-pastille sous tension]
   H -- en dessous --> O[Fiche 02 : pointes inversées, calibre au-dessus, schéma, carte saine]
   O --> P{Lecture expliquée par les chemins parallèles ?}
   P -- oui --> M
   P -- non --> Q[Lever une patte et mesurer la résistance seule]
   Q --> R{Dans la tolérance ?}
   R -- oui --> M
-  R -- non --> K
+  R -- au-dessus --> K
+  R -- en dessous --> S[Exceptionnel : revoir la lecture des anneaux, les doigts, le calibre]
 ```
 
 ## Remplacer le composant
@@ -256,7 +255,7 @@ Avant de remettre sous tension : la cause est trouvée et réparée ; la résist
 
 ## Mini-glossaire
 
-Les notions de cours (loi d'Ohm, puissance, associations série et parallèle) seront détaillées dans la fiche de cours de la résistance (issue #50).
+Les notions de cours (loi d'Ohm, puissance, associations série et parallèle) seront détaillées dans la fiche de cours de la résistance (issue #59).
 
 - **Tolérance** : écart admis entre la valeur réelle et la valeur marquée, en pour cent.
 - **Séries E12, E24, E96** : listes de valeurs normalisées par décade (12, 24 ou 96 valeurs) ; une résistance de 5 % vient de la série E24, une 1 % de la série E96.
