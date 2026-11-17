@@ -86,13 +86,13 @@ Classés du plus fréquent au plus rare (classement qualitatif d'après les sour
 
 ### CTN de puissance
 
-Sélecteur sur Ω, plus petit calibre, résistance des cordons retranchée (fiche [01](../01_multimetre/README.md)).
+Sélecteur sur Ω, plus petit calibre, résistance des cordons retranchée (fiche [01](../01_multimetre/README.md)). La **valeur attendue** est la valeur marquée, donnée à 25 °C, corrigée de la température de la pièce : environ 3 à 4 % de plus par degré en dessous de 25 °C, autant de moins par degré au-dessus.
 
 | Lecture à froid | Verdict |
 | --- | --- |
-| Valeur marquée, à ± 20 % près à 25 °C (environ 4 % de plus par degré en dessous, de moins par degré au-dessus), qui baisse en la réchauffant | saine |
-| OL, ou nettement au-dessus de la valeur marquée corrigée de la température | ouverte ou dégradée (disque fissuré) : remplacer |
-| Bien en dessous de la valeur marquée alors qu'elle est froide | attendre : elle met une à deux minutes à refroidir après la coupure ; si la lecture reste basse, remplacer |
+| Valeur attendue, à ± 20 % près, qui baisse en la réchauffant | saine |
+| OL, ou nettement au-dessus de la valeur attendue | ouverte ou dégradée (disque fissuré) : remplacer |
+| Bien en dessous de la valeur attendue alors qu'elle est froide | attendre : elle met une à deux minutes à refroidir après la coupure ; si la lecture reste basse, remplacer |
 
 ### CTP polymère (fusible réarmable)
 
@@ -118,7 +118,7 @@ La règle de la fiche [02](../02_pieges_en_circuit/README.md) s'applique : les c
 | Proche de la valeur attendue, et qui baisse en chauffant la CTN | probablement saine |
 | En dessous de la valeur attendue | rien de prouvé : débrancher la sonde ou lever une patte |
 | CTP polymère, une heure après la coupure : dans la plage de la fiche technique | probablement saine ; nettement au-dessus : fatiguée ; en dessous : rien de prouvé ; OL : ouverte |
-| CTN de puissance froide : valeur marquée à ± 20 % près | probablement saine ; nettement au-dessus de la valeur marquée corrigée de la température (niveau 2) : dégradée ; en dessous : rien de prouvé (chemin parallèle, fiche 02) ; OL : ouverte |
+| CTN de puissance froide : valeur attendue (valeur marquée corrigée de la température, niveau 2) à ± 20 % près | probablement saine ; nettement au-dessus : dégradée ; en dessous : rien de prouvé (chemin parallèle, fiche 02) ; OL : ouverte |
 
 Une sonde au bout d'un câble se mesure sans rien dessouder : débrancher son connecteur et mesurer côté sonde.
 
@@ -198,12 +198,14 @@ flowchart TD
   C -- CTP polymère --> H{Ohmmètre à froid, une heure après la coupure}
   H -- OL ou bien au-dessus de la fiche technique --> R
   H -- dans la plage de la fiche technique --> I{Ohmmètre entre l'aval et la masse}
+  H -- en dessous de la plage, en circuit --> X[Rien de prouvé : lever une patte, refaire la mesure]
   I -- proche de 0 Ω --> J[Court-circuit en aval : le trouver, fiche 92]
   I -- pas de court-circuit --> K[Essai sur alimentation limitée : mesurer le courant réel et la température autour de la CTP]
-  C -- CTN de puissance --> L{Ohmmètre à froid, après deux minutes de refroidissement}
-  L -- OL ou nettement au-dessus de la valeur marquée corrigée de la température --> R
-  L -- valeur marquée à 20 % près --> M[CTN probablement saine : chercher ailleurs]
+  C -- CTN de puissance --> L{Ohmmètre à froid, après deux minutes de refroidissement : lecture comparée à la valeur attendue, valeur marquée corrigée de la température}
+  L -- OL ou nettement au-dessus --> R
+  L -- valeur attendue à 20 % près --> M[CTN probablement saine : chercher ailleurs]
   L -- bien en dessous, hors circuit et froide --> R
+  L -- en dessous, en circuit --> X
 ```
 
 ## Remplacer le composant

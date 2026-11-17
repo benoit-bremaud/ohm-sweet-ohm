@@ -189,13 +189,16 @@ flowchart TD
   U -- valeur marquée, à la tolérance près --> V[Résistance fusible bonne : chercher ailleurs]
   U -- OL ou au-dessus de la tolérance --> G
   U -- en dessous de la tolérance, en circuit --> P
-  B -- bip, proche de 0 Ω, calibre de 200 mA ou plus --> C{Porte-fusible : même lecture de patte à patte, fusible en place ?}
+  U -- en dessous de la tolérance, hors circuit --> J
+  B -- bip, proche de 0 Ω, calibre de 200 mA ou plus --> C{Porte-fusible ou soudures : même lecture de pastille à pastille, fusible en place ?}
   C -- oui --> D[Fusible et contacts bons : chercher ailleurs]
   C -- non --> E[Nettoyer ou remplacer le porte-fusible, refaire les soudures]
   B -- quelques ohms ou plus, ou calibre de moins de 200 mA --> F{Lecture proche de la résistance à froid de son calibre ?}
   F -- oui --> C
   F -- non, nettement au-dessus --> G[Ouvert ou douteux]
   F -- non, nettement en dessous, en circuit --> P[Rien de prouvé : sortir le composant ou lever une patte, refaire la mesure]
+  P --> T
+  F -- non, nettement en dessous, hors circuit --> J
   B -- OL --> G
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
   H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
@@ -229,7 +232,7 @@ Avant de remettre sous tension : la cause est trouvée, le fusible monté est ce
 
 ## Aide-mémoire d'établi
 
-- Bipeur d'une capsule à l'autre, hors tension : bip = bon, OL = ouvert.
+- Bipeur d'une capsule à l'autre, fusible sorti : bip = bon, OL = ouvert (50 mA ou moins : en Ω).
 - Un fil qui a l'air entier ne prouve rien : mesurer.
 - Petit calibre : quelques ohms sont normaux (100 mA ≈ 6 Ω) ; 50 mA ou moins : de 15 Ω à plus de 250 Ω, bip incertain, lire en Ω.
 - En circuit : 200 mA ou plus, proche de 0 Ω = bon ; calibre plus petit, sa résistance à froid = bon, en dessous = rien de prouvé ; nettement plus = ouvert ou dégradé.
