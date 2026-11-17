@@ -10,7 +10,7 @@ Ces fiches ne valent que si **aucune tension ne dépasse 50 V continu ni 25 V al
 
 ## Le périmètre : 50 V continu, 25 V alternatif
 
-**Pourquoi ces seuils** : le courant qui traverse le corps dépend de sa résistance, et cette résistance **chute quand la tension monte**. Sous quelques volts et du bout des doigts, la peau sèche oppose des centaines de kΩ. Selon la norme CEI 60479-1, avec une grande surface de contact (main serrée sur une pièce métallique), l'impédance entre deux mains n'est plus que de quelques kΩ dès 25 V, et baisse encore quand la tension monte ; à 50 V alternatif, le courant atteint alors le seuil de non-lâcher (environ 10 mA), où les muscles se contractent et la main ne peut plus lâcher. Le seuil alternatif (valeur efficace, soit 35 V crête) est plus bas que le seuil continu parce que le courant alternatif à 50 Hz est plus dangereux à intensité égale. Ces limites sont plus prudentes que la très basse tension des normes d'installation (50 V alternatif, 120 V continu) : elles reprennent les valeurs retenues pour les lieux humides et laissent une marge pour la peau mouillée ou une coupure.
+**Pourquoi ces seuils** : le courant qui traverse le corps dépend de sa résistance, et cette résistance **chute quand la tension monte**. Sous quelques volts et du bout des doigts, la peau sèche oppose des centaines de kΩ. Selon la norme CEI 60479-1, avec une grande surface de contact (main serrée sur une pièce métallique), l'impédance entre deux mains n'est plus que de quelques kΩ dès 25 V, et baisse encore quand la tension monte ; à 50 V alternatif, le courant atteint alors le seuil de non-lâcher (environ 10 mA), où les muscles se contractent et la main ne peut plus lâcher. Le seuil alternatif (valeur efficace, soit 35 V crête) est plus bas que le seuil continu parce que le courant alternatif à 50 Hz est plus dangereux à intensité égale. Ces limites sont plus prudentes que la très basse tension des normes d'installation (50 V alternatif, 120 V continu) : elles reprennent la valeur alternative retenue pour les lieux humides (25 V), restent sous leur valeur continue (60 V) et laissent une marge pour la peau mouillée ou une coupure.
 
 **Partout sur la carte, pas seulement à l'entrée** : un appareil sur pile ou sur adaptateur peut fabriquer en interne bien plus que sa tension d'entrée.
 
@@ -22,7 +22,7 @@ Ces fiches ne valent que si **aucune tension ne dépasse 50 V continu ni 25 V al
 | Batterie 48 V (vélo électrique, stockage) | 54,6 V en fin de charge | 13 éléments lithium à 4,2 V |
 | Allumeur, tube Geiger, ioniseur, taser | centaines à milliers de volts | élévateur dédié |
 
-Si un composant porte un marquage de tension élevée (condensateur de 160 V, 250 V, 400 V), un transformateur inattendu ou un avertissement « high voltage », considérer la carte comme hors périmètre et s'arrêter là (ligne « oui ou je ne sais pas » de l'arbre) : ne pas la mesurer ni la décharger avec la méthode de cette fiche, prévue pour 50 V au plus. Seul un schéma ou la fiche technique peut lever le doute. Règle rapide pour les batteries : plus de 11 éléments lithium en série dépasse 50 V en fin de charge (12 éléments Li-ion « 44 V » : 50,4 V ; 16 éléments LiFePO4 « 48 V » : 58,4 V).
+Si un composant porte un marquage de tension élevée (condensateur de 160 V, 250 V, 400 V), un transformateur inattendu ou un avertissement « high voltage », considérer la carte comme hors périmètre et s'arrêter là (ligne « oui ou je ne sais pas » de l'arbre) : ne pas la mesurer ni la décharger avec la méthode de cette fiche, prévue pour 50 V au plus. Seul un schéma ou la fiche technique peut lever le doute. Règle rapide pour les batteries : plus de 11 éléments lithium en série dépassent 50 V en fin de charge (12 éléments Li-ion « 44 V » : 50,4 V ; 16 éléments LiFePO4 « 48 V » : 58,4 V).
 
 > **Variac et transformateur d'isolement** : un Variac (autotransformateur réglable) **n'isole pas** du secteur. Sa sortie reste reliée électriquement au réseau, même réglée à quelques volts : selon le sens de la prise (non polarisée en France), une borne de sortie est à 230 V par rapport à la terre quel que soit le réglage, et une erreur de réglage remet 230 V entre les bornes. Un transformateur d'isolement supprime la référence à la terre mais ne rend pas inoffensif le contact entre ses deux bornes de sortie. Les deux relèvent du travail sur secteur : fiche secteur et isolement, à venir.
 
@@ -31,7 +31,7 @@ Si un composant porte un marquage de tension élevée (condensateur de 160 V, 25
 La plupart des mesures (ohmmètre, bipeur, mode diode, capacimètre : fiche [01](../01_multimetre/README.md)) se font carte **hors tension**. Hors tension veut dire :
 
 1. **Débrancher** l'adaptateur, le câble USB, le câble réseau (PoE) : un interrupteur peut ne couper qu'une partie de la carte.
-2. **Retirer les piles et batteries**, y compris la pile bouton de l'horloge, et une batterie interne par son connecteur. Si elle est soudée et ne peut pas être déconnectée, la carte n'est pas hors tension : la traiter comme alimentée (voltmètre seulement), ou dessouder une patte de la batterie et isoler ses bornes.
+2. **Retirer les piles et batteries**, y compris la pile bouton de l'horloge, et une batterie interne par son connecteur. Si elle est soudée et ne peut pas être déconnectée, la carte n'est pas hors tension : la traiter comme alimentée (voltmètre seulement), ou dessouder une languette de la batterie (fer bref sur la languette ou le fil, sans chauffer l'élément) et isoler ses bornes.
 3. **Attendre** que les condensateurs se déchargent par la carte, puis **vérifier au voltmètre** (section suivante) : une LED éteinte ne prouve rien.
 
 ## Décharger un condensateur
@@ -47,7 +47,7 @@ Un condensateur garde sa charge carte débranchée, parfois des heures ou des jo
 **Méthode** :
 
 1. Mesurer la tension aux bornes du condensateur (voltmètre continu, calibre adapté).
-2. Choisir une résistance : le courant de décharge de départ vaut *V / R*, la puissance de départ *V² / R*, et la tension tombe à moins de 1 % en environ *5 × R × C*. Une valeur de 100 Ω à 1 kΩ et une puissance de 2 à 5 W conviennent dans ce périmètre. Exemple : 1000 µF sous 35 V dans 1 kΩ : 35 mA et 1,2 W au départ, déchargé en environ 5 s. Pire cas du périmètre : 50 V dans 100 Ω, soit 0,5 A et 25 W au départ, douze fois la puissance d'une résistance de 2 W ; c'est acceptable pour une résistance bobinée ou cimentée de 5 W tant que l'énergie reste de l'ordre de la dizaine de joules, sinon prendre 1 kΩ. Une résistance de 1/4 W suffit sous 0,1 J environ ; au-delà, la chaleur se concentre au début de la décharge et une résistance trop petite chauffe ou casse.
+2. Choisir une résistance : le courant de décharge de départ vaut *V / R*, la puissance de départ *V² / R*, et la tension tombe à moins de 1 % en environ *5 × R × C*. Une valeur de 100 Ω à 1 kΩ et une puissance de 2 à 5 W conviennent dans ce périmètre. Exemple : 1000 µF sous 35 V dans 1 kΩ : 35 mA et 1,2 W au départ, déchargé en environ 5 s. Pire cas du périmètre : 50 V dans 100 Ω, soit 0,5 A et 25 W au départ, douze fois la puissance d'une résistance de 2 W ; c'est acceptable pour une résistance bobinée ou cimentée de 5 W tant que l'énergie reste de l'ordre de la dizaine de joules ; avec une 2 W, prendre 1 kΩ. Un supercondensateur sort de cette méthode (1 F sous 5,5 V : 15 J, plus de 15 minutes dans 1 kΩ) : fiche 24. Une résistance de 1/4 W suffit sous 0,1 J environ ; au-delà, la chaleur se concentre au début de la décharge et une résistance trop petite chauffe ou casse.
 3. Tenir la résistance avec des pinces crocodile ou des pointes isolées, jamais à mains nues, et la maintenir le temps calculé.
 4. **Vérifier au voltmètre** que la tension est tombée sous 1 V environ.
 5. Revérifier avant la mesure suivante : un électrolytique aluminium peut remonter jusqu'à 10 à 15 % de sa tension après décharge (absorption diélectrique).
@@ -89,7 +89,7 @@ Une batterie de quelques volts ne présente pas de risque d'électrocution, mais
 - **Fer à souder** : la panne est à 300 à 400 °C. Le reposer toujours dans son support, jamais sur l'établi ; le débrancher en quittant le poste.
 - **Composants chauds** : une résistance de puissance, un régulateur linéaire ou un transistor peuvent dépasser 100 °C en fonctionnement normal, et restent chauds après la coupure.
 - **Trouver le point chaud** : de préférence un thermomètre à thermocouple ou une caméra thermique (fiche 03), ou une seule goutte d'alcool isopropylique qui s'évapore vite sur le point chaud ; l'alcool est très inflammable : pas de fer ni d'étincelle à proximité.
-- **Test au doigt**, en dernier recours, seulement dans ce périmètre basse tension, carte de préférence coupée juste avant : approcher d'abord le dos du doigt sans toucher (on sent la chaleur rayonnée), puis effleurer **brièvement**, jamais saisir. Un composant qu'on ne peut pas toucher plus d'une seconde est trop chaud pour être normal sur une carte basse puissance.
+- **Test au doigt**, en dernier recours, seulement dans ce périmètre basse tension, carte de préférence coupée juste avant : approcher d'abord le dos du doigt sans toucher (on sent la chaleur rayonnée), puis effleurer **brièvement**, jamais saisir. Un composant qu'on ne peut pas toucher plus d'une seconde est trop chaud pour la plupart des composants ; un régulateur linéaire ou une résistance de puissance peut l'être normalement (comparer avec une carte saine).
 - **Fumée, odeur de brûlé, gonflement** : couper l'alimentation tout de suite, avant de chercher d'où ça vient.
 
 ## L'électricité statique (ESD)
@@ -109,7 +109,7 @@ flowchart TD
   B -- non --> C{Mesure prévue}
   C -- voltmètre sous tension --> D[Alimentation limitée en courant, limite basse, polarité vérifiée]
   D --> E{Voyant CC allumé ou composant chaud ?}
-  E -- oui --> F[Couper ; tension proche de 0 V : chercher le court-circuit, fiche 92]
+  E -- oui --> F[Couper ; 0 V : court-circuit, fiche 92 ; tension partielle sans chaleur : remonter la limite par paliers]
   E -- non --> G[Mesurer, une seule pointe tenue, l'autre en pince crocodile]
   C -- ohmmètre, bipeur, diode, capacité --> H[Débrancher, retirer piles et batteries]
   H --> I[Mesurer la tension des gros condensateurs]
