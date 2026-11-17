@@ -4,7 +4,7 @@ Savoir, à l'établi, si un composant monté sur un PCB est mort ou vivant : des
 
 ## Comment lire ces fiches
 
-- **Public** : amateur débutant à intermédiaire. Un multimètre et une alimentation limitée en courant (fiche 00) suffisent pour les niveaux 1 à 3 ; le niveau 4 demande d'autres instruments (fiche 03).
+- **Public** : amateur débutant à intermédiaire. Un multimètre et une alimentation limitée en courant (fiche [00](00_securite/README.md)) suffisent pour les niveaux 1 à 3 ; le niveau 4 demande d'autres instruments (fiche 03).
 - **Basse tension uniquement** : aucune tension supérieure à 50 V continu (25 V alternatif) **nulle part sur la carte**, pas seulement à l'entrée. Un appareil sur pile ou sur adaptateur peut en produire bien plus (flash photo vers 300 V, onduleur de rétroéclairage, PoE jusqu'à 57 V, batterie 48 V chargée à 54,6 V) : hors périmètre. Un appareil dont l'alimentation secteur est intégrée se confie à un professionnel, en attendant la fiche secteur et isolement.
 - **Niveaux** dans chaque fiche de composant : 1 inspection par les sens (vue, odeur, échauffement), 2 mesure hors circuit, 3 mesure en circuit, 4 méthodes avancées.
 - **Fréquence de panne** : un classement qualitatif (très fréquent, fréquent, occasionnel, rare) tiré du consensus des réparateurs et des notes de fabricants, sources citées dans chaque fiche. Ce n'est pas une statistique. Dans le menu, il dit à quelle fréquence ce composant est le coupable d'une panne ; dans une fiche, à quelle fréquence chaque mode de défaillance survient.
@@ -20,7 +20,7 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 | --- | --- | --- |
 | [00 Sécurité](00_securite/README.md) | Périmètre basse tension, hors tension, décharge des condensateurs, alimentation limitée en courant | #81 |
 | [01 Comprendre son multimètre](01_multimetre/README.md) | Ce que chaque mode injecte ; pourquoi un condensateur bipe puis se tait, ce qu'affiche le mode diode | #82 |
-| 02 Pièges de la mesure en circuit | Chemins parallèles, jonctions qui conduisent, condensateurs qui se chargent, quand dessouder | #83 |
+| [02 Pièges de la mesure en circuit](02_pieges_en_circuit/README.md) | Chemins parallèles, jonctions qui conduisent, condensateurs qui se chargent, quand dessouder | #83 |
 | 03 Autres instruments | LCR/ESR, testeur de composants, alimentation de labo, oscilloscope, caméra thermique | #84 |
 
 ### 1. Résistifs — #85
@@ -124,9 +124,9 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Bipeur (continuité) | [01](01_multimetre/README.md) | — |
 | Mode diode | [01](01_multimetre/README.md) | — |
 | Capacimètre | [01](01_multimetre/README.md) | — |
-| Lever une patte | 02 | — |
+| Lever une patte | [02](02_pieges_en_circuit/README.md) | — |
 | Mesure ESR | 03 | — |
-| Chute de tension sous tension | 02 | — |
+| Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | — |
 | Injection de courant | 92 | — |
 
 ## Licence

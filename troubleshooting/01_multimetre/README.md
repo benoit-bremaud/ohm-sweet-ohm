@@ -6,7 +6,7 @@ Ce que chaque mode du multimètre injecte dans le composant, et pourquoi ce comp
 
 En voltmètre, l'appareil écoute presque sans rien consommer. En ohmmètre, en bipeur, en mode diode et en capacimètre, il **injecte** un courant connu et mesure la tension qui en résulte. Presque toutes les lectures « bizarres » s'expliquent par ce courant et par la tension à vide qui le pousse.
 
-> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche 00) ; seul le voltmètre (et l'ampèremètre, fiche 91) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
+> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche [00](../00_securite/README.md)) ; seul le voltmètre (et l'ampèremètre, fiche 91) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
 
 ## Le principe commun
 
@@ -62,7 +62,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 **Pourquoi un composant réagit ainsi** :
 
-- **Jonction de semi-conducteur** : ce qui compte est la tension aux bornes du composant pendant la mesure, environ *I × R* et au plus la tension à vide. Une jonction au silicium en parallèle commence à conduire quand cette tension approche 0,4 à 0,5 V, donc surtout en haut de calibre, et la résistance lue chute. Exemple : 1 mA sur 100 Ω ne donne que 0,1 V, la jonction reste bloquée ; 100 µA sur 10 kΩ donne 1 V, elle conduit. Un appareil dont la tension à vide reste sous 0,4 V ne fait jamais conduire de jonction au silicium ; d'anciens appareils avaient un calibre « basse puissance » conçu pour cela, devenu rare comme calibre séparé : les appareils haut de gamme limitent souvent la tension à pleine échelle de tous leurs calibres (fiche 02).
+- **Jonction de semi-conducteur** : ce qui compte est la tension aux bornes du composant pendant la mesure, environ *I × R* et au plus la tension à vide. Une jonction au silicium en parallèle commence à conduire quand cette tension approche 0,4 à 0,5 V, donc surtout en haut de calibre, et la résistance lue chute. Exemple : 1 mA sur 100 Ω ne donne que 0,1 V, la jonction reste bloquée ; 100 µA sur 10 kΩ donne 1 V, elle conduit. Une tension aux pointes qui reste sous environ 0,3 V pendant la mesure limite ce risque ; d'anciens appareils avaient un calibre « basse puissance » conçu pour cela, devenu rare comme calibre séparé : les appareils haut de gamme limitent souvent la tension à pleine échelle de tous leurs calibres (fiche [02](../02_pieges_en_circuit/README.md)).
 - **Condensateur** : la lecture part de presque zéro puis monte pendant que le condensateur se charge, jusqu'à « OL » ou jusqu'à sa résistance de fuite. Inverser les pointes recommence la montée.
 - **Valeurs élevées** : au-delà de quelques MΩ, la mesure devient lente et sensible aux fuites (flux de soudure, humidité, doigts).
 
@@ -112,7 +112,7 @@ Un « Vf » lu ici vaut pour 1 mA environ : il est plus bas que la tension direc
 
 - **Décharger le condensateur avant** : une charge résiduelle fausse la mesure et peut endommager l'entrée.
 - La valeur affichée ne dit rien de la **résistance série équivalente (ESR)**, la panne la plus courante des électrolytiques : un condensateur à la bonne capacité peut être hors d'usage (fiche 03, mesure ESR).
-- **En circuit**, tout ce qui est en parallèle (autres condensateurs, résistances, jonctions) fausse la lecture (fiche 02).
+- **En circuit**, tout ce qui est en parallèle (autres condensateurs, résistances, jonctions) fausse la lecture (fiche [02](../02_pieges_en_circuit/README.md)).
 - Sous quelques dizaines de pF, la capacité des cordons domine : utiliser REL cordons en l'air.
 
 ## Piège du mode courant

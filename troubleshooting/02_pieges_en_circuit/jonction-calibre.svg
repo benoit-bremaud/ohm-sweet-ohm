@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Monter d'un calibre démasque une jonction en parallèle</title>
+  <desc id="d">Deux multimètres mesurent le même montage : une résistance de 10 kΩ avec une diode au silicium en parallèle, dans le sens passant. À gauche, sélecteur sur le calibre 20 kΩ : le courant de test d'environ 100 µA viserait 1 V, la jonction conduit et plafonne la tension vers 0,45 V, l'appareil lit 4,5 kΩ. À droite, sélecteur sur le calibre 200 kΩ : le courant d'environ 10 µA ne donne que 0,1 V, la jonction reste bloquée, l'appareil lit 10 kΩ.</desc>
+  <style>
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}
+    .wire{stroke:#1f2933;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .panel{fill:#f3f5f8;stroke:#d5dbe3}.grid{stroke:#d5dbe3;stroke-width:1.5;stroke-dasharray:5 5;fill:none}
+    .ok{fill:#15803d}.no{fill:#b91c1c}.warn{fill:#b45309}.blue{fill:#2563eb}.amber{fill:#b45309}
+    .blk{stroke:#20242b}.blkf{fill:#20242b}
+    .flow{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:1 13;animation:run 1.1s linear infinite}
+    .fb{stroke:#2563eb}.fa{stroke:#d97706}
+    @keyframes run{to{stroke-dashoffset:-14}}
+    @media (prefers-reduced-motion: reduce){.flow{animation:none}}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.wire{stroke:#c9d1d9}
+      .panel{fill:#161b22;stroke:#30363d}.grid{stroke:#30363d}
+      .ok{fill:#4ade80}.no{fill:#f87171}.warn{fill:#fbbf24}.blue{fill:#60a5fa}.amber{fill:#fbbf24}
+      .blk{stroke:#8b949e}.blkf{fill:#8b949e}.fb{stroke:#60a5fa}.fa{stroke:#fbbf24}
+    }
+  </style>
+  <rect class="bg" width="760" height="460" rx="16"/>
+  <text class="fg" x="24" y="38" font-size="20" font-weight="700">Monter d'un calibre démasque une jonction</text>
+  <text class="mut" x="24" y="60" font-size="14">Même montage des deux côtés : R = 10 kΩ, une diode au silicium en parallèle, dans le sens passant</text>
+  <path class="grid" d="M380 84 V446"/>
+  <g transform="translate(24 84) scale(0.9)">
+    <rect width="180" height="310" rx="24" fill="#f2a900"/>
+    <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
+    <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
+    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">4.50</text>
+    <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">kΩ</text>
+    <path d="M159.9 177.3 A71 71 0 0 1 20.1 177.3" fill="none" stroke="#6b7482" stroke-width="1.5"/>
+    <text x="90" y="252" font-size="13" font-weight="700" text-anchor="middle" fill="#aeb6c2">Ω</text>
+    <path d="M90.0 128.0 L90.0 122.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="113.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">OFF</text>
+    <path d="M111.7 135.1 L115.3 130.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="122.9" y="123.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V~</text>
+    <path d="M125.2 153.6 L130.9 151.7" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="138.3" y="151.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V</text>
+    <path d="M144.3 144.7 h9 M144.3 148.7 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <path d="M125.2 176.4 L130.9 178.3" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="143.3" y="186.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2M</text>
+    <path d="M111.7 194.9 L115.3 199.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="122.9" y="214.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200k</text>
+    <path d="M90.0 202.0 L90.0 208.0" stroke="#ffd54a" stroke-width="3" stroke-linecap="round"/>
+    <text x="90.0" y="225.0" font-size="12" text-anchor="middle" font-weight="700" fill="#ffd54a">20k</text>
+    <path d="M68.3 194.9 L64.7 199.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="57.1" y="214.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2k</text>
+    <path d="M54.8 176.4 L49.1 178.3" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="36.7" y="186.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200</text>
+    <path d="M54.8 153.6 L49.1 151.7" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M28.7 147.7 h14 M32.7 143.7 v8 l7 -4 z M39.7 143.7 v8" stroke="#aeb6c2" stroke-width="1.3" fill="#aeb6c2"/>
+    <path d="M68.3 135.1 L64.7 130.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="52.1" y="123.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">A</text>
+    <path d="M58.1 116.7 h9 M58.1 120.7 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <g transform="rotate(180 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
+    <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
+    <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#6b7482" stroke-width="2"/>
+    <text x="90" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">COM</text>
+    <circle cx="90" cy="283" r="8" fill="#0c0e11" stroke="#9aa7b4" stroke-width="2"/>
+    <text x="135" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">VΩ</text>
+    <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <text class="mut" x="205" y="100" font-size="11">tension aux pointes</text>
+  <rect class="panel" x="228" y="110" width="24" height="140" rx="4"/>
+  <rect x="223" y="180.0" width="34" height="14.0" fill="#fde68a" stroke="#d97706"/>
+  <rect x="228" y="187.0" width="24" height="63.0" rx="4" fill="#dc2626"/>
+  <text class="mut" x="222" y="114" font-size="11" text-anchor="end">1 V</text>
+  <text class="mut" x="222" y="254" font-size="11" text-anchor="end">0</text>
+  <text class="warn" x="264" y="184" font-size="11" font-weight="700">conduction</text>
+  <text class="warn" x="264" y="198" font-size="11">0,4 à 0,5 V</text>
+  <path class="grid" d="M224 110 H258"/>
+  <text class="mut" x="264" y="114" font-size="11">I × R = 1 V visé</text>
+  <text class="no" x="205" y="272" font-size="12" font-weight="700">0,45 V : elle conduit</text>
+  <path class="wire" d="M232 300 H322 M232 356 H322" stroke-width="2.5"/>
+  <path class="wire" d="M268 300 V356"/>
+  <rect x="262.0" y="313.0" width="12" height="30" rx="4.0" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>
+  <rect x="262.0" y="317.8" width="12" height="2.7" fill="#7b3f00"/>
+  <rect x="262.0" y="322.9" width="12" height="2.7" fill="#111111"/>
+  <rect x="262.0" y="328.0" width="12" height="2.7" fill="#f97316"/>
+  <rect x="262.0" y="336.1" width="12" height="2.7" fill="#c9a227"/>
+  <path class="wire" d="M322 300 V356"/>
+  <rect x="317.0" y="316.0" width="10" height="24" rx="6" fill="#e2703a" stroke="#8a3d1c" stroke-width="1.5"/>
+  <rect x="317.0" y="330.0" width="10" height="7" fill="#111111"/>
+  <text class="mut" x="280" y="332" font-size="10">10 kΩ</text>
+  <text class="mut" x="332" y="332" font-size="10">diode</text>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M145.5 338.7 C149.5 372.7 205 322 232 300"/>
+  <circle fill="#dc2626" cx="145.5" cy="338.7" r="6.5"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M105.0 338.7 V380 C105.0 404 232 404 232 356"/>
+  <circle class="blkf" cx="105.0" cy="338.7" r="6.5"/>
+  <circle cx="232" cy="300" r="4" fill="#dc2626"/><circle class="blkf" cx="232" cy="356" r="4"/>
+  <text class="no" x="190" y="428" font-size="14" text-anchor="middle" font-weight="700">✗ 4,5 kΩ lus au lieu de 10 kΩ</text>
+  <text class="mut" x="190" y="446" font-size="12" text-anchor="middle">calibre 20 kΩ · courant de test ≈ 100 µA</text>
+  <g transform="translate(404 84) scale(0.9)">
+    <rect width="180" height="310" rx="24" fill="#f2a900"/>
+    <rect x="3" y="3" width="174" height="304" rx="22" fill="none" stroke="#c58700" stroke-width="2"/>
+    <rect x="11" y="11" width="158" height="288" rx="15" fill="#2a2e35"/>
+    <rect x="24" y="24" width="132" height="54" rx="6" fill="#c9d6b0" stroke="#11151a" stroke-width="2"/>
+    <text x="120" y="63" font-size="28" font-weight="700" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1a2016">10.0</text>
+    <text x="125" y="63" font-size="14" font-weight="700" fill="#1a2016">kΩ</text>
+    <path d="M159.9 177.3 A71 71 0 0 1 20.1 177.3" fill="none" stroke="#6b7482" stroke-width="1.5"/>
+    <text x="90" y="252" font-size="13" font-weight="700" text-anchor="middle" fill="#aeb6c2">Ω</text>
+    <path d="M90.0 128.0 L90.0 122.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="113.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">OFF</text>
+    <path d="M111.7 135.1 L115.3 130.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="122.9" y="123.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V~</text>
+    <path d="M125.2 153.6 L130.9 151.7" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="138.3" y="151.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">V</text>
+    <path d="M144.3 144.7 h9 M144.3 148.7 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <path d="M125.2 176.4 L130.9 178.3" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="143.3" y="186.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2M</text>
+    <path d="M111.7 194.9 L115.3 199.8" stroke="#ffd54a" stroke-width="3" stroke-linecap="round"/>
+    <text x="122.9" y="214.3" font-size="12" text-anchor="middle" font-weight="700" fill="#ffd54a">200k</text>
+    <path d="M90.0 202.0 L90.0 208.0" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="90.0" y="225.0" font-size="9.5" text-anchor="middle" fill="#aeb6c2">20k</text>
+    <path d="M68.3 194.9 L64.7 199.8" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="57.1" y="214.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">2k</text>
+    <path d="M54.8 176.4 L49.1 178.3" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="36.7" y="186.3" font-size="9.5" text-anchor="middle" fill="#aeb6c2">200</text>
+    <path d="M54.8 153.6 L49.1 151.7" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M28.7 147.7 h14 M32.7 143.7 v8 l7 -4 z M39.7 143.7 v8" stroke="#aeb6c2" stroke-width="1.3" fill="#aeb6c2"/>
+    <path d="M68.3 135.1 L64.7 130.2" stroke="#aeb6c2" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="52.1" y="123.7" font-size="9.5" text-anchor="middle" fill="#aeb6c2">A</text>
+    <path d="M58.1 116.7 h9 M58.1 120.7 h2 m1.5 0 h2 m1.5 0 h2" stroke="#aeb6c2" stroke-width="1.3" fill="none"/>
+    <circle cx="90" cy="165" r="34" fill="#3b4049" stroke="#16191e" stroke-width="2"/>
+    <g transform="rotate(144 90 165)"><rect x="82" y="132" width="16" height="66" rx="8" fill="#555c68"/><path d="M90 137 V157" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
+    <text x="45" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">10A</text>
+    <circle cx="45" cy="283" r="8" fill="#0c0e11" stroke="#6b7482" stroke-width="2"/>
+    <text x="90" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">COM</text>
+    <circle cx="90" cy="283" r="8" fill="#0c0e11" stroke="#9aa7b4" stroke-width="2"/>
+    <text x="135" y="268" font-size="8" text-anchor="middle" fill="#aeb6c2">VΩ</text>
+    <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
+  </g>
+  <text class="mut" x="585" y="100" font-size="11">tension aux pointes</text>
+  <rect class="panel" x="608" y="110" width="24" height="140" rx="4"/>
+  <rect x="603" y="180.0" width="34" height="14.0" fill="#fde68a" stroke="#d97706"/>
+  <rect x="608" y="236.0" width="24" height="14.0" rx="4" fill="#16a34a"/>
+  <text class="mut" x="602" y="114" font-size="11" text-anchor="end">1 V</text>
+  <text class="mut" x="602" y="254" font-size="11" text-anchor="end">0</text>
+  <text class="warn" x="644" y="184" font-size="11" font-weight="700">conduction</text>
+  <text class="warn" x="644" y="198" font-size="11">0,4 à 0,5 V</text>
+  <text class="ok" x="585" y="272" font-size="12" font-weight="700">0,1 V : elle reste bloquée</text>
+  <path class="wire" d="M612 300 H702 M612 356 H702" stroke-width="2.5"/>
+  <path class="wire" d="M648 300 V356"/>
+  <rect x="642.0" y="313.0" width="12" height="30" rx="4.0" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>
+  <rect x="642.0" y="317.8" width="12" height="2.7" fill="#7b3f00"/>
+  <rect x="642.0" y="322.9" width="12" height="2.7" fill="#111111"/>
+  <rect x="642.0" y="328.0" width="12" height="2.7" fill="#f97316"/>
+  <rect x="642.0" y="336.1" width="12" height="2.7" fill="#c9a227"/>
+  <path class="wire" d="M702 300 V356"/>
+  <rect x="697.0" y="316.0" width="10" height="24" rx="6" fill="#e2703a" stroke="#8a3d1c" stroke-width="1.5"/>
+  <rect x="697.0" y="330.0" width="10" height="7" fill="#111111"/>
+  <text class="mut" x="660" y="332" font-size="10">10 kΩ</text>
+  <text class="mut" x="712" y="332" font-size="10">diode</text>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M525.5 338.7 C529.5 372.7 585 322 612 300"/>
+  <circle fill="#dc2626" cx="525.5" cy="338.7" r="6.5"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M485.0 338.7 V380 C485.0 404 612 404 612 356"/>
+  <circle class="blkf" cx="485.0" cy="338.7" r="6.5"/>
+  <circle cx="612" cy="300" r="4" fill="#dc2626"/><circle class="blkf" cx="612" cy="356" r="4"/>
+  <text class="ok" x="570" y="428" font-size="14" text-anchor="middle" font-weight="700">✓ 10 kΩ lus</text>
+  <text class="mut" x="570" y="446" font-size="12" text-anchor="middle">calibre 200 kΩ · courant de test ≈ 10 µA</text>
+</svg>
