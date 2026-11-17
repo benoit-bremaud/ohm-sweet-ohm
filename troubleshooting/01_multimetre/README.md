@@ -6,7 +6,7 @@ Ce que chaque mode du multimètre injecte dans le composant, et pourquoi ce comp
 
 En voltmètre, l'appareil écoute presque sans rien consommer. En ohmmètre, en bipeur, en mode diode et en capacimètre, il **injecte** un courant connu et mesure la tension qui en résulte. Presque toutes les lectures « bizarres » s'expliquent par ce courant et par la tension à vide qui le pousse.
 
-> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche 00) ; seul le voltmètre (et l'ampèremètre, fiche 91) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
+> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche [00](../00_securite/README.md)) ; seul le voltmètre (et l'ampèremètre, fiche 91) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
 
 ## Le principe commun
 

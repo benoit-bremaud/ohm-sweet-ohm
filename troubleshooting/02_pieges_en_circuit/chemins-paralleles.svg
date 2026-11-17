@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Chemins parallèles : l'ohmmètre mesure le nœud</title>
+  <desc id="d">Une résistance R1 de 10 kΩ est mesurée en circuit ; une résistance R2 de 10 kΩ et une diode relient les mêmes nœuds. L'ohmmètre lit 5 kΩ. Sur l'échelle de lecture, une valeur au-dessus de la nominale est concluante, une valeur en dessous est ambiguë.</desc>
+  <style>
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}.wire{stroke:#1f2933;stroke-width:3;fill:none}
+    .meas{stroke:#2563eb}.measf{fill:#2563eb}.par{stroke:#d97706}.parf{fill:#d97706}
+    .okf{fill:#16a34a}.badf{fill:#dc2626}.amb{fill:#f59e0b}.card{fill:#f3f5f8;stroke:#d5dbe3}
+    .lcd{fill:#e8f0d8}.lcdt{fill:#1f2933}
+    .flow{fill:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:2 14;animation:run 1.2s linear infinite}
+    @keyframes run{to{stroke-dashoffset:-16}}
+    @media (prefers-reduced-motion: reduce){.flow{animation:none}}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.wire{stroke:#e6edf3}
+      .meas{stroke:#60a5fa}.measf{fill:#60a5fa}.par{stroke:#fbbf24}.parf{fill:#fbbf24}
+      .card{fill:#161b22;stroke:#30363d}.lcd{fill:#c9d8a8}
+    }
+  </style>
+  <rect class="bg" width="760" height="400" rx="16"/>
+  <text class="fg" x="24" y="38" font-size="20" font-weight="700">L'ohmmètre mesure le nœud, pas le composant</text>
+
+  <!-- circuit -->
+  <g>
+    <circle class="fg" cx="90" cy="110" r="7"/><text class="fg" x="62" y="96" font-size="15" font-weight="600">A</text>
+    <circle class="fg" cx="90" cy="300" r="7"/><text class="fg" x="62" y="318" font-size="15" font-weight="600">B</text>
+    <!-- rails -->
+    <path class="wire" d="M90 110 H390 M90 300 H390"/>
+    <!-- R1 measured -->
+    <path class="wire meas" d="M170 110 V160 M170 250 V300"/>
+    <rect x="152" y="160" width="36" height="90" rx="4" fill="none" class="wire meas"/>
+    <text class="measf" x="200" y="200" font-size="15" font-weight="700">R1</text>
+    <text class="measf" x="200" y="220" font-size="13">10 kΩ</text><text class="measf" x="200" y="236" font-size="13">mesurée</text>
+    <!-- R2 parallel -->
+    <path class="wire par" d="M290 110 V160 M290 250 V300"/>
+    <rect x="272" y="160" width="36" height="90" rx="4" fill="none" class="wire par"/>
+    <text class="parf" x="316" y="200" font-size="15" font-weight="700">R2</text>
+    <text class="parf" x="316" y="220" font-size="13">10 kΩ</text><text class="parf" x="316" y="236" font-size="13">cachée</text>
+    <!-- diode parallel -->
+    <path class="wire par" d="M390 110 V180 M390 232 V300"/>
+    <path class="parf" d="M372 180 H408 L390 210 Z"/>
+    <path class="wire par" d="M372 214 H408"/>
+    <text class="parf" x="414" y="196" font-size="13">jonction</text>
+    <text class="parf" x="414" y="212" font-size="13">(conduit dès</text>
+    <text class="parf" x="414" y="228" font-size="13">≈ 0,4 V)</text>
+    <!-- test current splits: part goes through R1, part leaks through R2 -->
+    <path class="flow meas" d="M100 104 H162 V292"/>
+    <path class="flow par" d="M100 104 H282 V292"/>
+    <path class="flow par" d="M100 104 H382 V292" opacity="0.6"/>
+    <text class="mut" x="100" y="90" font-size="12">courant de test : il se partage</text>
+    <!-- probes -->
+    <path class="wire meas" stroke-dasharray="6 6" d="M90 110 C40 140 30 260 90 300"/>
+  </g>
+
+  <!-- meter -->
+  <g transform="translate(520 70)">
+    <rect class="card" width="210" height="120" rx="12" stroke-width="1.5"/>
+    <rect class="lcd" x="16" y="16" width="178" height="58" rx="6"/>
+    <text class="lcdt" x="105" y="58" font-size="32" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">5.00 kΩ</text>
+    <text class="mut" x="105" y="100" font-size="13" text-anchor="middle">R1 ∥ R2 = 10 × 10 / 20</text>
+  </g>
+
+  <!-- reading scale -->
+  <g transform="translate(470 240)">
+    <text class="fg" x="0" y="0" font-size="15" font-weight="700">Que vaut la lecture stabilisée ?</text>
+    <rect class="amb" x="0" y="16" width="130" height="26" rx="4"/>
+    <rect class="okf" x="130" y="16" width="50" height="26"/>
+    <rect class="badf" x="180" y="16" width="90" height="26" rx="4"/>
+    <path class="wire" d="M155 10 V48"/>
+    <text class="fg" x="155" y="64" font-size="12" text-anchor="middle">nominale ± tolérance</text>
+    <text class="fg" x="4" y="88" font-size="13" font-weight="700">En dessous</text>
+    <text class="mut" x="4" y="106" font-size="12">rien de prouvé</text>
+    <text class="fg" x="190" y="88" font-size="13" font-weight="700">Au-dessus</text>
+    <text class="mut" x="190" y="106" font-size="12">défectueux, sûr</text>
+    <text x="62" y="34" font-size="12" font-weight="700" text-anchor="middle" fill="#1f2933">5 kΩ ici</text>
+  </g>
+</svg>

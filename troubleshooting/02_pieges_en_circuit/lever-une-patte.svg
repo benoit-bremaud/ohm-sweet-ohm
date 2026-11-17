@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Lever une patte pour isoler un composant</title>
+  <desc id="d">À gauche, résistance traversante soudée : les pointes mesurent aussi le reste du circuit. À droite, la patte côté signal est dessoudée et soulevée ; la patte côté plan de masse reste soudée ; on mesure entre la patte levée et l'autre borne, pas sur la pastille.</desc>
+  <style>
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}.pcb{fill:#1f7a4d}.pad{fill:#d4a017}
+    .gnd{fill:#145c39}.body{fill:#d9b88c;stroke:#8a6d45;stroke-width:2}.lead{stroke:#9aa3ad;stroke-width:4;fill:none}
+    .probe{stroke:#dc2626;stroke-width:5;stroke-linecap:round}.probeb{stroke:#1f2933;stroke-width:5;stroke-linecap:round}
+    .ok{fill:#16a34a}.no{fill:#dc2626}.tag{fill:#ffffff}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.probeb{stroke:#e6edf3}.ok{fill:#4ade80}.no{fill:#f87171}
+    }
+  </style>
+  <rect class="bg" width="760" height="330" rx="16"/>
+  <text class="fg" x="24" y="38" font-size="20" font-weight="700">Lever une patte : couper la boucle, mesurer le composant seul</text>
+
+  <!-- left: soldered -->
+  <g transform="translate(40 70)">
+    <text class="fg" x="0" y="0" font-size="15" font-weight="700">Avant : soudée</text>
+    <rect class="pcb" x="0" y="150" width="320" height="34" rx="4"/>
+    <rect class="gnd" x="190" y="150" width="130" height="34"/>
+    <text class="tag" x="255" y="172" font-size="12" text-anchor="middle">plan de masse</text>
+    <rect class="pad" x="70" y="142" width="34" height="10" rx="2"/>
+    <rect class="pad" x="216" y="142" width="34" height="10" rx="2"/>
+    <path class="lead" d="M87 146 V100 H120 M233 146 V100 H200"/>
+    <rect class="body" x="120" y="86" width="80" height="28" rx="12"/>
+    <line class="probe" x1="60" y1="40" x2="85" y2="96"/>
+    <line class="probeb" x1="262" y1="40" x2="236" y2="96"/>
+    <text class="no" x="0" y="218" font-size="14" font-weight="700">✗ lit R ∥ reste du circuit</text>
+  </g>
+
+  <!-- right: lifted -->
+  <g transform="translate(410 70)">
+    <text class="fg" x="0" y="0" font-size="15" font-weight="700">Après : patte côté signal levée</text>
+    <rect class="pcb" x="0" y="150" width="320" height="34" rx="4"/>
+    <rect class="gnd" x="190" y="150" width="130" height="34"/>
+    <text class="tag" x="255" y="172" font-size="12" text-anchor="middle">plan de masse</text>
+    <rect class="pad" x="70" y="142" width="34" height="10" rx="2"/>
+    <rect class="pad" x="216" y="142" width="34" height="10" rx="2"/>
+    <path class="lead" d="M87 120 V100 H120 M233 146 V100 H200"/>
+    <rect class="body" x="120" y="86" width="80" height="28" rx="12"/>
+    <text class="mut" x="52" y="140" font-size="12" text-anchor="end">écart</text>
+    <path class="lead" stroke-dasharray="3 3" d="M87 124 V140"/>
+    <line class="probe" x1="40" y1="70" x2="84" y2="118"/>
+    <line class="probeb" x1="262" y1="40" x2="236" y2="96"/>
+    <text class="ok" x="0" y="218" font-size="14" font-weight="700">✓ patte levée ↔ autre borne : R seule</text>
+  </g>
+
+  <g transform="translate(40 310)">
+    <text class="mut" x="0" y="-8" font-size="13">Lever la patte la plus facile à chauffer, pas celle du plan de masse.</text><text class="mut" x="0" y="10" font-size="13">Ne jamais tirer une pastille froide ; mesurer la patte, pas la pastille.</text>
+  </g>
+</svg>

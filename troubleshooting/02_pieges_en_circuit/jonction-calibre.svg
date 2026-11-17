@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Quand une jonction en parallèle se met à conduire</title>
+  <desc id="d">Tension aux pointes de l'ohmmètre, égale à I fois R, pour une résistance de 10 kΩ selon le calibre. Sur le calibre 2 kΩ la lecture est hors calibre ; sur le calibre 20 kΩ, avec 100 µA, la tension atteint 1 V et dépasse la zone de conduction d'une jonction au silicium, de 0,4 à 0,5 V ; avec un ohmmètre basse tension, elle reste sous 0,3 V.</desc>
+  <style>
+    .bg{fill:#ffffff}.fg{fill:#1f2933}.mut{fill:#5f6b7a}.ax{stroke:#5f6b7a;stroke-width:1.5;fill:none}
+    .zone{fill:#fde68a}.zt{fill:#92400e}.hi{fill:#dc2626}.lo{fill:#16a34a}.grid{stroke:#d5dbe3;stroke-dasharray:4 4}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117}.fg{fill:#e6edf3}.mut{fill:#9aa7b4}.ax{stroke:#9aa7b4}
+      .zone{fill:#4a3b10}.zt{fill:#fcd34d}.hi{fill:#f87171}.lo{fill:#4ade80}.grid{stroke:#30363d}
+    }
+  </style>
+  <rect class="bg" width="760" height="360" rx="16"/>
+  <text class="fg" x="24" y="38" font-size="20" font-weight="700">La jonction conduit quand I × R approche 0,4 à 0,5 V</text>
+  <text class="mut" x="24" y="62" font-size="14">R = 10 kΩ mesurée, une diode au silicium en parallèle</text>
+
+  <!-- axes: y 0..1.2 V mapped 300..100 -->
+  <g transform="translate(90 0)">
+    <path class="ax" d="M0 100 V300 H620"/>
+    <rect class="zone" x="0" y="216.7" width="620" height="16.6"/>
+    <text class="zt" x="192" y="229" font-size="12" font-weight="700">conduction 0,4 – 0,5 V</text>
+    <path class="grid" d="M0 133.3 H620 M0 300 H620"/>
+    <text class="mut" x="-10" y="137" font-size="12" text-anchor="end">1 V</text>
+    <text class="mut" x="-10" y="229" font-size="12" text-anchor="end">0,45 V</text>
+    <text class="mut" x="-10" y="304" font-size="12" text-anchor="end">0 V</text>
+    <text class="mut" x="-62" y="200" font-size="12" transform="rotate(-90 -62 200)" text-anchor="middle">tension aux pointes</text>
+
+    <!-- bar 1: calibre 20 kΩ classique 100 µA → 1 V -->
+    <rect class="hi" x="70" y="133.3" width="110" height="166.7" rx="6"/>
+    <text class="fg" x="125" y="122" font-size="15" font-weight="700" text-anchor="middle">I × R = 1 V</text>
+    <text class="fg" x="125" y="322" font-size="13" text-anchor="middle">calibre 20 kΩ</text>
+    <text class="mut" x="125" y="340" font-size="12" text-anchor="middle">100 µA : lecture effondrée</text>
+
+    <!-- bar 2: basse tension, pleine échelle 0.2 V -->
+    <rect class="lo" x="260" y="266.7" width="110" height="33.3" rx="6"/>
+    <text class="fg" x="315" y="256" font-size="15" font-weight="700" text-anchor="middle">0,2 V</text>
+    <text class="fg" x="315" y="322" font-size="13" text-anchor="middle">ohmmètre basse tension</text>
+    <text class="mut" x="315" y="340" font-size="12" text-anchor="middle">jonction bloquée : 10 kΩ lus</text>
+
+    <!-- bar 3: calibre 2k : hors calibre, tension à vide -->
+    <rect class="hi" x="450" y="150" width="110" height="150" rx="6" opacity="0.55"/>
+    <text class="fg" x="505" y="140" font-size="15" font-weight="700" text-anchor="middle">tension à vide</text>
+    <text class="fg" x="505" y="322" font-size="13" text-anchor="middle">calibre 2 kΩ</text>
+    <text class="mut" x="505" y="340" font-size="12" text-anchor="middle">hors calibre (OL)</text>
+  </g>
+</svg>
