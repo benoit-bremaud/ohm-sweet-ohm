@@ -2,6 +2,8 @@
 
 Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaque consigne en italique, garder l'ordre des sections et supprimer une section seulement si elle ne s'applique pas.
 
+Les figures SVG sont générées : modifier `scripts/figures/guide_NN.py` puis lancer `just figures`, ne jamais retoucher un fichier `.svg` à la main (`just test` le refuse).
+
 ## En bref
 
 *Trois lignes au plus : ce qui tombe le plus souvent en panne sur ce composant, et la mesure qui tranche dans la majorité des cas.*

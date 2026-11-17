@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 import generate
-from elements import DIAL_STEP, POS, bench_supply, dial_angle, meter, probe
+from elements import POS, UNITS, bench_supply, dial_angle, meter, probe
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
 FIGURES = [
@@ -21,13 +21,13 @@ FIGURES = [
 
 @pytest.mark.parametrize("sel", POS)
 def test_dial_points_at_the_selected_position(sel: str) -> None:
-    drawing, _ = meter(0, 0, 1, sel, "0.00", "V")
-    assert dial_angle(sel) == POS.index(sel) * DIAL_STEP
+    drawing, _ = meter(0, 0, 1, sel, "0.00", sorted(UNITS[sel])[0])
     assert f'data-sel="{sel}"' in drawing
     assert f'transform="rotate({dial_angle(sel)} ' in drawing
 
 
 def test_dial_positions_are_distinct_angles_within_one_turn() -> None:
+    assert dial_angle(POS[0]) == 0
     angles = [dial_angle(sel) for sel in POS]
     assert len(set(angles)) == len(POS)
     assert max(angles) < 360
@@ -36,6 +36,14 @@ def test_dial_positions_are_distinct_angles_within_one_turn() -> None:
 def test_unknown_dial_position_is_refused() -> None:
     with pytest.raises(ValueError, match="unknown dial position"):
         meter(0, 0, 1, "10A", "0.00", "A")
+
+
+@pytest.mark.parametrize(
+    ("sel", "unit"), [("20k", "V"), ("ADC", "V"), ("VDC", "kΩ"), ("BEEP", "A")]
+)
+def test_unit_the_position_cannot_display_is_refused(sel: str, unit: str) -> None:
+    with pytest.raises(ValueError, match="cannot be read"):
+        meter(0, 0, 1, sel, "1.00", unit)
 
 
 def test_meter_jacks_scale_and_keep_their_order() -> None:

@@ -54,7 +54,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 ![Multimètre sur V continu, cordon rouge dans la douille VΩ, pointes en parallèle sur la charge d'une carte alimentée en 5 V : 5,02 V lus ; pointes inversées, la lecture devient négative](voltmetre-continu.svg)
 
-![Multimètre sur V alternatif, pointes en parallèle sur la sortie 12 V d'un transformateur : 12,1 V lus, valeur efficace, sans sens des pointes](voltmetre-alternatif.svg)
+![Multimètre sur V alternatif, pointes en parallèle sur la sortie d'un adaptateur secteur externe 12 V alternatif : 12,1 V lus, valeur efficace, sans sens des pointes](voltmetre-alternatif.svg)
 
 **Pourquoi ça compte** : sur un point à haute impédance (pont diviseur de quelques MΩ, entrée flottante, grille de MOSFET), cette résistance d'entrée forme un diviseur avec le circuit et la lecture baisse. Un fil non relié capte au contraire des tensions « fantômes » de quelques volts en alternatif, qui disparaissent avec une charge de quelques kΩ (mode basse impédance des appareils qui en ont un).
 
@@ -64,7 +64,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 **Ce qu'il injecte** : un courant qui diminue quand le calibre monte, sous une tension à vide de quelques centaines de mV à environ 3 V selon l'appareil.
 
-![Multimètre sur Ω, calibre 20 kΩ, carte hors tension, pointes aux bornes d'une résistance de 10 kΩ : 9,96 kΩ lus ; le courant de test diminue quand le calibre monte](ohmmetre.svg)
+![Multimètre sur Ω, calibre 20 kΩ, carte hors tension, pointes aux bornes d'une résistance de 10 kΩ : 9,96 kΩ lus, courant de test d'environ 100 µA, environ 1 V entre les pointes](ohmmetre.svg)
 
 **Pourquoi un composant réagit ainsi** :
 
@@ -80,7 +80,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 **Ce qu'il injecte** : le même courant que l'ohmmètre sur son petit calibre, environ 0,2 à 1 mA.
 
-![Multimètre sur continuité, pointes aux deux extrémités d'une piste : 0,3 Ω lus, l'appareil sonne ; il sonne aussi pour une résistance de 47 Ω et se tait pour 1 kΩ](bipeur.svg)
+![Multimètre sur continuité, pointes aux deux extrémités d'une piste : 0,3 Ω lus, l'appareil sonne ; il sonne souvent aussi pour une résistance de 47 Ω, selon son seuil, et se tait pour 1 kΩ](bipeur.svg)
 
 **Seuil** : l'alarme sonne sous une résistance fixée par le fabricant, en général entre 10 et 100 Ω. Un bipeur ne distingue donc pas un vrai court-circuit (0,1 Ω) d'une résistance de 47 Ω : il répond « faible », pas « nul ». Pour trancher, lire la valeur en ohmmètre.
 
@@ -129,7 +129,7 @@ Un « Vf » lu ici vaut pour 1 mA environ : il est plus bas que la tension direc
 
 > En mode courant, l'appareil insère entre les douilles A (ou mA) et COM un **shunt** de quelques milliohms à quelques ohms : c'est un fil. Laisser le cordon rouge dans la douille A puis toucher une alimentation « pour lire la tension » court-circuite la source. Sur beaucoup d'appareils premier prix, la douille 10 A n'a **aucun fusible**. Sur une batterie (plomb, lithium) ou une alimentation non limitée, le court-circuit débite des dizaines à des centaines d'ampères : cordons qui fondent, brûlure, arc, incendie de la batterie. Remettre le cordon rouge dans la douille V/Ω **avant** chaque mesure de tension, et remplacer un fusible grillé par un fusible de même calibre et de même pouvoir de coupure, jamais par un fil. La mesure de courant elle-même relève de la fiche 91.
 
-![Mesure de courant et piège : à gauche, multimètre en série avec la charge, cordon rouge dans la douille A ; à droite, cordon resté dans la douille A et pointes en parallèle sur une batterie, court-circuit](mode-courant.svg)
+![Mesure de courant et piège : à gauche, multimètre en série avec la charge, cordon rouge dans la douille 10 A ; à droite, cordon resté dans la douille 10 A et pointes en parallèle sur une batterie, court-circuit](mode-courant.svg)
 
 ## Exercice : mesurer son propre appareil
 

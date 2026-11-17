@@ -94,11 +94,13 @@ def fig_junction() -> str:
     )
     b += '  <path class="grid" d="M380 84 V446"/>\n'
 
-    def half(x0, sel, lcd, volt, good, l1, l2):
+    def half(
+        x0: int, sel: str, lcd: str, volt: float, good: bool, l1: str, l2: str
+    ) -> str:
         m, (_, com, v) = meter(x0 + 24, 84, 0.9, sel, lcd, "kΩ")
         o = m
 
-        def yv(u):
+        def yv(u: float) -> float:
             return 250 - 140 * u
 
         o += text(x0 + 205, 100, "tension aux pointes", "mut", 11)

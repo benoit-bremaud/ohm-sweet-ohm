@@ -91,7 +91,7 @@ def fig_supply() -> str:
         verdict = (
             (
                 "✗ Voyant CC, tension proche de 0 V",
-                "court-circuit probable : couper et chercher, sans monter la limite",
+                "court-circuit probable : couper, chercher, limite inchangée",
             )
             if shorted
             else (
@@ -133,7 +133,7 @@ def fig_discharge() -> str:
         "mut",
         14,
     )
-    m, jacks = meter(30, 80, 1, "VDC", "0.42", "V", "DC")
+    m, jacks = meter(30, 80, 1, "VDC", "0.24", "V", "DC")
     b += m
     b += f'  <path class="wire" d="M300 {YA} H470 M300 {YB} H560 M470 {YA} V205 H480 M550 205 H560 V{YB}"/>\n'
     b += cap_v(370, YA, YB)
@@ -191,7 +191,7 @@ def fig_discharge() -> str:
         484,
         "Décharger un condensateur dans une résistance, puis vérifier au voltmètre",
         "Un condensateur électrolytique de 1000 µF chargé à 35 V est déchargé dans une résistance de 1 kΩ 5 W tenue par des pinces crocodile. "
-        "Un multimètre, sélecteur sur volts continus, pointe rouge sur la borne plus, vérifie la tension : 0,42 V après la décharge. "
+        "Un multimètre, sélecteur sur volts continus, pointe rouge sur la borne plus, vérifie la tension : 0,24 V après la décharge. "
         "La courbe montre la tension qui tombe de 35 V à moins de 1 % en cinq constantes de temps, soit 5 secondes. "
         "Étapes : mesurer la tension, brancher la résistance, attendre cinq fois R fois C, vérifier que la tension est sous 1 V, revérifier avant la mesure suivante.",
         b,

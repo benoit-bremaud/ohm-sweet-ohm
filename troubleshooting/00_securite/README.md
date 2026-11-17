@@ -52,7 +52,7 @@ Un condensateur garde sa charge carte débranchée, parfois des heures ou des jo
 4. **Vérifier au voltmètre** que la tension est tombée sous 1 V environ.
 5. Revérifier avant la mesure suivante : un électrolytique aluminium peut remonter jusqu'à 10 à 15 % de sa tension après décharge (absorption diélectrique).
 
-![Condensateur de 1000 µF chargé à 35 V, déchargé dans une résistance de 1 kΩ 5 W tenue par des pinces ; le voltmètre continu vérifie 0,42 V après cinq constantes de temps, soit 5 secondes](decharge-condensateur.svg)
+![Condensateur de 1000 µF chargé à 35 V, déchargé dans une résistance de 1 kΩ 5 W tenue par des pinces ; le voltmètre continu vérifie 0,24 V après cinq constantes de temps, soit 5 secondes](decharge-condensateur.svg)
 
 **Jamais de tournevis** en court-circuit sur les bornes : le pic de courant abîme le condensateur et les pistes, projette du métal fondu et, sur un condensateur hors périmètre, fait un arc violent. Certains réparateurs le font par habitude ; ce n'est pas une méthode.
 

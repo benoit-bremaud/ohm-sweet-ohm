@@ -106,7 +106,7 @@ def fig_volts_ac() -> str:
     m, jacks = meter(30, 80, 1, "V~", "12.1", "V", "AC")
     b += m
     b += _powered_rails(
-        ("Transfo.", ("sortie 12 V~",)), "Charge", "12 V alternatif", "retour"
+        ("Adaptateur", ("externe 12 V~",)), "Charge", "12 V alternatif", "retour"
     )
     b += '  <path d="M396 232 q6 -12 12 0 t12 0 t12 0 t12 0" fill="none" stroke="#2563eb" stroke-width="2"/>\n'
     b += side_hookup(jacks.v, jacks.com, polarity=False)
@@ -126,8 +126,8 @@ def fig_volts_ac() -> str:
         760,
         450,
         "Voltmètre alternatif : mesure en parallèle, sans polarité",
-        "Un multimètre, sélecteur sur volts alternatifs, cordon rouge dans la douille V ohms, a ses pointes en parallèle sur la sortie 12 V alternatif "
-        "d'un transformateur qui alimente une charge. Il lit 12,1 V, la valeur efficace. Le sens des pointes est indifférent.",
+        "Un multimètre, sélecteur sur volts alternatifs, cordon rouge dans la douille V ohms, a ses pointes en parallèle sur la sortie d'un adaptateur secteur externe "
+        "12 V alternatif qui alimente une charge. Il lit 12,1 V, la valeur efficace. Le sens des pointes est indifférent.",
         b,
     )
 
@@ -220,7 +220,7 @@ def fig_beeper() -> str:
     for i, (val, verdict, cls) in enumerate(
         (
             ("0,1 Ω · court-circuit franc", "bip", "ok"),
-            ("47 Ω · une résistance", "bip aussi", "warn"),
+            ("47 Ω · une résistance", "bip souvent", "warn"),
             ("1 kΩ", "silence", "mut"),
         )
     ):
@@ -319,7 +319,7 @@ def fig_diode() -> str:
         False,
         "OL",
         "Pointes inversées",
-        ("✓ OL : la jonction bloque", "sens inverse, aucune tension lue"),
+        ("✓ OL : la jonction bloque", "sens inverse, tension hors plage"),
     )
     b += text(24, 524, "Proche de 0 V dans les deux sens : court-circuit.", "mut", 12)
     b += text(
@@ -362,14 +362,14 @@ def fig_current() -> str:
         title = (
             "Le piège : en parallèle, cordon resté sur 10 A"
             if trap
-            else "La mesure : en série, circuit ouvert"
+            else "La mesure : en série, circuit coupé"
         )
         o = text(x0 + 20, 100, title, size=15, weight=700)
         m, jacks = _half_meter(
             x0,
             116,
             "VDC" if trap else "ADC",
-            "0.00" if trap else "0.150",
+            "0.00" if trap else "0.15",
             "V" if trap else "A",
         )
         o += m
@@ -456,7 +456,7 @@ def fig_current() -> str:
         558,
         "Mode courant : mesure en série, et piège du cordon oublié sur la douille 10 A",
         "À gauche, la mesure : sélecteur sur ampères continus, cordon rouge dans la douille 10 A, l'appareil est inséré en série dans le fil coupé "
-        "entre une alimentation limitée et sa charge ; il lit 0,150 A. "
+        "entre une alimentation limitée et sa charge ; il lit 0,15 A. "
         "À droite, le piège : sélecteur sur volts continus mais cordon rouge resté dans la douille 10 A, pointes en parallèle sur une batterie ; "
         "le shunt de l'appareil court-circuite la source, des dizaines d'ampères circulent, et la douille 10 A est souvent sans fusible.",
         b,

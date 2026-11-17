@@ -133,7 +133,8 @@ systemctl --user enable --now ohm-sweet-ohm-nightly.timer
 `just test` measures test coverage (`pnpm test:coverage`, V8, floor 80 % for each package,
 `main.ts` entry points excluded), documentation coverage (`pnpm doc:coverage`, share of exported
 declarations with a doc block, floor 90 %) and runs the wiring tests of the local CI itself
-(`scripts/test-local-ci.sh`, `scripts/test-attest.sh`). `just sonar` sends the analysis and the lcov
+(`scripts/test-local-ci.sh`, `scripts/test-attest.sh`) and the figure generator tests
+(`scripts/test-figures.sh`: coverage floor 90 %, committed SVGs equal to the generated ones). `just sonar` sends the analysis and the lcov
 report to the shared SonarQube at `http://localhost:9000` and fails when the quality gate fails; it
 uses the machine's global analysis token (`SONAR_TOKEN`, or `~/.config/sonarqube/analysis-token`).
 
