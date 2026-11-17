@@ -100,7 +100,7 @@ Un fusible de 100 mA qui lit 6 Ω est donc bon. Un fusible CMS de 1 A lit moins 
 
 - **Résistance fusible** : sélecteur sur Ω, lecture à comparer à la valeur marquée comme pour une résistance (fiche [10](../10_resistance/README.md), niveau 2). Une résistance fusible qui a joué son rôle lit OL ou une valeur au moins cent fois supérieure à la valeur marquée.
 - **Fusible thermique** : il doit sonner à température ambiante. Ouvert, il ne se réarme pas.
-- **Porte-fusible** : fusible en place, une pointe sur chaque **patte du porte-fusible** côté soudure. Si le fusible seul sonne mais pas l'ensemble, le défaut est dans les clips ou les soudures.
+- **Porte-fusible ou soudures** : fusible en place, une pointe sur chaque **pastille** côté soudure (pattes du porte-fusible, ou pastilles d'un fusible soudé ou CMS). Si le fusible seul sonne mais pas l'ensemble, le défaut est dans les clips ou les soudures.
 
 ## Niveau 3 — Mesure en circuit
 

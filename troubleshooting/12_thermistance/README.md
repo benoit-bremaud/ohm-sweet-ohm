@@ -92,7 +92,7 @@ Sélecteur sur Ω, plus petit calibre, résistance des cordons retranchée (fich
 | --- | --- |
 | Valeur attendue, à ± 20 % près, qui baisse en la réchauffant | saine |
 | OL, ou nettement au-dessus de la valeur attendue | ouverte ou dégradée (disque fissuré) : remplacer |
-| Bien en dessous de la valeur attendue alors qu'elle est froide | attendre : elle met une à deux minutes à refroidir après la coupure ; si la lecture reste basse, remplacer |
+| En dessous de la valeur attendue de plus de 20 % alors qu'elle est froide | attendre : elle met une à deux minutes à refroidir après la coupure ; si la lecture reste basse, remplacer |
 
 ### CTP polymère (fusible réarmable)
 
@@ -201,11 +201,12 @@ flowchart TD
   H -- en dessous de la plage, en circuit --> X[Rien de prouvé : lever une patte, refaire la mesure]
   I -- proche de 0 Ω --> J[Court-circuit en aval : le trouver, fiche 92]
   I -- pas de court-circuit --> K[Essai sur alimentation limitée : mesurer le courant réel et la température autour de la CTP]
-  C -- CTN de puissance --> L{Ohmmètre à froid, après deux minutes de refroidissement : lecture comparée à la valeur attendue, valeur marquée corrigée de la température}
+  C -- CTN de puissance --> L{Ohmmètre à froid, deux minutes après la coupure : comparer à la valeur attendue}
   L -- OL ou nettement au-dessus --> R
   L -- valeur attendue à 20 % près --> M[CTN probablement saine : chercher ailleurs]
-  L -- bien en dessous, hors circuit et froide --> R
+  L -- en dessous de plus de 20 %, hors circuit et froide --> R
   L -- en dessous, en circuit --> X
+  X --> C
 ```
 
 ## Remplacer le composant
