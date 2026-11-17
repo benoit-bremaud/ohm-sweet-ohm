@@ -79,7 +79,7 @@ Lever une patte (dessouder une seule broche pour isoler le composant) coûte du 
 
 1. Carte hors tension, condensateurs déchargés (fiche [00](../00_securite/README.md)).
 2. **Traversant** : retirer la soudure du côté pastille (pompe ou tresse), redresser la patte si elle est rabattue sous la carte, chauffer la pastille et soulever la patte de quelques millimètres avec une pince, sans tirer sur une pastille froide : elle s'arrache avec sa piste.
-3. **CMS** (composant monté en surface, résistance ou condensateur 0603, 0805…) : chauffer une seule extrémité et la soulever à la pince, ou retirer le composant (deux fers, pince chauffante ou air chaud) et le mesurer seul.
+3. **CMS** (composant monté en surface, résistance 0603, 0805…) : chauffer une seule extrémité et la soulever à la pince, ou retirer le composant (deux fers, pince chauffante ou air chaud) et le mesurer seul. Un condensateur céramique se retire toujours entier, sans faire levier : le soulever par un bout risque de le fissurer (fiche [20](../20_condensateur_ceramique/README.md)).
 4. Mesurer entre la patte levée et l'autre borne du composant, **pas** la pastille.
 5. Ressouder, puis vérifier la continuité entre la patte et la piste.
 

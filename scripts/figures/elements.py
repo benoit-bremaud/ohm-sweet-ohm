@@ -8,7 +8,7 @@ on the page background uses the CSS classes of STYLE so it follows the light or 
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import NamedTuple
 
 Point = tuple[float, float]
@@ -514,3 +514,135 @@ def side_hookup(red_jack: Point, com_jack: Point, polarity: bool = True) -> str:
         o += text(284, 124, "+", "no", 16, "end", 700)
         o += text(284, 274, "−", "fg", 16, "end", 700)
     return o
+
+
+def heading(title: str, subtitle: str) -> str:
+    """Title and muted subtitle at the top of a figure."""
+    return text(24, 38, title, size=20, weight=700) + text(24, 60, subtitle, "mut", 14)
+
+
+def half_meter(
+    x0: float,
+    sel: str,
+    lcd: str,
+    unit: str,
+    title: str,
+    notes: Sequence[str],
+    flag: str = "",
+) -> tuple[str, Point, Point]:
+    """Left part of a 380-wide panel starting at x0: bold title, meter, muted notes beside it.
+
+    Returns (svg, V jack, COM jack); the part under test goes right of the meter, from x0 + 205.
+    """
+    o = text(x0 + 20, 100, title, size=15, weight=700)
+    m, (_, com, v) = meter(x0 + 24, 116, 0.9, sel, lcd, unit, flag)
+    o += m
+    for i, line in enumerate(notes):
+        o += text(x0 + 205, 132 + 16 * i, line, "mut", 12)
+    return o, v, com
+
+
+def hookup(
+    v: Point, com: Point, red_tip: Point, black_tip: Point, slant: float = 0.45
+) -> str:
+    """Leads and probes of a `half_meter`: red tip on the left point, black tip on the right one.
+
+    Both points sit above y = 340 and the red one left of the black one, so the cables do not cross.
+    """
+    pr, (ex, ey) = probe(*red_tip, -slant, 0.9, True)
+    o = (
+        lead(
+            v,
+            f"V400 C{v[0]:.1f} 436 {ex:.1f} 446 {ex:.1f} 410 L{ex:.1f} {ey:.1f}",
+            True,
+        )
+        + pr
+    )
+    pr, (ex, ey) = probe(*black_tip, 0.3, 0.95, False)
+    return (
+        o
+        + lead(
+            com,
+            f"V404 C{com[0]:.1f} 470 {ex:.1f} 482 {ex:.1f} 410 L{ex:.1f} {ey:.1f}",
+            False,
+        )
+        + pr
+    )
+
+
+def verdict(cx: float, y: float, head: str, sub: str, cls: str) -> str:
+    """Centred two-line verdict: bold `head` in theme class `cls`, muted `sub` under it."""
+    return text(cx, y, head, cls, 14, "middle", 700) + text(
+        cx, y + 18, sub, "mut", 12, "middle"
+    )
+
+
+def chart(
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    xmax: float,
+    ymax: float,
+    xticks: Sequence[tuple[float, str]],
+    yticks: Sequence[tuple[float, str]],
+    xlabel: str,
+    ylabel: str,
+) -> tuple[str, Callable[[float, float], Point]]:
+    """Axes of a chart in the box (x, y, w, h), values from 0 to xmax and 0 to ymax.
+
+    Returns (svg, function mapping a value pair to its point in the figure).
+    """
+
+    def at(vx: float, vy: float) -> Point:
+        return x + w * vx / xmax, y + h - h * vy / ymax
+
+    o = ""
+    for vy, label in yticks:
+        py = at(0, vy)[1]
+        o += f'  <path class="grid" d="M{x} {py:.1f} H{x + w}"/>\n'
+        o += text(x - 8, round(py + 4, 1), label, "mut", 11, "end")
+    for vx, label in xticks:
+        px = at(vx, 0)[0]
+        o += f'  <path class="blk" stroke-width="1.5" d="M{px:.1f} {y + h} v5"/>\n'
+        o += text(round(px, 1), y + h + 18, label, "mut", 11, "middle")
+    o += f'  <path class="blk" stroke-width="1.5" fill="none" d="M{x} {y} V{y + h} H{x + w}"/>\n'
+    o += text(x + w / 2, y + h + 38, xlabel, "mut", 12, "middle")
+    o += text(x - 8, y - 12, ylabel, "mut", 12)
+    return o, at
+
+
+def curve(points: Sequence[Point], cls: str, width: float = 3, dash: str = "") -> str:
+    """Polyline through `points`; `cls` is a stroke class of STYLE (fb, fa, fr, blk)."""
+    d = " L".join(f"{px:.1f} {py:.1f}" for px, py in points)
+    da = f' stroke-dasharray="{dash}"' if dash else ""
+    return f'  <path class="{cls}" fill="none" stroke-width="{width}" stroke-linecap="round" stroke-linejoin="round"{da} d="M{d}"/>\n'
+
+
+def mlcc(
+    cx: float, cy: float, w: float = 64, h: float = 30, vertical: bool = False
+) -> tuple[str, Point, Point]:
+    """Unmarked ceramic chip capacitor (MLCC) centred on (cx, cy); `w` is its length.
+
+    Returns (svg, centre of the first termination, centre of the second): left then right,
+    or top then bottom when `vertical`.
+    """
+    t = w * 0.2  # metal termination at each end
+    if vertical:
+        o = f'  <rect x="{cx - h / 2}" y="{cy - w / 2}" width="{h}" height="{w}" rx="2" fill="#c9d0d9" stroke="#7d8794"/>\n'
+        o += f'  <rect x="{cx - h / 2}" y="{cy - w / 2 + t:.1f}" width="{h}" height="{w - 2 * t:.1f}" fill="#c8a97e" stroke="#8a6d45"/>\n'
+        return o, (cx, cy - w / 2 + t / 2), (cx, cy + w / 2 - t / 2)
+    o = f'  <rect x="{cx - w / 2}" y="{cy - h / 2}" width="{w}" height="{h}" rx="2" fill="#c9d0d9" stroke="#7d8794"/>\n'
+    o += f'  <rect x="{cx - w / 2 + t:.1f}" y="{cy - h / 2}" width="{w - 2 * t:.1f}" height="{h}" fill="#c8a97e" stroke="#8a6d45"/>\n'
+    return o, (cx - w / 2 + t / 2, cy), (cx + w / 2 - t / 2, cy)
+
+
+def tile(x: float, y: float, code: str, head: str, sub: str) -> str:
+    """Dark tile showing one part of a marking, with its meaning under it."""
+    o = f'  <rect x="{x}" y="{y}" width="60" height="34" rx="5" fill="#20242b" stroke="#7d8794"/>\n'
+    o += f'  <text x="{x + 30}" y="{y + 23}" font-size="17" font-weight="700" text-anchor="middle" font-family="{MONO}" fill="#ffffff">{code}</text>\n'
+    return (
+        o
+        + text(x, y + 54, head, "blue", 13, weight=700)
+        + text(x, y + 71, sub, "mut", 12)
+    )

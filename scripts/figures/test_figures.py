@@ -20,12 +20,20 @@ from elements import (
     band_offsets,
     bands,
     bench_supply,
+    chart,
     chip,
+    curve,
     dial_angle,
+    half_meter,
+    heading,
+    hookup,
     meter,
+    mlcc,
     probe,
     res_h,
     res_v,
+    tile,
+    verdict,
 )
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -145,6 +153,65 @@ def test_resistor_body_colour_is_selectable() -> None:
 
 def test_chip_prints_its_marking() -> None:
     assert ">4R7</text>" in chip(0, 0, "4R7")
+
+
+def test_heading_prints_the_title_then_the_subtitle() -> None:
+    drawing = heading("Titre", "Sous-titre")
+    assert drawing.index(">Titre</text>") < drawing.index(">Sous-titre</text>")
+
+
+def test_half_meter_and_hookup_draw_one_meter_with_its_probe_pair() -> None:
+    drawing, v, com = half_meter(380, "BEEP", "OL", "Ω", "Rail sain", ["note"])
+    assert 'data-sel="BEEP"' in drawing
+    assert ">Rail sain</text>" in drawing and ">note</text>" in drawing
+    assert 380 < com[0] < v[0] < 380 + 205  # jacks stay left of the part under test
+    probes = re.findall(
+        r'data-probe="(red|black)" transform="translate\(([\d.]+) ([\d.]+)\)',
+        hookup(v, com, (600, 200), (700, 300)),
+    )
+    assert probes == [("red", "600.0", "200.0"), ("black", "700.0", "300.0")]
+
+
+def test_verdict_prints_its_head_in_the_given_class_above_the_note() -> None:
+    drawing = verdict(100, 50, "Court-circuit", "à localiser", "no")
+    head, sub = drawing.strip().splitlines()
+    assert 'class="no"' in head and ">Court-circuit</text>" in head
+    assert 'class="mut"' in sub and ">à localiser</text>" in sub
+
+
+def test_chart_maps_values_from_the_origin_to_the_far_corner() -> None:
+    axes, at = chart(
+        100, 50, 400, 200, 16, 100, [(8, "8 V")], [(50, "50 %")], "tension", "capacité"
+    )
+    assert at(0, 0) == pytest.approx((100, 250))  # y grows downwards in SVG
+    assert at(16, 100) == pytest.approx((500, 50))
+    assert at(8, 50) == pytest.approx((300, 150))
+    for label in ("8 V", "50 %", "tension", "capacité"):
+        assert f">{label}</text>" in axes
+
+
+def test_curve_joins_its_points_in_order() -> None:
+    drawing = curve([(0, 0), (10, 5), (20, 0)], "fr")
+    assert 'class="fr"' in drawing
+    assert 'd="M0.0 0.0 L10.0 5.0 L20.0 0.0"' in drawing
+    assert "stroke-dasharray" not in drawing
+    assert 'stroke-dasharray="6 4"' in curve([(0, 0), (1, 1)], "fb", dash="6 4")
+
+
+def test_mlcc_terminations_follow_its_orientation() -> None:
+    _, left, right = mlcc(100, 50, w=60)
+    assert (left, right) == (pytest.approx((76, 50)), pytest.approx((124, 50)))
+    _, top, bottom = mlcc(100, 50, w=60, vertical=True)
+    assert (top, bottom) == (pytest.approx((100, 26)), pytest.approx((100, 74)))
+
+
+def test_tile_prints_the_code_above_its_meaning() -> None:
+    code, head, sub = (
+        tile(10, 20, "47", "chiffres significatifs", "ici 47").strip().splitlines()[1:]
+    )
+    assert ">47</text>" in code
+    assert 'class="blue"' in head and ">chiffres significatifs</text>" in head
+    assert 'class="mut"' in sub and ">ici 47</text>" in sub
 
 
 @pytest.mark.parametrize(("path", "draw", "positions"), FIGURES)
