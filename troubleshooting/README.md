@@ -117,17 +117,17 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 
 | Technique | Fiche de base | Utilisée dans |
 | --- | --- | --- |
-| Décharge d'un condensateur | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md) |
-| Capacimètre | [01](01_multimetre/README.md) | — |
-| Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md) |
-| Mesure ESR | 03 | — |
+| Décharge d'un condensateur | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md), [24](24_supercondensateur/README.md) |
+| Capacimètre | [01](01_multimetre/README.md) | [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md) |
+| Mesure ESR | 03 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md) |
-| Injection de courant | 92 | — |
+| Injection de courant | 92 | [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md) |
 
 ## Licence
