@@ -62,7 +62,7 @@
     <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
   </g>
   <rect x="300" y="85" width="14" height="14" rx="3" fill="#16a34a"/>
-  <text class="fg" x="322" y="96" font-size="13">quelques mV à quelques dizaines de mV : contact ou fusible sain</text>
+  <text class="fg" x="322" y="96" font-size="13">quelques mV à dizaines de mV : sain (plus pour un fusible PTC)</text>
   <rect x="300" y="107" width="14" height="14" rx="3" fill="#f59e0b"/>
   <text class="fg" x="322" y="118" font-size="13">plusieurs centaines de mV : contact résistant, fusible fatigué</text>
   <rect x="300" y="129" width="14" height="14" rx="3" fill="#dc2626"/>

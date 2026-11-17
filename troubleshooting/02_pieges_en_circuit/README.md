@@ -4,7 +4,7 @@ Pourquoi un composant soudé sur la carte ne se mesure pas comme un composant se
 
 ## En bref
 
-En circuit, l'ohmmètre mesure le composant **et tout ce qui est branché en parallèle** : résistances, jonctions de semi-conducteurs, condensateurs. Ces chemins ne peuvent que **faire baisser** la lecture. D'où la règle centrale : une valeur stabilisée **au-dessus** de la valeur nominale (tolérance comprise), relevée sur des pattes propres et un circuit déchargé, est concluante : le composant ou sa soudure est défectueux ; une valeur **en dessous** ne prouve rien tant qu'on n'a pas écarté les chemins parallèles. Pour trancher : inverser les pointes, monter d'un calibre, raisonner sur le schéma, comparer avec une carte saine, ou lever une patte. Sous tension, le voltmètre complète ces mesures par la chute de tension aux bornes des composants.
+En circuit, l'ohmmètre mesure le composant **et tout ce qui est branché en parallèle** : résistances, jonctions de semi-conducteurs, condensateurs. Ces chemins ne peuvent que **faire baisser** la lecture. D'où la règle centrale : une valeur stabilisée **au-dessus** de la valeur nominale (tolérance comprise), relevée sur des pattes propres et un circuit déchargé, est concluante : le composant est défectueux ; une valeur **en dessous** ne prouve rien tant qu'on n'a pas écarté les chemins parallèles. Pour trancher : inverser les pointes, monter d'un calibre, raisonner sur le schéma, comparer avec une carte saine, ou lever une patte. Sous tension, le voltmètre complète ces mesures par la chute de tension aux bornes des composants.
 
 > **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; les mesures sous tension se font par une alimentation limitée en courant, et seulement si aucune tension ne dépasse 50 V continu ni 25 V alternatif sur la carte (fiche [00](../00_securite/README.md)). Le fonctionnement de chaque mode du multimètre est expliqué en fiche [01](../01_multimetre/README.md).
 
@@ -25,9 +25,11 @@ La dernière ligne montre le piège inverse : une résistance coupée ne lit pas
 
 **Règle de lecture**. Elle vaut pour une valeur stabilisée et reproduite, multimètre vérifié, cordons soustraits sous 10 Ω, pointes posées sur le **métal propre des pattes** du composant (pas sur les pastilles, ni sur du flux ou du vernis), et quelques mV au plus entre les deux nœuds, contrôlés au voltmètre juste avant la mesure :
 
-- **Au-dessus de la nominale plus la tolérance** (et la précision de l'appareil) : défaut, quel que soit le reste du circuit : composant coupé ou dérivé, ou soudure fissurée. C'est la seule conclusion ferme qu'une mesure en circuit donne. Un contact de pointe sale ou une charge résiduelle font aussi lire trop haut, d'où les conditions ci-dessus.
+- **Au-dessus de la nominale plus la tolérance** (et la précision de l'appareil) : défaut, quel que soit le reste du circuit : composant coupé ou dérivé. C'est la seule conclusion ferme qu'une mesure en circuit donne. Un contact de pointe sale ou une charge résiduelle font aussi lire trop haut, d'où les conditions ci-dessus.
 - **Proche de la nominale** : probablement sain, un chemin parallèle de valeur bien plus élevée ne changeant presque rien. Sauf si le schéma annonce une valeur plus basse : dans l'exemple du tableau, on attend 5 kΩ ; lire 10 kΩ voudrait dire que l'une des deux résistances est coupée.
 - **En dessous de la nominale** : ambigu. Le composant peut être sain et shunté, ou bien en court-circuit. Suivre l'arbre de décision.
+
+Une soudure fissurée ne se voit pas pointes sur les pattes : la contrôler au bipeur entre chaque patte et sa pastille.
 
 **Raisonner sur le schéma** : quand on l'a, repérer tout ce qui relie les deux nœuds et calculer la valeur attendue en parallèle. Une lecture égale à ce calcul est normale.
 
@@ -57,7 +59,7 @@ Un condensateur entre les deux nœuds se charge sous le courant de l'ohmmètre :
 Pour mesurer une résistance sans faire conduire les jonctions, il faut que la tension aux pointes reste sous environ 0,3 V pendant la mesure. Deux caractéristiques comptent :
 
 - la **tension à vide**, atteinte pointes en l'air ou sur une valeur hors calibre (relevée par l'exercice de la fiche [01](../01_multimetre/README.md)) ;
-- la **tension à pleine échelle**, atteinte quand la résistance mesurée remplit le calibre. Pour la relever : une résistance proche du haut du calibre entre les pointes (1,8 kΩ sur le calibre 2 kΩ, 18 kΩ sur 20 kΩ, 180 kΩ sur 200 kΩ) et un second multimètre en voltmètre continu à ses bornes. Un appareil dont la tension à pleine échelle reste sous 0,3 V ne fait pas conduire de jonction au silicium sur les calibres jusqu'à quelques dizaines de kΩ, tant que la lecture n'est pas hors calibre ; sur les calibres de centaines de kΩ et de MΩ, le courant de test est si faible que la fuite d'une jonction fausse encore la lecture, même sous 0,3 V.
+- la **tension à pleine échelle**, atteinte quand la résistance mesurée remplit le calibre. Pour la relever : une résistance vers 90 % du calibre entre les pointes (1,8 kΩ sur le calibre 2 kΩ, 18 kΩ sur 20 kΩ, 3,6 kΩ sur un calibre 4 kΩ) et un second multimètre en voltmètre continu à ses bornes. Un appareil dont la tension à pleine échelle reste sous 0,3 V ne fait pas conduire de jonction au silicium sur les calibres jusqu'à quelques dizaines de kΩ, tant que la lecture n'est pas hors calibre ; sur les calibres de centaines de kΩ et de MΩ, le courant de test est si faible que la fuite d'une jonction fausse encore la lecture, même sous 0,3 V.
 
 Les appareils qui proposent un calibre « basse puissance » (*low power ohms*) ou qui limitent la tension à pleine échelle sont les plus fiables en circuit. Sur un appareil premier prix, passer en calibre manuel, monter d'un calibre au-dessus de celui que choisit le mode automatique et comparer les deux lectures, dans les deux polarités. Une diode Schottky ou une jonction au germanium conduit dès 0,15 à 0,2 V : même un ohmmètre basse tension peut la faire conduire.
 
@@ -69,7 +71,7 @@ Lever une patte (dessouder une seule broche pour isoler le composant) coûte du 
 - on veut une mesure qu'aucun chemin parallèle ne doit fausser : capacité ou ESR exacte, fuite d'un condensateur, gain d'un transistor ;
 - plusieurs composants identiques sont en parallèle (condensateurs de découplage, MOSFET en parallèle) et on cherche lequel est en court-circuit : l'ohmmètre seul ne peut pas les distinguer. Avant de dessouder, essayer la chute de tension le long du rail (fiche 92).
 
-**Quelle patte** : pour un composant à deux bornes, lever l'une ou l'autre suffit à couper la boucle ; choisir celle qui se dessoude le plus facilement, c'est-à-dire **pas celle reliée à un plan de masse ou d'alimentation**, qui absorbe la chaleur. Transistor bipolaire : lever la base isole les jonctions base-émetteur et base-collecteur (le trajet collecteur-émetteur reste en circuit). MOSFET : la grille n'a pas de jonction ; lever le drain ou la source pour tester le trajet drain-source et la diode interne, et relier un instant grille et source avant la mesure, car une grille en l'air peut rester chargée et rendre le canal passant : un MOSFET sain lirait alors comme un court-circuit. Un circuit intégré se teste sous tension ou se remplace, pas en levant ses broches.
+**Quelle patte** : pour un composant à deux bornes, lever l'une ou l'autre suffit à couper la boucle ; choisir celle qui se dessoude le plus facilement, c'est-à-dire **pas celle reliée à un plan de masse ou d'alimentation**, qui absorbe la chaleur. Transistor bipolaire : lever la base isole les jonctions base-émetteur et base-collecteur (le trajet collecteur-émetteur reste en circuit). MOSFET : la grille n'a pas de jonction ; lever le drain ou la source (souvent la source : sur les boîtiers de puissance, le drain est la languette soudée au cuivre) pour tester le trajet drain-source et la diode interne, et relier un instant grille et source avant la mesure, car une grille en l'air peut rester chargée et rendre le canal passant : un MOSFET sain lirait alors comme un court-circuit. Un circuit intégré se teste sous tension ou se remplace, pas en levant ses broches.
 
 ![Multimètre sur Ω, calibre 20 kΩ. Avant : deux pattes soudées, 3,2 kΩ lus, la résistance en parallèle avec le circuit. Après : patte côté signal levée, 10 kΩ lus, la résistance seule](lever-une-patte.svg)
 
@@ -83,7 +85,7 @@ Lever une patte (dessouder une seule broche pour isoler le composant) coûte du 
 
 ## Mesurer la chute de tension sous tension
 
-Avec l'ampèremètre (fiche 91), le voltmètre est le seul mode qui se branche sur une carte alimentée (fiche [01](../01_multimetre/README.md)), et les chemins parallèles ne le gênent pas : il lit la tension qui existe réellement entre deux points. Carte alimentée par une alimentation limitée en courant (fiche [00](../00_securite/README.md)), une seule pointe tenue, l'autre fixée par un grippe-fil quand c'est possible pour qu'elle ne glisse pas entre deux broches :
+Le voltmètre est, avec l'ampèremètre (fiche 91), le seul mode qui se branche sur une carte alimentée (fiche [01](../01_multimetre/README.md)), et les chemins parallèles ne le gênent pas : il lit la tension qui existe réellement entre deux points. Carte alimentée par une alimentation limitée en courant (fiche [00](../00_securite/README.md)), une seule pointe tenue, l'autre fixée par un grippe-fil quand c'est possible pour qu'elle ne glisse pas entre deux broches :
 
 ![Multimètre sur V continu, pointes de part et d'autre d'un fusible parcouru par le courant : 12 mV lus, contact sain ; des centaines de mV signalent un contact résistant, toute la tension d'alimentation un fusible ouvert](chute-de-tension.svg)
 
@@ -91,7 +93,7 @@ Avec l'ampèremètre (fiche 91), le voltmètre est le seul mode qui se branche s
 | --- | --- | --- |
 | Aux bornes d'une résistance | *V = R × I*, à comparer au schéma ou à une carte saine | 0 V : aucun courant (circuit coupé en amont ou en aval, ou résistance en court-circuit) ; tension trop haute : trop de courant, résistance dérivée vers le haut, ou résistance coupée (toute la tension disponible à ses bornes) |
 | Aux bornes d'un fusible, d'un interrupteur fermé, d'un connecteur | quelques mV à quelques dizaines de mV ; davantage pour un fusible de faible calibre ou réarmable (PTC) : comparer à sa fiche technique ou à une carte saine | Plusieurs centaines de mV : contact résistant ou fusible fatigué ; tension d'alimentation complète : ouvert |
-| Le long d'une piste ou d'un plan de masse | quelques mV ; une piste longue et fine peut chuter 10 à 20 mV en service normal | Nettement plus que sur la carte saine : un courant anormal y passe ; la tension diminue en approchant du court-circuit (fiche 92) |
+| Le long d'une piste ou d'un plan de masse | quelques mV ; une piste longue et fine peut chuter 10 à 20 mV vers 100 mA en service normal | Nettement plus que sur la carte saine : un courant anormal y passe ; la tension diminue en approchant du court-circuit (fiche 92) |
 | Base-émetteur d'un transistor bipolaire au silicium qui conduit | 0,6 à 0,7 V (1,2 à 1,4 V pour un Darlington) | Nettement plus haut : jonction ouverte ; 0 V alors qu'il devrait conduire : pas de commande, ou jonction en court-circuit |
 | Aux bornes d'une diode qui conduit | 0,6 à 1 V (silicium), 0,2 à 0,5 V (Schottky) | Proche de 0 V : diode en court-circuit, ou aucun courant |
 
@@ -111,7 +113,7 @@ flowchart TD
   B -- non, elle descend ou est négative --> M[Charge résiduelle : décharger, fiche 00, puis reprendre]
   M --> B
   B -- oui --> D{Comparée à la nominale plus tolérance}
-  D -- au-dessus --> E[Défaut : composant coupé ou dérivé, ou soudure fissurée]
+  D -- au-dessus --> E[Composant défectueux : coupé ou dérivé]
   D -- proche --> N{Schéma ou carte saine disponible ?}
   N -- non --> F[Probablement sain]
   N -- oui --> I
@@ -130,7 +132,7 @@ flowchart TD
 ## Aide-mémoire d'établi
 
 - En circuit, l'ohmmètre mesure le nœud, pas le composant.
-- Les chemins parallèles ne font que baisser la lecture : au-dessus de la nominale plus la tolérance, pointes sur des pattes propres = composant ou soudure défectueux.
+- Les chemins parallèles ne font que baisser la lecture : au-dessus de la nominale plus la tolérance, pointes sur des pattes propres = composant défectueux.
 - En dessous de la nominale : rien de prouvé.
 - Inverser les pointes : valeur différente = jonction ou condensateur.
 - Lecture qui monte = condensateur qui se charge : attendre 3 à 5 τ. Lecture qui descend ou négative = charge résiduelle : décharger.
