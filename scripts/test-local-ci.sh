@@ -34,6 +34,8 @@ for r in fast check gate nightly; do
 done
 deps() { just --show "$1" | grep -E "^$1( |:)" | sed 's/.*: *//'; } # deps <recipe>
 for d in lint test security secrets; do deps check | grep -qw "$d" || fail "check lacks $d"; done
+for r in lint test; do deps "$r" | grep -qw sync || fail "$r does not run sync first"; done # #135
+just --show sync | grep -q 'astro sync' || fail "sync does not run astro sync"
 just --show nightly | grep -q '^    warn just check$' || fail "nightly does not run check as a warning"
 for t in 'trivy fs' 'trivy image' 'trufflehog git'; do
   just --show nightly | grep "$t" | grep -q '|| rc=1$' || fail "nightly does not fail on $t"

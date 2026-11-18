@@ -29,6 +29,7 @@ default: check
 setup:
     mise install
     mise x -- pnpm install --frozen-lockfile
+    mise x -- just sync
     mise x -- lefthook install
 
 # Regenerate the SVG figures of the troubleshooting guides (scripts/figures, #101)
@@ -58,7 +59,7 @@ sync: node-guard
 
 # Format, eslint, markdownlint, tsc, typos, the prod workflow, the Dockerfiles, the shell scripts, the
 # figure generator (ruff), the hooks
-lint: node-guard sync
+lint: sync
     pnpm format:check
     pnpm lint
     pnpm lint:md
@@ -75,7 +76,7 @@ lint: node-guard sync
 # Unit and integration suites (Testcontainers: Docker must run) with the per-package coverage floor
 # of vitest.config.ts (80 %), the doc coverage floor (90 %), the local CI wiring tests and the
 # figure generator tests (committed SVGs equal to the generated ones)
-test: node-guard sync
+test: sync
     pnpm test:coverage
     pnpm doc:coverage
     sh scripts/test-local-ci.sh
