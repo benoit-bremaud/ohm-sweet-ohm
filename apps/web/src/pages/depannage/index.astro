@@ -1,0 +1,23 @@
+---
+import { getEntry, render } from 'astro:content';
+
+import GuideProse from '../../components/GuideProse.astro';
+import Page from '../../layouts/Page.astro';
+
+// The guides change with a commit, not with the catalogue: built once, served as static pages.
+export const prerender = true;
+
+const menu = await getEntry('guideMenu', 'menu');
+if (menu === undefined) throw new Error('troubleshooting/README.md is missing');
+const { Content } = await render(menu);
+---
+
+<Page
+  lang="fr"
+  title="Dépannage électronique"
+  description="Fiches de dépannage électronique, des passifs aux circuits intégrés."
+>
+  <GuideProse>
+    <Content />
+  </GuideProse>
+</Page>

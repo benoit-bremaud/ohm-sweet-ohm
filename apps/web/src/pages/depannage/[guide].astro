@@ -1,0 +1,46 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+
+import GuideProse from '../../components/GuideProse.astro';
+import Page from '../../layouts/Page.astro';
+import { GUIDES_ROUTE } from '../../lib/guide-links';
+
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({ params: { guide: guide.id }, props: { guide } }));
+}) satisfies GetStaticPaths;
+
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const title = headings.find((h) => h.depth === 1)?.text ?? guide.id;
+---
+
+<Page lang="fr" title={title} description={`Fiche de dépannage ${title}.`} imageOrigins={['data:']}>
+  <nav aria-label="Fil d'Ariane" class="crumb">
+    <a href={GUIDES_ROUTE}>Dépannage</a>
+  </nav>
+  <GuideProse>
+    <Content />
+  </GuideProse>
+</Page>
+
+<style>
+  .crumb {
+    margin-bottom: var(--space-4);
+    font-size: var(--size-label);
+  }
+
+  .crumb a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--target-min);
+    color: var(--ink-muted);
+  }
+
+  .crumb a::before {
+    content: '← ';
+  }
+</style>
