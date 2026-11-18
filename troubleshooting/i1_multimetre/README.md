@@ -26,13 +26,13 @@ Comment lire la fiche technique d'un multimètre :
 | Caractéristique | Ce qu'elle dit | Ordre de grandeur utile |
 | --- | --- | --- |
 | Nombre de points | La plus grande lecture affichable plus un : 6000 points affichent jusqu'à 5999, donc 5,999 V sur le calibre 6 V | 4000 à 6000 points ; 20 000 et plus pour l'établi |
-| Précision | ± (% de la lecture + chiffres) : ± (0,5 % + 2) sur 5,000 V donne ± 0,027 V | 0,5 à 1 % en tension continue ; nettement moins bon en alternatif, en capacité et en courant |
+| Précision | ± (% de la lecture + chiffres) : ± (0,5 % + 2) sur 5,000 V donne ± 0,027 V | 0,05 à 1 % en tension continue selon la gamme ; nettement moins bon en alternatif, en capacité et en courant |
 | Impédance d'entrée | La résistance que le voltmètre met en parallèle sur ce qu'il mesure | 10 MΩ typiques en tension continue ; 1 MΩ sur certains premiers prix, qui fausse les mesures sur un diviseur de fortes valeurs |
-| TRMS (valeur efficace vraie) | Calcule la vraie valeur efficace d'un signal alternatif de n'importe quelle forme | Sans TRMS, l'appareil n'est juste que pour une sinusoïde pure ; sa bande passante reste limitée (souvent quelques centaines de Hz à quelques kHz) |
+| TRMS (valeur efficace vraie) | Calcule la vraie valeur efficace d'un signal alternatif de n'importe quelle forme | Sans TRMS, l'appareil n'est juste que pour une sinusoïde pure ; dans les deux cas, la bande passante reste limitée (souvent quelques centaines de Hz à quelques kHz) |
 | Catégorie de mesure | Où l'appareil peut être branché sans danger, et la tension correspondante : CAT II 600 V, CAT III 1000 V… | Voir ci-dessous |
 | Fusibles | Calibre et **pouvoir de coupure** de chaque entrée courant | Fusibles céramique à haut pouvoir de coupure (HPC, 10 kA ou plus) sur un bon appareil |
 
-**Catégories de mesure** (CEI 61010-1 et 61010-2-033). La catégorie dit quelle surtension transitoire l'appareil encaisse sans exploser, selon l'endroit de l'installation :
+**Catégories de mesure** (CEI 61010-2-030, appliquée aux multimètres par la CEI 61010-2-033). La catégorie dit quelle surtension transitoire l'appareil encaisse sans exploser, selon l'endroit de l'installation :
 
 - **CAT II** : appareils branchés sur une prise ;
 - **CAT III** : installation fixe du bâtiment (tableau, câblage, prises elles-mêmes) ;
@@ -47,7 +47,7 @@ La catégorie va avec une tension : CAT III 600 V est plus sévère que CAT II 6
 | --- | --- | --- |
 | Calibre manuel | Simple, réponse rapide, bon marché | Il faut choisir le calibre ; « 1 » ou OL quand il est trop petit |
 | Calibre automatique | Rien à choisir, moins d'erreurs de lecture | Plus lent à se stabiliser ; la touche RANGE reste utile en circuit (fiche [02](../02_pieges_en_circuit/README.md)) |
-| De poche | Portable, sur pile, assez précis pour le dépannage | 4000 à 6000 points en général |
+| De poche | Portable, sur pile, assez précis pour le dépannage | De 2000 à 60 000 points selon la gamme ; pas de mesure 4 fils |
 | De paillasse | 20 000 points et plus, mesure 4 fils (fiche [10](../10_resistance/README.md)), alimenté sur secteur | Encombrant, cher, pas pour une mesure dans un appareil ouvert ailleurs qu'à l'établi |
 
 Les appareils à aiguille gardent un intérêt pour suivre une valeur qui varie, mais leur ohmmètre a souvent la polarité inversée (fiche [01](../01_multimetre/README.md)) : ces fiches supposent un appareil numérique.
@@ -58,7 +58,7 @@ Pour suivre toutes les fiches, viser :
 
 - 4000 points au moins, calibre automatique **avec** touche RANGE ;
 - tension continue, alternative, résistance, bipeur, mode diode, **capacimètre** ;
-- un mode diode dont la tension à vide dépasse 3 V, pour tester une LED bleue ou blanche (à vérifier avec l'exercice de la fiche [01](../01_multimetre/README.md)) ;
+- un mode diode dont la tension à vide **et** l'affichage dépassent 3 V, pour tester une LED bleue ou blanche (à vérifier avec l'exercice de la fiche [01](../01_multimetre/README.md)) ;
 - des **fusibles sur toutes les entrées courant**, idéalement céramique à haut pouvoir de coupure ; refuser un appareil dont la douille 10 A n'est pas protégée ;
 - une catégorie de mesure certifiée par un laboratoire, CAT III 600 V au moins si l'appareil doit un jour approcher le secteur, avec des cordons de même catégorie ;
 - TRMS : utile, pas indispensable pour ces fiches ;
@@ -72,13 +72,15 @@ Un premier prix reste utile comme second appareil : il sert à l'exercice de la 
 
 - **Pile** : le symbole de pile faible annonce des lectures fausses avant que l'appareil ne s'éteigne ; la remplacer aussitôt. Retirer la pile d'un appareil rangé longtemps : une pile qui coule ronge les contacts.
 - **Cordons** : gaine sans coupure ni partie fondue, fiches qui tiennent dans les douilles. Pointes court-circuitées en ohmmètre sur le plus petit calibre : quelques dixièmes d'ohm. Plier les cordons pendant la mesure : une lecture qui saute trahit un fil coupé dans la gaine. Remplacer un cordon abîmé, ne jamais le réparer au ruban adhésif.
-- **Fusibles** : un fusible fondu ne se voit pas à l'usage, l'appareil affiche seulement 0 A ou OL en mode courant. Le contrôler sans ouvrir l'appareil :
+- **Fusibles** : un fusible fondu ne se voit pas à l'usage, l'appareil affiche seulement 0 A en mode courant, même quand un courant circule. Le contrôler sans ouvrir l'appareil :
 
-![Contrôle du fusible 10 A : multimètre en ohmmètre calibre 200 Ω, cordon rouge en VΩ et sa pointe enfoncée dans la douille 10 A ; à gauche 0,3 Ω, fusible bon ; à droite OL, fusible fondu](controle-fusible.svg)
+![Contrôle du fusible 10 A : multimètre en ohmmètre calibre 200 Ω, cordon rouge en VΩ et sa pointe enfoncée dans la douille 10 A ; à gauche 0,3 Ω, chemin fermé ; à droite OL, fusible fondu](controle-fusible.svg)
 
 1. Sélecteur sur l'ohmmètre, cordon rouge dans VΩ, cordon noir retiré ou laissé sans contact.
-2. Enfoncer la pointe rouge dans la douille 10 A : quelques dixièmes d'ohm (cordon, fusible et shunt en série) = fusible bon ; OL = fusible fondu.
-3. Recommencer dans la douille mA/µA, si l'appareil en a une : la valeur est plus haute (le shunt fait quelques ohms ou plus), mais pas OL.
+2. Enfoncer la pointe rouge dans la douille 10 A : quelques dixièmes d'ohm (cordon, fusible et shunt en série) = chemin fermé ; OL = fusible fondu.
+3. Recommencer dans la douille mA/µA, si l'appareil en a une, en calibre automatique ou sur le plus haut calibre : la valeur est plus haute, de quelques ohms à quelques kΩ selon l'appareil (résistances de protection en série) ; seul le manuel dit la valeur attendue.
+
+Une valeur basse prouve que le chemin est fermé, **pas qu'un fusible existe** : sur un appareil dont la douille 10 A n'a pas de fusible (fréquent en premier prix, fiche [01](../01_multimetre/README.md)), la lecture est la même. Vérifier sa présence dans le manuel, ou sous le capot, appareil débranché de tout et pile retirée.
 
 Certains manuels donnent une autre méthode (mode bipeur, ou valeur attendue précise) : le manuel prime. Un fusible fondu se remplace par le calibre, la tension et le **pouvoir de coupure** exacts du manuel, jamais par un fusible en verre ni par un fil : c'est lui qui empêche le court-circuit du « Piège du mode courant » de devenir un arc.
 
@@ -87,7 +89,7 @@ Certains manuels donnent une autre méthode (mode bipeur, ou valeur attendue pr�
 
 ## Sources
 
-- CEI 61010-1 et CEI 61010-2-033, règles de sécurité des appareils électriques de mesure et des multimètres portatifs (catégories de mesure, marquage, protection des entrées) : normes payantes, consulter la norme pour les valeurs d'essai.
+- CEI 61010-1, CEI 61010-2-030 et CEI 61010-2-033, règles de sécurité des appareils électriques de mesure et des multimètres portatifs (catégories de mesure, marquage, protection des entrées) : normes payantes, consulter la norme pour les valeurs d'essai.
 - Fluke 87V, fiche produit (précision, nombre de points, catégories CAT III 1000 V et CAT IV 600 V, fusibles des entrées courant) — <https://www.fluke.com/en-us/product/electrical-testing/digital-multimeters/fluke-87v>
 - HKJ (lygte-info.dk), *Multimeter and component testing* et ses tests d'appareils (mesures comparées, démontages, fusibles et protections d'entrée) — <https://lygte-info.dk/info/DMMComponentTesting%20UK.html>
 - EEVblog forum, *Multimeters with low ohms function* (tensions de test relevées sur divers appareils) — <https://www.eevblog.com/forum/testgear/multimeters-with-low-ohms-function/>

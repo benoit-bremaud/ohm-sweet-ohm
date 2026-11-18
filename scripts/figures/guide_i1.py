@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from elements import (
     Point,
-    half_meter,
     heading,
     lead,
     meter,
@@ -46,12 +45,12 @@ def fig_anatomy() -> str:
     sx, sy = at(90, 165)
     b += f'  <circle class="flow fa" cx="{sx:.1f}" cy="{sy:.1f}" r="{78 * s:.1f}"/>\n'
     # leads parked below the meter, probes pointing outwards
-    pr, (ex, ey) = probe(140, 560, 0.8, -0.6, True)
+    pr, (ex, ey) = probe(640, 560, -0.8, -0.6, True)
     b += lead(
         jacks.v, f"V520 C{jacks.v[0]:.1f} 560 {ex:.1f} 520 {ex:.1f} {ey:.1f}", True
     )
     b += pr
-    pb, (ex, ey) = probe(640, 560, -0.8, -0.6, False)
+    pb, (ex, ey) = probe(140, 560, 0.8, -0.6, False)
     b += lead(
         jacks.com, f"V530 C{jacks.com[0]:.1f} 570 {ex:.1f} 520 {ex:.1f} {ey:.1f}", False
     )
@@ -67,8 +66,8 @@ def fig_anatomy() -> str:
         *at(135, 283),
         right,
         380,
-        "4 Douilles VΩ et COM",
-        "rouge en VΩ, noir en COM",
+        "4 Douille VΩ",
+        "cordon rouge ; le noir en COM",
         False,
     )
     b += _callout(
@@ -80,7 +79,7 @@ def fig_anatomy() -> str:
         False,
     )
     b += _callout(
-        *at(150, 380),
+        *at(135, 342),
         right,
         470,
         "6 Cordons et pointes",
@@ -110,11 +109,11 @@ def fig_fuse() -> str:
         (
             0,
             "0.3",
-            "Fusible bon",
+            "Chemin fermé",
             ("Quelques dixièmes", "d'ohm : shunt,", "fusible, cordon."),
             "ok",
             "✓ valeur basse",
-            "le chemin du courant est fermé",
+            "fusible bon, s'il existe : voir le manuel",
         ),
         (
             380,
@@ -126,24 +125,26 @@ def fig_fuse() -> str:
             "remplacer par le calibre exact du manuel",
         ),
     ):
-        o, v, com = half_meter(x0, "200", lcd, "Ω", title, notes)
-        b += o
-        # red probe goes back into the meter's own 10 A jack
-        a_jack = (x0 + 24 + 45 * 0.9, 116 + 283 * 0.9)
-        pr, (ex, ey) = probe(a_jack[0], a_jack[1] + 4, -0.2, 1, True)
-        b += lead(v, f"V420 C{v[0]:.1f} 450 {ex:.1f} 450 {ex:.1f} {ey:.1f}", True)
+        b += text(x0 + 20, 100, title, size=15, weight=700)
+        m, jacks = meter(x0 + 24, 116, 0.9, "200", lcd, "Ω")
+        b += m
+        for i, line in enumerate(notes):
+            b += text(x0 + 205, 132 + 16 * i, line, "mut", 12)
+        # red probe goes back into the meter's own 10 A jack; its lead loops under the
+        # parked black probe, so the two leads never cross
+        pr, (ex, ey) = probe(jacks.a[0], jacks.a[1] + 4, 0, 1, True)
+        b += lead(jacks.v, f"V490 H{ex:.1f} V{ey:.1f}", True)
         b += pr
-        # black probe parked away from everything
-        pb, (bx, by) = probe(x0 + 300, 400, -0.6, 0.8, False)
-        b += lead(com, f"V440 C{com[0]:.1f} 470 {bx:.1f} 470 {bx:.1f} {by:.1f}", False)
+        pb, (bx, by) = probe(jacks.com[0], 470, 0, -1, False)
+        b += lead(jacks.com, f"V{by:.1f}", False)
         b += pb
-        b += verdict(x0 + 190, 500, head, sub, cls)
+        b += verdict(x0 + 190, 530, head, sub, cls)
     return svg(
         760,
-        540,
+        570,
         "Contrôler le fusible de la douille 10 A",
         "Deux multimètres sur le calibre 200 ohms, cordon rouge branché en VΩ et sa pointe "
-        "enfoncée dans la douille 10 A du même appareil. À gauche 0,3 ohm : fusible bon. "
+        "enfoncée dans la douille 10 A du même appareil, cordon noir en COM, pointe en l'air. À gauche 0,3 ohm : chemin fermé. "
         "À droite OL : fusible fondu, le mode courant ne mesure plus rien.",
         b,
     )

@@ -188,7 +188,7 @@ Sous 1 Ω (shunts, résistances de puissance, cavaliers), la résistance des cor
 4. *R = U / I*. La tension affichée par l'alimentation ne sert pas : elle inclut ses propres cordons.
 5. Couper la sortie avant de déplacer une pince.
 
-Choisir le courant pour rester sous la puissance de la pièce (*P = R × I²*) : 1 A dans 0,1 Ω dissipe 0,1 W ; pour un shunt CMS de 10 mΩ, 1 A donne 10 mV et 10 mW. La précision est celle de l'ampèremètre de l'alimentation : la vérifier une fois avec le multimètre en série, cordon rouge dans la douille 10 A, puis remettre le cordon en VΩ avant toute mesure de tension (fiche [01](../01_multimetre/README.md)). Un pont RLC ou un milliohmmètre fait la même mesure directement (page i5).
+Choisir le courant pour rester sous la puissance de la pièce (*P = R × I²*) : 1 A dans 0,1 Ω dissipe 0,1 W ; pour un shunt CMS de 10 mΩ, 1 A donne 10 mV et 10 mW. La précision est celle de l'ampèremètre de l'alimentation : la vérifier une fois avec le multimètre en série, cordon rouge dans la douille 10 A, puis remettre le cordon en VΩ avant toute mesure de tension (fiche [01](../01_multimetre/README.md)). Un pont RLC (page i5) ou un milliohmmètre fait la même mesure directement.
 
 ### Sulfuration des CMS
 
@@ -196,7 +196,7 @@ Les résistances CMS à couche épaisse ont une électrode interne en argent. Da
 
 ### Caméra thermique
 
-Elle montre en quelques secondes la résistance en surcharge, et surtout le composant en court-circuit qui la surcharge (fiches 03 et 92).
+Elle montre en quelques secondes la résistance en surcharge, et surtout le composant en court-circuit qui la surcharge (page i8 et fiche 92).
 
 ## Arbre de décision
 

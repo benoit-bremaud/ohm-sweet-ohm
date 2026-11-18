@@ -74,11 +74,11 @@
     <circle cx="135" cy="283" r="8" fill="#0c0e11" stroke="#dc2626" stroke-width="2"/>
   </g>
   <circle class="flow fa" cx="380.0" cy="288.0" r="93.6"/>
-  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M434.0 429.6 V520 C434.0 560 196.0 520 196.0 518.0"/>
+  <path stroke="#dc2626" stroke-width="4" fill="none" stroke-linecap="round" d="M434.0 429.6 V520 C434.0 560 584.0 520 584.0 518.0"/>
   <circle fill="#dc2626" cx="434.0" cy="429.6" r="6.5"/>
   <circle cx="434.0" cy="429.6" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
   <circle cx="434.0" cy="429.6" r="1.6" fill="#000000" fill-opacity="0.35"/>
-  <g data-probe="red" transform="translate(140.0 560.0) rotate(-36.9)">
+  <g data-probe="red" transform="translate(640.0 560.0) rotate(-143.1)">
     <path d="M0 0 L7.2 -2.1 H17.0 V2.1 H7.2 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
     <rect fill="#dc2626" x="16.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
     <path fill="#dc2626" d="M26.0 -5.6 H60.0 L70.0 -3 V3 L60.0 5.6 H26.0 Z" stroke-linejoin="round"/>
@@ -86,11 +86,11 @@
     <path d="M33.0 -5.6 v11.2 M37.5 -5.6 v11.2 M42.0 -5.6 v11.2 M46.5 -5.6 v11.2 M63.5 -4.6 v9.2 M67.0 -3.7 v7.4" stroke="#000000" stroke-opacity="0.35" stroke-width="1.2" fill="none"/>
     <path d="M30.0 -3.2 H58.0" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1.2" stroke-linecap="round"/>
   </g>
-  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M380.0 429.6 V530 C380.0 570 584.0 520 584.0 518.0"/>
+  <path class="blk" stroke-width="4" fill="none" stroke-linecap="round" d="M380.0 429.6 V530 C380.0 570 196.0 520 196.0 518.0"/>
   <circle class="blkf" cx="380.0" cy="429.6" r="6.5"/>
   <circle cx="380.0" cy="429.6" r="4.2" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1"/>
   <circle cx="380.0" cy="429.6" r="1.6" fill="#000000" fill-opacity="0.35"/>
-  <g data-probe="black" transform="translate(640.0 560.0) rotate(-143.1)">
+  <g data-probe="black" transform="translate(140.0 560.0) rotate(-36.9)">
     <path d="M0 0 L7.2 -2.1 H17.0 V2.1 H7.2 Z" fill="#d5dbe3" stroke="#7d8794" stroke-width="0.7" stroke-linejoin="round"/>
     <rect class="blkf" x="16.0" y="-3.8" width="8" height="7.6" rx="1.8"/>
     <path class="blkf" d="M26.0 -5.6 H60.0 L70.0 -3 V3 L60.0 5.6 H26.0 Z" stroke-linejoin="round"/>
@@ -116,14 +116,14 @@
   <text class="mut" x="238" y="397" font-size="12" text-anchor="end">courant seulement</text>
   <path class="wire" stroke-width="1.5" d="M434.0 429.6 L532.0 375.0"/>
   <circle class="blkf" cx="434.0" cy="429.6" r="3"/>
-  <text class="fg" x="540" y="380" font-size="14" font-weight="700">4 Douilles VΩ et COM</text>
-  <text class="mut" x="540" y="397" font-size="12">rouge en VΩ, noir en COM</text>
+  <text class="fg" x="540" y="380" font-size="14" font-weight="700">4 Douille VΩ</text>
+  <text class="mut" x="540" y="397" font-size="12">cordon rouge ; le noir en COM</text>
   <path class="wire" stroke-width="1.5" d="M476.0 162.0 L532.0 125.0"/>
   <circle class="blkf" cx="476.0" cy="162.0" r="3"/>
   <text class="fg" x="540" y="130" font-size="14" font-weight="700">5 Fusibles et pile</text>
   <text class="mut" x="540" y="147" font-size="12">derrière le capot arrière</text>
-  <path class="wire" stroke-width="1.5" d="M452.0 546.0 L532.0 465.0"/>
-  <circle class="blkf" cx="452.0" cy="546.0" r="3"/>
+  <path class="wire" stroke-width="1.5" d="M434.0 500.4 L532.0 465.0"/>
+  <circle class="blkf" cx="434.0" cy="500.4" r="3"/>
   <text class="fg" x="540" y="470" font-size="14" font-weight="700">6 Cordons et pointes</text>
   <text class="mut" x="540" y="487" font-size="12">garde-doigts, catégorie CAT</text>
 </svg>

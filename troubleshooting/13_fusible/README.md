@@ -175,7 +175,7 @@ Pour séparer le fusible de son porte-fusible : mesurer la chute entre la capsul
 
 - **Mesurer le courant réel** : ampèremètre en série à la place du fusible, sur alimentation limitée, pour comparer la consommation au courant assigné. En service continu, un fusible est choisi pour ne conduire qu'environ les trois quarts de son courant assigné à 25 °C ; un courant mesuré au-dessus explique un fusible qui fatigue.
 - **Estimer le courant sans ouvrir le circuit** : chute de tension aux bornes du fusible divisée par sa résistance à froid (mesurée ou lue dans la fiche technique). Le résultat est un **majorant** : près du courant assigné, la résistance du fil chaud vaut deux à plusieurs fois sa résistance à froid. L'ordre de grandeur suffit pour repérer une surcharge franche.
-- **Caméra thermique ou doigt prudent** sur le rail alimenté à courant limité : le composant en court-circuit chauffe (fiches 03 et 92).
+- **Caméra thermique ou doigt prudent** sur le rail alimenté à courant limité : le composant en court-circuit chauffe (page i8 et fiche 92).
 - **Oscilloscope sur une résistance de mesure en série** : visualiser l'appel de courant à la mise sous tension, pour départager un fusible mal choisi d'un défaut réel.
 - **Lire la courbe temps-courant** de la fiche technique : un fusible ne fond pas à son courant assigné. Selon la norme, il tient ce courant indéfiniment et ne fond en moins d'une heure qu'à partir d'une surcharge de plusieurs dizaines de pour cent ; une petite surcharge peut durer longtemps.
 
