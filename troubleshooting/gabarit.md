@@ -38,7 +38,7 @@ Classés du plus fréquent au plus rare (consensus des réparateurs et notes de 
 
 ## Niveau 4 — Méthodes avancées
 
-*Instrument, méthode, ce qu'elle apporte de plus qu'un multimètre (renvoi vers la fiche 03).*
+*Instrument, méthode, ce qu'elle apporte de plus qu'un multimètre (renvoi vers sa page d'appareil, i1 à i8).*
 
 ## Arbre de décision
 

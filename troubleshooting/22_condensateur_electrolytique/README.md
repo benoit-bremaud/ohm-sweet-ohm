@@ -102,7 +102,7 @@ Le capacimètre du multimètre charge le condensateur avec un courant connu et c
 
 ### À l'ESR-mètre : le verdict
 
-L'ESR-mètre est un petit appareil dédié (fiche 03). Il envoie dans le condensateur des impulsions de courant trop brèves pour le charger, des dizaines de milliers de fois par seconde, et mesure la tension qu'elles produisent : celle-ci ne dépend que de la résistance série.
+L'ESR-mètre est un petit appareil dédié (page i5). Il envoie dans le condensateur des impulsions de courant trop brèves pour le charger, des dizaines de milliers de fois par seconde, et mesure la tension qu'elles produisent : celle-ci ne dépend que de la résistance série.
 
 1. **Décharger le condensateur** et le vérifier au voltmètre : une tension résiduelle peut détruire l'ESR-mètre.
 2. Une pince ou une pointe sur chaque patte ; le sens est indifférent sur la plupart des appareils.
@@ -167,7 +167,7 @@ Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par
 ## Niveau 4 — Méthodes avancées
 
 - **Oscilloscope** : sonde sur le rail, couplage alternatif. C'est la mesure directe de l'ondulation de la figure ci-dessus ; la comparer à celle d'une carte saine ou à la valeur de la fiche technique du régulateur (fiches 03 et 91).
-- **Pont LCR** : capacité et ESR à une fréquence choisie, à comparer aux valeurs de la fiche technique (fiche 03).
+- **Pont LCR** : capacité et ESR à une fréquence choisie, à comparer aux valeurs de la fiche technique (page i5).
 - **Courant de fuite sous tension de service**, condensateur dessoudé : même montage que pour le céramique (fiche [20](../20_condensateur_ceramique/README.md), niveau 4), alimentation de laboratoire limitée à 10 mA, résistance de 1 kΩ en série, **+ de l'alimentation vers le + du condensateur**, jamais plus que la tension de service ni que 50 V. 1 mV aux bornes de la résistance correspond à 1 µA. Limite habituelle après 2 à 5 minutes : 0,01 × C (µF) × U (V) + 3 µA, soit environ **120 µA** (120 mV) pour un 470 µF 25 V. Une fuite qui reste bien au-dessus, ou qui augmente : à remplacer. Décharger ensuite dans la résistance.
 - **Condensateur resté des années sans tension** : sa couche d'oxyde a pu se dégrader et sa fuite est élevée à la première mise sous tension. Le même montage, laissé une heure à la tension de service, la reforme. Les condensateurs récents n'en ont en général pas besoin.
 - **Substitution** : souder provisoirement un condensateur neuf, de même capacité et de tension au moins égale, à la place du suspect. Le symptôme disparaît : le diagnostic est fait.

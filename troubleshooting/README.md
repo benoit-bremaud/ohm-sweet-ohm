@@ -4,11 +4,11 @@ Savoir, à l'établi, si un composant monté sur un PCB est mort ou vivant : des
 
 ## Comment lire ces fiches
 
-- **Public** : amateur débutant à intermédiaire. Un multimètre et une alimentation limitée en courant (fiche [00](00_securite/README.md)) suffisent pour les niveaux 1 à 3 ; le niveau 4 demande d'autres instruments (fiche 03).
+- **Public** : amateur débutant à intermédiaire. Un multimètre et une alimentation limitée en courant (fiche [00](00_securite/README.md)) suffisent pour les niveaux 1 à 3 ; le niveau 4 demande d'autres instruments (section [Appareils de mesure et de test](#appareils-de-mesure-et-de-test--84)).
 - **Basse tension uniquement** : aucune tension supérieure à 50 V continu (25 V alternatif) **nulle part sur la carte**, pas seulement à l'entrée. Un appareil sur pile ou sur adaptateur peut en produire bien plus (flash photo vers 300 V, onduleur de rétroéclairage, PoE jusqu'à 57 V, batterie 48 V chargée à 54,6 V) : hors périmètre. Un appareil dont l'alimentation secteur est intégrée se confie à un professionnel, en attendant la fiche secteur et isolement.
 - **Niveaux** dans chaque fiche de composant : 1 inspection par les sens (vue, odeur, échauffement), 2 mesure hors circuit, 3 mesure en circuit, 4 méthodes avancées.
 - **Fréquence de panne** : un classement qualitatif (très fréquent, fréquent, occasionnel, rare) tiré du consensus des réparateurs et des notes de fabricants, sources citées dans chaque fiche. Ce n'est pas une statistique. Dans le menu, il dit à quelle fréquence ce composant est le coupable d'une panne ; dans une fiche, à quelle fréquence chaque mode de défaillance survient.
-- Chaque fiche de composant (familles 1 à 9) suit le [gabarit](gabarit.md) ; les fiches de base (partie 0) ont un plan propre. Chaque fiche renvoie aux fiches de base de la partie 0 au lieu d'en répéter le contenu.
+- Chaque fiche de composant (familles 1 à 9) suit le [gabarit](gabarit.md) ; les fiches de base (partie 0) ont un plan propre. Chaque fiche renvoie aux fiches de base de la partie 0 au lieu d'en répéter le contenu. Les pages d'appareils (préfixe i) présentent un instrument : ce qu'il apporte par rapport au multimètre et quand il vaut la dépense.
 
 ## Menu
 
@@ -21,7 +21,21 @@ Du plus simple au plus complexe. Une ligne sans lien est une fiche à venir ; so
 | [00 Sécurité](00_securite/README.md) | Périmètre basse tension, hors tension, décharge des condensateurs, alimentation limitée en courant | #81 |
 | [01 Comprendre son multimètre](01_multimetre/README.md) | Ce que chaque mode injecte ; pourquoi un condensateur bipe puis se tait, ce qu'affiche le mode diode | #82 |
 | [02 Pièges de la mesure en circuit](02_pieges_en_circuit/README.md) | Chemins parallèles, jonctions qui conduisent, condensateurs qui se chargent, quand dessouder | #83 |
-| 03 Autres instruments | LCR/ESR, testeur de composants, alimentation de labo, oscilloscope, caméra thermique | #84 |
+
+### Appareils de mesure et de test — #84
+
+Une page par instrument : ce qu'il est, comment le choisir et l'entretenir. Le comportement des modes du multimètre reste dans la fiche 01.
+
+| Page | Contenu | Issue |
+| --- | --- | --- |
+| [i1 Le multimètre](i1_multimetre/README.md) | Anatomie, caractéristiques (points, précision, impédance, TRMS, CAT), types, choix, entretien et contrôle des fusibles | #103 |
+| i2 Oscilloscope | — | #104 |
+| i3 Vérificateur d'absence de tension (VAT) | — | #105 |
+| i4 Pince ampèremétrique | — | #106 |
+| i5 LCR-mètre et ESR-mètre | — | #107 |
+| i6 Testeur de composants | — | #108 |
+| i7 Alimentation de laboratoire | — | #109 |
+| i8 Caméra thermique | — | #110 |
 
 ### 1. Résistifs — #85
 
@@ -125,7 +139,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md), [24](24_supercondensateur/README.md) |
 | Capacimètre | [01](01_multimetre/README.md) | [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md) |
-| Mesure ESR | 03 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
+| Mesure ESR | i5 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Injection de courant | 92 | [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md) |

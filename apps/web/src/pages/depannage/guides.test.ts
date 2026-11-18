@@ -33,6 +33,8 @@ describe('guide pages', () => {
     const paths = await guidePaths();
     expect(paths.map((p) => p.params.guide)).toEqual(ids);
     expect(ids).toContain('10_resistance');
+    // instrument pages (#84) live in i-prefixed folders beside the numbered guides
+    expect(ids).toContain('i1_multimetre');
     expect(ids).not.toContain('menu');
   });
 
@@ -56,6 +58,7 @@ describe('guides index', () => {
 
     expect(html).toMatch(/<html lang="fr"/);
     expect(html).toContain('href="/depannage/10_resistance"');
+    expect(html).toContain('href="/depannage/i1_multimetre"');
     expect(html).not.toContain('README.md');
     expect(deadLinks(html)).toEqual([]);
   });

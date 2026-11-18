@@ -12,7 +12,7 @@ const base = `../../${GUIDES_DIR}`;
 const guides = defineCollection({
   loader: glob({
     base,
-    pattern: '[0-9][0-9]_*/README.md',
+    pattern: '{[0-9][0-9],i[0-9]}_*/README.md',
     generateId: ({ entry }) => entry.split('/')[0] ?? entry,
   }),
 });

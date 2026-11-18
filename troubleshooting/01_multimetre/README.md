@@ -58,7 +58,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 **Pourquoi ça compte** : sur un point à haute impédance (pont diviseur de quelques MΩ, entrée flottante, grille de MOSFET), cette résistance d'entrée forme un diviseur avec le circuit et la lecture baisse. Un fil non relié capte au contraire des tensions « fantômes » de quelques volts en alternatif, qui disparaissent avec une charge de quelques kΩ (mode basse impédance des appareils qui en ont un).
 
-**Seuils et temps de réponse** : en continu, 2 à 3 mesures par seconde ; une tension qui bouge plus vite (découpage, signal logique) est moyennée et la lecture ne prouve rien de son allure (fiche 03, oscilloscope). En alternatif, seuls les appareils « True RMS » lisent juste une forme non sinusoïdale, et seulement dans leur bande passante.
+**Seuils et temps de réponse** : en continu, 2 à 3 mesures par seconde ; une tension qui bouge plus vite (découpage, signal logique) est moyennée et la lecture ne prouve rien de son allure (page i2, oscilloscope). En alternatif, seuls les appareils « True RMS » lisent juste une forme non sinusoïdale, et seulement dans leur bande passante.
 
 ## Ohmmètre
 
@@ -121,7 +121,7 @@ Un « Vf » lu ici vaut pour 1 mA environ : il est plus bas que la tension direc
 **Limites** :
 
 - **Décharger le condensateur avant** : une charge résiduelle fausse la mesure et peut endommager l'entrée.
-- La valeur affichée ne dit rien de la **résistance série équivalente (ESR)**, la panne la plus courante des électrolytiques : un condensateur à la bonne capacité peut être hors d'usage (fiche 03, mesure ESR).
+- La valeur affichée ne dit rien de la **résistance série équivalente (ESR)**, la panne la plus courante des électrolytiques : un condensateur à la bonne capacité peut être hors d'usage (page i5, mesure ESR).
 - **En circuit**, tout ce qui est en parallèle (autres condensateurs, résistances, jonctions) fausse la lecture (fiche [02](../02_pieges_en_circuit/README.md)).
 - Sous quelques dizaines de pF, la capacité des cordons domine : utiliser REL cordons en l'air.
 
@@ -153,7 +153,7 @@ flowchart TD
   C -- deux points reliés ? --> D[Bipeur, puis ohmmètre pour lire la valeur]
   C -- valeur d'une résistance --> E[Ohmmètre, REL sous 10 Ω, une seule main sur les pointes]
   C -- jonction saine ? --> F[Mode diode, dans les deux sens]
-  C -- valeur d'un condensateur --> G[Décharger, puis capacimètre ; ESR en fiche 03]
+  C -- valeur d'un condensateur --> G[Décharger, puis capacimètre ; ESR en page i5]
   D --> H{Comment sonne-t-il ?}
   H -- bip bref puis silence --> I[Condensateurs qui se chargent : pas un court-circuit]
   H -- bip continu --> J[Lire la valeur en ohmmètre ; très bas dans les deux sens : court-circuit probable, fiche 92]
