@@ -18,6 +18,8 @@
   --grid: #dfe3e8;
   --hazard: #8a1c1c;
   --hazard-bg: #fbe9e7;
+  /* Figures and diagrams are drawn on white: they keep this mat in both themes. */
+  --figure-mat: #ffffff;
 
   /* IBM Plex, self-hosted (OFL): the type of engineering documents, one superfamily. */
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;

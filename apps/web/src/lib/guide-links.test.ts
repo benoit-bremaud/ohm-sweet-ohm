@@ -42,7 +42,7 @@ describe('guideDir', () => {
   it('gives the folder under troubleshooting/', () => {
     expect(guideDir('/repo/troubleshooting/10_resistance/README.md')).toBe('10_resistance');
     expect(guideDir('/repo/troubleshooting/README.md')).toBe('');
-    expect(guideDir('/elsewhere/README.md')).toBe('');
+    expect(guideDir('/elsewhere/README.md')).toBeUndefined();
   });
 });
 

@@ -21,6 +21,8 @@ const clean = (label: string) =>
 /**
  * Reads the steps of a Mermaid flowchart, for a text version of the tree beside its image.
  * Steps keep the order in which the source first names them; a node never labelled shows its id.
+ * One link or one node per line, links written `-->`, `-- text -->`, `-.->` or `-. text .->`;
+ * any other link syntax throws, so a guide cannot lose a branch silently.
  */
 export function flowchartSteps(source: string): FlowStep[] {
   const labels = new Map<string, string>();
@@ -43,10 +45,18 @@ export function flowchartSteps(source: string): FlowStep[] {
       edges.push({ from, condition: condition && clean(condition), to });
       continue;
     }
+    // A bare word is a directive (`end`, the header's tail): only a bracketed line declares a node.
     const lone = LONE_NODE.exec(line);
     if (lone !== null && /[[{(]/.test(line)) {
       const [, id = '', l1, l2, l3] = lone;
       name(id, l1, l2, l3);
+      continue;
+    }
+    // Any other link syntax would vanish from the text version: stop the build instead.
+    if (/--|==|-\./.test(line)) {
+      throw new Error(
+        `Mermaid link not understood, the text version would drop it: ${line.trim()}`,
+      );
     }
   }
 

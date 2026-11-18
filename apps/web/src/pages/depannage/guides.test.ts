@@ -2,52 +2,85 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { getCollection } from 'astro:content';
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import { guidePaths, guideTitle } from '../../lib/guide-pages';
+import { DIAGRAM_ALT } from '../../lib/mermaid-text';
 import GuidePage from './[guide].astro';
 import GuidesIndex from './index.astro';
 
 // The pages read the real guides of troubleshooting/: the content is the fixture.
 let container: AstroContainer;
+let ids: string[];
 
 beforeAll(async () => {
   container = await AstroContainer.create();
+  ids = (await getCollection('guides')).map((g) => g.id);
 });
 
-describe('guides collection', () => {
-  it('loads one entry per guide folder, menu excluded', async () => {
-    const ids = (await getCollection('guides')).map((g) => g.id);
+const renderGuide = async (id: string) => {
+  const path = (await guidePaths()).find((p) => p.params.guide === id);
+  if (path === undefined) throw new Error(`no page for ${id}`);
+  return container.renderToString(GuidePage, { params: path.params, props: path.props });
+};
+
+/** Every site link of a page must reach the index or an existing guide. */
+const deadLinks = (html: string) =>
+  [...html.matchAll(/href="\/depannage(?:\/([^"#?]+))?/g)]
+    .map((m) => m[1])
+    .filter((target) => target !== undefined && !ids.includes(target));
+
+describe('guide pages', () => {
+  it('has one prerendered path per guide folder, menu excluded', async () => {
+    const paths = await guidePaths();
+    expect(paths.map((p) => p.params.guide)).toEqual(ids);
     expect(ids).toContain('10_resistance');
     expect(ids).not.toContain('menu');
-    expect(ids.every((id) => /^\d\d_/.test(id))).toBe(true);
+  });
+
+  it('takes the level 1 heading as title and refuses a guide without one', () => {
+    expect(
+      guideTitle(
+        [
+          { depth: 2, slug: 'a', text: 'A' },
+          { depth: 1, slug: 'b', text: 'B' },
+        ],
+        'x',
+      ),
+    ).toBe('B');
+    expect(() => guideTitle([], '99_vide')).toThrow(/99_vide/);
   });
 });
 
 describe('guides index', () => {
-  it('renders the menu in French with the guides as site links', async () => {
+  it('renders the menu in French, every link on a guide', async () => {
     const html = await container.renderToString(GuidesIndex);
 
     expect(html).toMatch(/<html lang="fr"/);
-    expect(html).toMatch(/<h1[^>]*>Dépannage électronique<\/h1>/);
     expect(html).toContain('href="/depannage/10_resistance"');
     expect(html).not.toContain('README.md');
+    expect(deadLinks(html)).toEqual([]);
   });
 });
 
 describe('guide page', () => {
-  it('renders a guide with its title, figures, tree and text version', async () => {
-    const guide = (await getCollection('guides')).find((g) => g.id === '10_resistance');
-    if (guide === undefined) throw new Error('guide 10_resistance missing');
+  it('renders the diagram as an image with a text version', async () => {
+    const html = await renderGuide('10_resistance');
 
-    const html = await container.renderToString(GuidePage, {
-      params: { guide: guide.id },
-      props: { guide },
-    });
-
-    expect(html).toMatch(/<title>10 Résistance · Ohm Sweet Ohm<\/title>/);
     expect(html).toContain('href="/depannage"');
-    expect(html).toContain('href="/depannage/02_pieges_en_circuit"');
-    expect(html).toMatch(/<img[^>]+alt="Lecture d/);
-    expect(html).toMatch(/<img[^>]+alt="Arbre de décision/);
-    expect(html).toContain("Version texte de l'arbre");
+    // Vite inlines the SVG in tests; the file name is checked by remarkMermaidImages' own test.
+    expect(html).toContain(`alt="${DIAGRAM_ALT.replace("'", '&#39;')}"`);
+    expect(html).toContain('Version texte du schéma');
     expect(html).not.toContain('language-mermaid');
+  });
+
+  it('lists every guide folder', () => {
+    expect(ids.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it('checks each guide: alt on every image, every site link alive', async () => {
+    for (const id of ids) {
+      const html = await renderGuide(id);
+      expect(html, id).not.toMatch(/<img(?![^>]*\balt="[^"]+")[^>]*>/);
+      expect(deadLinks(html), id).toEqual([]);
+    }
   });
 });

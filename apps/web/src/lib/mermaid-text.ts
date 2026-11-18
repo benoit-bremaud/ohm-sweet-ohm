@@ -1,80 +1,62 @@
 import { flowchartSteps } from './flowchart-text';
+import { treeFile } from './mermaid-trees';
 
-/** The few hast fields the plugin reads or writes. */
-interface HastNode {
+interface MdastNode {
   type: string;
-  tagName?: string;
-  properties?: Record<string, unknown>;
-  children?: HastNode[];
+  lang?: string | null;
   value?: string;
+  url?: string;
+  alt?: string;
+  children?: MdastNode[];
 }
 
-/** Text alternative of every tree image; the full tree follows it in text. */
-export const TREE_ALT = "Arbre de décision ; sa version texte suit l'image.";
+/** Alt of every diagram image (decision trees and block diagrams alike); its text follows it. */
+export const DIAGRAM_ALT = "Schéma ; sa version texte suit l'image.";
 
-const text = (value: string): HastNode => ({ type: 'text', value });
-const el = (tagName: string, children: HastNode[]): HastNode => ({
-  type: 'element',
-  tagName,
-  properties: {},
-  children,
-});
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const mermaidCode = (node: HastNode): HastNode | undefined => {
-  if (node.tagName !== 'pre') return undefined;
-  const code = node.children?.find((c) => c.type === 'element');
-  const classes = code?.properties?.className;
-  return Array.isArray(classes) && classes.includes('language-mermaid') ? code : undefined;
-};
-
-const sourceOf = (code: HastNode) => (code.children ?? []).map((c) => c.value ?? '').join('');
-
-/** The tree as an ordered list of steps, each with its branches, folded under a summary. */
-export function treeText(source: string): HastNode {
-  const steps = flowchartSteps(source).map((step) =>
-    el('li', [
-      text(step.label),
-      ...(step.branches.length === 0
-        ? []
-        : [
-            el(
-              'ul',
-              step.branches.map((b) =>
-                el('li', [
-                  text(b.condition === undefined ? `→ ${b.to}` : `${b.condition} → ${b.to}`),
-                ]),
-              ),
-            ),
-          ]),
-    ]),
-  );
-  return el('details', [el('summary', [text("Version texte de l'arbre")]), el('ol', steps)]);
+/** The diagram as an ordered list of steps, each with its branches, folded under a summary. */
+export function diagramText(source: string): string {
+  const steps = flowchartSteps(source).map((step) => {
+    const branches = step.branches.map((b) => {
+      const arrow = b.condition === undefined ? `→ ${b.to}` : `${b.condition} → ${b.to}`;
+      return `<li>${escapeHtml(arrow)}</li>`;
+    });
+    const nested = branches.length === 0 ? '' : `<ul>${branches.join('')}</ul>`;
+    return `<li>${escapeHtml(step.label)}${nested}</li>`;
+  });
+  return `<details><summary>Version texte du schéma</summary><ol>${steps.join('')}</ol></details>`;
 }
 
 /**
- * Rehype plugin, to run before rehype-mermaid: gives each Mermaid tree an `accDescr` (it becomes
- * the image's alt) and a text version after it, so the tree reads without the picture.
+ * Remark plugin: replaces Mermaid block n of a guide by the image `arbre-n.svg` that `just trees`
+ * rendered next to it, followed by its text version. GitHub still draws the block from the
+ * Markdown; the site never runs a browser.
  */
-export function rehypeMermaidText() {
-  return (tree: HastNode) => {
-    const visit = (node: HastNode) => {
-      const children = node.children;
-      if (children === undefined) return;
-      for (let i = 0; i < children.length; i += 1) {
-        const child = children[i];
-        if (child === undefined) continue;
-        const code = mermaidCode(child);
-        if (code === undefined) {
+export function remarkMermaidImages() {
+  // `unknown`, narrowed below: the mdast types are not a dependency of the site.
+  return (tree: unknown) => {
+    let index = 0;
+    const visit = (node: MdastNode) => {
+      if (node.children === undefined) return;
+      node.children = node.children.flatMap((child) => {
+        if (child.type !== 'code' || child.lang !== 'mermaid') {
           visit(child);
-          continue;
+          return [child];
         }
-        const source = sourceOf(code);
-        const [head = '', ...rest] = source.split('\n');
-        code.children = [text([head, `  accDescr: ${TREE_ALT}`, ...rest].join('\n'))];
-        children.splice(i + 1, 0, treeText(source));
-        i += 1;
-      }
+        const image = { type: 'image', url: treeFile(index), alt: DIAGRAM_ALT };
+        index += 1;
+        return [
+          { type: 'paragraph', children: [image] },
+          { type: 'html', value: diagramText(child.value ?? '') },
+        ];
+      });
     };
-    visit(tree);
+    if (isNode(tree)) visit(tree);
   };
+}
+
+function isNode(value: unknown): value is MdastNode {
+  return typeof value === 'object' && value !== null && 'type' in value;
 }

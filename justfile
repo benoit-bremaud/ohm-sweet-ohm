@@ -35,6 +35,11 @@ setup:
 figures:
     python3 -B scripts/figures/generate.py
 
+# Render the Mermaid diagrams of the guides to the committed arbre-N.svg files (#123); a test
+# fails while one is stale. Needs Chromium once: `mise x -- pnpm --filter web exec playwright install chromium`
+trees:
+    mise x -- node apps/web/scripts/render-trees.ts
+
 # L0 — the pre-commit checks on the staged files (< 10 s)
 fast:
     lefthook run pre-commit

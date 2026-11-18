@@ -85,6 +85,15 @@ Chosen option: **C, Astro on Cloudflare Workers**, with 435 points out of 500.
   accepted because versions are pinned exactly and Dependabot plus CI would catch a break (an
   own matrix scored it 395 against 330 for pure-function tests only and 265 for HTTP tests
   through `wrangler dev`).
+- Amendment (2026-11-18, issue #123): the troubleshooting guides under `/depannage` are the one
+  prerendered part of the site; their Markdown is read in place from `troubleshooting/`, which
+  only changes on a deploy. Their Mermaid diagrams are rendered by `just trees` to committed
+  `arbre-N.svg` files next to each guide, with a text version folded under each image. A first
+  matrix chose build-time rendering (435 against 370 for committed SVG and 285 for client-side
+  Mermaid); the adversarial review found that Workers Builds installs no Chromium, and the
+  re-scored matrix chose committed SVG (400 against 330 for installing Chromium at build). A test
+  fails while an SVG is older than its Mermaid source. Prerendered pages bypass the middleware,
+  so `public/_headers` repeats its headers for `/depannage`.
 
 ### Consequences
 

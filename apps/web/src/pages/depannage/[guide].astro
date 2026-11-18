@@ -1,24 +1,23 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 
 import GuideProse from '../../components/GuideProse.astro';
 import Page from '../../layouts/Page.astro';
 import { GUIDES_ROUTE } from '../../lib/guide-links';
+import { guidePaths, guideTitle } from '../../lib/guide-pages';
 
+// The guides change with a commit, not with the catalogue: built once, served as static pages.
 export const prerender = true;
 
-export const getStaticPaths = (async () => {
-  const guides = await getCollection('guides');
-  return guides.map((guide) => ({ params: { guide: guide.id }, props: { guide } }));
-}) satisfies GetStaticPaths;
+export const getStaticPaths = guidePaths satisfies GetStaticPaths;
 
 const { guide } = Astro.props;
 const { Content, headings } = await render(guide);
-const title = headings.find((h) => h.depth === 1)?.text ?? guide.id;
+const title = guideTitle(headings, guide.id);
 ---
 
-<Page lang="fr" title={title} description={`Fiche de dépannage ${title}.`} imageOrigins={['data:']}>
+<Page lang="fr" title={title} description={`Fiche de dépannage ${title}.`}>
   <nav aria-label="Fil d'Ariane" class="crumb">
     <a href={GUIDES_ROUTE}>Dépannage</a>
   </nav>
@@ -40,7 +39,8 @@ const title = headings.find((h) => h.depth === 1)?.text ?? guide.id;
     color: var(--ink-muted);
   }
 
+  /* Decoration only: screen readers read the link text alone. */
   .crumb a::before {
-    content: '← ';
+    content: '← ' / '';
   }
 </style>
