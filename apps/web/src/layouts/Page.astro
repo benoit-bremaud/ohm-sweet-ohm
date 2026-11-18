@@ -6,14 +6,30 @@ interface Props {
   description: string;
   /** Origins the page loads images from, added to the CSP of this response. */
   imageOrigins?: readonly string[];
+  /** Language of the page content; the frame's own words follow it. */
+  lang?: keyof typeof CHROME;
 }
 
-const { title, description, imageOrigins = [] } = Astro.props;
+const CHROME = {
+  en: {
+    skip: 'Skip to content',
+    tagline: 'Reusable circuit blocks and their variants',
+    licence: 'Schematics are published under CC BY-SA 4.0; the code is MIT.',
+  },
+  fr: {
+    skip: 'Aller au contenu',
+    tagline: 'Blocs de circuits réutilisables et dépannage',
+    licence: 'Les fiches et schémas sont publiés sous CC BY-SA 4.0 ; le code sous MIT.',
+  },
+} as const;
+
+const { title, description, imageOrigins = [], lang = 'en' } = Astro.props;
+const words = CHROME[lang];
 Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +40,7 @@ Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
   </head>
   <body>
     <a class="skip" href="#main">
-      Skip to content
+      {words.skip}
     </a>
     <div class="frame">
       <header class="bar">
@@ -32,13 +48,13 @@ Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
         <span class="wordmark" translate="no">
           Ohm Sweet Ohm
         </span>
-        <p class="tagline">Reusable circuit blocks and their variants</p>
+        <p class="tagline">{words.tagline}</p>
       </header>
       <main id="main" class="page">
         <slot />
       </main>
       <footer class="bar foot">
-        <p>Schematics are published under CC BY-SA 4.0; the code is MIT.</p>
+        <p>{words.licence}</p>
       </footer>
     </div>
   </body>

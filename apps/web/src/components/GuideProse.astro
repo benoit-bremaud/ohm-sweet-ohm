@@ -1,0 +1,110 @@
+---
+/** Typesets a troubleshooting guide rendered from Markdown (headings, tables, figures, notes). */
+---
+
+<article class="prose">
+  <slot />
+</article>
+
+<style>
+  .prose {
+    max-width: var(--measure);
+    display: grid;
+    gap: var(--space-4);
+    line-height: 1.6;
+  }
+
+  .prose :global(h1) {
+    font-size: var(--size-display);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .prose :global(h2) {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+    font-size: var(--size-title);
+  }
+
+  .prose :global(h3) {
+    margin-top: var(--space-4);
+    font-size: var(--size-body);
+  }
+
+  .prose :global(:is(ul, ol)) {
+    display: grid;
+    gap: var(--space-2);
+    padding-inline-start: var(--space-6);
+  }
+
+  /* Wide tables scroll inside the column instead of the page on a phone. */
+  .prose :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--size-label);
+  }
+
+  .prose :global(:is(th, td)) {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--rule);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .prose :global(th) {
+    background: var(--copper-tint);
+  }
+
+  /* Guides use block quotes for safety notes only. */
+  .prose :global(blockquote) {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-inline-start: var(--rule-strong) solid var(--hazard);
+    background: var(--hazard-bg);
+  }
+
+  .prose :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .prose :global(p > img) {
+    background: var(--figure-mat);
+    border-radius: var(--radius-sheet);
+  }
+
+  /* Text version of a decision tree, folded under its image. */
+  .prose :global(details) {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sheet);
+    font-size: var(--size-label);
+  }
+
+  .prose :global(summary) {
+    min-block-size: var(--target-min);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .prose :global(details ol) {
+    margin-top: var(--space-2);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  .prose :global(a) {
+    color: var(--copper);
+    text-underline-offset: 0.15em;
+  }
+</style>

@@ -51,7 +51,8 @@ sequenceDiagram
 
 ## Notes
 
-- **On demand**: no page is prerendered, so an import is visible on the site within the API's
+- **On demand**: no catalogue page is prerendered (only the troubleshooting guides are, ADR-0003
+  amendment of 2026-11-18), so an import is visible on the site within the API's
   5 s freshness window, with no redeploy of the front-end.
 - **Validation at the boundary**: the Worker trusts nothing from the network; a response that
   drifts from `blockResponseSchema` is a server error on the web side, never a half-rendered page.

@@ -4,6 +4,8 @@ Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaqu
 
 Les figures SVG sont générées : modifier `scripts/figures/guide_NN.py` puis lancer `just figures`, ne jamais retoucher un fichier `.svg` à la main (`just test` le refuse).
 
+Les schémas Mermaid sont dessinés pour le site par `just trees` dans `arbre-N.svg` : le relancer après chaque modification d'un schéma (`just test` refuse un SVG périmé). Liens acceptés : `-->`, `-- texte -->`, `-.->`, `-. texte .->` ; toute autre forme fait échouer la construction.
+
 ## En bref
 
 *Trois lignes au plus : ce qui tombe le plus souvent en panne sur ce composant, et la mesure qui tranche dans la majorité des cas.*

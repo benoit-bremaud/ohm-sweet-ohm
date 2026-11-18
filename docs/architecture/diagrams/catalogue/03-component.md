@@ -27,7 +27,7 @@ flowchart TB
   Developer["Third-party client"]
 
   subgraph Edge ["Cloudflare Workers"]
-    Web["apps/web — Astro<br/>server-rendered pages"]
+    Web["apps/web — Astro<br/>server-rendered pages,<br/>prerendered guides"]
   end
 
   subgraph Server ["Fly.io Machine (stops when idle)"]

@@ -20,7 +20,7 @@ Single public repo `ohm-sweet-ohm` (public since 2026-11-07), pnpm workspace (no
 
 ```text
 apps/api          Fastify + Zod, OpenAPI
-apps/web          Astro on Cloudflare Workers (server rendering on demand, ADR-0003)
+apps/web          Astro on Cloudflare Workers (catalogue rendered on demand, troubleshooting guides prerendered, ADR-0003)
 apps/importer     CLI: validate meta.yaml, read the SVG rendered by docker/renderer (just render), upsert into PostgreSQL
 packages/schemas  Shared Zod schemas (meta.yaml, API DTOs) — single source of truth
 catalogue/        <base-circuit>/<block>/{schematic.kicad_sch, meta.yaml} + LICENSE (CC BY-SA 4.0)

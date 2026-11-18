@@ -25,7 +25,7 @@ architecture) takes precedence over catalogue volume.
 | Spec model | Typed parameters per category, stored as min/max ranges in SI units | — |
 | Backend | TypeScript, Fastify, PostgreSQL as a plain store (search runs in memory, see ADR-0001; pgvector in v2), OpenAPI from Zod schemas | — |
 | Name | **Ohm Sweet Ohm** (repo/domain slug: `ohm-sweet-ohm`) | — |
-| Front-end | Astro (server rendering on demand: one indexable page per base circuit and variant, no client JavaScript until the calculator's React island; see ADR-0003), typed client generated from OpenAPI | — |
+| Front-end | Astro (server rendering on demand: one indexable page per base circuit and variant, no client JavaScript until the calculator's React island; troubleshooting guides prerendered; see ADR-0003), typed client generated from OpenAPI | — |
 | Hosting | Managed services: hosted PostgreSQL, API on a container platform, front on Cloudflare Workers (ADR-0003). Environments: local → staging (branch preview) → prod | — |
 | Repository | Single repo, pnpm workspace (`apps/api`, `apps/web`, `apps/importer`, `packages/schemas`), catalogue in `catalogue/` with its own CC BY-SA license; studies in `studies/` (own CC BY-SA license, not ingested by the importer until #49); French troubleshooting guides in `troubleshooting/` (own CC BY-SA license, not ingested until published, epic #79) | Split catalogue repo if community contributions grow |
 | Delivery | Vertical slices from M1; tracked with GitHub Project + milestones + issues. See WORKPLAN.md | — |
