@@ -1,0 +1,10 @@
+# Trivy findings accepted on purpose; each entry is scoped and expires (skill docker-hardening).
+vulnerabilities:
+  # Same advisory as GHSA-fc5q-39xc-vjpf, waived for pnpm audit in pnpm-workspace.yaml (#112, #131):
+  # picomatch ReDoS through single-branch repeated extglobs, no patched 2.x or 4.x release. It needs
+  # an attacker-supplied glob pattern; every pattern here comes from the repository or its config.
+  - id: CVE-2026-112366
+    paths:
+      - pnpm-lock.yaml
+    expired_at: 2027-02-18
+    statement: No patched picomatch release; glob patterns never come from a request (#112).
