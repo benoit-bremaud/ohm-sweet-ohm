@@ -10,12 +10,12 @@ const base = `../../${GUIDES_DIR}`;
 
 /**
  * One entry per guide, its id the guide folder (`10_resistance`). `NN_*` are the numbered guides,
- * `iN_*` the instrument pages (#84, one digit: i1 to i9).
+ * `iN_*` the instrument pages (#84, one digit: i1 to i9; a tree in one would be skipped by `just trees`).
  */
 const guides = defineCollection({
   loader: glob({
     base,
-    pattern: '{[0-9][0-9],i[0-9]}_*/README.md',
+    pattern: '{[0-9][0-9],i[1-9]}_*/README.md',
     generateId: ({ entry }) => entry.split('/')[0] ?? entry,
   }),
 });
