@@ -135,7 +135,8 @@ systemctl --user enable --now ohm-sweet-ohm-nightly.timer
 declarations with a doc block, floor 90 %) and runs the wiring tests of the local CI itself
 (`scripts/test-local-ci.sh`, `scripts/test-attest.sh`) and the figure generator tests
 (`scripts/test-figures.sh`: coverage floor 90 %, committed SVGs equal to the generated
-ones). `just sonar` sends the analysis and the lcov
+ones) and the diagram test of the web site (each `troubleshooting/*/arbre-N.svg` carries the hash
+of its Mermaid source; run `just trees` after changing a diagram). `just sonar` sends the analysis and the lcov
 report to the shared SonarQube at `http://localhost:9000` and fails when the quality gate fails; it
 uses the machine's global analysis token (`SONAR_TOKEN`, or `~/.config/sonarqube/analysis-token`).
 

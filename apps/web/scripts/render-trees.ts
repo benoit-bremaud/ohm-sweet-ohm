@@ -2,12 +2,13 @@
 // (`just trees`, #123). The site serves these files: no browser runs at build or deploy time.
 import { readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { createMermaidRenderer } from 'mermaid-isomorphic';
 
-import { mermaidBlocks, sourceMark, treeFile } from '../src/lib/mermaid-trees.ts';
+import { RENDER_CONFIG, mermaidBlocks, sourceMark, treeFile } from '../src/lib/mermaid-trees.ts';
 
-const root = new URL('../../../troubleshooting/', import.meta.url).pathname;
+const root = fileURLToPath(new URL('../../../troubleshooting/', import.meta.url));
 const render = createMermaidRenderer();
 let written = 0;
 
@@ -17,10 +18,7 @@ for (const guide of readdirSync(root).filter((d) => /^\d\d_/.test(d))) {
     rmSync(join(dir, old));
   }
   const blocks = mermaidBlocks(readFileSync(join(dir, 'README.md'), 'utf8'));
-  // SVG text labels, not HTML ones: an <img> lays them out with the viewer's fonts otherwise.
-  const results = await render(blocks, {
-    mermaidConfig: { flowchart: { htmlLabels: false }, theme: 'neutral' },
-  });
+  const results = await render(blocks, { mermaidConfig: RENDER_CONFIG });
   results.forEach((result, i) => {
     if (result.status === 'rejected') {
       throw new Error(`${guide}, diagram ${String(i + 1)}: ${String(result.reason)}`);
