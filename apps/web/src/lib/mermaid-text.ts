@@ -15,10 +15,10 @@ export const DIAGRAM_ALT = "Schéma ; sa version texte suit l'image.";
 
 const escapeHtml = (text: string) =>
   text
-    .replaceAll(/&/g, '&amp;')
-    .replaceAll(/</g, '&lt;')
-    .replaceAll(/>/g, '&gt;')
-    .replaceAll(/"/g, '&quot;');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
 
 /** The diagram as an ordered list of steps, each with its branches, folded under a summary. */
 export function diagramText(source: string): string {
