@@ -7,9 +7,9 @@ export interface FlowStep {
 const NODE = String.raw`([A-Za-z0-9_]+)\s*(?:\[([^\]]*)\]|\{([^}]*)\}|\(([^)]*)\))?`;
 // `A --> B`, `A -- oui --> B`, `A -.-> B`, `A -. texte .-> B`, each end with an optional label.
 const EDGE = new RegExp(
-  `^\\s*${NODE}\\s*(?:--\\s*(.+?)\\s*-->|-->|-\\.\\s*(.+?)\\s*\\.->|-\\.->)\\s*${NODE}\\s*$`,
+  String.raw`^\s*${NODE}\s*(?:--\s*(.+?)\s*-->|-->|-\.\s*(.+?)\s*\.->|-\.->)\s*${NODE}\s*$`,
 );
-const LONE_NODE = new RegExp(`^\\s*${NODE}\\s*$`);
+const LONE_NODE = new RegExp(String.raw`^\s*${NODE}\s*$`);
 
 const clean = (label: string) =>
   label
