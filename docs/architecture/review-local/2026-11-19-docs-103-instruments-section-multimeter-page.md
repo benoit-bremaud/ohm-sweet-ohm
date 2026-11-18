@@ -16,17 +16,18 @@ Milestone review closing part 0 of epic #79: the instruments section and its mul
 - Round 4 on `0eb2a73`: Nice fixed · Nice 3 (applied in this commit) · **Push gate: open**
 - Optional second review (owner's own account): not run (never a gate step)
 
-## Pre-merge gate (head SHA 0eb2a73)
+## Pre-merge gate (head SHA 761f83e)
 
 | Step | Result |
 | --- | --- |
 | 1 Tests | ✅ vitest 284 · pytest 236 · test-local-ci 47 · test-attest 22 |
 | 2 Coverage | web 95.41 % stmts / 93.41 % branches / 95 % funcs / 95.68 % lines (floor 80) · figures 99.94 % · docs 100 % (floor 90) |
-| 3 SonarQube | ⏸ deferred to the pre-merge run (`--push`) |
-| 4 Secrets | ✅ gitleaks clean (66 commits) · no tracked .env · diff read: nothing sensitive |
-| 5 E2E/smoke | ⏸ deferred to the pre-merge run (`--push`); manual check on the dev server: `/depannage` and `/depannage/i1_multimetre` render, figures load, links alive, no overflow at 375 px |
+| 3 SonarQube | ✅ PASSED |
+| 4 Secrets | ✅ gitleaks clean · no tracked .env · diff read: nothing sensitive · Trivy 0 vulnerabilities · pnpm audit: nothing at high |
+| 5 E2E/smoke | ✅ smoke healthy on the local prod build · manual check on the dev server: `/depannage` and `/depannage/i1_multimetre` render, figures load, links alive, no overflow at 375 px |
 
-- Gate: `--push`: **pre-push green** — `just check` passed, SonarQube and E2E deferred (never GREEN)
+- Workflow rehearse: n/a (no workflow changed)
+- Gate: **GREEN — attested**: `attest: gate verified on 761f83eb9205e59e8a908d0f5c887ceed1d5d64a`; this report-only commit is re-gated before the merge
 
 ## 🔴 Must Have
 
