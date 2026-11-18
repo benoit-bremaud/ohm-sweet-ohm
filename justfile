@@ -25,7 +25,7 @@ renderer_image := "ohm-sweet-ohm-renderer"
 # L1 by default
 default: check
 
-# Once per clone: the pinned toolchain, the dependencies and the git hooks
+# Once per clone: the pinned toolchain, the dependencies, the Astro types and content store, the git hooks
 setup:
     mise install
     mise x -- pnpm install --frozen-lockfile

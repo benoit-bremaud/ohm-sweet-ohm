@@ -15,7 +15,8 @@ export default defineConfig({
   adapter: cloudflare({ imageService: 'passthrough' }),
   session: false,
   // The guide tests read the content store the dev server writes to .astro/; sync and build write
-  // it there too, so a fresh checkout runs them after one `astro sync` (`just sync`, run by `just setup`, `lint` and `test`).
+  // it there too, so a fresh checkout runs them after one `astro sync`
+  // (`just sync`, run by `just setup`, `lint` and `test`).
   cacheDir: './.astro',
   // Troubleshooting guides (#123): each Mermaid block becomes the SVG `just trees` committed next
   // to its guide, plus a text version; no browser runs at build time and the CSP stays strict.

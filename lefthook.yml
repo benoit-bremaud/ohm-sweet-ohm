@@ -1,5 +1,5 @@
 # Git hooks for the local CI (#68, skill local-ci): tier L0 on commit, L1 on push. Install once per
-# clone: `just setup` (mise install, lefthook install). `mise x --` puts the pinned tools of
+# clone: `just setup` (mise install, pnpm install, just sync, lefthook install). `mise x --` puts the pinned tools of
 # mise.toml (Node 22 and pnpm included) on PATH whether or not the shell activates mise.
 pre-commit:
   parallel: true
