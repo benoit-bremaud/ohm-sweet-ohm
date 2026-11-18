@@ -103,7 +103,7 @@ gate base="origin/main":
     base={{quote(base)}}
     case "$base" in origin/*) git fetch --quiet origin "${base#origin/}" ;; esac
     just sonar
-    trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler .
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs node_modules,build,dist,coverage,.wrangler .
     trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs node_modules,build,dist,coverage,.wrangler .
     if ! docker info > /dev/null 2>&1; then
       echo "gate: WARNING docker unreachable, API image build, smoke, trivy image, syft SBOM, catalogue render and act not run"
@@ -256,7 +256,7 @@ nightly:
     rc=0
     warn() { "$@" || echo "WARNING nightly: '$*' failed (drift, not a failure)"; }
     warn just check
-    trivy fs --exit-code 1 --severity HIGH,CRITICAL --skip-dirs node_modules,build,dist,coverage,.wrangler . || rc=1
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs node_modules,build,dist,coverage,.wrangler . || rc=1
     if docker info > /dev/null 2>&1; then
         if docker build -q -f apps/api/Dockerfile -t {{api_image}} .; then
             trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}} || rc=1

@@ -11,5 +11,6 @@ auditConfig:
     # (2.x via astro > unstorage > anymatch and markdownlint-cli2 > micromatch; 4.x via astro,
     # vite, tinyglobby, typescript-eslint). It needs an attacker-supplied glob pattern; every pattern here comes from
     # the repository or its config (astro route cache not enabled, sessions off), never from a
-    # request. Remove once patched 2.x and 4.x releases are in the lockfile.
+    # request. Remove once patched 2.x and 4.x releases are in the lockfile, with the
+    # CVE-2026-112366 entry of .trivyignore.yaml (#131).
     - GHSA-fc5q-39xc-vjpf
