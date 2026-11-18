@@ -241,4 +241,4 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
 ## 2026-11-18
 
 - **Trivy waiver for the picomatch advisory** (branch `fix/131-trivy-picomatch-waiver`, issue #131) — Trivy's filesystem scan started reporting picomatch CVE-2026-112366 (HIGH), the advisory already waived for `pnpm audit` as GHSA-fc5q-39xc-vjpf (#112), and turned `just gate` red on every branch.
-  - **Decision** (owner, MCDA 475/500 against 395 for the waiver inside #124 and 240 for a one-off merge waiver): a dedicated PR adds `.trivyignore.yaml`, scoped to `pnpm-lock.yaml` and expiring 2027-02-18; `just gate` and `just nightly` pass it with `--ignorefile`.
+  - **Decision** (owner, MCDA 475/500 against 395 for the waiver inside #124 and 240 for a one-off merge waiver): a dedicated PR adds `.trivyignore.yaml`, scoped to `pnpm-lock.yaml` and expiring 2027-02-18; `just gate` and `just nightly` pass it with `--ignorefile`. Measured: `trivy fs` exits 1 without the file (picomatch 2.3.2 and 4.0.7, HIGH, no fixed version), 0 with it. `SECURITY.md` and a wiring test (`scripts/test-local-ci.sh`) follow.

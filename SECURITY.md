@@ -30,8 +30,10 @@ its image. Base images are bumped by Dependabot (`docker` ecosystem).
 ## Accepted findings
 
 An accepted Hadolint finding is suppressed inline in the Dockerfile with a one-line reason. An
-accepted Trivy finding goes in `.trivyignore.yaml` with `paths`, `expired_at` and a `statement`;
-there is none today, so the file does not exist.
+accepted Trivy finding goes in `.trivyignore.yaml` with `paths`, `expired_at` and a `statement`.
+One today: picomatch CVE-2026-112366 (GHSA-fc5q-39xc-vjpf, #112, #131), scoped to `pnpm-lock.yaml`,
+expiring 2027-02-18. `just gate` and `just nightly` pass the file with `--ignorefile`, so it stays
+in place, with `vulnerabilities: []` when it holds no entry.
 
 ## Runtime
 

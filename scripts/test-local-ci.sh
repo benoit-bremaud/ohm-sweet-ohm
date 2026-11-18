@@ -38,6 +38,12 @@ just --show nightly | grep -q '^    warn just check$' || fail "nightly does not 
 for t in 'trivy fs' 'trivy image' 'trufflehog git'; do
   just --show nightly | grep "$t" | grep -q '|| rc=1$' || fail "nightly does not fail on $t"
 done
+for r in gate nightly; do
+  just --show "$r" | grep 'trivy fs' | grep -q -- '--ignorefile .trivyignore.yaml' || fail "$r trivy fs ignores .trivyignore.yaml"
+done
+ids=$(grep -c '^  - id:' .trivyignore.yaml || true)
+[ "$ids" = "$(grep -c '^    expired_at:' .trivyignore.yaml || true)" ] || fail ".trivyignore.yaml entry without expired_at"
+[ "$ids" = "$(grep -c '^    statement:' .trivyignore.yaml || true)" ] || fail ".trivyignore.yaml entry without statement"
 just --show nightly | tail -1 | grep -q '^    exit "$rc"$' || fail "nightly does not end with exit \"\$rc\""
 just --show gate | grep -q "^    just check$" || fail "gate does not run check (from its body, before the attestation)"
 for r in setup merge rehearse deploy attest render smoke sonar; do just --show "$r" > /dev/null 2>&1 || fail "recipe $r missing"; n=$((n + 1)); done
