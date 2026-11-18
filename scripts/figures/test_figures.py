@@ -277,3 +277,16 @@ def test_check_reports_a_stale_figure(tmp_path: Path, monkeypatch) -> None:
 
 def test_unknown_option_is_refused() -> None:
     assert generate.main(["--force"]) == 2
+
+
+def test_fuse_figure_puts_the_red_probe_in_the_10a_jack_of_each_panel() -> None:
+    import guide_i1
+
+    reds = re.findall(
+        r'data-probe="red" transform="translate\(([\d.]+) ([\d.]+)\)',
+        guide_i1.fig_fuse(),
+    )
+    jacks = [meter(x0 + 24, 116, 0.9, "200", "OL", "Ω")[1].a for x0 in (0, 380)]
+    got = [float(v) for pair in reds for v in pair]
+    want = [v for jx, jy in jacks for v in (jx, jy + 4)]
+    assert got == pytest.approx(want, abs=0.06)

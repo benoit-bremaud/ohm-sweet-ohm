@@ -23,6 +23,7 @@ describe('sourceMark', () => {
 // version that reads every link. A failure here means: run `just trees`, or fix the guide.
 describe('the diagrams of the guides', () => {
   const root = new URL('../../../../troubleshooting/', import.meta.url);
+  // Numbered guides only: instrument pages (iN_) carry no decision tree (#84).
   const guides = readdirSync(root).filter((d) => /^\d\d_/.test(d));
   const read = (guide: string, file: string) =>
     readFileSync(new URL(`${guide}/${file}`, root), 'utf8');

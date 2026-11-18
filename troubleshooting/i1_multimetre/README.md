@@ -80,7 +80,7 @@ Un premier prix reste utile comme second appareil : il sert à l'exercice de la 
 2. Enfoncer la pointe rouge dans la douille 10 A : quelques dixièmes d'ohm (cordon, fusible et shunt en série) = chemin fermé ; OL = fusible fondu, à confirmer en recommençant pointe appuyée contre la paroi de la douille.
 3. Recommencer dans la douille mA/µA, si l'appareil en a une, en calibre automatique ou sur le plus haut calibre : la valeur est plus haute, de quelques ohms à quelques kΩ selon l'appareil (shunts des petits calibres, parfois une résistance de protection) ; seul le manuel dit la valeur attendue.
 
-Une valeur basse prouve que le chemin est fermé, **pas qu'un fusible existe** : sur un appareil dont la douille 10 A n'a pas de fusible (fréquent en premier prix, fiche [01](../01_multimetre/README.md)), la lecture est la même. Vérifier sa présence et son type (céramique, calibre, pouvoir de coupure) dans le manuel, ou sous le capot, appareil débranché de tout et pile retirée.
+Une valeur basse prouve que le chemin est fermé, **pas qu'un fusible existe** : sur un appareil dont la douille 10 A n'a pas de fusible (fréquent en premier prix, fiche [01](../01_multimetre/README.md)), la lecture est la même. Vérifier sa présence et son type (céramique, calibre, tension, pouvoir de coupure) dans le manuel, ou sous le capot, appareil débranché de tout et pile retirée.
 
 Certains manuels donnent une autre méthode (mode bipeur, ou valeur attendue précise) : le manuel prime. Un fusible fondu se remplace par le calibre, la tension et le **pouvoir de coupure** exacts du manuel, jamais par un fusible en verre ni par un fil : c'est lui qui empêche le court-circuit du « Piège du mode courant » de devenir un arc.
 

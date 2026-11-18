@@ -8,7 +8,10 @@ import { GUIDES_DIR } from './lib/guide-links';
 // Relative to the Astro project root (apps/web).
 const base = `../../${GUIDES_DIR}`;
 
-/** One entry per guide, its id the guide folder (`10_resistance`). */
+/**
+ * One entry per guide, its id the guide folder (`10_resistance`). `NN_*` are the numbered guides,
+ * `iN_*` the instrument pages (#84, one digit: i1 to i9).
+ */
 const guides = defineCollection({
   loader: glob({
     base,

@@ -12,6 +12,7 @@ const root = fileURLToPath(new URL('../../../troubleshooting/', import.meta.url)
 const render = createMermaidRenderer();
 let written = 0;
 
+// Numbered guides only: instrument pages (iN_) carry no decision tree (#84).
 for (const guide of readdirSync(root).filter((d) => /^\d\d_/.test(d))) {
   const dir = join(root, guide);
   for (const old of readdirSync(dir).filter((f) => /^arbre-\d+\.svg$/.test(f))) {

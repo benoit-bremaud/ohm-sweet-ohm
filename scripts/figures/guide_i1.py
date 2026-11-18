@@ -135,7 +135,7 @@ def fig_fuse() -> str:
         pr, (ex, ey) = probe(jacks.a[0], jacks.a[1] + 4, 0, 1, True)
         b += lead(jacks.v, f"V490 H{ex:.1f} V{ey:.1f}", True)
         b += pr
-        pb, (bx, by) = probe(jacks.com[0], 470, 0, -1, False)
+        pb, (_, by) = probe(jacks.com[0], 470, 0, -1, False)
         b += lead(jacks.com, f"V{by:.1f}", False)
         b += pb
         b += verdict(x0 + 190, 530, head, sub, cls)
