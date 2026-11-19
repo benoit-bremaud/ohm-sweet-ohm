@@ -115,7 +115,7 @@ Les MLCC de découplage sont tous branchés de la même façon : une terminaison
 | --- | --- |
 | Bip bref puis silence, lecture qui monte | pas de court-circuit franc : les condensateurs se chargent |
 | Bip continu, moins de 1 Ω environ | **court-circuit franc** sur le rail : un condensateur, ou un autre composant du rail |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine, ou avec un schéma qui explique la lecture ; sinon, injection à courant limité (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine, ou avec un schéma qui explique la lecture ; sinon, injection à courant limité (fiche [92](../92_court_circuit/README.md)) ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
 
 Ce que cette mesure ne dit pas :
 
@@ -182,7 +182,7 @@ flowchart TD
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
-  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : noter le courant ; trop fort, fiche 92, Rail qui fuit ; sinon fils d'injection retirés, tout refermer, mise sous tension, fiche 91]
+  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : noter le courant ; trop fort, fiche 92, Rail qui fuit ; sinon fils d'injection retirés, tout refermer, mise sous tension, fiche 03 étape 6]
   I -- rien, limitation à 100 mA, plafond inconnu, rail douteux --> ZB[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   I -- rien, en limitation au plafond de la fiche 03 étape 5 --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
