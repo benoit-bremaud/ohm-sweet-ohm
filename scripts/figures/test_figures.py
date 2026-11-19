@@ -389,3 +389,38 @@ def test_only_the_third_transformer_symbol_has_a_centre_tap() -> None:
     import guide_32
 
     assert guide_32.fig_symbol().count('data-tap="centre"') == 1
+
+
+def test_contact_resistance_is_the_voltage_drop_over_the_test_current() -> None:
+    import guide_33
+
+    good = guide_33.contact_resistance(guide_33.GOOD_DROP, guide_33.TEST_AMPS)
+    worn = guide_33.contact_resistance(guide_33.WORN_DROP, guide_33.TEST_AMPS)
+    assert good == pytest.approx(0.04)
+    assert good < guide_33.CONTACT_MAX < worn
+    for current in (0, -1):
+        with pytest.raises(ValueError, match="positive"):
+            guide_33.contact_resistance(0.1, current)
+
+
+def test_coil_voltage_shown_in_circuit_is_above_the_operate_voltage() -> None:
+    import guide_33
+
+    floor = guide_33.must_operate(guide_33.COIL_VOLTS)
+    assert floor == pytest.approx(3.75)
+    shown = float(re.search(r">(\d\.\d\d)<", guide_33.fig_coil()).group(1))
+    assert floor < shown <= guide_33.COIL_VOLTS
+
+
+def test_relay_contact_rests_on_nc_and_moves_to_no_when_energised() -> None:
+    import guide_33
+
+    states = re.findall(r'data-contact="(\w+)"', guide_33.fig_symbol())
+    assert states == ["nc", "no"]
+
+
+def test_contact_test_circuit_stays_inside_the_low_voltage_scope() -> None:
+    import guide_33
+
+    assert guide_33.TEST_VOLTS <= 50
+    assert guide_33.TEST_VOLTS / guide_33.TEST_AMPS == pytest.approx(24)
