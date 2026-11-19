@@ -58,7 +58,7 @@ Fourchettes typiques, tirées des mesures comparées de HKJ (lygte-info.dk) et d
 
 **Pourquoi ça compte** : sur un point à haute impédance (pont diviseur de quelques MΩ, entrée flottante, grille de MOSFET), cette résistance d'entrée forme un diviseur avec le circuit et la lecture baisse. Un fil non relié capte au contraire des tensions « fantômes » de quelques volts en alternatif, qui disparaissent avec une charge de quelques kΩ (mode basse impédance des appareils qui en ont un).
 
-**Seuils et temps de réponse** : en continu, 2 à 3 mesures par seconde ; une tension qui bouge plus vite (découpage, signal logique) est moyennée et la lecture ne prouve rien de son allure (page i2, oscilloscope). En alternatif, seuls les appareils « True RMS » lisent juste une forme non sinusoïdale, et seulement dans leur bande passante.
+**Seuils et temps de réponse** : en continu, 2 à 3 mesures par seconde ; une tension qui bouge plus vite (découpage, signal logique) est moyennée et la lecture ne prouve rien de son allure (page i2, oscilloscope). En alternatif, seuls les appareils « True RMS » lisent juste une forme non sinusoïdale, et seulement dans leur bande passante et sous leur facteur de crête maximal ; le mode V~ ignore en général la composante continue (page [i1](../i1_multimetre/README.md)).
 
 ## Ohmmètre
 
