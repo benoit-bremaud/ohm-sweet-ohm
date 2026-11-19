@@ -68,7 +68,7 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
 | Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [20](../20_condensateur_ceramique/README.md) (méthode complète en fiche 92) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche ; si rien ne chauffe à la tension du rail, c'est une charge normale : passer à l'étape 6 |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche. Le rail tient sa tension nominale sans que l'alimentation passe en limitation, et rien ne chauffe : c'est une charge normale, passer à l'étape 6. L'alimentation reste en limitation alors que la limite a été relevée par paliers jusqu'au courant que le rail fournit en service : c'est un défaut, même si rien ne chauffe ; ne pas alimenter la carte normalement, suivre les millivolts le long du rail (fiche 92) |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
 | Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
@@ -156,7 +156,8 @@ flowchart TD
   D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
   F -- douteux, sans carte saine --> Y[Injection à courant limité, fiche 20]
   Y -- un composant chauffe --> M
-  Y -- rien ne chauffe : charge normale --> H
+  Y -- le rail tient sa tension sans limitation, rien ne chauffe --> H
+  Y -- toujours en limitation, même sans chaleur --> G
   F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
   F -- non --> H[Mise sous tension à courant limité, fiche 00]
   H --> I{L'alimentation passe en limitation, ou un composant chauffe ?}
