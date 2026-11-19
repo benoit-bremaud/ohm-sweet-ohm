@@ -150,7 +150,7 @@ Carte sur alimentation limitée en courant, sélecteur sur **V continu**, pointe
 
 L'exemple de la figure est une carte alimentée par un adaptateur basse tension **alternatif** (25 V~ au plus), qui porte son propre redresseur. L'ondulation à 100 Hz ne s'observe qu'avec cet adaptateur : ne le brancher qu'après avoir vérifié, au bipeur puis sur l'alimentation limitée en courant, que le rail n'est pas en court-circuit (fiche [00](../00_securite/README.md)). Sur une alimentation de laboratoire, qui fournit du continu, il n'y a pas d'ondulation à 100 Hz : le même défaut se montre par une tension qui s'effondre dès que la carte consomme.
 
-Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par seconde et moyenne tout ce qui bouge plus vite (fiche [01](../01_multimetre/README.md)). Le mode V alternatif donne au mieux un ordre de grandeur de l'ondulation, selon l'appareil ; seul l'oscilloscope la montre (niveau 4).
+Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par seconde et moyenne tout ce qui bouge plus vite (fiche [01](../01_multimetre/README.md)). Le mode V alternatif donne au mieux un ordre de grandeur de l'ondulation, selon l'appareil ; seul l'oscilloscope la montre (niveau 4, page [i2](../i2_oscilloscope/README.md)).
 
 ### Du symptôme au condensateur suspect
 
@@ -166,7 +166,7 @@ Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par
 
 ## Niveau 4 — Méthodes avancées
 
-- **Oscilloscope** : sonde sur le rail, couplage alternatif. C'est la mesure directe de l'ondulation de la figure ci-dessus ; la comparer à celle d'une carte saine ou à la valeur de la fiche technique du régulateur (page i2 et fiche 91).
+- **Oscilloscope** : sonde sur le rail, couplage alternatif. C'est la mesure directe de l'ondulation de la figure ci-dessus ; la comparer à celle d'une carte saine ou à la valeur de la fiche technique du régulateur (page [i2](../i2_oscilloscope/README.md) et fiche 91).
 - **Pont LCR** : capacité et ESR à une fréquence choisie, à comparer aux valeurs de la fiche technique (page i5).
 - **Courant de fuite sous tension de service**, condensateur dessoudé : même montage que pour le céramique (fiche [20](../20_condensateur_ceramique/README.md), niveau 4), alimentation de laboratoire limitée à 10 mA, résistance de 1 kΩ en série, **+ de l'alimentation vers le + du condensateur**, jamais plus que la tension de service ni que 50 V. 1 mV aux bornes de la résistance correspond à 1 µA. Limite habituelle après 2 à 5 minutes : 0,01 × C (µF) × U (V) + 3 µA, soit environ **120 µA** (120 mV) pour un 470 µF 25 V. Une fuite qui reste bien au-dessus, ou qui augmente : à remplacer. Décharger ensuite dans la résistance.
 - **Condensateur resté des années sans tension** : sa couche d'oxyde a pu se dégrader et sa fuite est élevée à la première mise sous tension. Le même montage, laissé une heure à la tension de service, la reforme. Les condensateurs récents n'en ont en général pas besoin.
