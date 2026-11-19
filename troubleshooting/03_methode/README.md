@@ -61,7 +61,7 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 
 1. Carte débranchée, piles et batteries retirées, condensateurs déchargés et vérifiés au voltmètre (fiche [00](../00_securite/README.md)).
 2. Bipeur d'abord, puis ohmmètre pour lire la valeur (fiche [01](../01_multimetre/README.md)). Pointe noire sur la masse, pointe rouge sur le rail ; sur un rail négatif, l'inverse, sinon les diodes de protection des circuits intégrés conduisent.
-3. Mesurer dans l'ordre où le courant circule : l'entrée d'alimentation, puis **après la protection** (côté charge du fusible, après la diode ou le transistor de protection), puis l'entrée et la sortie de chaque régulateur. Un fusible ouvert ou une diode série cache un court-circuit placé derrière : la mesure à l'entrée seule ne suffit pas (fiche [13](../13_fusible/README.md), niveau 3, « Hors tension »).
+3. Mesurer dans l'ordre où le courant circule : l'entrée d'alimentation, puis **après la protection** (côté charge du fusible, après la diode ou le transistor de protection), puis l'entrée et la sortie de chaque régulateur. Mesurer aussi **entre** l'entrée et la sortie de chaque régulateur : proche de 0 Ω dans les deux sens, ne pas alimenter, la sortie recevrait la tension d'entrée (fiche [91](../91_rails_alimentation/README.md), « Hors tension »). Un fusible ouvert ou une diode série cache un court-circuit placé derrière : la mesure à l'entrée seule ne suffit pas (fiche [13](../13_fusible/README.md), niveau 3, « Hors tension »).
 4. Attendre que la lecture se stabilise : les condensateurs du rail se chargent (fiche [02](../02_pieges_en_circuit/README.md)).
 5. Sur une lecture basse, inverser les pointes : un vrai court-circuit lit la même valeur dans les deux sens, une jonction non (fiche [01](../01_multimetre/README.md)). Après l'inversion, la lecture repart du début et peut être négative un instant : c'est la charge laissée par l'appareil dans les condensateurs, attendre qu'elle se stabilise (fiche [02](../02_pieges_en_circuit/README.md)).
 
@@ -162,7 +162,7 @@ flowchart TD
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
   D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
-  F -- douteux, sans carte saine --> Y[Injection à courant limité, fiche 92]
+  F -- douteux, sans carte saine ni schéma qui l'explique --> Y[Injection à courant limité, fiche 92]
   Y -- un composant chauffe anormalement --> M
   Y -- le rail tient sa tension sans limitation, rien ne chauffe : noter le courant --> H
   Y -- limitation, rien ne chauffe --> Z[Relever la limite par paliers, jusqu'au courant de service du rail, fiche 92]
@@ -206,7 +206,7 @@ flowchart TD
 3. Adaptateur, câble, piles, fusible, réglages.
 4. Photos des deux faces et des connecteurs ; schéma ; repérer la masse et les rails.
 5. Regarder et sentir, carte déchargée.
-6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms sans carte saine ni schéma : injection limitée à la tension du rail (fiche 92) avant la mise sous tension.
+6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur, et entre l'entrée et la sortie de chacun. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms sans carte saine ni schéma qui explique la lecture : injection limitée à la tension du rail (fiche 92) avant la mise sous tension.
 7. Alimentation de laboratoire, polarité vérifiée, limite de courant basse, œil sur le courant.
 8. Rails au voltmètre, de l'entrée vers les régulateurs, avant tout signal. Rail trop haut : couper.
 9. Couper la chaîne par le milieu ; comparer avec une carte saine.

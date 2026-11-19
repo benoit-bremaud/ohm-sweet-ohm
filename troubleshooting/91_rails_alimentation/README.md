@@ -172,7 +172,8 @@ Ses limites :
 
 ```mermaid
 flowchart TD
-  A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse}
+  A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse, et entre l'entrée et la sortie de chaque régulateur}
+  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens --> S
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
   B -- lecture négative ou qui descend --> B0[Charge résiduelle : décharger de nouveau, fiche 00]
   B0 --> B
@@ -206,7 +207,7 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
-3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92 ; tout refermer avant la mise sous tension.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.

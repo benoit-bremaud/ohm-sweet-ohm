@@ -166,21 +166,24 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ```mermaid
 flowchart TD
   A[Rail suspect, carte débranchée et déchargée] --> B{Bipeur entre le rail et la masse}
-  B -- bip continu, moins de 1 Ω --> C[Court-circuit ou fuite sur le rail]
+  B -- bip continu, moins de 1 Ω --> C[Court-circuit franc sur le rail]
   B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine ?}
   D -- oui --> E[Charge normale du rail : chercher ailleurs]
-  D -- non, plus bas ici, ou pas de carte saine --> C
+  D -- non, plus bas ici, ou pas de carte saine --> C2[Rail douteux : fuite ou charge normale, à trancher par l'injection]
+  C2 --> H
   B -- bip bref puis lecture qui monte --> F{Symptôme de fuite ou de découplage manquant ?}
   F -- non --> E
   F -- oui --> G[Alimentation limitée : chercher un condensateur tiède, ou comparer l'ondulation, niveau 4]
   G --> G2{Un condensateur tiède ?}
   G2 -- oui --> J
   G2 -- non --> L
-  C --> H[Injecter un courant limité à la tension du rail au plus, chercher le point chaud]
+  C --> H[Injecter un courant limité, fiche 92 : 1 V d'abord, tension du rail au plus, chercher le point chaud]
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
-  I -- rien, à la limite maximale atteinte --> L[Fiche 92 : millivolts le long du rail]
+  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : tout refermer, mise sous tension, fiche 91]
+  I -- rien, limitation à 100 mA, plafond inconnu, rail douteux --> ZB[Doute, pas un verdict : fiche 03, Quand s'arrêter]
+  I -- rien, en limitation au plafond de la fiche 03 étape 5 --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
   M -- encore un court-circuit --> H
   M -- plus de court-circuit --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}
