@@ -129,7 +129,7 @@ Carte débranchée, condensateurs déchargés et vérifiés.
 | --- | --- |
 | **ESR-mètre** : ESR élevée | condensateur usé : rien, en parallèle, ne peut faire monter la lecture. C'est la mesure en circuit la plus utile |
 | ESR-mètre : ESR basse | bon signe, sans certitude : un autre condensateur ou une faible résistance en parallèle abaisse la lecture. Au moindre doute, lever une patte |
-| Bipeur : bip continu qui ne cesse pas | court-circuit sur le rail : le condensateur, ou n'importe quel composant branché sur le même rail (fiche 92) |
+| Bipeur : bip continu qui ne cesse pas | court-circuit sur le rail : le condensateur, ou n'importe quel composant branché sur le même rail (fiche [92](../92_court_circuit/README.md)) |
 | Bipeur : bip bref, puis silence | normal : le condensateur se charge (fiche [01](../01_multimetre/README.md)) |
 | Ohmmètre ou capacimètre | rien de sûr : tout le rail est mesuré en même temps, les condensateurs en parallèle s'additionnent (fiche [02](../02_pieges_en_circuit/README.md)) |
 
@@ -166,7 +166,7 @@ Le voltmètre en continu ne rafraîchit son affichage que deux ou trois fois par
 
 ## Niveau 4 — Méthodes avancées
 
-- **Oscilloscope** : sonde sur le rail, couplage alternatif. C'est la mesure directe de l'ondulation de la figure ci-dessus ; la comparer à celle d'une carte saine ou à la valeur de la fiche technique du régulateur (page [i2](../i2_oscilloscope/README.md) et fiche 91).
+- **Oscilloscope** : sonde sur le rail, couplage alternatif. C'est la mesure directe de l'ondulation de la figure ci-dessus ; la comparer à celle d'une carte saine ou à la valeur de la fiche technique du régulateur (page [i2](../i2_oscilloscope/README.md) et fiche [91](../91_rails_alimentation/README.md)).
 - **Pont LCR** : capacité et ESR à une fréquence choisie, à comparer aux valeurs de la fiche technique (page i5).
 - **Courant de fuite sous tension de service**, condensateur dessoudé : même montage que pour le céramique (fiche [20](../20_condensateur_ceramique/README.md), niveau 4), alimentation de laboratoire limitée à 10 mA, résistance de 1 kΩ en série, **+ de l'alimentation vers le + du condensateur**, jamais plus que la tension de service ni que 50 V. 1 mV aux bornes de la résistance correspond à 1 µA. Limite habituelle après 2 à 5 minutes : 0,01 × C (µF) × U (V) + 3 µA, soit environ **120 µA** (120 mV) pour un 470 µF 25 V. Une fuite qui reste bien au-dessus, ou qui augmente : à remplacer. Décharger ensuite dans la résistance.
 - **Condensateur resté des années sans tension** : sa couche d'oxyde a pu se dégrader et sa fuite est élevée à la première mise sous tension. Le même montage, laissé une heure à la tension de service, la reforme. Les condensateurs récents n'en ont en général pas besoin.

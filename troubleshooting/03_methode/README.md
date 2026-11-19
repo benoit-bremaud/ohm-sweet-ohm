@@ -67,21 +67,21 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
-| Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [20](../20_condensateur_ceramique/README.md) (méthode complète en fiche 92) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche, lue comme indiqué sous ce tableau |
+| Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [92](../92_court_circuit/README.md) |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [91](../91_rails_alimentation/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la fiche [92](../92_court_circuit/README.md), lue comme indiqué sous ce tableau |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
 | Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
 
-**Rail douteux, sans carte saine ni schéma** : l'injection de la fiche [20](../20_condensateur_ceramique/README.md) (tension nominale du rail, limite à 100 mA, relevée par paliers) se lit ainsi.
+**Rail douteux, sans carte saine ni schéma** : l'injection de la fiche [92](../92_court_circuit/README.md) (limite à 100 mA, relevée par paliers ; tension montée lentement jusqu'à la tension nominale du rail, jamais au-dessus) se lit ainsi.
 
-- **Un composant chauffe anormalement** (condensateur, résistance, diode, transistor, ou circuit intégré chaud au doigt) : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [20](../20_condensateur_ceramique/README.md)). Un circuit intégré seulement tiède à la tension de son rail peut être normal.
-- **Le rail tient sa tension nominale, l'alimentation ne passe pas en limitation, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu, puis passer à l'étape 6. Un courant nettement plus fort que ce que les circuits du rail consomment reste une fuite possible (fiche [20](../20_condensateur_ceramique/README.md), condensateur fuyant).
-- **L'alimentation reste en limitation au plafond, même si rien ne chauffe** : c'est un défaut. Ne pas alimenter la carte normalement ; suivre les millivolts le long du rail (fiche [20](../20_condensateur_ceramique/README.md), niveau 4 ; méthode complète en fiche 92).
+- **Un composant chauffe anormalement** (condensateur, résistance, diode, transistor, ou circuit intégré chaud au doigt) : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [92](../92_court_circuit/README.md)). Un circuit intégré seulement tiède à la tension de son rail peut être normal.
+- **Le rail tient sa tension nominale, l'alimentation ne passe pas en limitation, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu, puis passer à l'étape 6. Un courant nettement plus fort que ce que les circuits du rail consomment reste une fuite possible (fiche [92](../92_court_circuit/README.md), « Rail qui fuit »).
+- **L'alimentation reste en limitation au plafond, même si rien ne chauffe** : c'est un défaut. Ne pas alimenter la carte normalement ; suivre les millivolts le long du rail (fiche [92](../92_court_circuit/README.md), « Suivre les millivolts »).
 
 Le plafond des paliers est le courant que le rail fournit en service. Sans schéma : le courant maximal du régulateur qui produit ce rail, lu dans sa fiche technique d'après la référence relevée à l'étape 3, et jamais plus que le courant nominal de l'adaptateur d'origine (derrière un convertisseur abaisseur, le rail peut en fournir davantage : une limitation à ce plafond y reste un doute). Référence illisible ou fiche introuvable : s'arrêter à 100 mA et traiter une limitation à ce courant comme un doute, pas comme un verdict (« Quand s'arrêter »).
 
-Le détail de cette mesure et ses limites sont en fiche [20](../20_condensateur_ceramique/README.md), « Hors tension : le rail entier se mesure d'un coup ».
+Le détail de cette mesure et ses limites sont en fiche [91](../91_rails_alimentation/README.md), « Hors tension : la résistance de chaque rail à la masse ».
 
 ## Étape 6 — Première mise sous tension, courant limité
 
@@ -89,8 +89,8 @@ Jamais sur l'adaptateur d'origine tant que la panne n'est pas comprise : aliment
 
 Regarder le courant pendant les premières secondes, une main prête à couper :
 
-- **limitation immédiate, tension proche de 0 V** : court-circuit, couper et passer à la fiche 92 ;
-- **limitation, tension partielle, rien ne chauffe** : la limite est peut-être trop basse pour le démarrage ; la remonter par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine (fiche [00](../00_securite/README.md)). Toujours en limitation à ce courant : couper, recherche de court-circuit (fiches [20](../20_condensateur_ceramique/README.md) et 92) ;
+- **limitation immédiate, tension proche de 0 V** : court-circuit, couper et passer à la fiche [92](../92_court_circuit/README.md) ;
+- **limitation, tension partielle, rien ne chauffe** : la limite est peut-être trop basse pour le démarrage ; la remonter par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine (fiche [00](../00_securite/README.md)). Toujours en limitation à ce courant : couper, recherche de court-circuit (fiche [92](../92_court_circuit/README.md)) ;
 - **courant anormalement faible ou nul** : vérifier d'abord que ce n'est pas normal (appareil en veille tant qu'on n'a pas appuyé sur son bouton, appareil à batterie qui ne démarre pas sans elle). Sinon rien ne démarre : la panne est sur le chemin de l'alimentation (fusible, interrupteur, régulateur, signal de mise en marche) ;
 - **courant plausible et stable** : la carte s'alimente ; laisser la limite juste au-dessus du courant lu et passer aux rails.
 
@@ -108,7 +108,7 @@ Les rails passent **avant** les signaux : aucun signal n'est juste sur une alime
 | Trop bas | alimentation de laboratoire en limitation (voyant CC : limite trop basse), surcharge en aval, régulateur en limitation, chute dans un contact résistant (fiche [02](../02_pieges_en_circuit/README.md), « Mesurer la chute de tension sous tension ») |
 | Correct au voltmètre, appareil instable | ondulation : condensateurs du rail (fiche [22](../22_condensateur_electrolytique/README.md)), à voir à l'oscilloscope (page [i2](../i2_oscilloscope/README.md) ; lire « Pince de masse et terre » avant de brancher la pince) |
 
-La méthode complète, mesure de courant comprise, est en fiche 91.
+La méthode complète, mesure de courant comprise, est en fiche [91](../91_rails_alimentation/README.md).
 
 ## Étape 8 — Réduire la zone : diviser pour régner
 
@@ -162,14 +162,14 @@ flowchart TD
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
   D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
-  F -- douteux, sans carte saine --> Y[Injection à courant limité, fiche 20]
+  F -- douteux, sans carte saine --> Y[Injection à courant limité, fiche 92]
   Y -- un composant chauffe anormalement --> M
   Y -- le rail tient sa tension sans limitation, rien ne chauffe : noter le courant --> H
-  Y -- limitation, rien ne chauffe --> Z[Relever la limite par paliers, jusqu'au courant de service du rail, fiche 20]
+  Y -- limitation, rien ne chauffe --> Z[Relever la limite par paliers, jusqu'au courant de service du rail, fiche 92]
   Z --> Y
   Y -- limitation à 100 mA, plafond inconnu --> S
   Y -- toujours en limitation au courant de service du rail --> G
-  F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
+  F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiche 92]
   F -- non --> H[Mise sous tension à courant limité, fiche 00]
   H --> I{L'alimentation passe en limitation, ou un composant chauffe ?}
   I -- tension près de 0 V, ou un composant chauffe --> G
@@ -206,7 +206,7 @@ flowchart TD
 3. Adaptateur, câble, piles, fusible, réglages.
 4. Photos des deux faces et des connecteurs ; schéma ; repérer la masse et les rails.
 5. Regarder et sentir, carte déchargée.
-6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms sans carte saine ni schéma : injection limitée à la tension du rail (fiche 20) avant la mise sous tension.
+6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms sans carte saine ni schéma : injection limitée à la tension du rail (fiche 92) avant la mise sous tension.
 7. Alimentation de laboratoire, polarité vérifiée, limite de courant basse, œil sur le courant.
 8. Rails au voltmètre, de l'entrée vers les régulateurs, avant tout signal. Rail trop haut : couper.
 9. Couper la chaîne par le milieu ; comparer avec une carte saine.

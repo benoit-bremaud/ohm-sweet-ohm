@@ -124,8 +124,8 @@ L'ordre dans lequel les employer est donné par la fiche [03](03_methode/README.
 | Fiche | Contenu | Issue |
 | --- | --- | --- |
 | 90 Inspection visuelle | Soudures, connecteurs, interrupteurs, corrosion, pistes | #93 |
-| 91 Contrôle des rails d'alimentation | Résistance des rails hors tension, première mise sous tension, tensions, mesure de courant | #93 |
-| 92 Recherche de court-circuit et injection de courant | Localisation par la chute de tension et par l'échauffement | #93 |
+| [91 Contrôle des rails d'alimentation](91_rails_alimentation/README.md) | Résistance des rails hors tension, première mise sous tension, tensions, ondulation, mesure de courant | #93 |
+| [92 Recherche de court-circuit et injection de courant](92_court_circuit/README.md) | Division du rail, injection à courant limité, point chaud, suivi des millivolts | #93 |
 | 93 Traçage de signal et comparaison avec une carte saine | Suivre un signal étage par étage, comparer point par point | #93 |
 
 ## Index des techniques
@@ -144,7 +144,9 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure ESR | i5 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
-| Injection de courant | 92 | [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
+| Résistance d'un rail à la masse, hors tension | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [22](22_condensateur_electrolytique/README.md) |
+| Mesure de courant | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md) |
+| Injection de courant | [92](92_court_circuit/README.md) | [03](03_methode/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md) |
 
 ## Licence

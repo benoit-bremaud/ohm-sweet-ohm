@@ -71,7 +71,7 @@ Pour remettre une carte sous tension pendant un dépannage, une alimentation de 
 
 **Lire** :
 
-- Voyant **CC** allumé, tension proche de 0 V : court-circuit probable. Couper, et chercher (fiche 92) avant d'augmenter la limite.
+- Voyant **CC** allumé, tension proche de 0 V : court-circuit probable. Couper, et chercher (fiche [92](../92_court_circuit/README.md)) avant d'augmenter la limite.
 - Voyant **CC** allumé, tension partielle, rien ne chauffe : la limite est trop basse pour cette carte (un régulateur à découpage sous-alimenté tire même davantage et reste bloqué ainsi). Remonter la limite par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine.
 - Courant stable sous la limite, voyant CC éteint : la carte fonctionne ; laisser la limite juste au-dessus du courant mesuré.
 - Un composant qui chauffe pendant ce temps (section Chaleur) signale où passe le courant.

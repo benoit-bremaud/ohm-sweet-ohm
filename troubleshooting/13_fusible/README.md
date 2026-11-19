@@ -123,8 +123,8 @@ Le contrôle au bipeur reste valable fusible en place : un fusible bon de 200 mA
 
 | Lecture entre l'aval du fusible et la masse | Ce qu'elle dit |
 | --- | --- |
-| Proche de 0 Ω, stable | court-circuit franc sur le rail : le chercher (fiche 92) avant toute remise sous tension |
-| Quelques ohms à quelques dizaines d'ohms | suspect sur un rail peu chargé ; comparer avec une carte saine ou avec la consommation attendue |
+| Proche de 0 Ω, stable | court-circuit franc sur le rail : le chercher (fiche [92](../92_court_circuit/README.md)) avant toute remise sous tension |
+| Quelques ohms à quelques centaines d'ohms | douteux : comparer avec une carte saine ou avec la consommation attendue (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») |
 | Lecture qui monte puis se stabilise à une valeur élevée | pas de court-circuit franc : défaut intermittent, surcharge, ou fusible mort de fatigue |
 
 Passer aussi le rail au mode diode dans les deux sens : une diode de protection ou un transistor en court-circuit lit 0 V dans les deux sens (fiche [01](../01_multimetre/README.md)).
@@ -175,7 +175,7 @@ Pour séparer le fusible de son porte-fusible : mesurer la chute entre la capsul
 
 - **Mesurer le courant réel** : ampèremètre en série à la place du fusible, sur alimentation limitée, pour comparer la consommation au courant assigné. En service continu, un fusible est choisi pour ne conduire qu'environ les trois quarts de son courant assigné à 25 °C ; un courant mesuré au-dessus explique un fusible qui fatigue.
 - **Estimer le courant sans ouvrir le circuit** : chute de tension aux bornes du fusible divisée par sa résistance à froid (mesurée ou lue dans la fiche technique). Le résultat est un **majorant** : près du courant assigné, la résistance du fil chaud vaut deux à plusieurs fois sa résistance à froid. L'ordre de grandeur suffit pour repérer une surcharge franche.
-- **Caméra thermique ou doigt prudent** sur le rail alimenté à courant limité : le composant en court-circuit chauffe (page i8 et fiche 92).
+- **Caméra thermique ou doigt prudent** sur le rail alimenté à courant limité : le composant en court-circuit chauffe (page i8 et fiche [92](../92_court_circuit/README.md)).
 - **Oscilloscope sur une résistance de mesure en série** : visualiser l'appel de courant à la mise sous tension, pour départager un fusible mal choisi d'un défaut réel. Résistance placée côté 0 V, pince sur l'extrémité reliée au − de l'alimentation et pointe sur l'autre, après le contrôle au voltmètre de la page i2 ; côté +, sonde différentielle : la pince de masse de l'oscilloscope est à la terre (page [i2](../i2_oscilloscope/README.md)).
 - **Lire la courbe temps-courant** de la fiche technique : un fusible ne fond pas à son courant assigné. Selon la norme, il tient ce courant indéfiniment et ne fond en moins d'une heure qu'à partir d'une surcharge de plusieurs dizaines de pour cent ; une petite surcharge peut durer longtemps.
 

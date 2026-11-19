@@ -128,13 +128,14 @@ Le capacimètre en circuit additionne tous les condensateurs du rail et ne rense
 
 Le court-circuit dissipe de la chaleur là où il se trouve, et seulement là. On lui fournit un courant **limité** et on cherche le point chaud.
 
-1. Alimentation de laboratoire réglée sur la **tension nominale du rail, jamais au-dessus** (les circuits intégrés du rail la reçoivent aussi), limite de courant à 100 mA. Sortie coupée.
-2. Brancher le + sur le rail, le − sur la masse de la carte, puis activer la sortie : l'alimentation passe en limitation (voyant CC) et la tension s'effondre.
-3. Chercher le point chaud : caméra thermique, ou une goutte d'alcool isopropylique sur chaque suspect (elle s'évapore d'abord sur le coupable), ou le dos du doigt approché brièvement.
-4. Rien ne chauffe : relever la limite par paliers (200 mA, 500 mA, 1 A) en restant sous ce que le rail fournit en service, et recommencer. S'arrêter au premier palier où un composant chauffe.
-5. Couper la sortie, dessouder le composant désigné, puis refaire la mesure au bipeur : le court-circuit doit avoir disparu. S'il est toujours là, un second composant est en cause.
+C'est l'**injection de courant**, décrite pas à pas en fiche [92](../92_court_circuit/README.md) : où brancher, tension de départ, paliers de courant et leur plafond, recherche du point chaud, suivi des millivolts, précautions sur la sortie d'un régulateur. L'essentiel :
 
-La méthode complète (injection sous tension réduite, suivi des millivolts le long du rail) est dans la fiche 92. Si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur.
+- alimentation de laboratoire limitée en courant, tension **jamais au-dessus** de la tension nominale du rail (les circuits intégrés du rail la reçoivent aussi), limite à 100 mA ;
+- point chaud cherché à la caméra thermique, à la goutte d'alcool isopropylique (elle s'évapore d'abord sur le coupable) ou au dos du doigt approché brièvement ;
+- rien ne chauffe : limite relevée par paliers, en restant sous ce que le rail fournit en service ;
+- composant désigné : couper la sortie, le dessouder, refaire la mesure au bipeur. Court-circuit toujours là : un second composant est en cause.
+
+Si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur.
 
 **Rail qui porte des condensateurs tantale** (fiche [23](../23_condensateur_tantale/README.md)) : un tantale en court-circuit peut s'enflammer. Ne relever la limite que par paliers, lunettes de protection portées, sans se pencher au-dessus de la carte, de préférence avec une caméra thermique, et couper au premier échauffement.
 
@@ -155,9 +156,9 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ## Niveau 4 — Méthodes avancées
 
 - **Essai d'isolement sous tension de service**, condensateur dessoudé : le multimètre teste l'isolement sous moins d'un volt, alors qu'une fissure fuit surtout sous la tension du rail. Mettre en série l'alimentation de laboratoire (tension du rail, **jamais plus que la tension de service du condensateur ni que 50 V**, limite 10 mA), une résistance de 1 kΩ et le condensateur ; mesurer en V continu aux bornes de la résistance. Lire après une minute : un céramique sain donne 0,0 mV, ou presque pour une forte valeur ; **1 mV correspond à 1 µA de fuite**. Dans le doute, comparer avec un condensateur neuf identique : une lecture nettement plus élevée que la sienne, ou qui augmente, condamne le condensateur. Le décharger ensuite dans la résistance.
-- **Millivolts le long du rail** : avec le courant injecté du niveau 3, la chute de tension dans les pistes est la plus forte en direction du court-circuit. Un multimètre qui résout 0,01 mV suffit (fiche 92).
+- **Millivolts le long du rail** : avec le courant injecté du niveau 3, la chute de tension dans les pistes est la plus forte en direction du court-circuit. Un multimètre qui résout 0,01 mV suffit (fiche [92](../92_court_circuit/README.md)).
 - **Pont LCR** : mesure la capacité à une fréquence et une tension définies, ainsi que les pertes ; certains appliquent une tension continue et montrent la capacité réelle d'une classe II en service (page i5).
-- **Oscilloscope** : l'ondulation et les parasites sur un rail augmentent quand un condensateur de découplage est ouvert ; comparer avec une carte saine (page [i2](../i2_oscilloscope/README.md) et fiche 93).
+- **Oscilloscope** : l'ondulation et les parasites sur un rail augmentent quand un condensateur de découplage est ouvert ; comparer avec une carte saine (page [i2](../i2_oscilloscope/README.md), fiche [91](../91_rails_alimentation/README.md), « L'ondulation », et fiche 93).
 - **Caméra thermique** : désigne le condensateur en court-circuit en quelques secondes, à courant bien plus faible que le doigt ou l'alcool.
 
 ## Arbre de décision
