@@ -28,16 +28,16 @@ Comment lire la fiche technique d'un multimètre :
 | Nombre de points | La plus grande lecture affichable plus un : 6000 points affichent jusqu'à 5999, donc 5,999 V sur le calibre 6 V | 4000 à 6000 points ; 20 000 et plus pour l'établi |
 | Précision | ± (% de la lecture + chiffres) : ± (0,5 % + 2) sur 5,000 V donne ± 0,027 V | 0,05 à 1 % en tension continue selon la gamme ; nettement moins bon en alternatif, en capacité et en courant |
 | Impédance d'entrée | La résistance que le voltmètre met en parallèle sur ce qu'il mesure | 10 MΩ typiques en tension continue ; 1 MΩ sur certains premiers prix, qui fausse les mesures sur un diviseur de fortes valeurs |
-| TRMS (valeur efficace vraie) | Calcule la vraie valeur efficace d'un signal alternatif de n'importe quelle forme | Sans TRMS, l'appareil n'est juste que pour une sinusoïde pure ; dans les deux cas, la bande passante reste limitée (souvent quelques centaines de Hz à quelques kHz) |
+| TRMS (valeur efficace vraie) | Calcule la valeur efficace d'un signal alternatif déformé, pas seulement d'une sinusoïde, dans trois limites données par la fiche technique : la bande passante, le **facteur de crête** (crête / efficace, souvent 3 à pleine échelle) et le couplage (le mode V~ de la plupart des appareils ignore la composante continue ; peu d'appareils ont un mode AC+DC) | Sans TRMS, l'appareil n'est juste que pour une sinusoïde peu déformée ; un signal en impulsions brèves (facteur de crête élevé), un signal au-delà de la bande passante (de quelques centaines de Hz sur un premier prix à 20 kHz ou plus sur un appareil haut de gamme) ou une composante continue faussent la lecture même en TRMS : vérifier ces limites dans la fiche de l'appareil |
 | Catégorie de mesure | Où l'appareil peut être branché sans danger, et la tension correspondante : CAT II 600 V, CAT III 1000 V… | Voir ci-dessous |
 | Fusibles | Calibre et **pouvoir de coupure** de chaque entrée courant | Fusibles céramique à haut pouvoir de coupure (HPC, 10 kA ou plus) sur un bon appareil |
 
-**Catégories de mesure** (CEI 61010-2-030, appliquée aux multimètres par la CEI 61010-2-033). La catégorie dit quelle surtension transitoire l'appareil encaisse sans exploser, selon l'endroit de l'installation :
+**Catégories de mesure** (CEI 61010-2-030, appliquée aux multimètres portatifs par la CEI 61010-2-033, édition 2023). La catégorie dit quelle surtension transitoire l'appareil encaisse sans exploser, selon l'endroit de l'installation :
 
-- **CAT II** : appareils branchés sur une prise ;
-- **CAT III** : installation fixe du bâtiment (tableau, câblage, prises elles-mêmes) ;
+- **CAT II** : du côté appareil d'une prise de courant, de la fiche aux circuits de l'appareil branché ;
+- **CAT III** : installation fixe du bâtiment, du tableau (disjoncteurs) aux bornes derrière les prises, câblage et boîtes de dérivation compris ;
 - **CAT IV** : origine de l'installation (compteur, branchement) ;
-- circuits non reliés au secteur (cartes basse tension de ces fiches) : pas de catégorie requise, l'ancienne mention CAT I.
+- circuits non reliés au secteur (cartes basse tension de ces fiches) : pas de catégorie requise (l'ancienne mention CAT I, parfois marquée « O » ou « non classé »).
 
 La catégorie va avec une tension : CAT III 600 V est plus sévère que CAT II 600 V. L'ensemble ne vaut que la plus faible des deux catégories, celle de l'appareil et celle des cordons. Une catégorie seulement imprimée sur le boîtier ne prouve rien : chercher la marque d'un laboratoire indépendant (UL, CSA, TÜV, VDE…). Les essais de démontage publiés montrent des appareils marqués CAT III sans fusible sur la douille 10 A ni protection de l'entrée.
 
@@ -48,7 +48,7 @@ La catégorie va avec une tension : CAT III 600 V est plus sévère que CAT II 6
 | Calibre manuel | Simple, réponse rapide, bon marché | Il faut choisir le calibre ; « 1 » ou OL quand il est trop petit |
 | Calibre automatique | Rien à choisir, moins d'erreurs de lecture | Plus lent à se stabiliser ; la touche RANGE reste utile en circuit (fiche [02](../02_pieges_en_circuit/README.md)) |
 | De poche | Portable, sur pile, assez précis pour le dépannage | De 2000 à 60 000 points selon la gamme ; pas de mesure 4 fils |
-| De paillasse | 20 000 points et plus, mesure 4 fils (fiche [10](../10_resistance/README.md)), alimenté sur secteur | Encombrant, cher, pas pour une mesure dans un appareil ouvert ailleurs qu'à l'établi |
+| De paillasse | 20 000 points et plus, mesure 4 fils sur la plupart (fiche [10](../10_resistance/README.md)), alimenté sur secteur | Encombrant, cher, pas pour une mesure dans un appareil ouvert ailleurs qu'à l'établi |
 
 Les appareils à aiguille gardent un intérêt pour suivre une valeur qui varie, mais leur ohmmètre a souvent la polarité inversée (fiche [01](../01_multimetre/README.md)) : ces fiches supposent un appareil numérique.
 
@@ -85,7 +85,7 @@ Une valeur basse prouve que le chemin est fermé, **pas qu'un fusible existe** :
 Certains manuels donnent une autre méthode (mode bipeur, ou valeur attendue précise) : le manuel prime. Un fusible fondu se remplace par le calibre, la tension et le **pouvoir de coupure** exacts du manuel, jamais par un fusible en verre ni par un fil : c'est lui qui empêche le court-circuit du « Piège du mode courant » de devenir un arc.
 
 - **Après chaque mesure de courant** : cordon rouge remis dans VΩ, sélecteur sur OFF.
-- **Contrôle de justesse** : comparer de temps en temps avec un second appareil ou une référence connue (pile neuve, résistance à 0,1 %) ; un écart qui grandit annonce une dérive ou un défaut.
+- **Contrôle de justesse** : mesurer de temps en temps une référence dont la valeur est connue et au moins dix fois plus précise que l'appareil : référence de tension caractérisée (module à circuit de référence, livré avec sa valeur mesurée), résistance à 0,1 %, ou comparaison avec un appareil étalonné. Une pile, même neuve, n'est pas une référence : sa tension dépend de sa chimie, de sa charge, de la température et du courant tiré. Deux appareils non étalonnés qui diffèrent montrent un défaut sans dire lequel a tort. Un écart qui grandit d'un contrôle à l'autre annonce une dérive ou un défaut.
 
 ## Sources
 
@@ -93,4 +93,12 @@ Certains manuels donnent une autre méthode (mode bipeur, ou valeur attendue pr�
 - Fluke 87V, fiche produit (précision, nombre de points, catégories CAT III 1000 V et CAT IV 600 V, fusibles des entrées courant) — <https://www.fluke.com/en-us/product/electrical-testing/digital-multimeters/fluke-87v>
 - HKJ (lygte-info.dk), *Multimeter and component testing* et ses tests d'appareils (mesures comparées, démontages, fusibles et protections d'entrée) — <https://lygte-info.dk/info/DMMComponentTesting%20UK.html>
 - EEVblog forum, *Multimeters with low ohms function* (tensions de test relevées sur divers appareils) — <https://www.eevblog.com/forum/testgear/multimeters-with-low-ohms-function/>
+- Fluke, *ABCs of multimeter safety* (définition des catégories CAT, marques de laboratoire, fusibles) — <https://www.mscdirect.com/knowledge-center/articles/abcs-multimeter-safety>
+- Hioki, *Measurement categories* (limite entre CAT II et CAT III à la prise de courant) — <https://manual.hioki.com/en/CM4001/manual/introduction/about_measurement_category.html>
+- Megger, *The Measurement Category (CAT) rating: why it matters* — <https://www.megger.com/en/safety/measurement-category>
+- CEI 61010-2-033:2023, fiche de la norme (multimètres portatifs) — <https://webstore.iec.ch/publication/60964>
+- Fluke, *Facts about true-rms measurement* (couplage AC seul ou AC+DC, facteur de crête) — <https://www.fluke.com/en-ie/learn/blog/digital-multimeters/facts-about-true-rms-measurement>
+- Keysight, didacticiel des multimètres 34465A, *True RMS AC Measurements* (erreurs au-delà de la bande passante, tables de déclassement selon le facteur de crête) — <https://people.ece.ubc.ca/~eng-services/files/eHUB/Bench1-General/34465A%20DMM/Help%20file/Content/__F_Tutorial/Tutorial%2004%20AC.htm>
+- Fluke 289, manuel, caractéristiques (précision donnée pour un facteur de crête de 3 à pleine échelle) — <https://www.manualslib.com/manual/451842/Fluke-289.html?page=77>
+- Nuts and Volts, *Can you trust your voltmeter?* et Silicon Chip, *MiniCal 5V Meter Calibration Standard* (contrôle d'un multimètre avec une référence de tension) — <https://nutsvolts.com/magazine/article/can-you-trust-your-voltmeter>, <https://www.siliconchip.com.au/Issue/SC/2003/December/MiniCal+5V+Meter+Calibration+Standard>
 - Fiche [01](../01_multimetre/README.md) : comportement de chaque mode, ordres de grandeur par classe d'appareil, exercice pour mesurer son propre multimètre.
