@@ -10,18 +10,18 @@ Un rail en court-circuit lit la **même** résistance partout : l'ohmmètre dit 
 
 ## Avant de chercher : est-ce bien un court-circuit ?
 
-La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
+La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Un rail **douteux** (quelques ohms à quelques centaines d'ohms) sans carte saine ni schéma se traite par la même injection, lue comme au point 5 de « Régler et monter par paliers ». Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
 
 - **Rail de cœur d'un processeur** (autour de 1 V, plusieurs ampères) : quelques ohms, parfois moins, sur une carte saine.
 - **Bobinage, lampe à filament, élément chauffant, moteur** branchés directement sur le rail : l'ohmmètre lit leur résistance en continu, parfois moins de 1 Ω.
 - **Cordons du multimètre** : pointes en court-circuit, ils lisent déjà 0,1 à 0,5 Ω. Faire ce zéro avant de juger une lecture de 0,8 Ω (fiche [01](../01_multimetre/README.md)).
 - **Mauvais nœud** : la pointe posée du côté de la masse d'une résistance de mesure de courant, ou sur une deuxième masse reliée à la première.
 
-Un court-circuit vu **à travers** un autre composant change de valeur selon le point de mesure. Exemple : le transistor du bas d'un régulateur à découpage, en court-circuit, relie à la masse le nœud placé entre lui et l'inductance ; mesuré depuis la sortie du régulateur, le rail lit la résistance de l'inductance (quelques dizaines de milliohms à quelques ohms), ce qui ressemble à un condensateur de sortie en court-circuit. Mesurer **des deux côtés** de chaque composant en série.
+Un court-circuit vu **à travers** un autre composant change de valeur selon le point de mesure. Exemple : le transistor du bas d'un régulateur à découpage, en court-circuit, relie à la masse le nœud placé entre lui et l'inductance ; mesuré depuis la sortie du régulateur, le rail lit la résistance de l'inductance (quelques dizaines de milliohms à quelques ohms), ce qui ressemble à un condensateur de sortie en court-circuit. Mesurer **des deux côtés** de chaque composant en série. Une inductance de quelques dizaines de milliohms ne se distingue pas à l'ohmmètre : la lever d'un côté (section « Diviser le rail ») et mesurer chaque côté séparément.
 
 ## Les courts-circuits qui ne sont pas un composant
 
-Un examen à la loupe, sous un bon éclairage, avant toute injection (fiche [03](../03_methode/README.md), étape 2). Chercher sur le trajet du rail :
+Un examen à la loupe, sous un bon éclairage, avant toute injection (fiche [03](../03_methode/README.md), étape 4). Chercher sur le trajet du rail :
 
 - un **pont de soudure** entre deux broches ou deux pastilles, surtout après une réparation ;
 - une **bille de soudure**, un copeau, un brin de fil, une vis ou une rondelle tombés sur la carte ;
@@ -40,7 +40,7 @@ Chaque division retire des suspects sans rien chauffer. Hors tension, entre deux
 2. **Ouvrir les éléments en série** prévus pour cela ou faciles à lever : cavalier, résistance de 0 Ω, perle de ferrite, inductance, fusible. Lever une seule extrémité suffit. Mesurer des deux côtés : le défaut est du côté qui lit encore le court-circuit.
 3. **Séparer le régulateur de ses charges**, si un élément en série le permet : le défaut est dans le régulateur et ses composants proches, ou dans ce qu'il alimente.
 
-Noter chaque élément ouvert, pour tout refermer ensuite. Couper une piste au scalpel est un dernier recours, à réparer ensuite par un fil soudé.
+Noter chaque élément ouvert, pour tout refermer ensuite. Ne pas remettre la carte sous tension par son entrée avec un élément en série ouvert sans avoir vérifié où le régulateur prend son retour de tension : privé de ce retour, il monte sa sortie jusqu'à sa tension d'entrée (fiche [91](../91_rails_alimentation/README.md), « Entrée correcte, sortie fausse sur un régulateur »). Couper une piste au scalpel est un dernier recours, à réparer ensuite par un fil soudé.
 
 Le tronçon qui garde le défaut porte encore plusieurs composants en parallèle. C'est là que l'injection commence.
 
@@ -55,11 +55,14 @@ Le principe : la puissance dissipée dans une résistance est *P = R × I²*. Le
 1. Sortie coupée : tension à **1 V** environ, limite de courant à **100 mA**. Le réglage de l'alimentation est en fiche [00](../00_securite/README.md), « L'alimentation de laboratoire limitée en courant ».
 2. Activer la sortie. Sur un court-circuit franc, l'alimentation passe en limitation (voyant CC) et la tension affichée tombe à quelques dizaines de millivolts.
 3. Chercher le point chaud (ci-dessous).
-4. Rien ne chauffe : relever la **limite de courant** par paliers (200 mA, 500 mA, 1 A), en cherchant de nouveau à chaque palier. S'arrêter au premier palier où un composant chauffe.
-5. L'alimentation ne passe pas en limitation à 1 V (voyant CV, courant sous la limite) : le défaut est résistif ou dépend de la tension. Monter la **tension** lentement, sans jamais dépasser la tension nominale du rail (section « Rail qui fuit »).
+4. Rien ne chauffe : relever la **limite de courant** par paliers (200 mA, 500 mA, 1 A), sans dépasser le plafond donné plus bas, en cherchant de nouveau à chaque palier. S'arrêter au premier palier où un composant chauffe. Au plafond, toujours en limitation et rien ne chauffe : suivre les millivolts.
+5. L'alimentation ne passe pas en limitation à 1 V (voyant CV, courant sous la limite) : pas de court-circuit franc à cette tension. Le défaut est résistif, dépend de la tension, ou n'existe pas. Monter la **tension** lentement, sans jamais dépasser la tension nominale du rail, en surveillant l'entrée du régulateur (section « Injecter sur la sortie d'un régulateur »). Trois issues, les mêmes qu'en fiche [03](../03_methode/README.md), étape 5 :
+   - **l'alimentation passe en limitation en chemin** : ne pas monter davantage ; chercher le point chaud, puis relever la limite par paliers comme au point 4 ;
+   - **un composant chauffe anormalement** : couper, c'est le suspect ;
+   - **la tension nominale est atteinte, voyant CV, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu. Nettement plus fort que ce que les circuits du rail consomment : section « Rail qui fuit ». Sinon : première mise sous tension (fiche [03](../03_methode/README.md), étape 6).
 6. Couper la sortie avant de toucher, de dessouder ou de déplacer les fils.
 
-**Le plafond des paliers** est celui de la fiche [03](../03_methode/README.md), étape 5 : le courant que le rail fournit en service, c'est-à-dire le courant maximal du régulateur qui le produit, lu dans sa fiche technique, et jamais plus que le courant nominal de l'adaptateur d'origine. Référence illisible ou fiche introuvable : s'arrêter à 100 mA. Les pistes d'un rail sont dimensionnées pour son courant de service, pas davantage.
+**Le plafond des paliers** est défini en fiche [03](../03_methode/README.md), étape 5, avec ses cas particuliers ; sans référence lisible du régulateur, s'arrêter à 100 mA. Les pistes d'un rail sont dimensionnées pour son courant de service, pas davantage.
 
 Ordres de grandeur de la puissance dissipée dans le défaut :
 
@@ -67,7 +70,7 @@ Ordres de grandeur de la puissance dissipée dans le défaut :
 | --- | --- | --- |
 | 0,05 Ω (pont de soudure, composant fondu) | 0,5 mW | 50 mW |
 | 0,5 Ω | 5 mW | 0,5 W |
-| 5 Ω | 50 mW | la tension nominale est atteinte avant |
+| 5 Ω | 50 mW | 5 W ; sur un rail de 5 V ou moins, la tension nominale est atteinte avant |
 
 Un petit condensateur céramique est nettement chaud à partir de quelques dizaines de milliwatts. Un défaut de quelques dizaines de milliohms ne chauffe presque pas, même à 1 A : c'est le cas où il faut suivre les millivolts.
 
@@ -75,9 +78,9 @@ Un petit condensateur céramique est nettement chaud à partir de quelques dizai
 
 - **Caméra thermique** : la carte entière d'un coup d'œil, sans contact. Limite : une surface métallique brillante (blindage, boîtier de condensateur, soudure) paraît plus froide qu'elle ne l'est.
 - **Alcool isopropylique** : sortie coupée, une goutte étalée en film mince sur la zone suspecte, puis sortie activée. Le film s'évapore **d'abord** sur le composant qui chauffe.
-- **Dos du doigt**, approché sans appuyer, en dernier, et seulement à faible courant : un composant en défaut peut dépasser 100 °C.
+- **Dos du doigt**, approché sans appuyer, en dernier, seulement à faible courant, et de préférence sortie coupée juste avant : un composant en défaut peut dépasser 100 °C.
 
-Si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur voisin. Un composant en série sur le trajet du courant (perle de ferrite, inductance, diode) peut chauffer sans être en défaut : il porte simplement le courant injecté.
+Sur un court-circuit franc injecté à 1 V, si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur voisin. À la tension nominale du rail, un circuit intégré seulement tiède peut être normal (fiche [03](../03_methode/README.md), étape 5). Un composant en série sur le trajet du courant (perle de ferrite, inductance, diode) peut chauffer sans être en défaut : il porte simplement le courant injecté.
 
 **Deux lectures qui ne sont pas un court-circuit** :
 
@@ -102,16 +105,16 @@ Pourquoi l'ohmmètre ne fait pas ce travail : ses cordons et le contact de ses p
 
 ## Injecter sur la sortie d'un régulateur
 
-Brancher l'alimentation de laboratoire sur un rail, c'est alimenter la **sortie** d'un régulateur dont l'entrée est à 0 V. Le courant peut alors **remonter** vers l'entrée : par la diode interne du transistor de puissance, sur un régulateur à faible chute ou à découpage ; par le transistor de puissance lui-même, monté à l'envers, sur un régulateur linéaire classique.
+Brancher l'alimentation de laboratoire sur un rail, c'est alimenter la **sortie** d'un régulateur dont l'entrée est à 0 V. Le courant peut alors **remonter** vers l'entrée par des chemins internes au régulateur (diode du transistor de puissance, jonctions parasites), que sa fiche technique décrit quand elle traite de la sortie plus haute que l'entrée.
 
-- **Rail en court-circuit franc** : le rail reste à quelques dizaines de millivolts, bien en dessous du seuil d'une diode. Rien ne remonte. L'injection est sans effet sur le régulateur.
+- **Rail en court-circuit franc** : le rail reste à quelques dizaines de millivolts, bien en dessous du seuil d'une diode. Rien ne remonte. Même si la consigne de 1 V est atteinte, il ne remonte presque rien : le risque commence quand la tension est montée vers la tension nominale.
 - **Rail douteux, qui monte à sa tension nominale** : le courant remonte, charge les condensateurs d'entrée et alimente à moitié tout ce qui est branché sur le rail d'entrée. Deux conséquences : un composant peut chauffer **sur un autre rail** que celui que l'on teste ; et un régulateur linéaire de type 78xx peut être détruit si sa sortie dépasse son entrée de plusieurs volts alors que l'entrée est maintenue basse. Sa fiche technique le signale et prévoit une diode de protection de la sortie vers l'entrée, que toutes les cartes n'ont pas.
 
 Ce qu'il faut faire quand le rail monte :
 
 1. Mesurer la tension à l'**entrée** du régulateur pendant l'injection. Proche de la tension injectée : le courant remonte.
 2. Garder la limite à 100 mA tant que le doute existe.
-3. Séparer le régulateur du rail si un élément en série le permet (section « Diviser le rail »), puis injecter du côté des charges.
+3. Séparer le régulateur du rail si un élément en série le permet (section « Diviser le rail »), puis injecter du côté des charges. Refermer avant toute remise sous tension par l'entrée.
 4. Sinon, alimenter la carte par son **entrée normale**, à courant limité, comme en fiche [91](../91_rails_alimentation/README.md) : le régulateur travaille dans son sens.
 
 ## Rail qui fuit
@@ -121,7 +124,7 @@ Un rail peut lire quelques ohms à quelques centaines d'ohms, ou consommer trop 
 - **Alimenter par l'entrée normale**, à courant limité, et chercher le point chaud, carte en marche puis en veille. Comparer avec une carte saine si possible : un régulateur ou un processeur tiède est normal.
 - **Mesurer le courant rail par rail** (fiche [91](../91_rails_alimentation/README.md), « Mesurer le courant ») pour désigner le rail qui consomme trop, puis le diviser.
 - **Injecter sur le rail isolé en montant la tension lentement** depuis 0 V, limite à 100 mA, et noter à quelle tension le courant apparaît. Un courant proportionnel à la tension dès les premiers dixièmes de volt est une fuite résistive. Un courant qui apparaît d'un coup au-dessus d'un seuil désigne une jonction : diode de protection, diode Zener ou circuit intégré.
-- **Diode de protection contre les surtensions** (TVS) ou Zener : elle conduit normalement au-dessus de sa tension de seuil, qui est supérieure à la tension nominale du rail. Si elle conduit en dessous, elle est abîmée. Une surtension l'a souvent tuée : chercher laquelle avant de la remplacer.
+- **Diode de protection contre les surtensions** (TVS) ou Zener : sa fiche technique donne deux tensions. Jusqu'à sa tension de service (V_WM), choisie au moins égale à la tension nominale du rail, elle ne laisse passer qu'un courant de fuite (I_R, de l'ordre du microampère pour la plupart). Elle conduit franchement à partir de sa tension de claquage (V_BR), plus haute. Un courant nettement supérieur à I_R à la tension du rail la condamne. Une Zener de moins de 5 V environ a un coude progressif et fuit déjà sous sa tension marquée : comparer à sa fiche technique. Une surtension l'a souvent tuée : chercher laquelle avant de la remplacer.
 
 Un circuit intégré sain consomme aussi quand son rail monte : sans carte saine pour comparer, seul un courant nettement plus fort que ce que la fiche technique annonce, ou un point franchement chaud, fait un verdict.
 
@@ -162,14 +165,19 @@ Sur un composant à deux bornes, lever **une seule** borne suffit pour le sortir
 
 ```mermaid
 flowchart TD
-  A[Rail lu à moins de 1 Ω dans les deux sens, fiche 91] --> B{Lecture normale pour ce rail : cœur de processeur, bobinage, lampe, moteur ?}
-  B -- oui --> B1[Pas un court-circuit : comparer avec une carte saine]
+  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux sans point de comparaison, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
+  B -- oui --> B1{Carte saine : même lecture ?}
+  B1 -- oui --> B2[Pas un court-circuit]
+  B1 -- non, nettement plus bas, ou pas de carte saine --> C
   B -- non --> C{Examen visuel : pont de soudure, débris, vis, zone brûlée ?}
   C -- oui --> C1[Corriger, puis mesurer de nouveau le rail]
   C -- non --> D[Diviser le rail : modules débranchés, éléments en série ouverts]
   D --> E[Injecter sur le tronçon en défaut : 1 V, limite à 100 mA]
   E --> F{L'alimentation passe en limitation ?}
-  F -- non, la tension atteint la consigne --> G[Monter la tension lentement, au plus à la tension nominale : section Rail qui fuit]
+  F -- non, la tension atteint la consigne --> G{Tension montée lentement, au plus à la tension nominale : limitation en chemin ?}
+  G -- oui --> H
+  G -- non, un composant chauffe --> I
+  G -- non, tension nominale atteinte, rien ne chauffe --> G1[Pas de court-circuit franc : noter le courant ; trop fort, section Rail qui fuit ; sinon mise sous tension, fiche 03 étape 6]
   F -- oui --> H{Un composant chauffe ?}
   H -- oui --> I[Couper, lever le composant, mesurer le rail]
   H -- non --> J{Plafond de courant du rail atteint ?}
@@ -185,15 +193,15 @@ flowchart TD
 
 ## Aide-mémoire d'établi
 
-1. Confirmer : moins de 1 Ω dans les deux sens, zéro des cordons fait, rail qui n'est ni un cœur de processeur ni un bobinage.
+1. Confirmer : moins de 1 Ω dans les deux sens, zéro des cordons fait. Cœur de processeur ou bobinage sur le rail : comparer avec une carte saine avant de conclure.
 2. Loupe d'abord : pont de soudure, débris, vis, zone brûlée.
 3. Diviser : modules débranchés, cavaliers, 0 Ω, ferrites et inductances levés d'un côté.
 4. Injection : alimentation de laboratoire seulement, + sur le rail, 1 V, limite à 100 mA.
-5. Paliers de courant : 200 mA, 500 mA, 1 A, jamais au-dessus du courant de service du rail ; inconnu : 100 mA.
+5. Paliers de courant : 200 mA, 500 mA, 1 A, jamais au-dessus du plafond de la fiche 03, étape 5 ; inconnu : 100 mA.
 6. Jamais plus que la tension nominale du rail. Tantales : lunettes, visage à l'écart.
 7. Point chaud : caméra thermique, goutte d'alcool sortie coupée, dos du doigt en dernier.
 8. Rien ne chauffe : millivolts aux bornes de chaque condensateur, le plus bas désigne le défaut.
-9. Le rail monte à sa tension : surveiller l'entrée du régulateur, le courant remonte.
+9. Le rail monte à sa tension : surveiller l'entrée du régulateur, le courant remonte. Tension nominale atteinte sans limitation ni point chaud : pas de court-circuit franc.
 10. Composant levé : rail mesuré de nouveau, cause cherchée, régulateur contrôlé.
 
 ## Sources

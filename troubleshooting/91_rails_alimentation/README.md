@@ -52,16 +52,16 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 
 - **Carte saine identique**, ou voie identique de la même carte : même rail, même calibre, même sens des pointes. Une lecture nettement plus basse sur la carte en panne désigne le rail.
 - **Schéma** : il montre ce qui est branché entre le rail et la masse. Une résistance de faible valeur, un bobinage (relais, moteur, inductance), une lampe à filament ou un élément chauffant branchés directement sur le rail font lire leur propre résistance, parfois quelques ohms : c'est normal.
-- **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé.
+- **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé : ce repère ne blanchit jamais un rail. Sans carte saine ni schéma, passer par l'injection à courant limité (fiche [03](../03_methode/README.md), étape 5).
 - Le rail de cœur d'un processeur (autour de 1 V, plusieurs ampères) lit normalement quelques ohms, parfois moins : seule la comparaison avec une carte saine le juge.
 
-**Mode diode**, en complément : pointe rouge sur le rail, noire à la masse, puis l'inverse. Un rail sain lit OL (ou une valeur qui monte) dans le sens normal et une jonction, 0,3 à 0,7 V, dans le sens inverse : ce sont les diodes de protection des circuits intégrés. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
+**Mode diode**, en complément : pointe rouge sur le rail, noire à la masse, puis l'inverse. Un rail positif sain lit OL (ou une valeur qui monte) dans le premier sens et une jonction, 0,3 à 0,7 V, dans le second : ce sont les diodes de protection des circuits intégrés. Sur un rail négatif, les deux lectures s'échangent. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
 
 Ce que cette mesure ne dit pas : **lequel** des composants du rail est en cause. C'est l'objet de la fiche [92](../92_court_circuit/README.md).
 
 ## Première mise sous tension
 
-Seulement si aucun rail ne lit un court-circuit franc. Le réglage de l'alimentation de laboratoire (tension à vide, limite de courant, voyants CV et CC) est en fiche [00](../00_securite/README.md).
+Seulement si aucun rail ne lit un court-circuit franc, et si chaque lecture douteuse a été tranchée. Le réglage de l'alimentation de laboratoire (tension à vide, limite de courant, voyants CV et CC) est en fiche [00](../00_securite/README.md).
 
 1. Tension réglée à la valeur nominale de l'entrée, jamais au-dessus. Limite de courant basse : 50 à 100 mA pour une petite carte logique, quelques centaines de mA pour une carte avec moteur, relais ou rétroéclairage.
 2. Sortie coupée, brancher le moins en premier, vérifier la **polarité**, puis activer la sortie.
@@ -98,10 +98,13 @@ Voltmètre continu, pointe noire fixée à la masse par un grippe-fil, une seule
 
 **Entrée correcte, sortie fausse sur un régulateur** :
 
-1. Vérifier la **marge d'entrée** d'un régulateur linéaire : son entrée doit dépasser sa sortie de sa tension de déchet, environ 2 V pour un 78xx, environ 1,2 V pour un 1117, moins de 0,5 V pour un régulateur à faible chute (LDO). En dessous, la sortie suit l'entrée et lit trop bas sans que le régulateur soit en panne.
+1. Vérifier la **marge d'entrée** d'un régulateur linéaire : son entrée doit dépasser sa sortie de sa tension de déchet, environ 2 V pour un 78xx, moins de 0,5 V pour la plupart des régulateurs à faible chute (LDO) récents. Le 1117, vendu comme LDO, demande pourtant environ 1,2 V : lire la fiche technique. En dessous, la sortie suit l'entrée et lit trop bas sans que le régulateur soit en panne.
 2. Vérifier la broche de mise en marche, si le régulateur en a une : son niveau actif est dans la fiche technique.
 3. Couper, puis mesurer la résistance de la sortie à la masse (section « Hors tension »).
-4. Si un élément en série sépare le régulateur de ses charges (cavalier, résistance de 0 Ω, perle de ferrite, connecteur d'une carte fille), l'ouvrir hors tension et réalimenter : la sortie revient, la charge est en cause ; elle reste fausse, le régulateur ou ses composants proches sont en cause. Ne pas ouvrir l'inductance ni la boucle de mesure d'un régulateur à découpage sous tension : sans retour de sa sortie, il peut monter à sa tension d'entrée.
+4. Si un élément en série sépare le régulateur de ses charges (cavalier, résistance de 0 Ω, perle de ferrite, connecteur d'une carte fille), l'ouvrir hors tension et réalimenter : la sortie revient, la charge est en cause ; elle reste fausse, le régulateur ou ses composants proches sont en cause. Trois précautions :
+   - **Avant de réalimenter**, vérifier sur le schéma, ou en suivant la piste, de quel côté de l'élément ouvert le régulateur prend son **retour de tension** (broche FB ou *sense*, pont diviseur). Du côté du régulateur (c'est toujours le cas d'un régulateur fixe à trois broches, qui le prend sur sa broche de sortie) : l'essai est possible. Du côté des charges : le régulateur ne voit plus sa sortie et la monte jusqu'à sa tension d'entrée, ce que les condensateurs de sortie ne supportent pas toujours. Dans ce cas, ou dans le doute, ne pas faire cet essai.
+   - **À la mise sous tension** : voltmètre déjà posé sur la sortie du régulateur, limite de courant basse, couper dès que la sortie dépasse sa valeur nominale.
+   - **L'inductance d'un régulateur à découpage** ne sert pas à cet essai : elle fait partie du régulateur, qui n'a plus de sortie sans elle. Elle ne s'ouvre jamais sous tension : le courant interrompu crée une pointe de tension sur le nœud de commutation.
 
 **Ordre de démarrage.** Sur une carte à plusieurs régulateurs, l'un peut attendre le signal de l'autre pour démarrer. Un rail absent se cherche donc d'abord en amont : le premier rail absent dans l'ordre de démarrage est le suspect, les suivants ne font qu'obéir. En veille, seul le rail de veille est présent : c'est normal.
 
@@ -132,7 +135,7 @@ Une pince ampèremétrique à effet Hall mesure aussi un courant continu sans ou
 
 **Chute de tension sur une résistance connue.** Voltmètre en mV continu aux bornes de la résistance, carte alimentée : *I = V / R*. Conviennent : une résistance de mesure de courant (shunt, souvent 0,01 à 1 Ω, valeur marquée), une résistance série de protection, un fusible dont on connaît la résistance à froid (fiche [13](../13_fusible/README.md) ; ordre de grandeur seulement, sa résistance augmente en chauffant). Exemple : 25,0 mV aux bornes d'un shunt de 0,1 Ω : 250 mA.
 
-**Résistance de mesure ajoutée.** Hors tension, ouvrir le circuit (cavalier, fusible retiré, fil d'alimentation) et insérer une résistance de 1 Ω à 1 %, de puissance suffisante (*P = R × I²* : 1 W à 1 A). Lire la tension à ses bornes : **1 mV vaut 1 mA**. Pour des courants plus forts, 0,1 Ω : 1 mV vaut 10 mA. La chute est connue et choisie, ce qui n'est pas le cas dans un ampèremètre.
+**Résistance de mesure ajoutée.** Hors tension, ouvrir le circuit (cavalier, fusible retiré, fil d'alimentation) et insérer une résistance à 1 % et lire la tension à ses bornes. Avec 1 Ω, **1 mV vaut 1 mA** ; avec 0,1 Ω, 1 mV vaut 10 mA. Choisir la valeur pour que la chute *R × I* au courant le plus fort attendu reste sous 2 à 5 % de la tension du rail : sur un rail de 5 V, 1 Ω jusqu'à 100 mA environ, 0,1 Ω jusqu'à 1 A environ. Puissance : au moins le double de *R × I²* (0,1 Ω à 1 A dissipe 0,1 W : prendre 0,25 W ou plus). La chute est connue et choisie, ce qui n'est pas le cas dans un ampèremètre.
 
 **Multimètre en ampèremètre.**
 
@@ -170,9 +173,11 @@ Ses limites :
 flowchart TD
   A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse}
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
-  B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine, schéma ou repère de la loi d'Ohm : lecture normale ?}
+  B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine ou schéma : lecture normale ?}
   C -- oui --> D
-  C -- non, ou rien pour comparer --> S2[Injection à courant limité, fiche 92]
+  C -- non, rien pour comparer, ou lecture sous le repère de la loi d'Ohm --> S2{Injection à courant limité, fiche 92 : limitation, ou un composant chauffe ?}
+  S2 -- oui --> S
+  S2 -- non, tension nominale atteinte --> D
   B -- kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
   D --> E{L'alimentation passe en limitation, ou un composant chauffe ?}
   E -- tension près de 0 V, ou un composant chauffe --> S
@@ -197,20 +202,20 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92.
-3. Quelques ohms : comparer (carte saine, schéma, tension du rail divisée par son courant maximal).
+3. Quelques ohms : comparer (carte saine, schéma). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.
-7. Régulateur : marge d'entrée, mise en marche, sortie en court-circuit, charge séparée.
+7. Régulateur : marge d'entrée, mise en marche, sortie en court-circuit, charge séparée (retour de tension vérifié d'abord).
 8. Tension juste mais appareil instable : ondulation à l'oscilloscope, chute en charge en MIN/MAX.
-9. Courant : afficheur de l'alimentation, ou millivolts sur une résistance connue (1 Ω : 1 mV = 1 mA).
+9. Courant : afficheur de l'alimentation, ou millivolts sur une résistance connue (1 Ω : 1 mV = 1 mA ; chute sous 5 % du rail).
 10. Ampèremètre : en série, calibre fort d'abord, cordon rouge remis en V/Ω aussitôt.
 
 ## Sources
 
 - Texas Instruments, fiche technique *LM340, LM340A and LM7805 Family Wide VIN 1.5-A Fixed Voltage Regulators* (tension de déchet d'environ 2 V, tolérance de sortie) ; à chercher sous ce titre sur ti.com.
 - Texas Instruments, fiche technique *LM1117 800-mA, Low-Dropout Linear Regulator* (tension de déchet d'environ 1,2 V à 800 mA) ; à chercher sous ce titre sur ti.com.
-- Analog Devices, note d'application AN-1144, *Measuring Output Ripple and Switching Transients in Switching Regulators* (mesure de l'ondulation : connexion de masse courte, limite de bande, ordres de grandeur) ; à chercher sous ce titre sur analog.com.
+- Analog Devices, note d'application AN-1144, *Measuring Output Ripple and Switching Transients in Switching Regulators* (mesure de l'ondulation : connexion de masse courte, limite de bande) ; à chercher sous ce titre sur analog.com.
 - Fluke, *ABCs of DMMs: Multimeter features and functions explained*, note d'application (mesure de courant en série, erreur du cordon laissé dans l'entrée courant, bande passante en alternatif) ; à chercher sous ce titre sur fluke.com.
 - Fluke, manuel d'utilisation des multimètres *80 Series V*, caractéristiques (chute de tension en mesure de courant : 1,8 mV par mA sur l'entrée mA, 100 µV par µA sur l'entrée µA, 0,03 V par A sur l'entrée 10 A) ; à chercher sous ce titre sur fluke.com.
 - EEVblog, projet *µCurrent* (chute de tension des multimètres en mesure de courant et son effet sur une carte basse tension) — <https://www.eevblog.com/projects/ucurrent/>

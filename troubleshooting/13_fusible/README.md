@@ -203,6 +203,8 @@ flowchart TD
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
   H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
   I --> H
+  H -- douteux, quelques ohms à quelques centaines d'ohms --> W[Trancher la lecture, fiche 91, puis reprendre ici]
+  W --> H
   H -- pas de court-circuit --> J{Composant d'origine conforme : calibre et rapidité, ou valeur et puissance ?}
   J -- non --> K[Monter le composant prévu par le constructeur]
   J -- oui --> L[Monter un fusible ou une résistance fusible identique]
