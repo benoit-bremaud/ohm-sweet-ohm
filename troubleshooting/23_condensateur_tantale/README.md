@@ -137,7 +137,7 @@ La recherche du point chaud est décrite dans la fiche [20](../20_condensateur_c
 
 - **Courant de fuite sous tension de service**, condensateur dessoudé : même montage que pour le céramique (fiche [20](../20_condensateur_ceramique/README.md), niveau 4), alimentation de laboratoire limitée à 10 mA, résistance de 1 kΩ en série, **+ de l'alimentation vers le + du condensateur**, sans dépasser la tension à laquelle le condensateur travaille sur la carte, ni 50 V. 1 mV aux bornes de la résistance correspond à 1 µA. Comparer à la fiche technique ou à un condensateur neuf identique ; une fuite qui augmente au lieu de diminuer : couper, à remplacer. Décharger ensuite dans la résistance.
 - **Caméra thermique** : désigne le tantale en fuite ou en court-circuit à très faible courant, bien avant qu'il ne brûle (page i8).
-- **Millivolts le long du rail** : avec un faible courant injecté, la chute de tension dans les pistes désigne la direction du court-circuit (fiche [92](../92_court_circuit/README.md)).
+- **Millivolts le long du rail** : avec le courant injecté, relevé par paliers, la chute de tension dans les pistes désigne la direction du court-circuit (fiche [92](../92_court_circuit/README.md)).
 - **Pont LCR ou ESR-mètre** : capacité et résistance série à comparer à la fiche technique (page i5). Un tantale en court-circuit lit une ESR très basse : l'ESR-mètre ne le distingue pas d'un bon condensateur (fiche [22](../22_condensateur_electrolytique/README.md)).
 
 ## Arbre de décision

@@ -14,7 +14,7 @@ Avant de mesurer, dresser la liste des rails : c'est elle qui dit quoi lire et o
 
 1. **L'entrée** : connecteur d'alimentation, tension et polarité marquées sur l'appareil ou l'adaptateur.
 2. **La protection** : fusible, diode série ou transistor de protection, interrupteur. Chacun coupe le rail en deux nœuds à mesurer séparément.
-3. **Chaque régulateur** : sa référence, lue sur le boîtier, donne sa fiche technique, donc sa tension de sortie, son courant maximal et ses broches. Un régulateur linéaire a trois broches utiles (entrée, sortie, masse) ; un régulateur à découpage se reconnaît à l'inductance posée à côté de lui.
+3. **Chaque régulateur** : sa référence, lue sur le boîtier, donne sa fiche technique, donc sa tension de sortie, son courant maximal et ses broches. Un régulateur linéaire a le plus souvent trois broches (entrée, sortie, masse ou broche de réglage ADJ), parfois une broche de mise en marche en plus ; un régulateur à découpage se reconnaît à l'inductance posée à côté de lui.
 4. **La masse** : le point où poser la pointe noire. Une carte peut en avoir plusieurs, isolées l'une de l'autre (fiche [03](../03_methode/README.md), étape 3).
 
 Où poser la pointe rouge : sur un point de test, sur la broche du régulateur, ou sur une borne du gros condensateur placé à son entrée ou à sa sortie. Ne pas piquer entre deux broches fines d'un circuit intégré alimenté (fiche [02](../02_pieges_en_circuit/README.md)).
@@ -39,6 +39,7 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 3. Mesurer chaque ligne du tableau, dans l'ordre où le courant circule. Un fusible ouvert ou une diode série cache un court-circuit placé derrière : mesurer **des deux côtés** de chaque protection (fiche [13](../13_fusible/README.md)).
 4. Attendre que la lecture se stabilise : les condensateurs du rail se chargent sous le courant de test, la lecture monte pendant quelques secondes.
 5. Sur une lecture basse, inverser les pointes : un vrai court-circuit lit la même valeur dans les deux sens, une jonction non. Après l'inversion, la lecture repart du début et peut être négative un instant, le temps que les condensateurs se rechargent dans l'autre sens.
+6. Mesurer aussi la résistance entre l'**entrée et la sortie** de chaque régulateur. Proche de 0 Ω dans les deux sens : son élément de puissance est en court-circuit, la sortie recevrait la tension d'entrée. Ne pas alimenter (fiche [92](../92_court_circuit/README.md), « Court-circuit entre deux rails »).
 
 | Lecture entre le rail et la masse | Verdict | Suite |
 | --- | --- | --- |
@@ -46,22 +47,22 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 | Quelques ohms à quelques centaines d'ohms, stable | **douteux** : court-circuit résistif, fuite, ou charge normale du rail | comparer (ci-dessous) ; sans point de comparaison, injection à courant limité, fiche [92](../92_court_circuit/README.md) |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) | mise sous tension à courant limité |
 | Lecture qui monte, puis valeur élevée ou OL | pas de court-circuit franc : les condensateurs se chargent | mise sous tension à courant limité |
-| Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle sur le rail | décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
+| Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle sur le rail | décharger de nouveau (fiche [00](../00_securite/README.md), « Décharger un condensateur ») |
 
 **Trancher une lecture douteuse**, du plus sûr au moins sûr :
 
 - **Carte saine identique**, ou voie identique de la même carte : même rail, même calibre, même sens des pointes. Une lecture nettement plus basse sur la carte en panne désigne le rail.
 - **Schéma** : il montre ce qui est branché entre le rail et la masse. Une résistance de faible valeur, un bobinage (relais, moteur, inductance), une lampe à filament ou un élément chauffant branchés directement sur le rail font lire leur propre résistance, parfois quelques ohms : c'est normal.
-- **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé : ce repère ne blanchit jamais un rail. Sans carte saine ni schéma, passer par l'injection à courant limité (fiche [03](../03_methode/README.md), étape 5).
+- **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé : ce repère ne blanchit jamais un rail. Sans carte saine, ni schéma qui explique la lecture (bobinage, lampe, résistance de faible valeur), passer par l'injection à courant limité (fiche [03](../03_methode/README.md), étape 5).
 - Le rail de cœur d'un processeur (autour de 1 V, plusieurs ampères) lit normalement quelques ohms, parfois moins : seule la comparaison avec une carte saine le juge.
 
-**Mode diode**, en complément : pointe rouge sur le rail, noire à la masse, puis l'inverse. Un rail positif sain lit OL (ou une valeur qui monte) dans le premier sens et une jonction, 0,3 à 0,7 V, dans le second : ce sont les diodes de protection des circuits intégrés. Sur un rail négatif, les deux lectures s'échangent. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
+**Mode diode**, en complément : pointe rouge sur le rail, noire à la masse, puis l'inverse. Un rail positif sain lit OL, une valeur qui monte, ou une valeur nettement plus haute que dans l'autre sens (rail de cœur sous 2 V) dans le premier sens et une jonction, 0,3 à 0,7 V, dans le second : ce sont les diodes de protection des circuits intégrés. Sur un rail négatif, les deux lectures s'échangent. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
 
 Ce que cette mesure ne dit pas : **lequel** des composants du rail est en cause. C'est l'objet de la fiche [92](../92_court_circuit/README.md).
 
 ## Première mise sous tension
 
-Seulement si aucun rail ne lit un court-circuit franc, et si chaque lecture douteuse a été tranchée. Le réglage de l'alimentation de laboratoire (tension à vide, limite de courant, voyants CV et CC) est en fiche [00](../00_securite/README.md).
+Seulement si aucun rail ne lit un court-circuit franc, si aucun régulateur ne lit un court-circuit entre son entrée et sa sortie, et si chaque lecture douteuse a été tranchée. Le réglage de l'alimentation de laboratoire (tension à vide, limite de courant, voyants CV, tension constante, et CC, courant constant) est en fiche [00](../00_securite/README.md).
 
 1. Tension réglée à la valeur nominale de l'entrée, jamais au-dessus. Limite de courant basse : 50 à 100 mA pour une petite carte logique, quelques centaines de mA pour une carte avec moteur, relais ou rétroéclairage.
 2. Sortie coupée, brancher le moins en premier, vérifier la **polarité**, puis activer la sortie.
@@ -108,7 +109,7 @@ Voltmètre continu, pointe noire fixée à la masse par un grippe-fil, une seule
 
 **Ordre de démarrage.** Sur une carte à plusieurs régulateurs, l'un peut attendre le signal de l'autre pour démarrer. Un rail absent se cherche donc d'abord en amont : le premier rail absent dans l'ordre de démarrage est le suspect, les suivants ne font qu'obéir. En veille, seul le rail de veille est présent : c'est normal.
 
-**Chute en charge.** Un rail peut être juste au repos et s'effondrer quand un moteur démarre, qu'un émetteur radio émet ou qu'un rétroéclairage s'allume. Mesurer **au plus près de la charge** pendant qu'elle travaille, avec le mode MIN/MAX du multimètre ; une chute brève de moins d'une fraction de seconde lui échappe et se voit à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)).
+**Chute en charge.** Un rail peut être juste au repos et s'effondrer quand un moteur démarre, qu'un émetteur radio émet ou qu'un rétroéclairage s'allume. Mesurer **au plus près de la charge** pendant qu'elle travaille, avec le mode MIN/MAX du multimètre ; une chute plus brève qu'environ 100 ms, temps de réponse habituel de ce mode, lui échappe et se voit à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)).
 
 ## L'ondulation
 
@@ -147,11 +148,11 @@ Une pince ampèremétrique à effet Hall mesure aussi un courant continu sans ou
 
 Ses limites :
 
-- **Jamais en parallèle** sur une source : en mode courant, le multimètre est un fil (fiche [01](../01_multimetre/README.md), « Piège du mode courant »). Jamais sur une batterie, que rien ne limite.
+- **Jamais en parallèle** sur une source : en mode courant, le multimètre est un fil (fiche [01](../01_multimetre/README.md), « Piège du mode courant »). Encore moins sur une batterie, que rien ne limite.
 - **Chute de tension dans l'appareil** : le shunt et le fusible font perdre de l'ordre de 1 à 2 mV par mA sur le calibre mA, soit 0,2 à 0,4 V à 200 mA, et environ 0,1 mV par µA sur le calibre µA. Une carte en 3,3 V peut redémarrer ou se figer à cause de la mesure. Remèdes : le calibre 10 A, dont le shunt est bien plus faible (au prix de la résolution), ou une résistance de mesure choisie.
 - **Calibre 10 A** : souvent limité en durée (par exemple 10 A pendant 30 s), et sans fusible sur beaucoup d'appareils premier prix ; lire le marquage près de la douille.
 - **Fusible grillé** : un ampèremètre qui lit zéro partout et une carte qui ne s'alimente plus à travers lui désignent le fusible de l'entrée courant (page [i1](../i1_multimetre/README.md)).
-- **Courant de veille** : le changement automatique de calibre coupe le courant un instant et peut faire redémarrer la carte ; fixer le calibre (touche RANGE). Un appareil qui consomme quelques microampères en veille tire bien plus au démarrage : le démarrer sur le calibre mA, ou avec un fil en parallèle sur le multimètre, que l'on retire une fois la veille atteinte.
+- **Courant de veille** : un changement automatique de calibre en cours de mesure modifie d'un coup la chute de tension dans l'appareil et peut faire redémarrer la carte ; fixer le calibre (touche RANGE). Un appareil qui consomme quelques microampères en veille tire bien plus au démarrage : le démarrer avec un fil en parallèle sur le multimètre, que l'on retire une fois la veille atteinte.
 
 **À quoi comparer le courant lu** :
 
@@ -173,11 +174,14 @@ Ses limites :
 flowchart TD
   A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse}
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
-  B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine ou schéma : lecture normale ?}
+  B -- lecture négative ou qui descend --> B0[Charge résiduelle : décharger de nouveau, fiche 00]
+  B0 --> B
+  B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
   C -- oui --> D
-  C -- non, rien pour comparer, ou lecture sous le repère de la loi d'Ohm --> S2{Injection à courant limité, fiche 92 : limitation, ou un composant chauffe ?}
-  S2 -- oui --> S
-  S2 -- non, tension nominale atteinte --> D
+  C -- non, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
+  S2 -- un composant chauffe, ou toujours en limitation au plafond --> S
+  S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
+  S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer --> D
   B -- kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
   D --> E{L'alimentation passe en limitation, ou un composant chauffe ?}
   E -- tension près de 0 V, ou un composant chauffe --> S
@@ -201,8 +205,8 @@ flowchart TD
 ## Aide-mémoire d'établi
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
-2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92.
-3. Quelques ohms : comparer (carte saine, schéma). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92.
+2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.

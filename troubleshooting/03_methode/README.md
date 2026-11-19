@@ -68,12 +68,12 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
 | Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [92](../92_court_circuit/README.md) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [91](../91_rails_alimentation/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la fiche [92](../92_court_circuit/README.md), lue comme indiqué sous ce tableau |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [91](../91_rails_alimentation/README.md)). Sans carte saine, ni schéma qui explique la lecture : le traiter comme un court-circuit possible, par l'injection à courant limité de la fiche [92](../92_court_circuit/README.md), lue comme indiqué sous ce tableau |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
-| Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
+| Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [00](../00_securite/README.md), « Décharger un condensateur ») |
 
-**Rail douteux, sans carte saine ni schéma** : l'injection de la fiche [92](../92_court_circuit/README.md) (limite à 100 mA, relevée par paliers ; tension montée lentement jusqu'à la tension nominale du rail, jamais au-dessus) se lit ainsi.
+**Rail douteux, sans carte saine ni schéma qui explique la lecture** : l'injection de la fiche [92](../92_court_circuit/README.md) (limite à 100 mA, relevée par paliers ; tension montée lentement jusqu'à la tension nominale du rail, jamais au-dessus) se lit ainsi.
 
 - **Un composant chauffe anormalement** (condensateur, résistance, diode, transistor, ou circuit intégré chaud au doigt) : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [92](../92_court_circuit/README.md)). Un circuit intégré seulement tiède à la tension de son rail peut être normal.
 - **Le rail tient sa tension nominale, l'alimentation ne passe pas en limitation, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu, puis passer à l'étape 6. Un courant nettement plus fort que ce que les circuits du rail consomment reste une fuite possible (fiche [92](../92_court_circuit/README.md), « Rail qui fuit »).

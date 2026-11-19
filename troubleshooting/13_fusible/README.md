@@ -124,7 +124,7 @@ Le contrôle au bipeur reste valable fusible en place : un fusible bon de 200 mA
 | Lecture entre l'aval du fusible et la masse | Ce qu'elle dit |
 | --- | --- |
 | Proche de 0 Ω, stable | court-circuit franc sur le rail : le chercher (fiche [92](../92_court_circuit/README.md)) avant toute remise sous tension |
-| Quelques ohms à quelques centaines d'ohms | douteux : comparer avec une carte saine ou avec la consommation attendue (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») |
+| Quelques ohms à quelques centaines d'ohms | douteux : comparer avec une carte saine ou le schéma ; sans l'un ni l'autre, injection à courant limité (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») |
 | Lecture qui monte puis se stabilise à une valeur élevée | pas de court-circuit franc : défaut intermittent, surcharge, ou fusible mort de fatigue |
 
 Passer aussi le rail au mode diode dans les deux sens : une diode de protection ou un transistor en court-circuit lit 0 V dans les deux sens (fiche [01](../01_multimetre/README.md)).
@@ -203,8 +203,9 @@ flowchart TD
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
   H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
   I --> H
-  H -- douteux, quelques ohms à quelques centaines d'ohms --> W[Trancher la lecture, fiche 91, puis reprendre ici]
-  W --> H
+  H -- douteux, quelques ohms à quelques centaines d'ohms --> W{Lecture tranchée, fiche 91}
+  W -- court-circuit ou fuite --> I
+  W -- charge normale du rail --> J
   H -- pas de court-circuit --> J{Composant d'origine conforme : calibre et rapidité, ou valeur et puissance ?}
   J -- non --> K[Monter le composant prévu par le constructeur]
   J -- oui --> L[Monter un fusible ou une résistance fusible identique]
