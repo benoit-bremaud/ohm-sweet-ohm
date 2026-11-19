@@ -34,6 +34,7 @@ from elements import (
     res_v,
     tile,
     verdict,
+    winding,
 )
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -205,6 +206,18 @@ def test_mlcc_terminations_follow_its_orientation() -> None:
     assert (top, bottom) == (pytest.approx((100, 26)), pytest.approx((100, 74)))
 
 
+def test_winding_spans_its_two_ends_and_bulges_on_the_asked_side() -> None:
+    drawing = winding(100, 50, 130, loops=4)
+    assert 'd="M100 50 ' in drawing
+    assert drawing.count("a10 10 0 0 1 0 20") == 4  # 4 loops of 20 fill the 80 span
+    assert winding(100, 50, 130, loops=2, right=False).count("a20 20 0 0 0 0 40") == 2
+
+
+def test_winding_without_a_loop_is_refused() -> None:
+    with pytest.raises(ValueError, match="one loop at least"):
+        winding(0, 0, 10, loops=0)
+
+
 def test_tile_prints_the_code_above_its_meaning() -> None:
     code, head, sub = (
         tile(10, 20, "47", "chiffres significatifs", "ici 47").strip().splitlines()[1:]
@@ -312,3 +325,25 @@ def test_compensation_trace_overshoots_only_when_overcompensated() -> None:
     assert low <= min(levels["under"]) and max(levels["under"]) <= high
     assert min(levels["under"]) < max(levels["under"])
     assert min(levels["over"]) < low and max(levels["over"]) > high
+
+
+def test_ring_of_a_shorted_turn_dies_within_two_periods() -> None:
+    import guide_30
+
+    good, bad = (guide_30.RING_DECAY[k] for k in ("sain", "spire en court-circuit"))
+    assert guide_30.ring(0, good) == pytest.approx(1)
+    assert guide_30.ring(4, good) > 0.2  # still ringing after four periods
+    assert abs(guide_30.ring(2, bad)) < 0.01
+    assert guide_30.fig_ring_test().count("data-ring=") == 2
+
+
+@pytest.mark.parametrize(("diode", "floor"), [(False, -300), (True, -1.4)])
+def test_kick_of_an_opened_coil_is_clamped_by_the_diode(
+    diode: bool, floor: float
+) -> None:
+    import guide_30
+
+    levels = [guide_30.kick(t / 100, diode) for t in range(1001)]
+    assert levels[0] == guide_30.KICK_SUPPLY
+    assert min(levels) == pytest.approx(floor)
+    assert levels[-1] == pytest.approx(0, abs=0.01)

@@ -384,6 +384,25 @@ def diode_v(
     )
 
 
+def winding(
+    x: float,
+    y1: float,
+    y2: float,
+    loops: int = 4,
+    right: bool = True,
+    cls: str = "wire",
+) -> str:
+    """Vertical winding (coil symbol) from (x, y1) down to (x, y2): `loops` half-circles.
+
+    The loops bulge to the right, or to the left when `right` is false.
+    """
+    if loops < 1:
+        raise ValueError("a winding needs one loop at least")
+    r = (y2 - y1) / (2 * loops)
+    arcs = " ".join(f"a{r:g} {r:g} 0 0 {int(right)} 0 {2 * r:g}" for _ in range(loops))
+    return f'  <path class="{cls}" d="M{x} {y1} {arcs}"/>\n'
+
+
 def box(
     x: float, y: float, w: float, h: float, title: str, lines: tuple[str, ...] = ()
 ) -> str:
