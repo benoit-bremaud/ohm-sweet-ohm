@@ -68,7 +68,7 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
 | Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [20](../20_condensateur_ceramique/README.md) (méthode complète en fiche 92) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche ; si rien ne chauffe à la tension du rail, c'est une charge normale : passer à l'étape 6 |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
 | Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
@@ -82,7 +82,7 @@ Jamais sur l'adaptateur d'origine tant que la panne n'est pas comprise : aliment
 Regarder le courant pendant les premières secondes, une main prête à couper :
 
 - **limitation immédiate, tension proche de 0 V** : court-circuit, couper et passer à la fiche 92 ;
-- **limitation, tension partielle, rien ne chauffe** : la limite est peut-être trop basse pour le démarrage ; la remonter par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine (fiche [00](../00_securite/README.md)) ;
+- **limitation, tension partielle, rien ne chauffe** : la limite est peut-être trop basse pour le démarrage ; la remonter par paliers en surveillant la chaleur, sans dépasser le courant nominal de l'adaptateur d'origine (fiche [00](../00_securite/README.md)). Toujours en limitation à ce courant : couper, recherche de court-circuit (fiches [20](../20_condensateur_ceramique/README.md) et 92) ;
 - **courant anormalement faible ou nul** : vérifier d'abord que ce n'est pas normal (appareil en veille tant qu'on n'a pas appuyé sur son bouton, appareil à batterie qui ne démarre pas sans elle). Sinon rien ne démarre : la panne est sur le chemin de l'alimentation (fusible, interrupteur, régulateur, signal de mise en marche) ;
 - **courant plausible et stable** : la carte s'alimente ; laisser la limite juste au-dessus du courant lu et passer aux rails.
 
@@ -154,7 +154,10 @@ flowchart TD
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
   D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
-  F -- oui, ou douteux sans carte saine --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
+  F -- douteux, sans carte saine --> Y[Injection à courant limité, fiche 20]
+  Y -- un composant chauffe --> M
+  Y -- rien ne chauffe : charge normale --> H
+  F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
   F -- non --> H[Mise sous tension à courant limité, fiche 00]
   H --> I{L'alimentation passe en limitation, ou un composant chauffe ?}
   I -- tension près de 0 V, ou un composant chauffe --> G
@@ -173,7 +176,8 @@ flowchart TD
   L --> M
   G --> M
   M[Fiche du composant suspect] --> W{Composant fautif confirmé ?}
-  W -- non, il reste des points à mesurer --> L
+  W -- non, il reste des étages à mesurer --> L
+  W -- non, il reste des points à mesurer sur le rail --> K
   W -- non, plus rien à diviser --> S[Quand s'arrêter : noter les mesures, pause ou confier la carte]
   W -- oui --> N{Cause de la défaillance trouvée ?}
   N -- non --> O[Contrôler l'amont et l'aval]
