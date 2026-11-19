@@ -6,14 +6,14 @@ L'appareil lui-même : ce qu'il montre de plus qu'un multimètre, de quoi il est
 
 L'oscilloscope trace une tension en fonction du temps : il montre ce que le multimètre moyenne (ondulation, parasites, signaux logiques, coupures brèves). Il n'est pas nécessaire aux niveaux 1 à 3 des fiches ; il sert au niveau 4. Un modèle de paillasse de 50 à 100 MHz avec ses sondes ×10 suffit pour ces fiches. Le point à ne jamais rater : **la pince de masse de la sonde est reliée à la terre**.
 
-> **Sécurité** : les fiches de ce dépôt restent sous 50 V continu (25 V alternatif) partout sur la carte (fiche [00](../00_securite/README.md)). La pince de masse d'un oscilloscope de paillasse est reliée à la terre par le cordon secteur : posée ailleurs que sur le 0 V de la carte, elle fait un court-circuit (section [Pince de masse et terre](#pince-de-masse-et-terre)). Ne jamais supprimer la terre de l'oscilloscope. Un circuit relié au secteur ne se mesure pas avec une sonde passive et un oscilloscope de paillasse : hors périmètre de ces fiches.
+> **Sécurité** : les fiches de ce dépôt restent sous 50 V continu (25 V alternatif) partout sur la carte (fiche [00](../00_securite/README.md)). La pince de masse d'un oscilloscope de paillasse est reliée à la terre par le cordon secteur : posée ailleurs que sur le 0 V d'une carte reliée à la terre (le cas le plus courant), elle fait un court-circuit (section [Pince de masse et terre](#pince-de-masse-et-terre)). Ne jamais supprimer la terre de l'oscilloscope. Un circuit relié au secteur ne se mesure pas avec une sonde passive et un oscilloscope de paillasse : hors périmètre de ces fiches.
 
 ## Ce qu'il apporte par rapport au multimètre
 
 | Question | Multimètre | Oscilloscope |
 | --- | --- | --- |
 | Quelle est la valeur de cette tension continue ? | Oui, à mieux que 1 % (page [i1](../i1_multimetre/README.md)) | Oui, mais à quelques % seulement |
-| La tension est-elle stable ou ondule-t-elle ? | Non : 2 à 3 mesures par seconde, tout ce qui bouge plus vite est moyenné (fiche [01](../01_multimetre/README.md)) | Oui : amplitude, fréquence et forme de l'ondulation |
+| La tension est-elle stable ou ondule-t-elle ? | Non en continu : 2 à 3 mesures par seconde, tout ce qui bouge plus vite est moyenné (fiche [01](../01_multimetre/README.md)) ; au mieux un ordre de grandeur en V~ (fiche [22](../22_condensateur_electrolytique/README.md)) | Oui : amplitude, fréquence et forme de l'ondulation |
 | Y a-t-il un signal, et quelle est sa forme ? | Non | Oui : c'est sa raison d'être |
 | Deux signaux arrivent-ils dans le bon ordre ? | Non | Oui, avec deux voies ou plus |
 | Un événement bref et rare s'est-il produit ? | Non | Oui, avec le déclenchement en mode unique |
@@ -33,7 +33,7 @@ L'oscilloscope ne remplace donc pas le multimètre : il mesure moins juste, seul
 6. **Sortie de compensation** : un signal carré, en général à 1 kHz, et une borne de masse. Elle sert à régler la sonde, pas à étalonner l'appareil.
 7. **Sonde et pince de masse** : la pointe (souvent coiffée d'un grippe-fil à crochet) prend le signal, la pince crocodile au bout d'un fil court prend la référence. Un commutateur ×1 / ×10 est sur le corps de la plupart des sondes livrées avec l'appareil.
 
-La touche RUN/STOP fige l'image ; SINGLE prépare une capture unique ; AUTO laisse l'appareil choisir seul les échelles, utile pour trouver un signal, à corriger ensuite à la main.
+La touche RUN/STOP fige l'image ; SINGLE prépare une capture unique ; AUTO laisse l'appareil choisir seul les échelles, utile pour trouver un signal, à corriger ensuite à la main (à ne pas confondre avec le mode de déclenchement Auto).
 
 ## Caractéristiques
 
@@ -49,7 +49,7 @@ Comment lire la fiche technique d'un oscilloscope ; les ordres de grandeur sont 
 | Résolution verticale | Le nombre de niveaux du convertisseur : 8 bits = 256 niveaux sur la hauteur de l'écran | 8 bits ; 10 ou 12 bits sur d'autres gammes |
 | Précision verticale | L'erreur sur une tension lue à l'écran, en % de la pleine échelle | ± 3 % (± 4 % sous 10 mV/div) : pour une valeur continue juste, prendre le multimètre |
 | Impédance d'entrée | Ce que l'entrée met en parallèle sur le circuit, sans sonde | 1 MΩ en parallèle avec 15 pF ; 10 MΩ avec une sonde ×10 |
-| Tension maximale d'entrée | Ce que l'entrée BNC supporte, avec sa catégorie de mesure (page [i1](../i1_multimetre/README.md)) | 300 V efficaces en CAT I (circuits non reliés au secteur) sur l'appareil cité ; la sonde a sa propre limite |
+| Tension maximale d'entrée | Ce que l'entrée BNC supporte, avec sa catégorie de mesure (page [i1](../i1_multimetre/README.md)) | 300 V efficaces en CAT I (ancienne mention : circuits non reliés au secteur, page i1) et 100 V efficaces en CAT II sur l'appareil cité ; la sonde a sa propre limite (300 V CAT II en ×10 pour la sonde citée) |
 | Limitation de bande passante | Un filtre commutable qui retire le bruit haute fréquence | 20 MHz : utile pour mesurer une ondulation, à couper pour regarder des fronts |
 
 **Repliement** : un signal plus rapide que la moitié de la fréquence d'échantillonnage est affiché à une fréquence fausse, plus basse. Le risque apparaît surtout avec une base de temps lente, quand l'appareil réduit sa fréquence d'échantillonnage pour tenir dans sa mémoire. Un doute sur une fréquence affichée : accélérer la base de temps et regarder si la forme change.
@@ -77,7 +77,7 @@ Une sonde ×10 contient un condensateur ajustable, à accorder avec la capacité
 2. Régler les échelles pour voir deux ou trois périodes du signal carré.
 3. Tourner la vis d'ajustage de la sonde avec un tournevis **non métallique** (livré avec la sonde) jusqu'à obtenir des sommets plats.
 
-À faire à la première utilisation, et chaque fois que la sonde passe sur un autre oscilloscope ; un contrôle prend dix secondes avant une mesure qui compte. La position ×1 n'a pas de réglage.
+À faire à la première utilisation, et chaque fois que la sonde passe sur un autre oscilloscope, ou sur une autre voie si l'image n'y est pas plate ; un contrôle prend dix secondes avant une mesure qui compte. La position ×1 n'a pas de réglage.
 
 ## Pince de masse et terre
 
@@ -85,20 +85,20 @@ Une sonde ×10 contient un condensateur ajustable, à accorder avec la capacité
 
 Un oscilloscope de paillasse est relié à la terre par son cordon secteur, et la pince de masse de chaque sonde est reliée à son châssis. La pince n'est donc pas une « deuxième pointe » comme le cordon noir d'un multimètre : **elle met à la terre le point où on la pose**.
 
-- **Carte dont le 0 V est déjà à la terre** (alimentation de laboratoire dont la borne − est reliée à la borne de terre, câble USB vers un ordinateur de bureau, autre appareil de mesure branché) : la pince ne peut aller **que** sur le 0 V. Posée sur le +12 V, sur la sortie d'un régulateur ou aux bornes d'une résistance de mesure placée côté +, elle court-circuite ce point au 0 V à travers la terre. Le courant n'est limité que par l'alimentation : avec une batterie ou une alimentation non limitée, le fil de la pince, une piste ou l'entrée de l'oscilloscope peuvent être détruits.
-- **Carte flottante** (sur pile, sur batterie, sur adaptateur secteur isolé sans autre liaison) : la première pince peut se poser sur n'importe quel point, qui devient alors la référence, à la terre. Mais les masses de toutes les voies sont communes : une **seconde pince posée sur un autre point court-circuite ces deux points entre eux**.
-- **Dans le doute**, vérifier avant de poser la pince : carte hors tension, continuité au multimètre entre la pince et le 0 V de la carte ; carte sous tension, voltmètre entre la pince et le point visé, en continu puis en alternatif. Une tension non nulle = ne pas poser la pince.
+- **Carte dont le 0 V est déjà à la terre** (alimentation de laboratoire dont la borne − est reliée à la borne de terre, câble USB vers un ordinateur de bureau, autre appareil de mesure branché) : la pince ne peut aller **que** sur le 0 V. Posée sur le +12 V, sur la sortie d'un régulateur ou aux bornes d'une résistance de mesure placée côté +, elle court-circuite ce point au 0 V à travers la terre. Le courant n'est limité que par l'alimentation : avec une batterie ou une alimentation non limitée, le fil de masse de la sonde, une piste ou le port USB d'un ordinateur relié peuvent être détruits.
+- **Carte flottante** (sur pile, sur batterie, sur adaptateur secteur isolé, **sans aucune autre liaison** : ni câble USB, ni autre appareil branché) : la règle du fabricant reste la même, pince sur le 0 V. Posée sur un autre point, la pince ne fait pas de court-circuit, ce point devenant la référence, à la terre ; c'est une exception, réservée aux tensions de ces fiches (50 V au plus) et au contrôle au voltmètre ci-dessous. Les masses de toutes les voies sont communes : une **seconde pince posée sur un autre point court-circuite ces deux points entre eux**.
+- **Dans le doute**, vérifier avant de poser la pince : carte sous tension, **toutes les liaisons de la mesure en place** (alimentation, câble USB, autres appareils), voltmètre entre la pince et le point visé, en continu puis en alternatif. Une tension significative = ne pas poser la pince. Sur une carte flottante, le voltmètre peut afficher une tension « fantôme » de quelques volts ou dizaines de volts en alternatif : elle s'effondre avec le mode basse impédance du multimètre ou une charge de quelques kΩ (fiche [01](../01_multimetre/README.md)) ; une tension qui ne s'effondre pas est réelle. Un contrôle de continuité carte débranchée ne prouve rien : les liaisons à la terre (alimentation, USB) sont alors retirées.
 
 Mesurer une tension entre deux points dont aucun n'est le 0 V :
 
-- **Deux voies et une soustraction** : une sonde sur chaque point, les deux pinces sur le 0 V, mêmes réglages sur les deux voies, puis fonction mathématique A − B. Suffisant en basse tension et basse fréquence.
+- **Deux voies et une soustraction** : une sonde sur chaque point, les deux pinces sur le 0 V, mêmes réglages sur les deux voies, puis fonction mathématique A − B. Valable en basse fréquence, et seulement si la tension cherchée est grande devant la tension commune aux deux points : avec quelques % d'erreur par voie, c'est inutilisable pour quelques dizaines de mV sur un rail de 12 V.
 - **Sonde différentielle** : deux pointes, aucune à la terre. C'est la solution prévue pour cet usage.
-- **Oscilloscope à entrées isolées** (portable sur batterie dont les voies sont isolées entre elles et de la terre) : chaque voie a sa propre référence.
+- **Oscilloscope à entrées isolées** (portable sur batterie dont les voies sont isolées entre elles et de la terre) : chaque voie a sa propre référence. La plupart des oscilloscopes portables d'entrée de gamme ne le sont pas : masses communes entre voies, et reliées au chargeur ou à l'ordinateur pendant la charge. Vérifier la mention « isolated inputs » et la catégorie de mesure dans la fiche technique.
 - **Alimenter la carte par une source flottante** (batterie, alimentation de laboratoire dont aucune borne n'est reliée à la terre), dans la limite des 50 V de ces fiches.
 
 **Jamais** : couper ou neutraliser la terre de l'oscilloscope (adaptateur sans terre, broche coupée) pour « le rendre flottant ». Son châssis, ses BNC et tout ce qui y est relié se retrouvent au potentiel du point où la pince est posée.
 
-**Oscilloscope USB** : sa masse est celle de l'ordinateur, par le câble USB. Elle est à la terre avec un ordinateur de bureau ou un portable sur un chargeur relié à la terre, et le court-circuit passe alors par l'ordinateur. Cette masse ne sert qu'à la mesure, ce n'est pas une terre de protection : ne jamais y appliquer de tension.
+**Oscilloscope USB** : sa masse est celle de l'ordinateur, par le câble USB. La considérer à la terre tant que le contrôle au voltmètre ne prouve pas le contraire (ordinateur de bureau, portable sur un chargeur relié à la terre, écran, station d'accueil ou câble réseau branché) : le court-circuit passe alors par l'ordinateur. Cette masse ne sert qu'à la mesure, ce n'est pas une terre de protection : ne jamais la relier à une source de tension.
 
 ## Déclenchement
 
@@ -121,7 +121,7 @@ Image instable : vérifier dans l'ordre la source, le niveau (dans le signal ?),
 | --- | --- | --- |
 | Numérique de paillasse | Écran et boutons dédiés, 2 ou 4 voies, autonome ; le plus répandu | Masse à la terre ; encombrant |
 | USB (boîtier relié à un ordinateur) | Compact, grand écran, captures faciles à enregistrer | Pas de boutons ; masse reliée à celle de l'ordinateur ; sans terre de protection |
-| Portable à entrées isolées | Sur batterie, voies isolées entre elles et de la terre, catégorie de mesure élevée | Cher ; destiné au terrain et à l'industrie |
+| Portable à entrées isolées | Sur batterie, voies isolées entre elles et de la terre, catégorie de mesure élevée | Cher ; destiné au terrain et à l'industrie ; les portables d'entrée de gamme n'ont pas d'entrées isolées |
 
 Ces fiches supposent un oscilloscope numérique à mémoire.
 
@@ -156,8 +156,8 @@ C'est la classe des Rigol DS1000Z et Siglent SDS1000X-E, cités en Sources.
 ## Sources
 
 - Rigol, *DS1000Z Series Digital Oscilloscope*, fiche technique (bande passante, fréquence d'échantillonnage et profondeur mémoire selon le nombre de voies, 8 bits, précision du gain, impédance et tension maximale d'entrée, limitation à 20 MHz, plage de holdoff) — <https://cdn-aorpci9.actonsoftware.com/acton/cdna/1579/f-0504/1/9/MSO1000Z_Datasheet.pdf>
-- Rigol, *DS1000Z User Guide* (mise à la terre par le cordon secteur et fil de masse de la sonde à la terre, catégorie de mesure I, compensation de la sonde au tournevis non métallique, signal de compensation impropre à l'étalonnage, rapport de sonde, modes Auto, Normal et Single, holdoff, 12 divisions horizontales, relation mémoire, fréquence d'échantillonnage et base de temps, opération A − B) — <https://www.rigol.com/dam/global/downloads/brochures/en/user-manual/oscillosopes/DS1000Z_UserGuide_EN.pdf>
-- Rigol, *PVP2150 Passive Probe User's Guide*, 2016 (bande passante, résistance et capacité d'entrée en ×1 et en ×10, tension maximale, réglage de la compensation) — <https://cdn-aorpci9.actonsoftware.com/acton/cdna/1579/f-06be/1/0/PVP2150%20User%27s%20Guide.pdf>
+- Rigol, *DS1000Z User Guide* (mise à la terre par le cordon secteur, fil de masse de la sonde au potentiel de la terre et à ne relier qu'à lui, catégorie de mesure I, compensation à contrôler sur chaque voie, compensation de la sonde au tournevis non métallique, signal de compensation impropre à l'étalonnage, rapport de sonde, modes Auto, Normal et Single, holdoff, 12 divisions horizontales, relation mémoire, fréquence d'échantillonnage et base de temps, opération A − B) — <https://www.rigol.com/dam/global/downloads/brochures/en/user-manual/oscillosopes/DS1000Z_UserGuide_EN.pdf>
+- Rigol, *PVP2150 Passive Probe User's Guide*, 2016, sonde livrée avec les DS1000Z d'origine (bande passante, résistance et capacité d'entrée en ×1 et en ×10, tension maximale, réglage de la compensation) — <https://cdn-aorpci9.actonsoftware.com/acton/cdna/1579/f-06be/1/0/PVP2150%20User%27s%20Guide.pdf>
 - Keysight, *Evaluating Oscilloscope Bandwidths for Your Application*, note d'application 5989-5733EN (bande passante à −3 dB soit −30 % d'amplitude, règles des cinq fois et des trois fois, temps de montée 0,35 / bande passante) — <https://helpfiles.keysight.com/sp/PD1000A/Content/PD1500A%20DPT%20Tests/5989-5733EN.pdf>
 - Rohde & Schwarz, *Oscilloscope buyer's guide* (fréquence d'échantillonnage d'au moins 2,5 fois la bande passante, bits du convertisseur, mémoire) — <https://www.rohde-schwarz.com/us/products/test-and-measurement/essentials-test-equipment/rs-essentials-digital-oscilloscopes/buyers-guide-oscilloscopes_256699.html>
 - Rohde & Schwarz, *Understanding passive oscilloscope probes* (charge et bande passante comparées des sondes ×1 et ×10, usage du ×1 sous 1 V crête à crête, réglage du rapport de sonde) — <https://www.rohde-schwarz.com/us/products/test-and-measurement/essentials-test-equipment/rs-essentials-digital-oscilloscopes/understanding-passive-oscilloscope-probes_254518.html>
@@ -165,7 +165,7 @@ C'est la classe des Rigol DS1000Z et Siglent SDS1000X-E, cités en Sources.
 - Rohde & Schwarz, *Oscilloscope probe tips and how to use them* (inductance d'un fil de masse long, oscillations et dépassements, ressort de masse) — <https://www.rohde-schwarz.com/us/products/test-and-measurement/essentials-test-equipment/rs-essentials-digital-oscilloscopes/oscilloscope-probe-tips-and-how-to-use-them_257202.html>
 - Rohde & Schwarz, *Understanding basic oscilloscope operation* (échelle verticale et usage du convertisseur, base de temps, déclenchement sur front, modes Auto et Normal) — <https://www.rohde-schwarz.com/us/products/test-and-measurement/essentials-test-equipment/rs-essentials-digital-oscilloscopes/understanding-basic-oscilloscope-operation_254512.html>
 - Teledyne LeCroy, *Don't Probe HV with Single-ended Passive Probes* (pince de masse reliée à la terre par l'oscilloscope, court-circuit sur un point qui n'est pas à la terre, danger de couper la terre de l'appareil, sonde différentielle) — <https://www.teledynelecroy.com/oscilloscope/blog/dont-probe-hv-with-single-ended-passive-probes/>
-- Pico Technology, *PicoScope 2000 Series User's Guide*, DO231-11, § 2.3 « Grounding » (masse reliée par le câble USB, sans terre de protection ; ne jamais appliquer de tension à la masse ; contrôle au voltmètre avant de la relier) — <https://www.picotech.com/download/manuals/picoscope-2000-series-quick-start-guide.pdf>
+- Pico Technology, *PicoScope 2000 Series User's Guide*, DO231-11, § 2.3 « Grounding » (masse reliée par le câble USB, sans terre de protection ; ne jamais relier la masse à une source de tension ; contrôle au voltmètre, sans tension continue ou alternative significative, avant de la relier) — <https://www.picotech.com/download/manuals/picoscope-2000-series-quick-start-guide.pdf>
 - Fluke, *190 Series III ScopeMeter*, fiche produit (entrées isolées entre elles et de la terre, références de masse différentes sans court-circuit ; un oscilloscope de paillasse ne mesure que par rapport à la terre) — <https://www.fluke.com/en-us/product/electrical-testing/portable-oscilloscopes/190-series-iii>
 - Siglent, *SDS1000X-E Series*, fiche produit (2 ou 4 voies, 100 ou 200 MHz, 1 GSa/s) — <https://siglentna.com/digital-oscilloscopes/sds1000x-e-series-super-phosphor-oscilloscopes/>
 - CEI 61010-2-030:2023, édition 3.0, fiche de la norme (appareils à circuits de mesure, catégories de mesure ; norme payante) — <https://webstore.iec.ch/en/publication/75915>
