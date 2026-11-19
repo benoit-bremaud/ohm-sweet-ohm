@@ -161,7 +161,7 @@ flowchart TD
   C --> D{Indice visible sur la carte ?}
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
-  D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
+  D -- non --> F{Hors tension : un rail en court-circuit à la masse, ou un régulateur en court-circuit entre son entrée et sa sortie ?}
   F -- douteux, sans carte saine ni schéma qui l'explique --> Y[Injection à courant limité, fiche 92]
   Y -- un composant chauffe anormalement --> M
   Y -- le rail tient sa tension sans limitation, rien ne chauffe : noter le courant --> H

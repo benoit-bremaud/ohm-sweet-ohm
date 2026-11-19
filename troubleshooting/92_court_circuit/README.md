@@ -134,7 +134,7 @@ Les deux rails lisent une résistance normale à la masse, mais une résistance 
 
 - **Hors tension** : mesurer la résistance entre les deux rails, dans les deux sens.
 - **Suspects** : un pont de soudure entre deux broches voisines, un régulateur en court-circuit entre entrée et sortie, un transistor de commutation en court-circuit, un circuit intégré relié aux deux rails.
-- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA. Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension du rail le plus bas par rapport à la masse. Elle ne doit jamais devenir négative de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, ils sont pris à l'envers. Limite atteinte : ne plus monter, couper. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
+- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA. Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension du rail le plus bas par rapport à la masse. Elle ne doit jamais devenir négative de plus de 1 V, ni de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, les condensateurs polarisés sont pris à l'envers. Limite atteinte : ne plus monter, couper. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
 
 Un rail lu trop haut a pu détruire ce qu'il alimente (fiche [91](../91_rails_alimentation/README.md)) : après la réparation, contrôler chaque circuit de ce rail.
 
@@ -179,7 +179,7 @@ flowchart TD
   F -- non, la tension atteint la consigne --> G{Tension montée lentement, au plus à la tension nominale : limitation en chemin ?}
   G -- oui --> H
   G -- non, un composant chauffe --> I
-  G -- non, tension nominale atteinte, rien ne chauffe --> G1[Pas de court-circuit franc : noter le courant ; trop fort, section Rail qui fuit ; sinon refermer les éléments ouverts, puis mise sous tension, fiche 03 étape 6]
+  G -- non, tension nominale atteinte, rien ne chauffe --> G1[Pas de court-circuit franc : noter le courant ; trop fort, section Rail qui fuit ; sinon fils d'injection retirés, éléments ouverts refermés, puis mise sous tension, fiche 03 étape 6]
   F -- oui --> H{Un composant chauffe ?}
   H -- oui --> I[Couper, lever le composant, mesurer le rail]
   H -- non --> J{Plafond de courant du rail atteint ?}
@@ -213,7 +213,7 @@ flowchart TD
 - Texas Instruments, fiche technique *LM340, LM340A and LM7805 Family Wide VIN 1.5-A Fixed Voltage Regulators*, section sur la mise en court-circuit de l'entrée du régulateur (sortie maintenue au-dessus de l'entrée, diode de protection de la sortie vers l'entrée) ; à chercher sous ce titre sur ti.com.
 - Texas Instruments, fiche technique *LM317 3-Terminal Adjustable Regulator*, section sur les diodes de protection (décharge des condensateurs de sortie à travers le régulateur) ; à chercher sous ce titre sur ti.com.
 - Analog Devices, *Basic Linear Design* (H. Zumbahlen, éd.), chapitre 12, « Printed Circuit Board Design Issues » (résistance du cuivre : environ 0,48 mΩ par carré pour 35 µm) ; à chercher sous ce titre sur analog.com.
-- Littelfuse, fiche technique *SMAJ Series*, diodes de protection contre les surtensions (tension de service V_R, tension de claquage V_BR à son courant de test, courant de fuite I_R selon le modèle) ; à chercher sous ce titre sur littelfuse.com.
+- Littelfuse, fiche technique *SMAJ Series*, diodes de protection contre les surtensions (tension de service V_WM, notée V_R chez Littelfuse, tension de claquage V_BR à son courant de test, courant de fuite I_R selon le modèle) ; à chercher sous ce titre sur littelfuse.com.
 - Keysight, *Understanding Constant Voltage and Constant Current Operation* (modes tension constante et courant constant d'une alimentation de laboratoire) ; à chercher sous ce titre sur keysight.com.
 - EEVblog, forum, section *Repair* (pratique de l'injection de courant et du suivi des millivolts sur des cartes réelles) — <https://www.eevblog.com/forum/repair/>
 - Les procédures de base viennent des fiches citées, qui portent leurs propres sources : [00](../00_securite/README.md) (alimentation limitée en courant, chaleur), [03](../03_methode/README.md) (plafond des paliers), [20](../20_condensateur_ceramique/README.md) et [23](../23_condensateur_tantale/README.md) (condensateurs en court-circuit), [91](../91_rails_alimentation/README.md) (résistance d'un rail à la masse).

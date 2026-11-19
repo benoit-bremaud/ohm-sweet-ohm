@@ -115,7 +115,7 @@ Les MLCC de découplage sont tous branchés de la même façon : une terminaison
 | --- | --- |
 | Bip bref puis silence, lecture qui monte | pas de court-circuit franc : les condensateurs se chargent |
 | Bip continu, moins de 1 Ω environ | **court-circuit franc** sur le rail : un condensateur, ou un autre composant du rail |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine, ou avec un schéma qui explique la lecture ; sinon, injection à courant limité (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
 
 Ce que cette mesure ne dit pas :
 
@@ -166,27 +166,28 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ```mermaid
 flowchart TD
   A[Rail suspect, carte débranchée et déchargée] --> B{Bipeur entre le rail et la masse}
-  B -- bip continu, moins de 1 Ω --> C[Court-circuit franc sur le rail]
-  B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine ?}
+  B -- bip continu, moins de 1 Ω --> C[Court-circuit franc sur le rail : examen visuel et division d'abord, fiche 92]
+  B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine, ou schéma qui explique la lecture ?}
   D -- oui --> E[Charge normale du rail : chercher ailleurs]
-  D -- non, plus bas ici, ou pas de carte saine --> C2[Rail douteux : fuite ou charge normale, à trancher par l'injection]
+  D -- non, plus bas ici, ou rien pour comparer --> C2[Rail douteux : fuite ou charge normale, à trancher par l'injection]
   C2 --> H
   B -- bip bref puis lecture qui monte --> F{Symptôme de fuite ou de découplage manquant ?}
   F -- non --> E
   F -- oui --> G[Alimentation limitée : chercher un condensateur tiède, ou comparer l'ondulation, niveau 4]
   G --> G2{Un condensateur tiède ?}
   G2 -- oui --> J
-  G2 -- non --> L
+  G2 -- non, fuite soupçonnée --> ZC[Fiche 92 : Rail qui fuit]
+  G2 -- non, découplage manquant soupçonné --> ZD[Ondulation à l'oscilloscope : niveau 4, et fiche 91]
   C --> H[Injecter un courant limité, fiche 92 : 1 V d'abord, tension du rail au plus, chercher le point chaud]
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
-  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : tout refermer, mise sous tension, fiche 91]
+  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : noter le courant ; trop fort, fiche 92, Rail qui fuit ; sinon fils d'injection retirés, tout refermer, mise sous tension, fiche 91]
   I -- rien, limitation à 100 mA, plafond inconnu, rail douteux --> ZB[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   I -- rien, en limitation au plafond de la fiche 03 étape 5 --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
-  M -- encore un court-circuit --> H
-  M -- plus de court-circuit --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}
+  M -- encore un court-circuit, ou rail toujours douteux --> H
+  M -- lecture redevenue normale --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}
   N -- non --> O[Défaut confirmé : remplacer]
   N -- oui --> P[Fissure probable, invisible à l'établi : remplacer quand même]
   O --> Q[Contrôler fusible, résistance série et inductance en amont]

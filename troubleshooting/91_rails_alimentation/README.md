@@ -173,7 +173,7 @@ Ses limites :
 ```mermaid
 flowchart TD
   A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse, et entre l'entrée et la sortie de chaque régulateur}
-  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens --> S
+  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
   B -- lecture négative ou qui descend --> B0[Charge résiduelle : décharger de nouveau, fiche 00]
   B0 --> B
