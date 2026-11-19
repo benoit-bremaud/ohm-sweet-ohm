@@ -161,7 +161,7 @@ Une carte qui vient d'être branchée avec un supercondensateur vide consomme da
 
 - **Décharge à courant constant** (méthode normalisée, CEI 62391) : avec une charge électronique, décharger à courant constant et chronométrer le passage de 80 % à 40 % de la tension nominale ; **C = I × durée / écart de tension**. Pour un modèle de sauvegarde, le courant est de 1 mA par farad.
 - **Résistance interne en continu** : au branchement d'une charge, la tension chute d'un coup avant de descendre régulièrement. Cette marche, divisée par le courant, donne la résistance interne ; la comparer à la fiche technique (fin de vie : quatre fois la valeur d'origine).
-- **ESR-mètre ou pont LCR à 1 kHz** (fiche 03) : la valeur lue en alternatif est nettement plus faible que la résistance interne en continu. La comparer à la valeur à 1 kHz de la fiche technique, pas à la valeur en continu.
+- **ESR-mètre ou pont LCR à 1 kHz** (page i5) : la valeur lue en alternatif est nettement plus faible que la résistance interne en continu. La comparer à la valeur à 1 kHz de la fiche technique, pas à la valeur en continu.
 
 ## Arbre de décision
 

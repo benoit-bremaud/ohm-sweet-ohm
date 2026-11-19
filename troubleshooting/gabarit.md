@@ -2,7 +2,7 @@
 
 Copier ce fichier dans `troubleshooting/NN_composant/README.md`, remplacer chaque consigne en italique, garder l'ordre des sections et supprimer une section seulement si elle ne s'applique pas.
 
-Les figures SVG sont générées : modifier `scripts/figures/guide_NN.py` puis lancer `just figures`, ne jamais retoucher un fichier `.svg` à la main (`just test` le refuse).
+Les figures SVG sont générées : modifier `scripts/figures/guide_NN.py` (`guide_iN.py` pour une page d'appareil) puis lancer `just figures`, ne jamais retoucher un fichier `.svg` à la main (`just test` le refuse).
 
 Les schémas Mermaid sont dessinés pour le site par `just trees` dans `arbre-N.svg` : le relancer après chaque modification d'un schéma (`just test` refuse un SVG périmé). Liens acceptés : `-->`, `-- texte -->`, `-.->`, `-. texte .->` ; toute autre forme fait échouer la construction.
 
@@ -38,7 +38,7 @@ Classés du plus fréquent au plus rare (consensus des réparateurs et notes de 
 
 ## Niveau 4 — Méthodes avancées
 
-*Instrument, méthode, ce qu'elle apporte de plus qu'un multimètre (renvoi vers la fiche 03).*
+*Instrument, méthode, ce qu'elle apporte de plus qu'un multimètre (renvoi vers sa page d'appareil, i1 à i8).*
 
 ## Arbre de décision
 

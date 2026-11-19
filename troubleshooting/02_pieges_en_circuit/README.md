@@ -51,7 +51,7 @@ Un condensateur entre les deux nœuds se charge sous le courant de l'ohmmètre :
 
 - **Attendre que la lecture se stabilise** avant de la comparer à quoi que ce soit ; une lecture qui monte n'est pas un court-circuit.
 - Inverser les pointes recommence la montée : la première valeur lue après inversion n'a pas de sens.
-- Le **capacimètre** en circuit lit la somme des condensateurs en parallèle, faussée par les résistances et les jonctions qui les déchargent : une valeur en circuit n'est qu'un indice. Une capacité nettement **inférieure** à celle du seul condensateur mesuré reste toutefois suspecte, car les autres condensateurs en parallèle ne peuvent que l'augmenter ; l'ESR se mesure en fiche 03.
+- Le **capacimètre** en circuit lit la somme des condensateurs en parallèle, faussée par les résistances et les jonctions qui les déchargent : une valeur en circuit n'est qu'un indice. Une capacité nettement **inférieure** à celle du seul condensateur mesuré reste toutefois suspecte, car les autres condensateurs en parallèle ne peuvent que l'augmenter ; l'ESR se mesure à l'ESR-mètre (page i5).
 - Décharger les condensateurs avant chaque série de mesures (fiche [00](../00_securite/README.md)) et viser quelques mV au voltmètre, pas seulement le seuil de sécurité : l'ohmmètre travaille sous quelques dixièmes de volt, une charge résiduelle de même ordre lui fait lire n'importe quoi. Une lecture négative, qui descend ou qui dérive très lentement en est le signe.
 
 ## Ohmmètre basse tension : la tension à pleine échelle

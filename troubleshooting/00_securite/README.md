@@ -92,7 +92,7 @@ Une batterie de quelques volts ne présente pas de risque d'électrocution, mais
 
 - **Fer à souder** : la panne est à 300 à 400 °C. Le reposer toujours dans son support, jamais sur l'établi ; le débrancher en quittant le poste.
 - **Composants chauds** : une résistance de puissance, un régulateur linéaire ou un transistor peuvent dépasser 100 °C en fonctionnement normal, et restent chauds après la coupure.
-- **Trouver le point chaud** : de préférence un thermomètre à thermocouple ou une caméra thermique (fiche 03), ou une seule goutte d'alcool isopropylique qui s'évapore vite sur le point chaud ; l'alcool est très inflammable : pas de fer ni d'étincelle à proximité.
+- **Trouver le point chaud** : de préférence un thermomètre à thermocouple ou une caméra thermique (page i8), ou une seule goutte d'alcool isopropylique qui s'évapore vite sur le point chaud ; l'alcool est très inflammable : pas de fer ni d'étincelle à proximité.
 - **Test au doigt**, en dernier recours, seulement dans ce périmètre basse tension, carte de préférence coupée juste avant : approcher d'abord le dos du doigt sans toucher (on sent la chaleur rayonnée), puis effleurer **brièvement**, jamais saisir. Un composant qu'on ne peut pas toucher plus d'une seconde est trop chaud pour la plupart des composants ; un régulateur linéaire ou une résistance de puissance peut l'être normalement (comparer avec une carte saine).
 - **Fumée, odeur de brûlé, gonflement** : couper l'alimentation tout de suite, avant de chercher d'où ça vient.
 

@@ -178,7 +178,7 @@ Une CTP qui a basculé reste dans cet état tant que la tension est présente : 
 - **Retrouver le coefficient B d'une CTN inconnue** à partir de deux points (températures en kelvins) : B = ln(R1 / R2) / (1/T1 − 1/T2). C'est le moyen d'identifier une CTN sans marquage, encore en état, avant de commander sa remplaçante.
 - **Auto-échauffement** : une CTN parcourue par un courant s'échauffe et lit plus chaud que la réalité. La fiche technique donne un facteur de dissipation en milliwatts par degré (quelques mW/°C pour une perle à pattes, dans l'air calme). Un pont diviseur dont la résistance fixe a été remplacée par une valeur beaucoup plus faible fausse la mesure de cette manière.
 - **Résistance fixe à la place de la CTN** : pour savoir si le reste de la chaîne de mesure fonctionne, brancher provisoirement une résistance fixe égale à R25 ; l'appareil doit afficher environ 25 °C. Essai bref, sous surveillance, **jamais** sur un pack ou un chargeur de batteries, ni sur un élément chauffant en service : la protection thermique est alors neutralisée.
-- **Caméra thermique** : une CTP polymère qui a basculé et le composant en court-circuit qu'elle alimente ressortent immédiatement (fiche 03).
+- **Caméra thermique** : une CTP polymère qui a basculé et le composant en court-circuit qu'elle alimente ressortent immédiatement (page i8).
 - **Courant de maintien selon la température** : une CTP polymère prévue pour 0,25 A à 23 °C ne tient plus qu'une fraction de ce courant à 85 °C. Avant de la condamner, mesurer la température autour d'elle et le courant réel du rail.
 
 ## Arbre de décision

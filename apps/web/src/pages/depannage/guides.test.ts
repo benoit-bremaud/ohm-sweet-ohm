@@ -1,5 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { getCollection } from 'astro:content';
+import { existsSync, readdirSync } from 'node:fs';
+
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { guidePaths, guideTitle } from '../../lib/guide-pages';
@@ -33,7 +35,17 @@ describe('guide pages', () => {
     const paths = await guidePaths();
     expect(paths.map((p) => p.params.guide)).toEqual(ids);
     expect(ids).toContain('10_resistance');
+    // instrument pages (#84) live in i-prefixed folders beside the numbered guides
+    expect(ids).toContain('i1_multimetre');
     expect(ids).not.toContain('menu');
+  });
+
+  it('loads every folder holding a README, so a misnamed guide fails here', () => {
+    const root = new URL('../../../../../troubleshooting/', import.meta.url);
+    const folders = readdirSync(root, { withFileTypes: true })
+      .filter((d) => d.isDirectory() && existsSync(new URL(`${d.name}/README.md`, root)))
+      .map((d) => d.name);
+    expect([...ids].sort()).toEqual(folders.sort());
   });
 
   it('takes the level 1 heading as title and refuses a guide without one', () => {
@@ -56,8 +68,10 @@ describe('guides index', () => {
 
     expect(html).toMatch(/<html lang="fr"/);
     expect(html).toContain('href="/depannage/10_resistance"');
+    expect(html).toContain('href="/depannage/i1_multimetre"');
     expect(html).not.toContain('README.md');
     expect(deadLinks(html)).toEqual([]);
+    for (const id of ids) expect(html, id).toContain(`href="/depannage/${id}"`);
   });
 });
 
@@ -70,10 +84,6 @@ describe('guide page', () => {
     expect(html).toContain(`alt="${DIAGRAM_ALT.replace("'", '&#39;')}"`);
     expect(html).toContain('Version texte du schéma');
     expect(html).not.toContain('language-mermaid');
-  });
-
-  it('lists every guide folder', () => {
-    expect(ids.length).toBeGreaterThanOrEqual(12);
   });
 
   it('checks each guide: alt on every image, every site link alive', async () => {
