@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from elements import (
-    Point,
+    four_pad,
     half_meter,
     heading,
     hookup,
@@ -12,10 +12,6 @@ from elements import (
     verdict,
     winding,
 )
-
-METAL = "#9aa3ad"
-DARK = "#20242b"
-TRACE = "#c8763a"
 
 
 def _arrow(x: float, y1: float, y2: float, cls: str) -> str:
@@ -39,28 +35,6 @@ def _symbol(cx: float, top: float, dots: bool = True) -> str:
         for x in (cx - 46, cx + 46):
             o += f'  <circle class="blkf" cx="{x}" cy="{top + 4}" r="4"/>\n'
     return o
-
-
-def _choke(cx: float, cy: float) -> tuple[str, dict[str, Point]]:
-    """Four-pad surface-mount common-mode choke seen from above.
-
-    Winding A joins the two upper pads, winding B the two lower ones. Returns (svg, pad centres
-    keyed "a1", "a2", "b1", "b2": left then right).
-    """
-    pads = {
-        "a1": (cx - 52, cy - 24),
-        "a2": (cx + 52, cy - 24),
-        "b1": (cx - 52, cy + 24),
-        "b2": (cx + 52, cy + 24),
-    }
-    o = ""
-    for px, py in pads.values():
-        o += f'  <rect x="{px - 12}" y="{py - 12}" width="24" height="24" fill="{METAL}"/>\n'
-    o += f'  <rect x="{cx - 42}" y="{cy - 44}" width="84" height="88" rx="6" fill="{DARK}" stroke="#7d8794" stroke-width="1.5"/>\n'
-    for name, dy in (("A", -24), ("B", 24)):
-        o += f'  <path d="M{cx - 42} {cy + dy} H{cx + 42}" stroke="{TRACE}" stroke-width="3" stroke-dasharray="7 5"/>\n'
-        o += f'  <text x="{cx}" y="{cy + dy - 7}" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">{name}</text>\n'
-    return o, pads
 
 
 # ---------------------------------------------------------------- figure 1
@@ -136,7 +110,7 @@ def fig_windings() -> str:
         ),
     ):
         o, v, com = half_meter(x0, sel, lcd, unit, title, notes)
-        part, pads = _choke(x0 + 290, 250)
+        part, pads = four_pad(x0 + 290, 250)
         b += o + part + hookup(v, com, pads[ends[0]], pads[ends[1]])
         b += verdict(x0 + 190, 478, head, sub, "ok")
     b += text(

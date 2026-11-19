@@ -403,6 +403,29 @@ def winding(
     return f'  <path class="{cls}" d="M{x} {y1} {arcs}"/>\n'
 
 
+def four_pad(
+    cx: float, cy: float, names: tuple[str, str] = ("A", "B")
+) -> tuple[str, dict[str, Point]]:
+    """Four-pad surface-mount part with two windings, seen from above.
+
+    The first winding joins the two upper pads, the second the two lower ones. Returns (svg, pad
+    centres keyed by the lower-case winding name and 1 (left) or 2 (right): "a1", "a2", "b1", "b2").
+    """
+    pads = {
+        f"{name.lower()}{i}": (cx + dx, cy + dy)
+        for name, dy in zip(names, (-24, 24), strict=True)
+        for i, dx in ((1, -52), (2, 52))
+    }
+    o = ""
+    for px, py in pads.values():
+        o += f'  <rect x="{px - 12}" y="{py - 12}" width="24" height="24" fill="#9aa3ad"/>\n'
+    o += f'  <rect x="{cx - 42}" y="{cy - 44}" width="84" height="88" rx="6" fill="#20242b" stroke="#7d8794" stroke-width="1.5"/>\n'
+    for name, dy in zip(names, (-24, 24), strict=True):
+        o += f'  <path d="M{cx - 42} {cy + dy} H{cx + 42}" stroke="#c8763a" stroke-width="3" stroke-dasharray="7 5"/>\n'
+        o += f'  <text x="{cx}" y="{cy + dy - 7}" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">{name}</text>\n'
+    return o, pads
+
+
 def box(
     x: float, y: float, w: float, h: float, title: str, lines: tuple[str, ...] = ()
 ) -> str:

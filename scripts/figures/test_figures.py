@@ -24,6 +24,7 @@ from elements import (
     chip,
     curve,
     dial_angle,
+    four_pad,
     half_meter,
     heading,
     hookup,
@@ -356,9 +357,35 @@ def test_useful_current_flows_opposite_ways_and_noise_the_same_way() -> None:
     assert arrows == ["down", "up", "down", "down"]
 
 
-def test_choke_pads_put_winding_a_above_winding_b() -> None:
-    import guide_31
+def test_four_pad_part_puts_the_first_winding_on_the_upper_pads() -> None:
+    _, pads = four_pad(100, 100, ("P", "S"))
+    assert list(pads) == ["p1", "p2", "s1", "s2"]
+    assert pads["p1"][1] == pads["p2"][1] < pads["s1"][1] == pads["s2"][1]
+    assert pads["p1"][0] < pads["p2"][0]
 
-    _, pads = guide_31._choke(100, 100)
-    assert pads["a1"][1] == pads["a2"][1] < pads["b1"][1] == pads["b2"][1]
-    assert pads["a1"][0] < pads["a2"][0]
+
+def test_secondary_voltage_follows_the_turns_ratio() -> None:
+    import guide_32
+
+    assert guide_32.secondary_voltage(1.0, 2) == pytest.approx(0.5)
+    assert guide_32.secondary_voltage(1.0, 1 / 20) == pytest.approx(20)  # step-up
+    for ratio in (0, -2):
+        with pytest.raises(ValueError, match="positive"):
+            guide_32.secondary_voltage(1.0, ratio)
+
+
+def test_ratio_figure_reads_the_primary_then_the_secondary() -> None:
+    import guide_32
+
+    figure = guide_32.fig_ratio()
+    injected = f"{guide_32.INJECTED:.2f}"
+    reduced = f"{guide_32.INJECTED / guide_32.RATIO:.2f}"
+    assert figure.index(f">{injected}<") < figure.index(f">{reduced}<")
+    # a 1:20 step-up fed with the injected voltage stays under the 25 V AC limit of guide 00
+    assert guide_32.secondary_voltage(guide_32.INJECTED, 1 / 20) < 25
+
+
+def test_only_the_third_transformer_symbol_has_a_centre_tap() -> None:
+    import guide_32
+
+    assert guide_32.fig_symbol().count('data-tap="centre"') == 1
