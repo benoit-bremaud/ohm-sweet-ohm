@@ -34,7 +34,7 @@ Si l'appareil vient de quelqu'un d'autre, c'est cette personne qui connaît l'hi
 
 ## Étape 2 — Écarter les causes extérieures
 
-Une bonne part des « pannes de carte » sont ailleurs. À contrôler avant de démonter, **sans alimenter l'appareil** : la première mise sous tension est l'étape 6.
+Une bonne part des « pannes de carte » sont ailleurs. À contrôler avant de démonter, **sans alimenter l'appareil** : la première mise sous tension par le réparateur est l'étape 6.
 
 - l'**adaptateur** : mesuré seul, tension à vide et, mieux, sur une charge connue ; polarité de la fiche ; tension, polarité et courant comparés à ceux marqués sur l'appareil (un adaptateur qui n'est pas celui d'origine est un suspect) ;
 - le **câble** et les **connecteurs** d'alimentation ;
@@ -63,15 +63,15 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 2. Bipeur d'abord, puis ohmmètre pour lire la valeur (fiche [01](../01_multimetre/README.md)). Pointe noire sur la masse, pointe rouge sur le rail ; sur un rail négatif, l'inverse, sinon les diodes de protection des circuits intégrés conduisent.
 3. Mesurer dans l'ordre où le courant circule : l'entrée d'alimentation, puis **après la protection** (côté charge du fusible, après la diode ou le transistor de protection), puis l'entrée et la sortie de chaque régulateur. Un fusible ouvert ou une diode série cache un court-circuit placé derrière : la mesure à l'entrée seule ne suffit pas (fiche [13](../13_fusible/README.md), niveau 3, « Hors tension »).
 4. Attendre que la lecture se stabilise : les condensateurs du rail se chargent (fiche [02](../02_pieges_en_circuit/README.md)).
-5. Sur une lecture basse, inverser les pointes : un vrai court-circuit lit la même valeur dans les deux sens, une jonction non (fiche [01](../01_multimetre/README.md)).
+5. Sur une lecture basse, inverser les pointes : un vrai court-circuit lit la même valeur dans les deux sens, une jonction non (fiche [01](../01_multimetre/README.md)). Après l'inversion, la lecture repart du début et peut être négative un instant : c'est la charge laissée par l'appareil dans les condensateurs, attendre qu'elle se stabilise (fiche [02](../02_pieges_en_circuit/README.md)).
 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
 | Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [20](../20_condensateur_ceramique/README.md) (méthode complète en fiche 92) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)) |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [20](../20_condensateur_ceramique/README.md)). Sans carte saine ni schéma : le traiter comme un court-circuit possible, par l'injection à courant limité de la même fiche |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
-| Lecture négative, ou qui descend | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
+| Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [02](../02_pieges_en_circuit/README.md)) |
 
 Le détail de cette mesure et ses limites sont en fiche [20](../20_condensateur_ceramique/README.md), « Hors tension : le rail entier se mesure d'un coup ».
 
@@ -154,12 +154,13 @@ flowchart TD
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
   D -- non --> F{Hors tension : un rail en court-circuit à la masse ?}
-  F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
+  F -- oui, ou douteux sans carte saine --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
   F -- non --> H[Mise sous tension à courant limité, fiche 00]
   H --> I{L'alimentation passe en limitation, ou un composant chauffe ?}
   I -- tension près de 0 V, ou un composant chauffe --> G
-  I -- tension partielle, rien ne chauffe --> R[Remonter la limite par paliers, fiche 00]
+  I -- tension partielle, rien ne chauffe --> R[Remonter la limite par paliers, sans dépasser le courant nominal de l'adaptateur d'origine, fiche 00]
   R --> I
+  I -- toujours en limitation au courant nominal --> G
   I -- non --> J{Tous les rails à leur tension ?}
   J -- un rail trop haut --> T[Couper tout de suite : régulateur suspect]
   J -- un rail absent ou trop bas --> K[Remonter le rail fautif vers la source, fiche 91]
@@ -172,7 +173,8 @@ flowchart TD
   L --> M
   G --> M
   M[Fiche du composant suspect] --> W{Composant fautif confirmé ?}
-  W -- non, rien trouvé --> S[Quand s'arrêter : noter les mesures, pause ou confier la carte]
+  W -- non, il reste des points à mesurer --> L
+  W -- non, plus rien à diviser --> S[Quand s'arrêter : noter les mesures, pause ou confier la carte]
   W -- oui --> N{Cause de la défaillance trouvée ?}
   N -- non --> O[Contrôler l'amont et l'aval]
   O --> Q{Amont et aval sains ?}
@@ -188,7 +190,7 @@ flowchart TD
 3. Adaptateur, câble, piles, fusible, réglages.
 4. Photos des deux faces et des connecteurs ; schéma ; repérer la masse et les rails.
 5. Regarder et sentir, carte déchargée.
-6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur. Moins de 1 Ω dans les deux sens : ne pas alimenter.
+6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement.
 7. Alimentation de laboratoire, polarité vérifiée, limite de courant basse, œil sur le courant.
 8. Rails au voltmètre, de l'entrée vers les régulateurs, avant tout signal. Rail trop haut : couper.
 9. Couper la chaîne par le milieu ; comparer avec une carte saine.
