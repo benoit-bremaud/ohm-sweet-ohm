@@ -111,7 +111,7 @@ stay system tools. The hooks run the tools through `mise x --`, so they work whe
 shell activates mise.
 
 ```bash
-just setup     # once per clone: mise install, pnpm install --frozen-lockfile, lefthook install
+just setup     # once per clone: mise install, pnpm install --frozen-lockfile, just sync, lefthook install
 just fast      # L0, pre-commit hook: gitleaks, eslint, prettier, markdownlint, typos, hadolint… on the staged files
 just check     # L1, pre-push hook: lint + test + security + secrets, under 3 min
 just gate      # L2, before every merge, on the pushed head: check + SonarQube, Trivy, API image smoke, SBOM, render, attestation

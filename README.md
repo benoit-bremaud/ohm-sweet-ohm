@@ -19,7 +19,7 @@ Requires [mise](https://mise.jdx.dev) and Docker; `mise.toml` pins Node 22, pnpm
 check tool (see `docs/deploy.md` § Local CI).
 
 ```bash
-mise trust && mise install && mise x -- just setup   # once per clone: toolchain, pnpm install, git hooks (just itself comes from mise)
+mise trust && mise install && mise x -- just setup   # once per clone: toolchain, pnpm install, Astro sync, git hooks (just itself comes from mise)
 just check   # format, lint, typecheck, tests with coverage, Semgrep, audit, gitleaks (pre-push hook)
 just gate    # the pre-merge gate: check + SonarQube, Trivy, API image smoke, catalogue render, attestation
 ```

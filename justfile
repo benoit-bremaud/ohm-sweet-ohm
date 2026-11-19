@@ -25,10 +25,11 @@ renderer_image := "ohm-sweet-ohm-renderer"
 # L1 by default
 default: check
 
-# Once per clone: the pinned toolchain, the dependencies and the git hooks
+# Once per clone: the pinned toolchain, the dependencies, the Astro types and content store, the git hooks
 setup:
     mise install
     mise x -- pnpm install --frozen-lockfile
+    mise x -- just sync
     mise x -- lefthook install
 
 # Regenerate the SVG figures of the troubleshooting guides (scripts/figures, #101)
@@ -51,9 +52,14 @@ fast:
 node-guard:
     @node -e 'const want=require("fs").readFileSync(".nvmrc","utf8").trim().split(".")[0]; const v=process.versions.node; if (v.split(".")[0] !== want) { console.error("Node " + v + " found, Node " + want + " required (.nvmrc). Run: mise x -- just <recipe>"); process.exit(1) }'
 
+# Generate the Astro types and the content store (.astro/): eslint needs the types, the guide page
+# tests read the store (a fresh clone has neither, #135)
+sync: node-guard
+    pnpm -C apps/web exec astro sync
+
 # Format, eslint, markdownlint, tsc, typos, the prod workflow, the Dockerfiles, the shell scripts, the
 # figure generator (ruff), the hooks
-lint: node-guard
+lint: sync
     pnpm format:check
     pnpm lint
     pnpm lint:md
@@ -70,7 +76,7 @@ lint: node-guard
 # Unit and integration suites (Testcontainers: Docker must run) with the per-package coverage floor
 # of vitest.config.ts (80 %), the doc coverage floor (90 %), the local CI wiring tests and the
 # figure generator tests (committed SVGs equal to the generated ones)
-test: node-guard
+test: sync
     pnpm test:coverage
     pnpm doc:coverage
     sh scripts/test-local-ci.sh

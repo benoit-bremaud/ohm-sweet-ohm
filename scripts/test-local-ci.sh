@@ -4,7 +4,7 @@
 # only on Trivy and TruffleHog, agents-skills#427), gate ends with the attestation
 # and merge / deploy prod verify it (agents-skills ADR-0003/0004), the prod workflow is the only one
 # and takes attest.sh from main, deploy.sh refuses bad arguments before any deploy command,
-# lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
+# lint and test sync the Astro store first (#135), lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
 # refuses the right subjects, and L0 (`just fast`) passes a clean staged change but refuses a staged
 # secret and a staged typo, in a throwaway repository. Needs mise, just, lefthook, gitleaks, typos:
 #   mise x -- sh scripts/test-local-ci.sh
@@ -34,6 +34,9 @@ for r in fast check gate nightly; do
 done
 deps() { just --show "$1" | grep -E "^$1( |:)" | sed 's/.*: *//'; } # deps <recipe>
 for d in lint test security secrets; do deps check | grep -qw "$d" || fail "check lacks $d"; done
+for r in lint test; do deps "$r" | grep -qw sync || fail "$r does not run sync first"; done # #135
+grep -q "cacheDir: './.astro'" apps/web/astro.config.ts || fail "web cacheDir is not .astro: sync writes the store where the tests do not read it"
+just --show sync | grep -q 'astro sync' || fail "sync does not run astro sync"
 just --show nightly | grep -q '^    warn just check$' || fail "nightly does not run check as a warning"
 for t in 'trivy fs' 'trivy image' 'trufflehog git'; do
   just --show nightly | grep "$t" | grep -q '|| rc=1$' || fail "nightly does not fail on $t"
