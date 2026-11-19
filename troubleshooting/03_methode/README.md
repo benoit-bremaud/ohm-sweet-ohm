@@ -75,11 +75,11 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 
 **Rail douteux, sans carte saine ni schéma** : l'injection de la fiche [20](../20_condensateur_ceramique/README.md) (tension nominale du rail, limite à 100 mA, relevée par paliers) se lit ainsi.
 
-- **Un condensateur, une résistance ou une diode chauffe** : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [20](../20_condensateur_ceramique/README.md)). Un circuit intégré tiède à la tension de son rail peut être normal.
+- **Un composant chauffe anormalement** (condensateur, résistance, diode, transistor, ou circuit intégré chaud au doigt) : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [20](../20_condensateur_ceramique/README.md)). Un circuit intégré seulement tiède à la tension de son rail peut être normal.
 - **Le rail tient sa tension nominale, l'alimentation ne passe pas en limitation, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu, puis passer à l'étape 6. Un courant nettement plus fort que ce que les circuits du rail consomment reste une fuite possible (fiche [20](../20_condensateur_ceramique/README.md), condensateur fuyant).
 - **L'alimentation reste en limitation au plafond, même si rien ne chauffe** : c'est un défaut. Ne pas alimenter la carte normalement ; suivre les millivolts le long du rail (fiche [20](../20_condensateur_ceramique/README.md), niveau 4 ; méthode complète en fiche 92).
 
-Le plafond des paliers est le courant que le rail fournit en service. Sans schéma : le courant maximal du régulateur qui produit ce rail, lu dans sa fiche technique d'après la référence relevée à l'étape 3, et jamais plus que le courant nominal de l'adaptateur d'origine. Référence illisible ou fiche introuvable : s'arrêter à 100 mA et traiter une limitation à ce courant comme un doute, pas comme un verdict (« Quand s'arrêter »).
+Le plafond des paliers est le courant que le rail fournit en service. Sans schéma : le courant maximal du régulateur qui produit ce rail, lu dans sa fiche technique d'après la référence relevée à l'étape 3, et jamais plus que le courant nominal de l'adaptateur d'origine (derrière un convertisseur abaisseur, le rail peut en fournir davantage : une limitation à ce plafond y reste un doute). Référence illisible ou fiche introuvable : s'arrêter à 100 mA et traiter une limitation à ce courant comme un doute, pas comme un verdict (« Quand s'arrêter »).
 
 Le détail de cette mesure et ses limites sont en fiche [20](../20_condensateur_ceramique/README.md), « Hors tension : le rail entier se mesure d'un coup ».
 
@@ -147,7 +147,7 @@ Une panne qui va et vient se cherche en la **provoquant**. D'abord hors tension 
 - La carte sort du périmètre de la fiche [00](../00_securite/README.md).
 - Une batterie lithium gonflée, percée ou mouillée : ne pas la recharger, isoler ses bornes, la porter au recyclage (fiche [00](../00_securite/README.md)).
 - Le défaut est sous un boîtier à billes (BGA) ou dans une couche interne de la carte.
-- La panne demande un instrument qu'on n'a pas : noter ce qui a été mesuré, pour reprendre plus tard ou confier la carte.
+- La panne demande un instrument ou une information qu'on n'a pas (schéma, fiche technique) : noter ce qui a été mesuré, pour reprendre plus tard ou confier la carte.
 - Le coût de la pièce ou le risque d'aggraver dépasse la valeur de l'appareil.
 - La fatigue : après une heure sans progrès, faire une pause et reprendre les notes depuis le début.
 
@@ -167,6 +167,7 @@ flowchart TD
   Y -- le rail tient sa tension sans limitation, rien ne chauffe : noter le courant --> H
   Y -- limitation, rien ne chauffe --> Z[Relever la limite par paliers, jusqu'au courant de service du rail, fiche 20]
   Z --> Y
+  Y -- limitation à 100 mA, plafond inconnu --> S
   Y -- toujours en limitation au courant de service du rail --> G
   F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiches 20 et 92]
   F -- non --> H[Mise sous tension à courant limité, fiche 00]
