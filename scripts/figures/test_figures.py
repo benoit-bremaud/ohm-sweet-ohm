@@ -347,3 +347,18 @@ def test_kick_of_an_opened_coil_is_clamped_by_the_diode(
     assert levels[0] == guide_30.KICK_SUPPLY
     assert min(levels) == pytest.approx(floor)
     assert levels[-1] == pytest.approx(0, abs=0.01)
+
+
+def test_useful_current_flows_opposite_ways_and_noise_the_same_way() -> None:
+    import guide_31
+
+    arrows = re.findall(r'data-arrow="(\w+)"', guide_31.fig_structure())
+    assert arrows == ["down", "up", "down", "down"]
+
+
+def test_choke_pads_put_winding_a_above_winding_b() -> None:
+    import guide_31
+
+    _, pads = guide_31._choke(100, 100)
+    assert pads["a1"][1] == pads["a2"][1] < pads["b1"][1] == pads["b2"][1]
+    assert pads["a1"][0] < pads["a2"][0]

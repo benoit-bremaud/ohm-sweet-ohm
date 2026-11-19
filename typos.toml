@@ -19,4 +19,5 @@ extend-exclude = [
 extend-ignore-re = [
   "\\b[0-9a-f]{7,40}\\b", # commit SHAs and digests
   "\\bPVT_[A-Za-z0-9]+\\b", # GitHub Projects v2 node ids
+  "\"[0-9i][0-9]_[a-z_]+\"", # French guide folder names (scripts/figures/generate.py)
 ]
