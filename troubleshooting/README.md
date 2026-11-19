@@ -29,7 +29,7 @@ Une page par instrument : ce qu'il est, comment le choisir et l'entretenir. Le c
 | Page | Contenu | Issue |
 | --- | --- | --- |
 | [i1 Le multimètre](i1_multimetre/README.md) | Anatomie, caractéristiques (points, précision, impédance, TRMS, CAT), types, choix, entretien et contrôle des fusibles | #103 |
-| i2 Oscilloscope | — | #104 |
+| [i2 L'oscilloscope](i2_oscilloscope/README.md) | Ce qu'il apporte, anatomie, caractéristiques (bande passante, échantillonnage), sondes et compensation, pince de masse et terre, déclenchement, choix | #104 |
 | i3 Vérificateur d'absence de tension (VAT) | — | #105 |
 | i4 Pince ampèremétrique | — | #106 |
 | i5 LCR-mètre et ESR-mètre | — | #107 |

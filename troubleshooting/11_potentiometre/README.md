@@ -153,7 +153,7 @@ Sur un **ajustable**, ne pas tourner pour « voir » : mesurer d'abord la grande
 
 ## Niveau 4 — Méthodes avancées
 
-- **Oscilloscope sur le curseur** : potentiomètre en diviseur entre une tension continue et la masse (quelques volts d'une alimentation limitée), sonde sur le curseur, base de temps lente. Tourner l'axe : la trace doit être une rampe lisse. Les coupures brèves, invisibles au multimètre, apparaissent comme des pointes (page i2).
+- **Oscilloscope sur le curseur** : potentiomètre en diviseur entre une tension continue et la masse (quelques volts d'une alimentation limitée), sonde sur le curseur, base de temps lente. Tourner l'axe : la trace doit être une rampe lisse. Les coupures brèves, invisibles au multimètre, apparaissent comme des pointes (page [i2](../i2_oscilloscope/README.md)).
 - **Multimètre à aiguille ou bargraphe** : l'aiguille et le bargraphe d'un multimètre numérique suivent les variations rapides mieux que les chiffres.
 - **Variation de résistance de contact** : la fiche technique d'un ajustable borne les sauts de résistance du curseur pendant la rotation (de l'ordre de 1 à 3 % de la valeur totale, ou 3 Ω). Un ajustable au cermet traversé par un courant très faible, quelques dizaines de microampères, montre davantage ce bruit de contact : c'est une limite du composant, pas une panne.
 - **Mesure de la loi de variation** : relever la résistance entre curseur et bout de piste tous les quarts de course et comparer à la courbe de la fiche technique, pour identifier un modèle sans marquage avant de commander son remplaçant.

@@ -290,3 +290,25 @@ def test_fuse_figure_puts_the_red_probe_in_the_10a_jack_of_each_panel() -> None:
     got = [float(v) for pair in reds for v in pair]
     want = [v for jx, jy in jacks for v in (jx, jy + 4)]
     assert got == pytest.approx(want, abs=0.06)
+
+
+def test_earth_clip_figure_draws_the_short_circuit_in_the_wrong_panel_only() -> None:
+    import guide_i2
+
+    starts = re.findall(r'class="flow fr" d="M([\d.]+)', guide_i2.fig_earth_clip())
+    assert len(starts) == 1
+    assert float(starts[0]) > 380  # right of the divider: clip on the +12 V
+
+
+def test_compensation_trace_overshoots_only_when_overcompensated() -> None:
+    import guide_i2
+
+    low, high = guide_i2.LOW, guide_i2.HIGH
+    levels = {
+        shape: [y for _, y in guide_i2.square_wave(shape)]
+        for shape in ("flat", "under", "over")
+    }
+    assert (min(levels["flat"]), max(levels["flat"])) == (low, high)
+    assert low <= min(levels["under"]) and max(levels["under"]) <= high
+    assert min(levels["under"]) < max(levels["under"])
+    assert min(levels["over"]) < low and max(levels["over"]) > high

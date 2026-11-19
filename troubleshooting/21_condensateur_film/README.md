@@ -147,7 +147,7 @@ Le voltmètre en continu ne voit ni la capacité perdue ni le circuit ouvert : i
 
 - **Pont LCR** : mesure la capacité et le facteur de pertes à une fréquence choisie. Un film sain a des pertes très faibles ; des pertes en hausse trahissent un contact d'extrémité dégradé avant que la capacité ne bouge (page i5).
 - **Essai d'isolement sous tension de service**, condensateur dessoudé : même montage que pour le céramique (fiche [20](../20_condensateur_ceramique/README.md), niveau 4), alimentation de laboratoire limitée à 10 mA, résistance de 1 kΩ en série, **jamais plus que la tension de service du condensateur ni que 50 V**. Après la charge, 1 mV aux bornes de la résistance correspond à 1 µA de fuite ; un film sain donne 0,0 mV. Le décharger ensuite dans la résistance.
-- **Oscilloscope** : comparer le signal de part et d'autre d'un condensateur de liaison. Signal présent en amont et absent ou très affaibli en aval : condensateur ouvert ou capacité perdue (fiche 93).
+- **Oscilloscope** : comparer le signal de part et d'autre d'un condensateur de liaison. Signal présent en amont et absent ou très affaibli en aval : condensateur ouvert ou capacité perdue (page [i2](../i2_oscilloscope/README.md) et fiche 93).
 - **Substitution** : souder provisoirement un condensateur neuf de même valeur à la place du suspect, une patte de l'ancien levée. Le symptôme disparaît : le diagnostic est fait.
 
 ## Arbre de décision

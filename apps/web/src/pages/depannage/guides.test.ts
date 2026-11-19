@@ -37,6 +37,7 @@ describe('guide pages', () => {
     expect(ids).toContain('10_resistance');
     // instrument pages (#84) live in i-prefixed folders beside the numbered guides
     expect(ids).toContain('i1_multimetre');
+    expect(ids).toContain('i2_oscilloscope');
     expect(ids).not.toContain('menu');
   });
 
@@ -69,6 +70,7 @@ describe('guides index', () => {
     expect(html).toMatch(/<html lang="fr"/);
     expect(html).toContain('href="/depannage/10_resistance"');
     expect(html).toContain('href="/depannage/i1_multimetre"');
+    expect(html).toContain('href="/depannage/i2_oscilloscope"');
     expect(html).not.toContain('README.md');
     expect(deadLinks(html)).toEqual([]);
     for (const id of ids) expect(html, id).toContain(`href="/depannage/${id}"`);
