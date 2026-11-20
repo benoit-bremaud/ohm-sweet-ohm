@@ -51,7 +51,7 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 
 **Trancher une lecture douteuse**, du plus sûr au moins sûr :
 
-- **Carte saine identique**, ou voie identique de la même carte : même rail, même calibre, même sens des pointes. Une lecture nettement plus basse sur la carte en panne désigne le rail.
+- **Carte saine identique**, ou voie identique de la même carte : même rail, même calibre, même sens des pointes. Une lecture nettement plus basse sur la carte en panne désigne le rail : injection à courant limité, fiche [92](../92_court_circuit/README.md), régulateurs sains entre entrée et sortie.
 - **Schéma** : il montre ce qui est branché entre le rail et la masse. Une résistance de faible valeur, un bobinage (relais, moteur, inductance), une lampe à filament ou un élément chauffant branchés directement sur le rail font lire leur propre résistance, parfois quelques ohms : c'est normal.
 - **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé : ce repère ne blanchit jamais un rail. Sans carte saine, ni schéma qui explique la lecture (bobinage, lampe, résistance de faible valeur), passer par l'injection à courant limité (fiche [03](../03_methode/README.md), étape 5).
 - Le rail de cœur d'un processeur (autour de 1 V, plusieurs ampères) lit normalement quelques ohms, parfois moins : seule la comparaison avec une carte saine le juge.
@@ -210,7 +210,7 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
-3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Nettement plus bas que sur la carte saine, rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.

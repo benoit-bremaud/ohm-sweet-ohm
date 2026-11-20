@@ -68,7 +68,7 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 | Lecture entre le rail et la masse | Suite |
 | --- | --- |
 | Bip continu, moins de 1 Ω environ, dans les deux sens | court-circuit franc : **ne pas alimenter la carte normalement** ; chercher le composant en court-circuit, par la seule injection à courant limité de la fiche [92](../92_court_circuit/README.md) |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [91](../91_rails_alimentation/README.md)). Sans carte saine, ni schéma qui explique la lecture, et une fois les régulateurs vérifiés entre entrée et sortie : le traiter comme un court-circuit possible, par l'injection à courant limité de la fiche [92](../92_court_circuit/README.md), lue comme indiqué sous ce tableau |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : comparer avec une carte saine ou le schéma, même calibre et même sens des pointes ; certains rails lisent normalement quelques ohms (fiche [91](../91_rails_alimentation/README.md)). Nettement plus bas que sur une carte saine, ou sans carte saine ni schéma qui explique la lecture, et une fois les régulateurs vérifiés entre entrée et sortie : le traiter comme un court-circuit possible, par l'injection à courant limité de la fiche [92](../92_court_circuit/README.md), lue comme indiqué sous ce tableau |
 | Stable, de l'ordre du kilohm ou plus | normal le plus souvent (pont diviseur, LED, circuits au repos) : passer à l'étape 6 |
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
 | Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [00](../00_securite/README.md), « Décharger un condensateur ») |
@@ -162,14 +162,14 @@ flowchart TD
   D -- oui --> E[Zone suspecte : fiche du composant, niveau 1]
   E --> F
   D -- non --> F{Hors tension : un rail en court-circuit à la masse, ou un régulateur en court-circuit entre son entrée et sa sortie ?}
-  F -- rail douteux, sans carte saine ni schéma qui l'explique, régulateurs sains entre entrée et sortie --> Y[Injection à courant limité, fiche 92]
+  F -- rail douteux, nettement plus bas que sur une carte saine ou sans carte saine ni schéma qui l'explique, régulateurs sains entre entrée et sortie --> Y[Injection à courant limité, fiche 92]
   Y -- un composant chauffe anormalement --> M
   Y -- le rail tient sa tension sans limitation, rien ne chauffe : noter le courant, autres lectures douteuses tranchées --> H
   Y -- limitation, rien ne chauffe --> Z[Relever la limite par paliers, jusqu'au courant de service du rail, fiche 92]
   Z --> Y
   Y -- limitation à 100 mA, plafond inconnu --> S
   Y -- toujours en limitation au courant de service du rail --> G
-  F -- oui, ou rail nettement plus bas que sur une carte saine --> G[Ne pas alimenter normalement : recherche de court-circuit, fiche 92]
+  F -- oui --> G[Ne pas alimenter normalement : recherche de court-circuit, fiche 92]
   F -- non, aucune lecture douteuse non tranchée --> H[Mise sous tension à courant limité, fiche 00]
   H --> I{L'alimentation passe en limitation, ou un composant chauffe ?}
   I -- tension près de 0 V, ou un composant chauffe --> G
@@ -206,7 +206,7 @@ flowchart TD
 3. Adaptateur, câble, piles, fusible, réglages.
 4. Photos des deux faces et des connecteurs ; schéma ; repérer la masse et les rails.
 5. Regarder et sentir, carte déchargée.
-6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur, et entre l'entrée et la sortie de chacun. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms sans carte saine ni schéma qui explique la lecture, régulateurs sains entre entrée et sortie : injection limitée à la tension du rail (fiche 92) avant la mise sous tension.
+6. Hors tension : résistance de chaque rail à la masse, à l'entrée, après la protection, à chaque régulateur, et entre l'entrée et la sortie de chacun. Moins de 1 Ω dans les deux sens : ne pas alimenter normalement. Quelques ohms, nettement plus bas que sur une carte saine ou sans carte saine ni schéma qui explique la lecture, régulateurs sains entre entrée et sortie : injection limitée à la tension du rail (fiche 92) avant la mise sous tension.
 7. Alimentation de laboratoire, polarité vérifiée, limite de courant basse, œil sur le courant.
 8. Rails au voltmètre, de l'entrée vers les régulateurs, avant tout signal. Rail trop haut : couper.
 9. Couper la chaîne par le milieu ; comparer avec une carte saine.
