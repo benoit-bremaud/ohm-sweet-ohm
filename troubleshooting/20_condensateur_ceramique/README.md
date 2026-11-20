@@ -135,7 +135,7 @@ C'est l'**injection de courant**, décrite pas à pas en fiche [92](../92_court_
 - rien ne chauffe : limite relevée par paliers, sans dépasser le plafond défini en fiche [03](../03_methode/README.md), étape 5 ;
 - composant désigné : couper la sortie, le dessouder, refaire la mesure au bipeur. Court-circuit toujours là : un second composant est en cause.
 
-Sur un court-circuit franc injecté à 1 V environ, un circuit intégré qui chauffe est lui-même en court-circuit, pas un condensateur voisin ; à la tension nominale du rail, un circuit intégré seulement tiède peut être normal (fiche [92](../92_court_circuit/README.md)).
+Sur un court-circuit franc injecté à la tension de départ (1 V au plus), un circuit intégré qui chauffe est lui-même en court-circuit, pas un condensateur voisin ; à la tension nominale du rail, un circuit intégré seulement tiède peut être normal (fiche [92](../92_court_circuit/README.md)).
 
 **Rail qui porte des condensateurs tantale** (fiche [23](../23_condensateur_tantale/README.md)) : un tantale en court-circuit peut s'enflammer. Ne relever la limite que par paliers, lunettes de protection portées, sans se pencher au-dessus de la carte, de préférence avec une caméra thermique, et couper au premier échauffement.
 
@@ -178,7 +178,7 @@ flowchart TD
   G2 -- oui --> J
   G2 -- non, fuite soupçonnée --> ZC[Fiche 92 : Rail qui fuit]
   G2 -- non, découplage manquant soupçonné --> ZD[Ondulation à l'oscilloscope : niveau 4, et fiche 91]
-  C --> H[Injecter un courant limité, fiche 92 : 1 V d'abord, tension du rail au plus, chercher le point chaud]
+  C --> H[Injecter un courant limité, fiche 92 : 1 V d'abord, ou la tension du rail si elle est plus basse, jamais au-dessus, chercher le point chaud]
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
