@@ -123,7 +123,7 @@ Le contrôle au bipeur reste valable fusible en place : un fusible bon de 200 mA
 
 | Lecture entre l'aval du fusible et la masse | Ce qu'elle dit |
 | --- | --- |
-| Proche de 0 Ω, stable | court-circuit franc sur le rail : le chercher (fiche [92](../92_court_circuit/README.md)) avant toute remise sous tension |
+| Moins de 1 Ω, stable, dans les deux sens | court-circuit franc sur le rail : le chercher (fiche [92](../92_court_circuit/README.md)) avant toute remise sous tension |
 | Quelques ohms à quelques centaines d'ohms | douteux : comparer avec une carte saine ou un schéma qui explique la lecture ; sinon, injection à courant limité (fiche [91](../91_rails_alimentation/README.md), « Hors tension ») |
 | Lecture qui monte puis se stabilise à une valeur élevée | pas de court-circuit franc : défaut intermittent, surcharge, ou fusible mort de fatigue |
 
@@ -201,7 +201,7 @@ flowchart TD
   F -- non, nettement en dessous, hors circuit --> J
   B -- OL --> G
   G --> H{Ohmmètre entre l'aval du fusible et la masse}
-  H -- proche de 0 Ω --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
+  H -- moins de 1 Ω dans les deux sens --> I[Court-circuit en aval : le trouver et le réparer, fiche 92]
   I --> H
   H -- douteux, quelques ohms à quelques centaines d'ohms --> W{Lecture tranchée, fiche 91}
   W -- court-circuit ou fuite --> I

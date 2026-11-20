@@ -56,7 +56,7 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 - **Repère de la loi d'Ohm** : diviser la tension du rail par le courant maximal qu'il fournit (courant de l'adaptateur, ou courant maximal du régulateur). Exemple : 5 V et 1 A donnent 5 Ω. Les circuits intégrés ne conduisent presque pas sous la faible tension de l'ohmmètre : un rail sain lit en général **bien plus** que ce repère. Une lecture stable **en dessous**, dans les deux sens, sur un rail qui n'alimente ni bobinage, ni lampe, ni élément chauffant, est une anomalie. Au-dessus du repère, rien n'est prouvé : ce repère ne blanchit jamais un rail. Sans carte saine, ni schéma qui explique la lecture (bobinage, lampe, résistance de faible valeur), passer par l'injection à courant limité (fiche [03](../03_methode/README.md), étape 5).
 - Le rail de cœur d'un processeur (autour de 1 V, plusieurs ampères) lit normalement quelques ohms, parfois moins : seule la comparaison avec une carte saine le juge.
 
-**Mode diode**, en complément : pointe rouge sur le rail, noire à la masse, puis l'inverse. Un rail positif sain lit OL, une valeur qui monte, ou une valeur nettement plus haute que dans l'autre sens (rail de cœur sous 2 V) dans le premier sens et une jonction, 0,3 à 0,7 V, dans le second : ce sont les diodes de protection des circuits intégrés. Sur un rail négatif, les deux lectures s'échangent. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
+**Mode diode**, en complément, sur un rail positif : pointe rouge sur le rail et noire à la masse, un rail sain lit OL ou une valeur qui monte (sur un rail de cœur sous 2 V, une valeur nettement plus haute que dans l'autre sens) ; pointes inversées, il lit une jonction, 0,3 à 0,7 V : ce sont les diodes de protection des circuits intégrés. Sur un rail négatif, les deux lectures s'échangent. Une lecture proche de 0 V **dans les deux sens** est un court-circuit (fiche [01](../01_multimetre/README.md)).
 
 Ce que cette mesure ne dit pas : **lequel** des composants du rail est en cause. C'est l'objet de la fiche [92](../92_court_circuit/README.md).
 
@@ -84,7 +84,7 @@ Fumée, odeur de brûlé, composant qui chauffe : couper d'abord, chercher ensui
 
 Voltmètre continu, pointe noire fixée à la masse par un grippe-fil, une seule pointe tenue à la main (fiche [02](../02_pieges_en_circuit/README.md)). Mesurer chaque ligne du tableau, de l'entrée vers les charges.
 
-**Tolérance** : un rail régulé se lit à **± 5 %** de sa valeur nominale dans la plupart des cas (4,75 à 5,25 V pour 5 V ; 3,14 à 3,46 V pour 3,3 V) ; la fiche technique du régulateur et celle des circuits alimentés donnent la valeur exacte. Une entrée non régulée (adaptateur à transformateur) peut lire nettement plus que sa tension marquée quand la carte consomme peu : c'est normal tant que la tension reste sous le maximum d'entrée du régulateur.
+**Tolérance** : un rail régulé se lit à **± 5 %** de sa valeur nominale dans la plupart des cas (4,75 à 5,25 V pour 5 V ; 3,14 à 3,46 V pour 3,3 V) ; la fiche technique du régulateur et celle des circuits alimentés donnent la valeur exacte. Mesurée plus tard sur l'adaptateur d'origine, une entrée non régulée (adaptateur à transformateur) peut lire nettement plus que sa tension marquée quand la carte consomme peu : c'est normal tant que la tension reste sous le maximum d'entrée du régulateur.
 
 | Lecture | Causes à chercher |
 | --- | --- |
@@ -180,10 +180,10 @@ flowchart TD
   B -- toute autre lecture --> R0{Entrée-sortie de chaque régulateur : proche de 0 Ω dans les deux sens ?}
   R0 -- oui --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
   S0 -- court-circuit réparé --> B
-  R0 -- non, un rail à quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
+  R0 -- non, un rail stable sous le kilohm --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
   C -- oui, autres lectures douteuses tranchées --> D
-  C -- non, nettement plus bas que sur la carte saine, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
-  S2 -- un composant chauffe, ou toujours en limitation au plafond --> S
+  C -- non, nettement plus bas que sur la carte saine, rien pour comparer ni expliquer, ou, sans carte saine, lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
+  S2 -- un composant chauffe, ou toujours en limitation au plafond connu --> S
   S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer, autres lectures douteuses tranchées --> D
   R0 -- non, tous les rails au kilohm ou plus ou à lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
@@ -210,7 +210,7 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
-3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Nettement plus bas que sur la carte saine, rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Nettement plus bas que sur la carte saine, rien pour comparer, ou, sans carte saine, lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.

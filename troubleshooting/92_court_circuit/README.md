@@ -10,10 +10,10 @@ Un rail en court-circuit lit la **même** résistance partout : l'ohmmètre dit 
 
 ## Avant de chercher : est-ce bien un court-circuit ?
 
-La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Un rail **douteux** (quelques ohms à quelques centaines d'ohms), nettement plus bas que sur une carte saine, ou sans carte saine ni schéma qui explique la lecture, se traite par la même injection, une fois vérifié qu'aucun régulateur de ce rail ne lit près de 0 Ω entre son entrée et sa sortie (fiche 91, étape 6 : sinon l'injection porterait aussi l'autre rail à la tension injectée), faite **avant** de diviser le rail et lue comme au point 5 de « Régler et monter par paliers ». Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
+La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Un rail **douteux** (quelques ohms à quelques centaines d'ohms), nettement plus bas que sur une carte saine, ou sans carte saine ni schéma qui explique la lecture, se traite par la même injection, une fois vérifié qu'aucun régulateur relié à ce rail, celui qui le produit comme ceux qu'il alimente, ne lit près de 0 Ω entre son entrée et sa sortie (fiche 91, « Hors tension », point 6 : sinon l'injection porterait aussi l'autre rail à la tension injectée, au-dessus de sa tension nominale quand ce rail est l'entrée du régulateur), faite **avant** de diviser le rail et lue comme au point 5 de « Régler et monter par paliers ». Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
 
 - **Rail de cœur d'un processeur** (autour de 1 V, plusieurs ampères) : quelques ohms, parfois moins, sur une carte saine.
-- **Bobinage, lampe à filament, élément chauffant, moteur** branchés directement sur le rail : l'ohmmètre lit leur résistance en continu, parfois moins de 1 Ω.
+- **Bobinage, lampe à filament, élément chauffant, moteur** branchés directement sur le rail : l'ohmmètre lit leur résistance en continu, parfois moins de 1 Ω ; un schéma qui les montre branchés directement sur le rail explique la lecture (fiche 91).
 - **Cordons du multimètre** : pointes en court-circuit, ils lisent déjà 0,1 à 0,5 Ω. Faire ce zéro avant de juger une lecture de 0,8 Ω (fiche [01](../01_multimetre/README.md)).
 - **Mauvais nœud** : la pointe posée du côté de la masse d'une résistance de mesure de courant, ou sur une deuxième masse reliée à la première.
 
@@ -76,7 +76,7 @@ Un défaut de quelques dizaines de milliohms ne dissipe que quelques dizaines de
 
 **Chercher le point chaud**, du plus sûr au moins sûr (fiche [00](../00_securite/README.md), « La chaleur ») :
 
-- **Caméra thermique** : la carte entière d'un coup d'œil, sans contact. Limite : une surface métallique brillante (blindage, boîtier de condensateur, soudure) paraît plus froide qu'elle ne l'est.
+- **Caméra thermique** (page i8) : la carte entière d'un coup d'œil, sans contact. Limite : une surface métallique brillante (blindage, boîtier de condensateur, soudure) paraît plus froide qu'elle ne l'est.
 - **Alcool isopropylique** : sortie coupée, une goutte étalée en film mince sur la zone suspecte, puis sortie activée. Le film s'évapore **d'abord** sur le composant qui chauffe.
 - **Dos du doigt**, approché sans toucher, puis effleuré brièvement, en dernier, seulement à faible courant, et de préférence sortie coupée juste avant : un composant en défaut peut dépasser 100 °C.
 
@@ -107,7 +107,7 @@ Pourquoi l'ohmmètre ne fait pas ce travail : ses cordons et le contact de ses p
 
 Brancher l'alimentation de laboratoire sur un rail, c'est alimenter la **sortie** d'un régulateur dont l'entrée est à 0 V. Le courant peut alors **remonter** vers l'entrée par des chemins internes au régulateur (diode du transistor de puissance, jonctions parasites), que sa fiche technique décrit quand elle traite de la sortie plus haute que l'entrée.
 
-- **Rail en court-circuit franc** : le rail reste à quelques dizaines de millivolts, bien en dessous du seuil d'une diode. Rien ne remonte. Tant que le rail reste sous 1 V environ, il ne remonte presque rien : le risque commence quand la tension est montée vers la tension nominale.
+- **Rail en court-circuit franc** : le rail reste à quelques dizaines de millivolts, bien en dessous du seuil d'une diode. Rien ne remonte. Sous 1 V environ, l'entrée ne monte qu'à quelques dixièmes de volt, trop peu pour alimenter le rail d'entrée : il ne remonte presque rien. Le risque commence quand la tension est montée vers la tension nominale.
 - **Rail douteux, qui monte à sa tension nominale** : le courant remonte, charge les condensateurs d'entrée et alimente à moitié tout ce qui est branché sur le rail d'entrée. Deux conséquences : un composant peut chauffer **sur un autre rail** que celui que l'on teste ; et un régulateur linéaire de type 78xx peut être détruit si sa sortie dépasse son entrée de plusieurs volts alors que l'entrée est maintenue basse. Sa fiche technique le signale et prévoit une diode de protection de la sortie vers l'entrée, que toutes les cartes n'ont pas.
 
 Ce qu'il faut faire quand le rail monte :
@@ -134,7 +134,7 @@ Les deux rails lisent une résistance très faible **entre eux**, donc la même 
 
 - **Hors tension** : mesurer la résistance entre les deux rails, dans les deux sens.
 - **Suspects** : un pont de soudure entre deux broches voisines, un régulateur en court-circuit entre entrée et sortie, un transistor de commutation en court-circuit, un circuit intégré relié aux deux rails.
-- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA. Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension du rail le plus bas par rapport à la masse. Elle ne doit jamais devenir négative de plus de 1 V, ni de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, les condensateurs polarisés sont pris à l'envers. Limite atteinte : ne plus monter, couper. Sous la limite aussi, une tension inverse n'est tolérée que brièvement, et moins encore à chaud (fiche 23) : la garder la plus basse possible et couper entre deux recherches. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
+- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA, relevée ensuite par paliers comme au point 4 de « Régler et monter par paliers », sans dépasser le plus petit des plafonds des deux rails (fiche 03, étape 5). Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension de chaque rail par rapport à la masse. Aucun rail ne doit s'inverser (un rail positif qui devient négatif, un rail négatif qui devient positif) de plus de 1 V, ni de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, les condensateurs polarisés sont pris à l'envers. Entre deux rails positifs, c'est le plus bas qui peut s'inverser ; entre deux rails négatifs, le plus haut ; entre un rail positif et un rail négatif (+12 V et −12 V), la masse reste entre les deux et l'écart normal est la somme des deux tensions (24 V). Limite atteinte : ne plus monter, couper. Sous la limite aussi, une tension inverse n'est tolérée que brièvement, et moins encore à chaud (fiche 23) : la garder la plus basse possible et couper entre deux recherches. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
 
 Un rail lu trop haut a pu détruire ce qu'il alimente (fiche [91](../91_rails_alimentation/README.md)) : après la réparation, contrôler chaque circuit de ce rail.
 
@@ -165,10 +165,10 @@ Sur un composant à deux bornes, lever **une seule** borne suffit pour le sortir
 
 ```mermaid
 flowchart TD
-  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux, nettement plus bas que sur une carte saine ou sans point de comparaison, dont aucun régulateur ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
-  B -- oui --> B1{Carte saine : même lecture ?}
+  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux, nettement plus bas que sur une carte saine ou sans point de comparaison, dont aucun régulateur, ni celui qui le produit ni ceux qu'il alimente, ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
+  B -- oui --> B1{Carte saine : même lecture ? Bobinage, lampe, moteur : schéma qui explique la lecture ?}
   B1 -- oui --> B2[Pas un court-circuit : mise sous tension, fiche 91]
-  B1 -- non, nettement plus bas, ou pas de carte saine --> C
+  B1 -- non, nettement plus bas, ou ni carte saine ni schéma qui l'explique --> C
   B -- non --> C{Examen visuel : pont de soudure, débris, vis, zone brûlée ?}
   C -- oui --> C1[Corriger, puis mesurer de nouveau le rail]
   C1 --> N
@@ -186,7 +186,7 @@ flowchart TD
   J -- non --> K[Relever la limite d'un palier]
   K --> F
   J -- 100 mA, plafond inconnu, rail seulement douteux --> X[Doute, pas un verdict : fiche 03, Quand s'arrêter]
-  J -- oui --> L[Suivre les millivolts : tension aux bornes de chaque condensateur]
+  J -- oui : plafond connu atteint, ou 100 mA sur un rail à moins de 1 Ω --> L[Suivre les millivolts : tension aux bornes de chaque condensateur]
   L --> M[Lever le composant qui lit le moins, puis ses voisins dans l'ordre de la fiche]
   M --> I
   I --> N{Résistance du rail redevenue normale ?}
@@ -197,7 +197,7 @@ flowchart TD
 
 ## Aide-mémoire d'établi
 
-1. Confirmer : moins de 1 Ω dans les deux sens, zéro des cordons fait. Cœur de processeur ou bobinage sur le rail : comparer avec une carte saine avant de conclure. Rail seulement douteux : injecter avant de diviser.
+1. Confirmer : moins de 1 Ω dans les deux sens, zéro des cordons fait. Cœur de processeur : comparer avec une carte saine avant de conclure ; bobinage, lampe, élément chauffant, moteur : carte saine ou schéma qui explique la lecture. Rail seulement douteux : régulateurs reliés au rail vérifiés entre entrée et sortie, puis injecter avant de diviser.
 2. Loupe d'abord : pont de soudure, débris, vis, zone brûlée.
 3. Diviser : modules débranchés, cavaliers, 0 Ω, ferrites et inductances levés d'un côté.
 4. Injection : alimentation de laboratoire seulement, toute autre source débranchée, + sur le rail, 1 V, limite à 100 mA.

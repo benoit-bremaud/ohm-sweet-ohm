@@ -146,7 +146,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Résistance d'un rail à la masse, hors tension | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md), [10](10_resistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure de courant | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md), [13](13_fusible/README.md) |
-| Injection de courant | [92](92_court_circuit/README.md) | [03](03_methode/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
+| Injection de courant | [92](92_court_circuit/README.md) | [03](03_methode/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md) |
 
 ## Licence
