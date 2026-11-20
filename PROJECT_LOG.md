@@ -315,6 +315,7 @@ Chronological operational logbook. Release history lives in `CHANGELOG.md` (from
   - **Adversarial review, third verification** on `68f4ff7` (1 Must, 1 Should, fixed): the rail-to-rail line of the checklist states both reverse-voltage limits, the 0.5 V start and the normal-gap limit, as the prose does.
   - **Adversarial review, fourth verification** on `93b61bd` (gate open, 1 Nice, fixed): the rail-to-rail line of the checklist carries the smaller current ceiling of the two rails.
   - **Adversarial review, fifth verification** on `ed0a812` (gate open, 1 Nice, fixed): the rail-to-rail line of the checklist keeps any reversal brief, cut between two searches.
+  - **PR #152 review** (Codex, 1 P1 and 1 P2, both applied): rail-to-rail injection stops at any polarity reversal of a rail, since a few tenths of a volt in reverse already exceed the absolute limit of integrated circuits; the injection starts at the lower of about 1 V and the rail's nominal voltage (guides 92 and 20).
   - **Follow-ups**: the figure example of guide 00 (0.21 V at 100 mA, about 2 ohms) now falls in the doubtful range; a wording of guide 20 on the rail reading is ambiguous.
 
 ## 2026-11-20

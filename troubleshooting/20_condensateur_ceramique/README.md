@@ -130,7 +130,7 @@ Le court-circuit dissipe de la chaleur là où il se trouve, et seulement là. O
 
 C'est l'**injection de courant**, décrite pas à pas en fiche [92](../92_court_circuit/README.md) : où brancher, tension de départ, paliers de courant et leur plafond, recherche du point chaud, suivi des millivolts, précautions sur la sortie d'un régulateur. L'essentiel :
 
-- alimentation de laboratoire limitée en courant, tension de départ vers 1 V, montée ensuite sans **jamais dépasser** la tension nominale du rail (les circuits intégrés du rail la reçoivent aussi), limite à 100 mA ;
+- alimentation de laboratoire limitée en courant, tension de départ vers 1 V, ou à la tension nominale du rail si elle est plus basse, montée ensuite sans **jamais dépasser** la tension nominale du rail (les circuits intégrés du rail la reçoivent aussi), limite à 100 mA ;
 - point chaud cherché à la caméra thermique, à la goutte d'alcool isopropylique (elle s'évapore d'abord sur le coupable) ou au dos du doigt approché brièvement ;
 - rien ne chauffe : limite relevée par paliers, sans dépasser le plafond défini en fiche [03](../03_methode/README.md), étape 5 ;
 - composant désigné : couper la sortie, le dessouder, refaire la mesure au bipeur. Court-circuit toujours là : un second composant est en cause.
