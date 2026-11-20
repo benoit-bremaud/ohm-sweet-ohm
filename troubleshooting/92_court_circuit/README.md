@@ -134,7 +134,7 @@ Les deux rails lisent une résistance très faible **entre eux**, donc la même 
 
 - **Hors tension** : mesurer la résistance entre les deux rails, dans les deux sens.
 - **Suspects** : un pont de soudure entre deux broches voisines, un régulateur en court-circuit entre entrée et sortie, un transistor de commutation en court-circuit, un circuit intégré relié aux deux rails.
-- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA, relevée ensuite par paliers comme au point 4 de « Régler et monter par paliers », sans dépasser le plus petit des plafonds des deux rails (fiche 03, étape 5). Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension de chaque rail par rapport à la masse. Aucun rail ne doit s'inverser (un rail positif qui devient négatif, un rail négatif qui devient positif) de plus de 1 V, ni de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, les condensateurs polarisés sont pris à l'envers. Entre deux rails positifs, c'est le plus bas qui peut s'inverser ; entre deux rails négatifs, le plus haut ; entre un rail positif et un rail négatif (+12 V et −12 V), la masse reste entre les deux et l'écart normal est la somme des deux tensions (24 V). Limite atteinte : ne plus monter, couper. Sous la limite aussi, une tension inverse n'est tolérée que brièvement, et moins encore à chaud (fiche 23) : la garder la plus basse possible et couper entre deux recherches. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
+- **Injection** : le + sur le rail de tension la plus haute, le − sur l'autre, limite à 100 mA, relevée ensuite par paliers comme au point 4 de « Régler et monter par paliers », sans dépasser le plus petit des plafonds des deux rails (fiche 03, étape 5). Commencer vers 0,5 V et ne jamais dépasser l'**écart** normal entre les deux rails (1,7 V entre un rail de 5 V et un rail de 3,3 V). La masse de la carte n'est alors reliée à aucune borne de l'alimentation : en montant, surveiller la tension de chaque rail par rapport à la masse. Aucun rail ne doit dépasser sa tension nominale par rapport à la masse, ni s'inverser (un rail positif qui devient négatif, un rail négatif qui devient positif) de plus de 1 V, ni de plus de 10 % de la plus petite tension marquée des condensateurs au tantale de ce rail (0,25 V pour un modèle de 2,5 V ; fiche [23](../23_condensateur_tantale/README.md)) : au-delà, les condensateurs polarisés sont pris à l'envers. Entre deux rails positifs, c'est le plus bas qui peut s'inverser ; entre deux rails négatifs, le plus proche de 0 V (−5 V face à −12 V) ; entre un rail positif et un rail négatif (+12 V et −12 V), la masse reste entre les deux : aucun ne s'inverse, mais l'un peut dépasser sa tension nominale quand la masse se rapproche de l'autre ; l'écart normal est 24 V, et la montée s'arrête dès qu'un rail atteint sa tension nominale (12 V) par rapport à la masse. Limite atteinte : ne plus monter, couper. Sous la limite aussi, une tension inverse n'est tolérée que brièvement, et moins encore à chaud (fiche 23) : la garder la plus basse possible et couper entre deux recherches. Chercher ensuite le point chaud et suivre les millivolts de la même façon.
 
 Un rail lu trop haut a pu détruire ce qu'il alimente (fiche [91](../91_rails_alimentation/README.md)) : après la réparation, contrôler chaque circuit de ce rail.
 
@@ -165,8 +165,8 @@ Sur un composant à deux bornes, lever **une seule** borne suffit pour le sortir
 
 ```mermaid
 flowchart TD
-  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux, nettement plus bas que sur une carte saine ou sans point de comparaison, dont aucun régulateur, ni celui qui le produit ni ceux qu'il alimente, ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
-  B -- oui --> B1{Carte saine : même lecture ? Bobinage, lampe, moteur : schéma qui explique la lecture ?}
+  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux, nettement plus bas que sur une carte saine ou sans point de comparaison, dont aucun régulateur, ni celui qui le produit ni ceux qu'il alimente, ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, élément chauffant, moteur ?}
+  B -- oui --> B1{Carte saine : même lecture ? Bobinage, lampe, élément chauffant, moteur : schéma qui explique la lecture ?}
   B1 -- oui --> B2[Pas un court-circuit : mise sous tension, fiche 91]
   B1 -- non, nettement plus bas, ou ni carte saine ni schéma qui l'explique --> C
   B -- non --> C{Examen visuel : pont de soudure, débris, vis, zone brûlée ?}
@@ -186,7 +186,7 @@ flowchart TD
   J -- non --> K[Relever la limite d'un palier]
   K --> F
   J -- 100 mA, plafond inconnu, rail seulement douteux --> X[Doute, pas un verdict : fiche 03, Quand s'arrêter]
-  J -- oui : plafond connu atteint, ou 100 mA sur un rail à moins de 1 Ω --> L[Suivre les millivolts : tension aux bornes de chaque condensateur]
+  J -- oui : plafond connu atteint, ou 100 mA, plafond inconnu, sur un rail à moins de 1 Ω --> L[Suivre les millivolts : tension aux bornes de chaque condensateur]
   L --> M[Lever le composant qui lit le moins, puis ses voisins dans l'ordre de la fiche]
   M --> I
   I --> N{Résistance du rail redevenue normale ?}

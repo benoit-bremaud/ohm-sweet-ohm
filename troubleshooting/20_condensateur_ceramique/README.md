@@ -184,7 +184,7 @@ flowchart TD
   I -- un autre composant --> K[Voir la fiche de ce composant]
   I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : noter le courant ; trop fort, fiche 92, Rail qui fuit ; sinon fils d'injection retirés, tout refermer, mise sous tension, fiche 03 étape 6]
   I -- rien, limitation à 100 mA, plafond inconnu, rail douteux --> ZB[Doute, pas un verdict : fiche 03, Quand s'arrêter]
-  I -- rien, en limitation au plafond connu de la fiche 03 étape 5, ou à 100 mA sur un rail à moins de 1 Ω --> L[Fiche 92 : millivolts le long du rail]
+  I -- rien, en limitation au plafond connu de la fiche 03 étape 5, ou à 100 mA, plafond inconnu, sur un rail à moins de 1 Ω --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
   M -- encore un court-circuit, ou rail toujours douteux --> H
   M -- lecture redevenue normale --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}

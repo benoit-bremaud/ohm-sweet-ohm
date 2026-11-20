@@ -182,7 +182,7 @@ flowchart TD
   S0 -- court-circuit réparé --> B
   R0 -- non, un rail stable sous le kilohm --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
   C -- oui, autres lectures douteuses tranchées --> D
-  C -- non, nettement plus bas que sur la carte saine, rien pour comparer ni expliquer, ou, sans carte saine, lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
+  C -- non, nettement plus bas que sur la carte saine, rien pour comparer ni expliquer, ou, sans carte saine ni schéma qui l'explique, lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
   S2 -- un composant chauffe, ou toujours en limitation au plafond connu --> S
   S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer, autres lectures douteuses tranchées --> D
@@ -210,7 +210,7 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
-3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Nettement plus bas que sur la carte saine, rien pour comparer, ou, sans carte saine, lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Nettement plus bas que sur la carte saine, rien pour comparer, ou, sans carte saine ni schéma qui l'explique, lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.
