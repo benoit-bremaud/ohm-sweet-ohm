@@ -419,8 +419,10 @@ def test_relay_contact_rests_on_nc_and_moves_to_no_when_energised() -> None:
     assert states == ["nc", "no"]
 
 
-def test_contact_test_circuit_stays_inside_the_low_voltage_scope() -> None:
+def test_contact_test_circuit_shows_its_source_resistor_and_current() -> None:
     import guide_33
 
+    figure = guide_33.FIGURES["chute-de-tension-du-contact"][0]()
+    assert "12 V + 24 Ω" in figure
+    assert "0,5 A dans le contact" in figure
     assert guide_33.TEST_VOLTS <= 50
-    assert guide_33.TEST_VOLTS / guide_33.TEST_AMPS == pytest.approx(24)

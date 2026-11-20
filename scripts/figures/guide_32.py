@@ -15,7 +15,9 @@ from elements import (
 )
 
 RATIO = 2  # turns ratio of the example, primary to secondary
-INJECTED = 1.0  # volts RMS on the primary: a 1:20 step-up still stays under 25 V AC
+INJECTED = (
+    1.0  # volts RMS on the winding with the most turns: the transformer steps down
+)
 
 
 def secondary_voltage(primary: float, ratio: float) -> float:

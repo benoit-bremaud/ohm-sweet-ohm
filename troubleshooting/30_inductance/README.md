@@ -66,7 +66,8 @@ Un aspect normal ne prouve rien : une spire en court-circuit ne se voit pas.
 
 | Lecture | Verdict |
 | --- | --- |
-| Proche de la lecture des cordons seuls | Bobinage continu. Rien n'est prouvé sur les spires |
+| Proche de la lecture des cordons seuls (inductance de puissance, perle de ferrite) | Bobinage continu. Rien n'est prouvé sur les spires |
+| Faible et stable, jusqu'à quelques dizaines d'ohms sur une inductance de forte valeur en fil fin (ordre de grandeur de cette fiche) | Bobinage continu. Comparer à la fiche technique ; rien n'est prouvé sur les spires |
 | OL | Bobinage coupé : inductance à remplacer, cause à chercher |
 | Lecture instable quand on bouge une patte | Fil cassé à la sortie du bobinage, ou soudure interne défaite |
 
@@ -103,7 +104,7 @@ En continu, une inductance est un fil : la tension moyenne à ses bornes est pre
 ## Niveau 4 — Méthodes avancées
 
 - **Pont LCR** (page i5) : mesurer l'inductance hors circuit, à la fréquence de test indiquée par la fiche technique, et la comparer à la valeur marquée ou à un composant identique reconnu bon. Une valeur nettement trop basse désigne des spires en court-circuit ou un noyau fissuré.
-- **Test d'oscillation** à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)), composant dessoudé : brancher un condensateur de 0,001 à 1 µF en parallèle sur le bobinage, l'exciter par une impulsion (générateur de fonctions) et observer l'oscillation amortie. Un bobinage sain oscille plusieurs cycles ; une spire en court-circuit absorbe l'énergie et l'oscillation s'éteint en moins de deux cycles.
+- **Test d'oscillation** à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)), composant dessoudé : brancher un condensateur de 0,001 à 1 µF en parallèle sur le bobinage, l'exciter par une impulsion de quelques volts (générateur de fonctions ; 5 V au plus, choix de cette fiche) et observer l'oscillation amortie. La masse du générateur et la pince de masse de l'oscilloscope vont sur la **même** extrémité du bobinage (page i2, section Pince de masse et terre). Un bobinage sain oscille plusieurs cycles ; une spire en court-circuit absorbe l'énergie et l'oscillation s'éteint en moins de deux cycles.
 
 ![En haut, un générateur d'impulsions, un condensateur et le bobinage à tester en parallèle, reliés à un oscilloscope. En bas, deux écrans : à gauche une oscillation qui dure plusieurs cycles, bobinage sain ; à droite une oscillation éteinte en moins de deux cycles, spire en court-circuit probable.](test-d-oscillation.svg)
 
@@ -118,7 +119,7 @@ La surtension à l'ouverture se voit aussi à l'oscilloscope. La courbe ci-desso
 
 ```mermaid
 flowchart TD
-  A[Inductance suspecte, carte débranchée] --> B{Côté secteur ou primaire d'une alimentation à découpage ?}
+  A[Inductance suspecte, carte débranchée] --> B{Côté secteur, primaire d'une alimentation à découpage, ou plus de 50 V continu / 25 V alternatif quelque part ?}
   B -- oui --> C[Hors périmètre : professionnel]
   B -- non --> D{Brûlée, noyau fissuré ou soudure fissurée ?}
   D -- soudure --> E[Refaire la soudure]
@@ -176,7 +177,7 @@ Avant de remettre sous tension : mesurer la résistance du rail en aval par rapp
 - **Inductance** : composant qui s'oppose aux variations du courant qui le traverse ; sa valeur s'exprime en henrys (H), le plus souvent en microhenrys (µH).
 - **Perle de ferrite** : filtre qui laisse passer le courant continu et transforme les parasites haute fréquence en chaleur.
 - **Résistance du bobinage (DCR)** : résistance en continu du fil de l'inductance.
-- **Courant de saturation** : courant au-delà duquel le noyau ne peut plus stocker d'énergie ; l'inductance chute.
+- **Courant de saturation** : courant au-delà duquel la perméabilité du noyau s'effondre ; l'inductance chute.
 - **Courant nominal** : courant qui provoque l'échauffement maximal admis par le fabricant.
 - **Spire en court-circuit** : deux tours de fil voisins qui se touchent, isolant détruit ; la boucle fermée absorbe l'énergie et la transforme en chaleur.
 - **Blindage** : noyau qui referme le champ magnétique sur lui-même pour ne pas perturber les composants voisins.

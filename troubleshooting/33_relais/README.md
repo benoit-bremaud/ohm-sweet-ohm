@@ -29,7 +29,7 @@ Le nombre de broches renseigne sur le contact : un simple interrupteur donne 4 b
 
 Le boîtier porte la référence, la tension de la bobine et le pouvoir de coupure des contacts. Le reste se lit sur la fiche technique.
 
-| Exemple (fiches techniques, voir Sources) | Bobine | Colle au plus tard à | Relâche au plus tôt à | Contact |
+| Exemple (fiches techniques, voir Sources) | Bobine | Colle au plus tard à | Retombe au plus tard à | Contact |
 | --- | --- | --- | --- | --- |
 | Puissance, 1 inverseur (Songle SRD-05VDC-SL-C) | 5 V, 70 Ω à ±10 %, 71,4 mA | 75 % de 5 V, soit 3,75 V | 10 % de 5 V, soit 0,5 V | 100 mΩ au plus, neuf ; 7 A sous 28 V continu, 10 A sous 125 V alternatif |
 | Signal, 1 inverseur (Omron G5V-1, 5 V) | 5 V, 166,7 Ω à ±10 %, 30 mA | 80 % de 5 V, soit 4 V | 10 % de 5 V, soit 0,5 V | 100 mΩ au plus ; 1 A sous 24 V continu ; charge minimale 1 mA sous 5 V |
@@ -86,7 +86,9 @@ Un ohmmètre ne fait pas passer assez de courant pour juger un contact : un fabr
 2. Faire passer un courant connu dans le **contact fermé** : une seconde source de 12 V et une résistance de 24 Ω en série donnent 0,5 A. La résistance dissipe 6 W : prendre un modèle de puissance de 10 W au moins, il chauffe. Rester sous le courant maximal du contact (1 A pour le relais de signal de l'exemple).
 3. Multimètre sur **V continu**, une pointe sur chaque borne du contact fermé, au plus près du boîtier.
 4. Diviser la tension lue par le courant : c'est la résistance du contact.
-5. Ramener les alimentations à zéro **avant** de débrancher quoi que ce soit.
+5. Pour finir : couper d'abord la **source du contact**, puis ramener à zéro l'alimentation de la bobine, et seulement ensuite débrancher. Couper la bobine en premier ferait ouvrir le contact sous 0,5 A : c'est l'user pendant qu'on le mesure (précaution de cette fiche).
+
+Si le relais ne contient pas de diode, en monter une en parallèle sur la bobine pour l'essai, bague du côté du plus, comme sur la figure du symbole.
 
 ![Deux mesures au multimètre sur volts continus, sur un relais dessoudé dont la bobine est alimentée. Une source de 12 volts et une résistance de 24 ohms imposent 0,5 ampère dans le contact fermé, entre COM et NO. À gauche, 0,02 volt, soit 40 milliohms : contact sain. À droite, 0,60 volt, soit 1,2 ohm : contact dégradé.](chute-de-tension-du-contact.svg)
 
@@ -125,6 +127,8 @@ Uniquement sur une carte en basse tension, alimentation limitée en courant. Le 
 
 Les deux premières mesures suivent la procédure du fabricant ; les verdicts « relais suspect » et « panne en amont » sont des déductions de cette fiche.
 
+**Relais bistable** : sa bobine ne reçoit qu'une impulsion, puis le contact garde sa position sans courant. Une tension nulle à la bobine y est normale : ce tableau et l'arbre de décision ne s'appliquent pas tels quels. Suivre la fiche technique, ou observer l'impulsion à l'oscilloscope (déduction de cette fiche).
+
 **Chute de tension du contact en place** : relais collé et charge alimentée, voltmètre continu entre les deux bornes du contact fermé. Un bon contact ne laisse que quelques dizaines de millivolts ; une tension notable signale un contact dégradé. Diviser par le courant de la charge quand il est connu.
 
 ### Du symptôme au relais suspect
@@ -141,7 +145,7 @@ Ces liens se déduisent du rôle du composant ; aucune source ouverte ne les én
 ## Niveau 4 — Méthodes avancées
 
 - **Tensions de collage et de relâchement**, relais dessoudé, voltmètre sur la bobine, contact surveillé par sa chute de tension : monter lentement la tension de la bobine depuis zéro et noter celle où le contact bascule (elle doit être au plus celle de la fiche technique) ; repartir de la tension nominale, descendre lentement et noter celle où il retombe (elle doit être au moins celle de la fiche technique).
-- **Oscilloscope** (page [i2](../i2_oscilloscope/README.md)) sur la bobine d'un relais en place, carte en basse tension : à la coupure, une diode de roue libre en état limite la pointe à une tension de diode (fiche [30](../30_inductance/README.md)). Une pointe élevée signale une diode absente ou coupée. La pointe peut dépasser les limites de la sonde et de ces fiches : ne faire cette mesure que si la diode a d'abord été contrôlée hors tension (précaution de cette fiche).
+- **Oscilloscope** (page [i2](../i2_oscilloscope/README.md)) sur la bobine d'un relais en place, carte en basse tension. Sonde ×10, pointe sur la borne de la bobine **côté transistor**, pince de masse sur le 0 V de la carte, **jamais sur l'autre borne de la bobine** : elle est au plus de l'alimentation, et la pince le mettrait en court-circuit (page i2, section Pince de masse et terre). À la coupure, une diode de roue libre en état limite la pointe à une tension de diode (fiche [30](../30_inductance/README.md)). Une pointe élevée signale une diode absente ou coupée. La pointe peut dépasser les limites de la sonde et de ces fiches : ne faire cette mesure que si la diode a d'abord été contrôlée hors tension (précaution de cette fiche).
 - **Essai de tenue en tension** entre bobine et contacts : il met en jeu des tensions dangereuses. Il ne se fait pas dans le cadre de ces fiches.
 - **Substitution** : monter un relais neuf de même référence reste le test le plus sûr.
 
@@ -149,20 +153,25 @@ Ces liens se déduisent du rôle du composant ; aucune source ouverte ne les én
 
 ```mermaid
 flowchart TD
-  A[Relais suspect] --> B{Contacts sur le secteur, ou plus de 50 V sur la carte ?}
+  A[Relais suspect] --> B{Contacts sur le secteur, ou plus de 50 V continu / 25 V alternatif quelque part ?}
   B -- oui --> C[Hors périmètre : professionnel]
-  B -- non --> D{Relais commandé : tension nominale à la bobine ?}
-  D -- non --> E[Panne en amont : commande, transistor, diode de roue libre, alimentation]
+  B -- non --> S{Relais non commandé : la charge reste alimentée ?}
+  S -- oui --> T{Tension présente à la bobine ?}
+  T -- oui --> E[Panne en amont : commande, transistor, diode de roue libre, alimentation]
+  T -- non, contact collé --> R
+  S -- non --> D{Relais commandé : tension nominale à la bobine ?}
+  D -- non --> E
   D -- oui --> F{Le relais colle : clic ?}
   F -- non --> G[Hors tension : ohmmètre sur la bobine, puis relais dessoudé]
   G --> R[Remplacer : mêmes caractéristiques]
   F -- oui --> J[Chute de tension sur le contact fermé, sous courant]
-  J --> K{Résistance très au-dessus de la fiche technique, ou contact collé ?}
+  J --> K{Résistance très au-dessus de la fiche technique, ou lecture instable ?}
   K -- oui --> R
   K -- non --> I[Relais hors de cause : chercher ailleurs]
   R --> P[Chercher la cause : charge à fort courant d'appel, charge inductive sans protection, tension de bobine excessive]
   P --> Q[Essai sur alimentation limitée en courant]
-  E --> Q
+  E --> U[Réparer l'étage de commande : méthode de la fiche 03]
+  U --> Q
 ```
 
 ## Remplacer le composant
@@ -196,7 +205,7 @@ Avant de remettre sous tension : contrôler la diode de roue libre et le transis
 - Un clic ne prouve pas que le contact conduit.
 - Contact : chute de tension sous courant (12 V, 24 Ω, 0,5 A), pas l'ohmmètre. Neuf : 100 mΩ au plus sur les exemples.
 - Contact collé : chercher le courant d'appel de la charge.
-- Pas de clic et bobine bonne : transistor de commande, diode de roue libre.
+- Charge alimentée, relais non commandé : contact collé si la bobine est à 0 V, transistor de commande en court-circuit sinon.
 - Ne jamais débrancher une bobine sous courant.
 - Contacts sur le secteur : hors périmètre.
 

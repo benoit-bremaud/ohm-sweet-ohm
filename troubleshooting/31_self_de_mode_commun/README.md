@@ -6,7 +6,7 @@ Fiche de dépannage de la self de mode commun (filtre de mode commun) : la recon
 
 Une self de mode commun porte **deux bobinages sur un même noyau**, un par fil d'une paire (les deux fils d'une liaison USB ou CAN, le plus et le moins d'une alimentation). Elle laisse passer le courant utile, qui va par un fil et revient par l'autre, et freine les parasites qui circulent dans le même sens sur les deux fils. Elle tombe **rarement** en panne. En continu, chaque bobinage n'est qu'un **fil en série** sur sa ligne : le contrôle se résume à deux mesures à l'ohmmètre, la **continuité de chaque bobinage** et l'**isolement entre les deux**.
 
-> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Une self de mode commun d'alimentation est une bobine : **ne jamais la débrancher ni la dessouder sous courant** (fiche [30](../30_inductance/README.md)). La self de mode commun du **filtre d'entrée secteur** d'une alimentation est reliée au réseau : elle est **hors du périmètre de ces fiches** et relève d'un professionnel.
+> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Une self de mode commun d'alimentation est une bobine : **ne jamais la débrancher ni la dessouder sous courant** (fiche [30](../30_inductance/README.md)). La self de mode commun du **filtre d'entrée secteur** d'une alimentation est reliée au réseau : elle est **hors du périmètre de ces fiches** et relève d'un professionnel. Il en va de même sur un **port réseau PoE** (alimenté par le câble, ou qui alimente un appareil) : ses lignes portent jusqu'à 57 V continu (fiche [00](../00_securite/README.md)).
 
 ## Identifier le composant
 
@@ -32,7 +32,7 @@ La plupart des modèles CMS ne portent aucun marquage : la référence se lit su
 | Ligne CAN (Würth WE-CNSW 744234510) | non donnée à 100 MHz | 400 mA | 1,1 Ω au plus |
 | Alimentation continue (Murata DLW5BTM101SQ2L) | 100 Ω à 100 MHz | 6 A | 13 mΩ au plus |
 
-Une self de ligne de données s'exprime en **impédance à 100 MHz** (en ohms), une self d'alimentation souvent en **inductance** (en millihenrys). L'impédance annoncée ne se mesure pas à l'ohmmètre : en continu, on ne lit que la résistance du fil.
+Une self de ligne de données s'exprime en **impédance à 100 MHz** (en ohms), une self d'alimentation en impédance elle aussi (exemple Murata du tableau) ou en **inductance** (en millihenrys), selon le fabricant. L'impédance annoncée ne se mesure pas à l'ohmmètre : en continu, on ne lit que la résistance du fil.
 
 ## Modes de défaillance
 
@@ -45,7 +45,7 @@ Aucune source ouverte ne classe les pannes des selfs de mode commun. Le tableau 
 | Isolant détruit entre les deux bobinages | rare | Surintensité ou échauffement | Les deux lignes de la paire se retrouvent reliées : contrôler les composants de part et d'autre |
 | Noyau fissuré ou cassé | rare | Choc, chute | Le filtrage se dégrade sans autre symptôme ; chercher d'autres dégâts du même choc |
 
-Les selfs de mode commun des filtres d'alimentation sont décrites comme très fiables par Goldwasser (voir Sources) : la soupçonner en dernier, après le connecteur, le fusible et les composants de protection de la ligne.
+Les selfs de mode commun des filtres d'alimentation sont décrites comme très fiables par Goldwasser (voir Sources), qui parle des filtres d'alimentation à découpage ; l'étendre aux selfs en basse tension est une déduction de cette fiche. La soupçonner en dernier, après le connecteur, le fusible et les composants de protection de la ligne.
 
 ## Niveau 1 — Inspection par les sens
 
@@ -121,7 +121,7 @@ Ces liens se déduisent de la structure du composant (chaque bobinage est en sé
 
 ```mermaid
 flowchart TD
-  A[Self de mode commun suspecte, carte débranchée] --> B{Filtre d'entrée secteur ?}
+  A[Self de mode commun suspecte, carte débranchée] --> B{Filtre d'entrée secteur, port réseau PoE, ou plus de 50 V continu / 25 V alternatif quelque part ?}
   B -- oui --> C[Hors périmètre : professionnel]
   B -- non --> D{Brûlée, noyau fissuré ou soudure fissurée ?}
   D -- soudure --> E[Refaire la soudure]
