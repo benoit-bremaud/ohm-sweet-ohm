@@ -145,7 +145,7 @@ flowchart TD
 3. Lumière rasante, loupe de 4 à 10 fois, davantage pour trancher ; tourner la carte sous la lampe.
 4. Par zones : entrée, régulateurs, composants de puissance, connecteurs, reste.
 5. Joint sain : congé concave et lisse qui mouille patte et pastille ; mat sur une carte sans plomb, comparer aux voisins.
-6. Défauts à refaire : froid, perturbé, mal mouillé, trop peu d'alliage, pont, bille, pastille soulevée, fissure, flux brûlé.
+6. Défauts : froid, perturbé, mal mouillé, trop peu d'alliage, fissure, pastille soulevée (à refaire) ; pont, bille (à retirer) ; flux brûlé (nettoyer, regarder).
 7. Joint d'aspect correct mais suspect : bipeur de la patte à la piste, en appuyant ou en tapotant avec un outil isolant ; ce qui lit 0 Ω au repos peut couper sous l'effort.
 8. Composants : gonflé, fendu, noirci, cratère, carte brunie.
 9. Liquide : source, nettoyage à l'alcool, séchage complet, regarder de nouveau.
