@@ -203,7 +203,7 @@ Avant de remettre sous tension : contrôler la diode de roue libre et le transis
 - Un clic ne prouve pas que le contact conduit.
 - Contact : chute de tension sous courant (12 V, 24 Ω, 0,5 A), pas l'ohmmètre. Neuf : 100 mΩ au plus sur les exemples.
 - Contact collé : chercher le courant d'appel de la charge.
-- Charge alimentée, relais non commandé : contact collé si la bobine est à 0 V, transistor de commande en court-circuit sinon.
+- Charge du contact de travail alimentée, relais non commandé : contact collé si la bobine est à 0 V, transistor de commande en court-circuit sinon.
 - Ne jamais débrancher une bobine sous courant.
 - Contacts sur le secteur : hors périmètre.
 
