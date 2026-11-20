@@ -688,3 +688,31 @@ def tile(x: float, y: float, code: str, head: str, sub: str) -> str:
         + text(x, y + 54, head, "blue", 13, weight=700)
         + text(x, y + 71, sub, "mut", 12)
     )
+
+
+# Trace colours of oscilloscope channels 1 to 4; the screen is always dark, so they are fixed.
+CHANNELS = ("#facc15", "#22d3ee", "#e879f9", "#60a5fa")
+
+
+def screen(
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    cols: int,
+    rows: int,
+    trace: Sequence[Point],
+    colour: str = CHANNELS[0],
+) -> str:
+    """Screen with its graticule of cols × rows divisions and one trace.
+
+    `trace` is given in divisions, origin at the bottom left corner of the graticule.
+    """
+    dx, dy = w / cols, h / rows
+    o = f'  <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="3" fill="#0b1220" stroke="#7d8794"/>\n'
+    lines = "".join(f"M{x + dx * i:.1f} {y} v{h} " for i in range(1, cols))
+    lines += "".join(f"M{x} {y + dy * i:.1f} h{w} " for i in range(1, rows))
+    o += f'  <path d="{lines.strip()}" stroke="#334155" stroke-width="0.7" fill="none"/>\n'
+    d = " L".join(f"{x + dx * px:.1f} {y + h - dy * py:.1f}" for px, py in trace)
+    o += f'  <path d="M{d}" stroke="{colour}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>\n'
+    return o

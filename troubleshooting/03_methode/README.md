@@ -51,7 +51,7 @@ Une bonne part des « pannes de carte » sont ailleurs. À contrôler avant de d
 
 ## Étape 4 — Regarder, sentir
 
-Carte hors tension et déchargée (fiche [00](../00_securite/README.md)). L'inspection trouve une grande part des pannes sans aucune mesure : composant brûlé, fissuré ou gonflé, soudure fissurée, corrosion après un liquide, piste coupée, connecteur mal enfoncé, trace d'une réparation antérieure. Les indices propres à chaque composant sont au niveau 1 de sa fiche ; la méthode d'inspection complète est en fiche 90.
+Carte hors tension et déchargée (fiche [00](../00_securite/README.md)). L'inspection trouve une grande part des pannes sans aucune mesure : composant brûlé, fissuré ou gonflé, soudure fissurée, corrosion après un liquide, piste coupée, connecteur mal enfoncé, trace d'une réparation antérieure. Les indices propres à chaque composant sont au niveau 1 de sa fiche ; la méthode d'inspection complète est en fiche [90](../90_inspection_visuelle/README.md).
 
 Un indice visible désigne une **zone**, pas encore une cause : une résistance brûlée a obéi à un courant trop fort, que quelque chose d'autre a laissé passer (fiche [10](../10_resistance/README.md)).
 
@@ -118,7 +118,7 @@ Rails corrects, panne toujours là : la carte est une **chaîne d'étages**, de 
 - **Comparer** avec une carte saine ou avec une voie identique de la même carte : mêmes points, même appareil, même calibre (fiche [02](../02_pieges_en_circuit/README.md), « Comparer avec une carte saine »).
 - **Échanger** deux éléments réellement identiques (même version, même configuration) et amovibles (modules, cartes filles, câbles), carte hors tension pendant l'échange, et seulement si la panne n'est pas destructrice : si la panne suit l'élément, il est en cause. Un court-circuit, un rail trop haut ou un composant qui chauffe interdit l'échange, qui détruirait la pièce saine.
 
-Le traçage de signal et la comparaison complète sont en fiche 93.
+Le traçage de signal et la comparaison complète sont en fiche [93](../93_tracage_signal/README.md).
 
 ## Étape 9 — Confirmer le composant, trouver la cause
 

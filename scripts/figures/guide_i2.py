@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
 
-from elements import Point, box, clip, curve, heading, svg, text, verdict
+from elements import (
+    CHANNELS,
+    Point,
+    box,
+    clip,
+    curve,
+    heading,
+    screen,
+    svg,
+    text,
+    verdict,
+)
 
-# Trace colours of channels 1 to 4; the screen is always dark, so they are fixed.
-CHANNELS = ("#facc15", "#22d3ee", "#e879f9", "#60a5fa")
 METAL = 'fill="#c9d0d9" stroke="#7d8794"'
 LOW, HIGH = 1.5, 4.5  # levels of the compensation square wave, in divisions
 
@@ -19,30 +27,6 @@ def _badge(x: float, y: float, n: int) -> str:
         f'  <circle cx="{x}" cy="{y}" r="9" fill="#b45309" stroke="#ffffff" stroke-width="1.2"/>\n'
         f'  <text x="{x}" y="{y + 4}" font-size="11" font-weight="700" text-anchor="middle" fill="#ffffff">{n}</text>\n'
     )
-
-
-def _screen(
-    x: float,
-    y: float,
-    w: float,
-    h: float,
-    cols: int,
-    rows: int,
-    trace: Sequence[Point],
-    colour: str = CHANNELS[0],
-) -> str:
-    """Screen with its graticule of cols × rows divisions and one trace.
-
-    `trace` is given in divisions, origin at the bottom left corner of the graticule.
-    """
-    dx, dy = w / cols, h / rows
-    o = f'  <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="3" fill="#0b1220" stroke="#7d8794"/>\n'
-    lines = "".join(f"M{x + dx * i:.1f} {y} v{h} " for i in range(1, cols))
-    lines += "".join(f"M{x} {y + dy * i:.1f} h{w} " for i in range(1, rows))
-    o += f'  <path d="{lines.strip()}" stroke="#334155" stroke-width="0.7" fill="none"/>\n'
-    d = " L".join(f"{x + dx * px:.1f} {y + h - dy * py:.1f}" for px, py in trace)
-    o += f'  <path d="M{d}" stroke="{colour}" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>\n'
-    return o
 
 
 def _knob(x: float, y: float, r: float) -> str:
@@ -97,7 +81,7 @@ def fig_anatomy() -> str:
     for i, e in enumerate(edges):
         trace += [(e, low), (e, high)] if i % 2 == 0 else [(e, high), (e, low)]
     trace.append((12, high))
-    b += _screen(sx, sy, sw, sh, 12, 8, trace)
+    b += screen(sx, sy, sw, sh, 12, 8, trace)
     div = sw / 12
     ty = sy + sh - div * 4
     # trigger markers: level on the left edge, instant at the top
@@ -212,7 +196,7 @@ def fig_compensation() -> str:
         ),
     ):
         b += text(x0, 104, title, size=15, weight=700)
-        b += _screen(x0, 118, 200, 150, 8, 6, square_wave(shape))
+        b += screen(x0, 118, 200, 150, 8, 6, square_wave(shape))
         b += verdict(x0 + 100, 300, head, sub, cls)
     return svg(
         760,

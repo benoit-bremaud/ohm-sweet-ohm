@@ -101,7 +101,7 @@ La chute de tension évite de dessouder un fil pour insérer un ampèremètre : 
 
 ## Comparer avec une carte saine
 
-Quand on dispose d'une carte identique qui fonctionne (ou d'un canal identique sur la même carte : voie gauche et voie droite d'un amplificateur, phases d'un régulateur), les mêmes chemins parallèles existent des deux côtés : la comparaison neutralise le piège. Mesurer les **mêmes points**, avec le **même appareil**, sur le **même calibre**, dans la **même polarité**, les deux cartes hors tension et déchargées. Un écart net (au-delà de quelques pour cent sur une résistance) désigne la zone à examiner. Méthode complète : fiche 93.
+Quand on dispose d'une carte identique qui fonctionne (ou d'un canal identique sur la même carte : voie gauche et voie droite d'un amplificateur, phases d'un régulateur), les mêmes chemins parallèles existent des deux côtés : la comparaison neutralise le piège. Mesurer les **mêmes points**, avec le **même appareil**, sur le **même calibre**, dans la **même polarité**, les deux cartes hors tension et déchargées. Un écart net (au-delà de quelques pour cent sur une résistance) désigne la zone à examiner. Méthode complète : fiche [93](../93_tracage_signal/README.md).
 
 ## Arbre de décision : que vaut cette lecture en circuit ?
 

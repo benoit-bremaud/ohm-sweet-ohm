@@ -1,0 +1,108 @@
+<svg width="760" height="530" viewBox="0 0 760 530" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="760" height="530" rx="16" fill="white"/>
+<text fill="#1F2933" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="24" y="39.2727">Lire un joint de brasure &#xe0; la loupe</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" letter-spacing="0em"><tspan x="24" y="60.7273">Vue de c&#xf4;t&#xe9;, c&#xf4;t&#xe9; joints, composant traversant : le joint sain, puis cinq d&#xe9;fauts &#xe0; chercher</tspan></text>
+<path d="M234 84H22C16.4772 84 12 88.4772 12 94V281C12 286.523 16.4772 291 22 291H234C239.523 291 244 286.523 244 281V94C244 88.4772 239.523 84 234 84Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M225 198H31C29.3431 198 28 199.343 28 201V221C28 222.657 29.3431 224 31 224H225C226.657 224 228 222.657 228 221V201C228 199.343 226.657 198 225 198Z" fill="#1F7A4D"/>
+<path d="M228 198H28V201H228V198Z" fill="#2A9461"/>
+<path d="M129 116H127C125.895 116 125 116.895 125 118V230C125 231.105 125.895 232 127 232H129C130.105 232 131 231.105 131 230V118C131 116.895 130.105 116 129 116Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M150 193H106V198H150V193Z" fill="#D4A017"/>
+<path d="M106 193C120 191 123 178 125 156H131C133 178 136 191 150 193H106Z" fill="url(#paint0_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M114 189C121 186 123 176 123.5 164" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<text fill="#15803D" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="24" y="248.727">&#x2713; Sain</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="24" y="266.318">Cong&#xe9; concave, brillant, patte visible, </tspan><tspan x="24" y="279.318">pastille couverte</tspan></text>
+<path d="M482 84H270C264.477 84 260 88.4772 260 94V281C260 286.523 264.477 291 270 291H482C487.523 291 492 286.523 492 281V94C492 88.4772 487.523 84 482 84Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M473 198H279C277.343 198 276 199.343 276 201V221C276 222.657 277.343 224 279 224H473C474.657 224 476 222.657 476 221V201C476 199.343 474.657 198 473 198Z" fill="#1F7A4D"/>
+<path d="M476 198H276V201H476V198Z" fill="#2A9461"/>
+<path d="M377 116H375C373.895 116 373 116.895 373 118V230C373 231.105 373.895 232 375 232H377C378.105 232 379 231.105 379 230V118C379 116.895 378.105 116 377 116Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M398 193H354V198H398V193Z" fill="#D4A017"/>
+<path d="M356 193C352 182 360 174 364 170C360 162 368 154 376 158C384 152 394 162 389 170C398 176 400 186 396 193H356Z" fill="#9AA0A6" stroke="#6B7280" stroke-width="0.8"/>
+<path d="M366 179.6C366.884 179.6 367.6 178.884 367.6 178C367.6 177.116 366.884 176.4 366 176.4C365.116 176.4 364.4 177.116 364.4 178C364.4 178.884 365.116 179.6 366 179.6Z" fill="#6B7280"/>
+<path d="M382 173.4C382.773 173.4 383.4 172.773 383.4 172C383.4 171.227 382.773 170.6 382 170.6C381.227 170.6 380.6 171.227 380.6 172C380.6 172.773 381.227 173.4 382 173.4Z" fill="#6B7280"/>
+<path d="M388 185.7C388.939 185.7 389.7 184.939 389.7 184C389.7 183.061 388.939 182.3 388 182.3C387.061 182.3 386.3 183.061 386.3 184C386.3 184.939 387.061 185.7 388 185.7Z" fill="#6B7280"/>
+<path d="M372 189.3C372.718 189.3 373.3 188.718 373.3 188C373.3 187.282 372.718 186.7 372 186.7C371.282 186.7 370.7 187.282 370.7 188C370.7 188.718 371.282 189.3 372 189.3Z" fill="#6B7280"/>
+<path d="M377 166.2C377.663 166.2 378.2 165.663 378.2 165C378.2 164.337 377.663 163.8 377 163.8C376.337 163.8 375.8 164.337 375.8 165C375.8 165.663 376.337 166.2 377 166.2Z" fill="#6B7280"/>
+<path d="M361 187.1C361.608 187.1 362.1 186.608 362.1 186C362.1 185.392 361.608 184.9 361 184.9C360.392 184.9 359.9 185.392 359.9 186C359.9 186.608 360.392 187.1 361 187.1Z" fill="#6B7280"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="272" y="248.727">&#x2717; Sec</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="272" y="266.318">Terne, granuleux, bossel&#xe9; : l&#x2019;alliage n&#x2019;a </tspan><tspan x="272" y="279.318">pas coul&#xe9;</tspan></text>
+<path d="M730 84H518C512.477 84 508 88.4772 508 94V281C508 286.523 512.477 291 518 291H730C735.523 291 740 286.523 740 281V94C740 88.4772 735.523 84 730 84Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M721 198H527C525.343 198 524 199.343 524 201V221C524 222.657 525.343 224 527 224H721C722.657 224 724 222.657 724 221V201C724 199.343 722.657 198 721 198Z" fill="#1F7A4D"/>
+<path d="M724 198H524V201H724V198Z" fill="#2A9461"/>
+<path d="M625 116H623C621.895 116 621 116.895 621 118V230C621 231.105 621.895 232 623 232H625C626.105 232 627 231.105 627 230V118C627 116.895 626.105 116 625 116Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M646 193H602V198H646V193Z" fill="#D4A017"/>
+<path d="M624 189C633.389 189 641 182.284 641 174C641 165.716 633.389 159 624 159C614.611 159 607 165.716 607 174C607 182.284 614.611 189 624 189Z" fill="url(#paint1_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M613 168C615 163 619 161 623 161" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="520" y="248.727">&#x2717; Mal mouill&#xe9;</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="520" y="266.318">Boule sur la patte, angle vif, pastille nue</tspan></text>
+<path d="M234 309H22C16.4772 309 12 313.477 12 319V506C12 511.523 16.4772 516 22 516H234C239.523 516 244 511.523 244 506V319C244 313.477 239.523 309 234 309Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M225 423H31C29.3431 423 28 424.343 28 426V446C28 447.657 29.3431 449 31 449H225C226.657 449 228 447.657 228 446V426C228 424.343 226.657 423 225 423Z" fill="#1F7A4D"/>
+<path d="M228 423H28V426H228V423Z" fill="#2A9461"/>
+<path d="M101 341H99C97.8954 341 97 341.895 97 343V455C97 456.105 97.8954 457 99 457H101C102.105 457 103 456.105 103 455V343C103 341.895 102.105 341 101 341Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M157 341H155C153.895 341 153 341.895 153 343V455C153 456.105 153.895 457 155 457H157C158.105 457 159 456.105 159 455V343C159 341.895 158.105 341 157 341Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M118 418H82V423H118V418Z" fill="#D4A017"/>
+<path d="M174 418H138V423H174V418Z" fill="#D4A017"/>
+<path d="M78 418C92 416 95 403 97 381H103C105 403 108 416 122 418H78Z" fill="url(#paint2_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M86 414C93 411 95 401 95.5 389" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M134 418C148 416 151 403 153 381H159C161 403 164 416 178 418H134Z" fill="url(#paint3_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M142 414C149 411 151 401 151.5 389" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M108 418C112 405 120 403 128 404C136 403 144 405 148 418H108Z" fill="url(#paint4_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="24" y="473.727">&#x2717; Pont</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="24" y="491.318">Deux joints reli&#xe9;s : court-circuit</tspan></text>
+<path d="M482 309H270C264.477 309 260 313.477 260 319V506C260 511.523 264.477 516 270 516H482C487.523 516 492 511.523 492 506V319C492 313.477 487.523 309 482 309Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M473 423H279C277.343 423 276 424.343 276 426V446C276 447.657 277.343 449 279 449H473C474.657 449 476 447.657 476 446V426C476 424.343 474.657 423 473 423Z" fill="#1F7A4D"/>
+<path d="M476 423H276V426H476V423Z" fill="#2A9461"/>
+<path d="M377 341H375C373.895 341 373 341.895 373 343V455C373 456.105 373.895 457 375 457H377C378.105 457 379 456.105 379 455V343C379 341.895 378.105 341 377 341Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M354 423H376V417L354 423Z" fill="#0D3B26"/>
+<path d="M397.666 414.18L354.334 421.82L355.202 426.744L398.534 419.104L397.666 414.18Z" fill="#D4A017"/>
+<path d="M354.334 421.82C367.774 417.42 368.471 404.096 366.621 382.083L372.529 381.041C378.319 402.36 383.531 414.641 397.666 414.18L354.334 421.82Z" fill="url(#paint5_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M361.518 416.492C367.891 412.322 368.124 402.127 366.533 390.222" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="272" y="473.727">&#x2717; Pastille soulev&#xe9;e</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="272" y="491.318">D&#xe9;coll&#xe9;e de la carte, souvent apr&#xe8;s le </tspan><tspan x="272" y="504.318">retrait d&#x2019;un composant</tspan></text>
+<path d="M730 309H518C512.477 309 508 313.477 508 319V506C508 511.523 512.477 516 518 516H730C735.523 516 740 511.523 740 506V319C740 313.477 735.523 309 730 309Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M721 423H527C525.343 423 524 424.343 524 426V446C524 447.657 525.343 449 527 449H721C722.657 449 724 447.657 724 446V426C724 424.343 722.657 423 721 423Z" fill="#1F7A4D"/>
+<path d="M724 423H524V426H724V423Z" fill="#2A9461"/>
+<path d="M625 341H623C621.895 341 621 341.895 621 343V455C621 456.105 621.895 457 623 457H625C626.105 457 627 456.105 627 455V343C627 341.895 626.105 341 625 341Z" fill="#AAB2BD" stroke="#7D8794" stroke-width="0.8"/>
+<path d="M646 418H602V423H646V418Z" fill="#D4A017"/>
+<path d="M602 418C616 416 619 403 621 381H627C629 403 632 416 646 418H602Z" fill="url(#paint6_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
+<path opacity="0.8" d="M610 414C617 411 619 401 619.5 389" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M624 389.4C627.866 389.4 631 388.325 631 387C631 385.675 627.866 384.6 624 384.6C620.134 384.6 617 385.675 617 387C617 388.325 620.134 389.4 624 389.4Z" stroke="#111111" stroke-width="1.6"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="520" y="473.727">&#x2717; Fissur&#xe9; en anneau</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="520" y="491.318">Trait sombre autour de la patte, panne qui </tspan><tspan x="520" y="504.318">va et vient</tspan></text>
+<defs>
+<linearGradient id="paint0_linear_5_78" x1="106" y1="156" x2="150" y2="156" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint1_linear_5_78" x1="607" y1="159" x2="641" y2="159" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint2_linear_5_78" x1="78" y1="381" x2="122" y2="381" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint3_linear_5_78" x1="134" y1="381" x2="178" y2="381" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint4_linear_5_78" x1="108" y1="403.778" x2="148" y2="403.778" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint5_linear_5_78" x1="347.909" y1="385.382" x2="391.241" y2="377.742" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+<linearGradient id="paint6_linear_5_78" x1="602" y1="381" x2="646" y2="381" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8B949E"/>
+<stop offset="0.45" stop-color="#EEF1F5"/>
+<stop offset="1" stop-color="#9AA3AE"/>
+</linearGradient>
+</defs>
+</svg>
