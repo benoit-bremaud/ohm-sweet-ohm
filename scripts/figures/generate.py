@@ -23,6 +23,10 @@ import guide_21
 import guide_22
 import guide_23
 import guide_24
+import guide_30
+import guide_31
+import guide_32
+import guide_33
 import guide_i1
 import guide_i2
 
@@ -42,6 +46,10 @@ GUIDES = {
     "22_condensateur_electrolytique": guide_22.FIGURES,
     "23_condensateur_tantale": guide_23.FIGURES,
     "24_supercondensateur": guide_24.FIGURES,
+    "30_inductance": guide_30.FIGURES,
+    "31_self_de_mode_commun": guide_31.FIGURES,
+    "32_transformateur": guide_32.FIGURES,
+    "33_relais": guide_33.FIGURES,
     "i1_multimetre": guide_i1.FIGURES,
     "i2_oscilloscope": guide_i2.FIGURES,
 }

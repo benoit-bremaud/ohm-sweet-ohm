@@ -24,6 +24,7 @@ from elements import (
     chip,
     curve,
     dial_angle,
+    four_pad,
     half_meter,
     heading,
     hookup,
@@ -34,6 +35,7 @@ from elements import (
     res_v,
     tile,
     verdict,
+    winding,
 )
 
 SVG_NS = "{http://www.w3.org/2000/svg}"
@@ -205,6 +207,18 @@ def test_mlcc_terminations_follow_its_orientation() -> None:
     assert (top, bottom) == (pytest.approx((100, 26)), pytest.approx((100, 74)))
 
 
+def test_winding_spans_its_two_ends_and_bulges_on_the_asked_side() -> None:
+    drawing = winding(100, 50, 130, loops=4)
+    assert 'd="M100 50 ' in drawing
+    assert drawing.count("a10 10 0 0 1 0 20") == 4  # 4 loops of 20 fill the 80 span
+    assert winding(100, 50, 130, loops=2, right=False).count("a20 20 0 0 0 0 40") == 2
+
+
+def test_winding_without_a_loop_is_refused() -> None:
+    with pytest.raises(ValueError, match="one loop at least"):
+        winding(0, 0, 10, loops=0)
+
+
 def test_tile_prints_the_code_above_its_meaning() -> None:
     code, head, sub = (
         tile(10, 20, "47", "chiffres significatifs", "ici 47").strip().splitlines()[1:]
@@ -312,3 +326,108 @@ def test_compensation_trace_overshoots_only_when_overcompensated() -> None:
     assert low <= min(levels["under"]) and max(levels["under"]) <= high
     assert min(levels["under"]) < max(levels["under"])
     assert min(levels["over"]) < low and max(levels["over"]) > high
+
+
+def test_ring_of_a_shorted_turn_dies_within_two_periods() -> None:
+    import guide_30
+
+    good, bad = (guide_30.RING_DECAY[k] for k in ("sain", "spire en court-circuit"))
+    assert guide_30.ring(0, good) == pytest.approx(1)
+    assert guide_30.ring(4, good) > 0.2  # still ringing after four periods
+    assert abs(guide_30.ring(2, bad)) < 0.01
+    figure = guide_30.fig_ring_test()
+    assert figure.count("data-ring=") == 2
+    # the generator never sits straight across the tank: it would damp a good coil
+    assert (
+        figure.count('data-series="isolation"') == 1 and guide_30.SERIES_OHMS in figure
+    )
+
+
+@pytest.mark.parametrize(("diode", "floor"), [(False, -300), (True, -1.4)])
+def test_kick_of_an_opened_coil_is_clamped_by_the_diode(
+    diode: bool, floor: float
+) -> None:
+    import guide_30
+
+    levels = [guide_30.kick(t / 100, diode) for t in range(1001)]
+    assert levels[0] == guide_30.KICK_SUPPLY
+    assert min(levels) == pytest.approx(floor)
+    assert levels[-1] == pytest.approx(0, abs=0.01)
+
+
+def test_useful_current_flows_opposite_ways_and_noise_the_same_way() -> None:
+    import guide_31
+
+    arrows = re.findall(r'data-arrow="(\w+)"', guide_31.fig_structure())
+    assert arrows == ["down", "up", "down", "down"]
+
+
+def test_four_pad_part_puts_the_first_winding_on_the_upper_pads() -> None:
+    _, pads = four_pad(100, 100, ("P", "S"))
+    assert list(pads) == ["p1", "p2", "s1", "s2"]
+    assert pads["p1"][1] == pads["p2"][1] < pads["s1"][1] == pads["s2"][1]
+    assert pads["p1"][0] < pads["p2"][0]
+
+
+def test_secondary_voltage_follows_the_turns_ratio() -> None:
+    import guide_32
+
+    assert guide_32.secondary_voltage(1.0, 2) == pytest.approx(0.5)
+    assert guide_32.secondary_voltage(1.0, 1 / 20) == pytest.approx(20)  # step-up
+    for ratio in (0, -2):
+        with pytest.raises(ValueError, match="positive"):
+            guide_32.secondary_voltage(1.0, ratio)
+
+
+def test_ratio_figure_reads_the_primary_then_the_secondary() -> None:
+    import guide_32
+
+    figure = guide_32.fig_ratio()
+    injected = f"{guide_32.INJECTED:.2f}"
+    reduced = f"{guide_32.INJECTED / guide_32.RATIO:.2f}"
+    assert figure.index(f">{injected}<") < figure.index(f">{reduced}<")
+    # a 1:20 step-up fed with the injected voltage stays under the 25 V AC limit of guide 00
+    assert guide_32.secondary_voltage(guide_32.INJECTED, 1 / 20) < 25
+
+
+def test_only_the_third_transformer_symbol_has_a_centre_tap() -> None:
+    import guide_32
+
+    assert guide_32.fig_symbol().count('data-tap="centre"') == 1
+
+
+def test_contact_resistance_is_the_voltage_drop_over_the_test_current() -> None:
+    import guide_33
+
+    good = guide_33.contact_resistance(guide_33.GOOD_DROP, guide_33.TEST_AMPS)
+    worn = guide_33.contact_resistance(guide_33.WORN_DROP, guide_33.TEST_AMPS)
+    assert good == pytest.approx(0.04)
+    assert good < guide_33.CONTACT_MAX < worn
+    for current in (0, -1):
+        with pytest.raises(ValueError, match="positive"):
+            guide_33.contact_resistance(0.1, current)
+
+
+def test_coil_voltage_shown_in_circuit_is_above_the_operate_voltage() -> None:
+    import guide_33
+
+    floor = guide_33.must_operate(guide_33.COIL_VOLTS)
+    assert floor == pytest.approx(3.75)
+    shown = float(re.search(r">(\d\.\d\d)<", guide_33.fig_coil()).group(1))
+    assert floor < shown <= guide_33.COIL_VOLTS
+
+
+def test_relay_contact_rests_on_nc_and_moves_to_no_when_energised() -> None:
+    import guide_33
+
+    states = re.findall(r'data-contact="(\w+)"', guide_33.fig_symbol())
+    assert states == ["nc", "no"]
+
+
+def test_contact_test_circuit_shows_its_source_resistor_and_current() -> None:
+    import guide_33
+
+    figure = guide_33.FIGURES["chute-de-tension-du-contact"][0]()
+    assert "12 V + 24 Ω" in figure
+    assert "0,5 A dans le contact" in figure
+    assert guide_33.TEST_VOLTS <= 50
