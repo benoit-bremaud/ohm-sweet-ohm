@@ -39,7 +39,7 @@ Tous les composants branchés entre un rail et la masse sont **en parallèle** :
 3. Mesurer chaque ligne du tableau, dans l'ordre où le courant circule. Un fusible ouvert ou une diode série cache un court-circuit placé derrière : mesurer **des deux côtés** de chaque protection (fiche [13](../13_fusible/README.md)).
 4. Attendre que la lecture se stabilise : les condensateurs du rail se chargent sous le courant de test, la lecture monte pendant quelques secondes.
 5. Sur une lecture basse, inverser les pointes : un vrai court-circuit lit la même valeur dans les deux sens, une jonction non. Après l'inversion, la lecture repart du début et peut être négative un instant, le temps que les condensateurs se rechargent dans l'autre sens.
-6. Mesurer aussi la résistance entre l'**entrée et la sortie** de chaque régulateur. Proche de 0 Ω dans les deux sens, alors que les deux rails lisent une résistance normale à la masse : son élément de puissance est en court-circuit, la sortie recevrait la tension d'entrée. Ne pas alimenter (fiche [92](../92_court_circuit/README.md), « Court-circuit entre deux rails »). Si l'un des deux rails lit moins de 1 Ω à la masse, traiter d'abord ce rail (fiche 92), puis refaire cette mesure.
+6. Mesurer aussi la résistance entre l'**entrée et la sortie** de chaque régulateur. Proche de 0 Ω dans les deux sens : son élément de puissance est en court-circuit, la sortie recevrait la tension d'entrée (les deux rails lisent alors la même valeur à la masse). Ne pas alimenter (fiche [92](../92_court_circuit/README.md), « Court-circuit entre deux rails »). Exception : si les deux rails lisent eux-mêmes moins de 1 Ω à la masse, cette mesure ne prouve rien ; traiter d'abord le court-circuit à la masse (fiche 92), puis refaire cette mesure.
 
 | Lecture entre le rail et la masse | Verdict | Suite |
 | --- | --- | --- |
@@ -173,8 +173,9 @@ Ses limites :
 ```mermaid
 flowchart TD
   A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse, et entre l'entrée et la sortie de chaque régulateur}
-  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens, rails normaux à la masse --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
+  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens, rails pas tous deux sous 1 Ω à la masse --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
+  S -- court-circuit réparé --> B
   B -- lecture négative ou qui descend --> B0[Charge résiduelle : décharger de nouveau, fiche 00]
   B0 --> B
   B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}

@@ -130,7 +130,7 @@ Un circuit intégré sain consomme aussi quand son rail monte : sans carte saine
 
 ## Court-circuit entre deux rails
 
-Les deux rails lisent une résistance normale à la masse, mais une résistance très faible **entre eux**. Sous tension, le rail le plus bas monte vers le plus haut, ou les deux prennent une valeur intermédiaire.
+Les deux rails lisent une résistance très faible **entre eux**, donc la même valeur à la masse, sans y lire moins de 1 Ω (sinon, traiter d'abord le court-circuit à la masse). Sous tension, le rail le plus bas monte vers le plus haut, ou les deux prennent une valeur intermédiaire.
 
 - **Hors tension** : mesurer la résistance entre les deux rails, dans les deux sens.
 - **Suspects** : un pont de soudure entre deux broches voisines, un régulateur en court-circuit entre entrée et sortie, un transistor de commutation en court-circuit, un circuit intégré relié aux deux rails.
