@@ -431,3 +431,60 @@ def test_contact_test_circuit_shows_its_source_resistor_and_current() -> None:
     assert "12 V + 24 Ω" in figure
     assert "0,5 A dans le contact" in figure
     assert guide_33.TEST_VOLTS <= 50
+
+
+# Illustrations drawn in Figma and committed as exports: no generator to compare with, so check
+# they are safe to serve (nothing fetched or executed). Mermaid trees are checked by the web tests.
+GENERATED = {param.values[0] for param in FIGURES}
+ILLUSTRATIONS = sorted(
+    path
+    for path in generate.ROOT.glob("*/*.svg")
+    if path not in GENERATED and not re.fullmatch(r"arbre-\d+\.svg", path.name)
+)
+
+
+def test_illustrations_are_found() -> None:
+    names = {path.name for path in ILLUSTRATIONS}
+    assert {"joints.svg", "indices.svg"} <= names
+
+
+# Static drawing elements only: no script, animation, link, image or foreign content.
+ILLUSTRATION_TAGS = {
+    "svg",
+    "g",
+    "defs",
+    "path",
+    "rect",
+    "circle",
+    "ellipse",
+    "line",
+    "polygon",
+    "polyline",
+    "text",
+    "tspan",
+    "linearGradient",
+    "radialGradient",
+    "stop",
+    "clipPath",
+    "title",
+    "desc",
+}
+
+
+@pytest.mark.parametrize("path", ILLUSTRATIONS, ids=lambda p: p.stem)
+def test_illustration_is_a_safe_standalone_svg(path: Path) -> None:
+    content = path.read_text(encoding="utf-8")
+    root = ET.fromstring(content)
+    assert root.tag == f"{SVG_NS}svg"
+    for element in root.iter():
+        assert element.tag.removeprefix(SVG_NS) in ILLUSTRATION_TAGS
+        # event handlers (onload, onclick…) and links in any namespace
+        assert not any(
+            name.rsplit("}", 1)[-1].lower().startswith("on") or name.endswith("href")
+            for name in element.attrib
+        )
+    assert re.findall(r"https?://[^\"'\s)]+", content) == ["http://www.w3.org/2000/svg"]
+    for forbidden in ("@import", "data:"):
+        assert forbidden not in content
+    # only references to the file's own gradients and clip paths
+    assert all(ref.startswith("#") for ref in re.findall(r"url\(([^)]*)\)", content))

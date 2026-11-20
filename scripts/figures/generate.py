@@ -27,6 +27,8 @@ import guide_30
 import guide_31
 import guide_32
 import guide_33
+import guide_90
+import guide_93
 import guide_i1
 import guide_i2
 
@@ -50,6 +52,8 @@ GUIDES = {
     "31_self_de_mode_commun": guide_31.FIGURES,
     "32_transformateur": guide_32.FIGURES,
     "33_relais": guide_33.FIGURES,
+    "90_inspection_visuelle": guide_90.FIGURES,
+    "93_tracage_signal": guide_93.FIGURES,
     "i1_multimetre": guide_i1.FIGURES,
     "i2_oscilloscope": guide_i2.FIGURES,
 }

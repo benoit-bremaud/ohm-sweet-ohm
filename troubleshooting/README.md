@@ -123,10 +123,10 @@ L'ordre dans lequel les employer est donné par la fiche [03](03_methode/README.
 
 | Fiche | Contenu | Issue |
 | --- | --- | --- |
-| 90 Inspection visuelle | Soudures, connecteurs, interrupteurs, corrosion, pistes | #93 |
+| [90 Inspection visuelle](90_inspection_visuelle/README.md) | Joints de brasure, composants, connecteurs, interrupteurs, corrosion, pistes, contrôle mécanique | #93 |
 | [91 Contrôle des rails d'alimentation](91_rails_alimentation/README.md) | Résistance des rails hors tension, première mise sous tension, tensions, ondulation, mesure de courant | #93 |
 | [92 Recherche de court-circuit et injection de courant](92_court_circuit/README.md) | Division du rail, injection à courant limité, point chaud, suivi des millivolts | #93 |
-| 93 Traçage de signal et comparaison avec une carte saine | Suivre un signal étage par étage, comparer point par point | #93 |
+| [93 Traçage de signal et comparaison avec une carte saine](93_tracage_signal/README.md) | Suivre un signal étage par étage, étage qui charge sa sortie, comparer point par point, échanger les éléments identiques | #93 |
 
 ## Index des techniques
 
@@ -138,21 +138,23 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Alimentation limitée en courant | [00](00_securite/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md), [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md), [33](33_relais/README.md) |
 | Voltmètre (tensions sous tension) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md), [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md), [33](33_relais/README.md) |
 | Ohmmètre | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md), [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md), [33](33_relais/README.md) |
-| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
-| Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md), [24](24_supercondensateur/README.md) |
+| Bipeur (continuité) | [01](01_multimetre/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md), [90](90_inspection_visuelle/README.md) |
+| Mode diode | [01](01_multimetre/README.md) | [13](13_fusible/README.md), [24](24_supercondensateur/README.md), [93](93_tracage_signal/README.md) |
 | Capacimètre | [01](01_multimetre/README.md) | [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
-| Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [30](30_inductance/README.md) |
+| Lever une patte | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [11](11_potentiometre/README.md), [12](12_thermistance/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [30](30_inductance/README.md), [93](93_tracage_signal/README.md) |
 | Mesure ESR | i5 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md), [33](33_relais/README.md) |
 | Résistance d'un rail à la masse, hors tension | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md), [10](10_resistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md) |
 | Mesure de courant | [91](91_rails_alimentation/README.md) | [03](03_methode/README.md), [13](13_fusible/README.md) |
 | Injection de courant | [92](92_court_circuit/README.md) | [03](03_methode/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
+| Inspection visuelle | [90](90_inspection_visuelle/README.md) | [03](03_methode/README.md), [92](92_court_circuit/README.md) |
+| Traçage de signal, comparaison avec une carte saine | [93](93_tracage_signal/README.md) | [01](01_multimetre/README.md), [02](02_pieges_en_circuit/README.md), [03](03_methode/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md) |
 | Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md), [30](30_inductance/README.md), [32](32_transformateur/README.md) |
 | Test d'oscillation (spires en court-circuit) | [30](30_inductance/README.md) | [30](30_inductance/README.md), [32](32_transformateur/README.md) |
 | Rapport de transformation | [32](32_transformateur/README.md) | [32](32_transformateur/README.md) |
 | Chute de tension d'un contact sous courant | [33](33_relais/README.md) | [33](33_relais/README.md) |
 | Pont LCR (inductance) | i5 | [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md) |
-| Oscilloscope | [i2](i2_oscilloscope/README.md) | [11](11_potentiometre/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md), [33](33_relais/README.md) |
+| Oscilloscope | [i2](i2_oscilloscope/README.md) | [11](11_potentiometre/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [21](21_condensateur_film/README.md), [22](22_condensateur_electrolytique/README.md), [30](30_inductance/README.md), [31](31_self_de_mode_commun/README.md), [32](32_transformateur/README.md), [33](33_relais/README.md), [93](93_tracage_signal/README.md) |
 
 ## Licence
 

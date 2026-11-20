@@ -1,0 +1,60 @@
+<svg width="760" height="330" viewBox="0 0 760 330" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="760" height="330" rx="16" fill="white"/>
+<text fill="#1F2933" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="20" font-weight="bold" letter-spacing="0em"><tspan x="24" y="39.2727">Ce que l&#x2019;&#x153;il trouve sans mesurer</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" letter-spacing="0em"><tspan x="24" y="60.7273">Carte hors tension, &#xe0; la loupe et sous une lumi&#xe8;re rasante : chaque indice d&#xe9;signe une zone</tspan></text>
+<path d="M181 85H27C21.4772 85 17 89.4772 17 95V299C17 304.523 21.4772 309 27 309H181C186.523 309 191 304.523 191 299V95C191 89.4772 186.523 85 181 85Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M177 210H31C29.3431 210 28 211.343 28 213V229C28 230.657 29.3431 232 31 232H177C178.657 232 180 230.657 180 229V213C180 211.343 178.657 210 177 210Z" fill="#1F7A4D"/>
+<path d="M128 126H80C77.7909 126 76 127.791 76 130V208C76 210.209 77.7909 212 80 212H128C130.209 212 132 210.209 132 208V130C132 127.791 130.209 126 128 126Z" fill="#2B4A8B"/>
+<path d="M86 126H76V212H86V126Z" fill="#3D63B0"/>
+<path d="M128 126H118V212H128V126Z" fill="#7A8FC4"/>
+<path d="M76 132C80 112 128 112 132 132H76Z" fill="#C9D0D9" stroke="#7D8794"/>
+<path d="M92 122L104 126L116 122M104 116V130" stroke="#5F6B7A" stroke-width="2" stroke-linecap="round"/>
+<path opacity="0.9" d="M68 212C72 202 84 206 88 210C96 204 112 204 118 210C126 204 138 204 142 212H68Z" fill="#7A4A1D"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="26" y="256.727">Condensateur gonfl&#xe9;</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="26" y="274.318">Dessus bomb&#xe9; ou fendu, d&#xe9;p&#xf4;t </tspan><tspan x="26" y="287.318">brun &#xe0; la base</tspan></text>
+<path d="M365 85H211C205.477 85 201 89.4772 201 95V299C201 304.523 205.477 309 211 309H365C370.523 309 375 304.523 375 299V95C375 89.4772 370.523 85 365 85Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M360 102H216C213.791 102 212 103.791 212 106V228C212 230.209 213.791 232 216 232H360C362.209 232 364 230.209 364 228V106C364 103.791 362.209 102 360 102Z" fill="#1F7A4D"/>
+<path d="M288 207C324.451 207 354 189.091 354 167C354 144.909 324.451 127 288 127C251.549 127 222 144.909 222 167C222 189.091 251.549 207 288 207Z" fill="url(#paint0_radial_5_155)"/>
+<path d="M256 163H238V171H256V163Z" fill="#C9D0D9"/>
+<path d="M338 163H320V171H338V163Z" fill="#C9D0D9"/>
+<path d="M313 154H263C258.029 154 254 158.029 254 163V171C254 175.971 258.029 180 263 180H313C317.971 180 322 175.971 322 171V163C322 158.029 317.971 154 313 154Z" fill="#3A2A1C" stroke="#1A120B"/>
+<path d="M274 154C278 164 270 170 278 180M296 154C292 166 302 170 296 180" stroke="#0B0806" stroke-width="3"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="210" y="256.727">Composant br&#xfb;l&#xe9;</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="210" y="274.318">Corps noirci, carte brunie </tspan><tspan x="210" y="287.318">autour</tspan></text>
+<path d="M549 85H395C389.477 85 385 89.4772 385 95V299C385 304.523 389.477 309 395 309H549C554.523 309 559 304.523 559 299V95C559 89.4772 554.523 85 549 85Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M544 102H400C397.791 102 396 103.791 396 106V228C396 230.209 397.791 232 400 232H544C546.209 232 548 230.209 548 228V106C548 103.791 546.209 102 544 102Z" fill="#1F7A4D"/>
+<path d="M501 132H443C441.343 132 440 133.343 440 135V199C440 200.657 441.343 202 443 202H501C502.657 202 504 200.657 504 199V135C504 133.343 502.657 132 501 132Z" fill="#20242B"/>
+<path d="M440 138H422V144H440V138Z" fill="#C9D0D9"/>
+<path d="M522 138H504V144H522V138Z" fill="#C9D0D9"/>
+<path d="M440 154H422V160H440V154Z" fill="#C9D0D9"/>
+<path d="M522 154H504V160H522V154Z" fill="#C9D0D9"/>
+<path d="M440 170H422V176H440V170Z" fill="#C9D0D9"/>
+<path d="M522 170H504V176H522V170Z" fill="#C9D0D9"/>
+<path d="M440 186H422V192H440V186Z" fill="#C9D0D9"/>
+<path d="M522 186H504V192H522V186Z" fill="#C9D0D9"/>
+<path d="M412 148C420 142 430 146 436 152C432 162 422 166 414 160L412 148Z" fill="#7FBF9A" stroke="#4D8F6A"/>
+<path d="M508 168C518 164 530 168 532 178C524 186 512 184 508 178V168Z" fill="#E6EFE8" stroke="#A9B8AD"/>
+<path d="M426 177C427.657 177 429 175.657 429 174C429 172.343 427.657 171 426 171C424.343 171 423 172.343 423 174C423 175.657 424.343 177 426 177Z" fill="#E6EFE8"/>
+<path d="M418 182C419.105 182 420 181.105 420 180C420 178.895 419.105 178 418 178C416.895 178 416 178.895 416 180C416 181.105 416.895 182 418 182Z" fill="#E6EFE8"/>
+<path d="M522 152.5C523.381 152.5 524.5 151.381 524.5 150C524.5 148.619 523.381 147.5 522 147.5C520.619 147.5 519.5 148.619 519.5 150C519.5 151.381 520.619 152.5 522 152.5Z" fill="#E6EFE8"/>
+<path d="M528 188.5C529.381 188.5 530.5 187.381 530.5 186C530.5 184.619 529.381 183.5 528 183.5C526.619 183.5 525.5 184.619 525.5 186C525.5 187.381 526.619 188.5 528 188.5Z" fill="#5FAE82"/>
+<path d="M430 186C431.105 186 432 185.105 432 184C432 182.895 431.105 182 430 182C428.895 182 428 182.895 428 184C428 185.105 428.895 186 430 186Z" fill="#5FAE82"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="394" y="256.727">Corrosion</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="394" y="274.318">D&#xe9;p&#xf4;t vert ou blanc entre les </tspan><tspan x="394" y="287.318">broches</tspan></text>
+<path d="M733 85H579C573.477 85 569 89.4772 569 95V299C569 304.523 573.477 309 579 309H733C738.523 309 743 304.523 743 299V95C743 89.4772 738.523 85 733 85Z" fill="#F3F5F8" stroke="#D5DBE3"/>
+<path d="M728 102H584C581.791 102 580 103.791 580 106V228C580 230.209 581.791 232 584 232H728C730.209 232 732 230.209 732 228V106C732 103.791 730.209 102 728 102Z" fill="#1F7A4D"/>
+<path d="M586 142H726ZM586 172H642ZM652 172H726ZM586 202H726Z" fill="black"/>
+<path d="M586 142H726M586 172H642M652 172H726M586 202H726" stroke="#3FAE73" stroke-width="7" stroke-linecap="round"/>
+<path opacity="0.85" d="M647 180C653.075 180 658 176.418 658 172C658 167.582 653.075 164 647 164C640.925 164 636 167.582 636 172C636 176.418 640.925 180 647 180Z" fill="#2B1A0E"/>
+<path d="M676 137L672 142L677 147" stroke="#0D3B26" stroke-width="1.6"/>
+<path d="M647 194C659.15 194 669 184.15 669 172C669 159.85 659.15 150 647 150C634.85 150 625 159.85 625 172C625 184.15 634.85 194 647 194Z" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 3"/>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="578" y="256.727">Piste coup&#xe9;e</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="578" y="274.318">Cuivre interrompu, fissure ou </tspan><tspan x="578" y="287.318">trace br&#xfb;l&#xe9;e</tspan></text>
+<defs>
+<radialGradient id="paint0_radial_5_155" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(288 167) scale(66 40)">
+<stop stop-color="#4A2A10"/>
+<stop offset="0.6" stop-color="#8A5A2A" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#1F7A4D" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

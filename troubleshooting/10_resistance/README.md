@@ -77,8 +77,8 @@ Carte sur alimentation limitée en courant (fiche [00](../00_securite/README.md)
 
 Une résistance qui chauffe fatigue ses soudures : un **anneau sombre** se forme autour de la patte, parfois visible seulement à la loupe, en éclairage rasant. Indices : panne qui apparaît à chaud ou disparaît en tapotant la carte.
 
-- Hors tension : bipeur entre **chaque patte et sa pastille** (pas entre les deux pattes), en appuyant légèrement sur le composant avec un outil isolant.
-- Sous tension, alimentation limitée : voltmètre entre la patte et la pastille ; plus de quelques mV, ou nettement plus que sur l'autre patte ou sur une carte saine, signale un contact résistant.
+- Hors tension : bipeur entre **chaque patte et la piste qui part de sa pastille** (pas entre les deux pattes, fiche [90](../90_inspection_visuelle/README.md)), en appuyant légèrement sur le composant avec un outil isolant.
+- Sous tension, alimentation limitée : voltmètre entre la patte et la piste qui part de sa pastille ; plus de quelques mV, ou nettement plus que sur l'autre patte ou sur une carte saine, signale un contact résistant.
 - Réparation : retirer l'ancienne soudure, en remettre de la neuve. Refaire d'office les soudures des autres composants chauds de la zone.
 
 ## Niveau 2 — Mesure hors circuit
