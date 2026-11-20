@@ -335,7 +335,12 @@ def test_ring_of_a_shorted_turn_dies_within_two_periods() -> None:
     assert guide_30.ring(0, good) == pytest.approx(1)
     assert guide_30.ring(4, good) > 0.2  # still ringing after four periods
     assert abs(guide_30.ring(2, bad)) < 0.01
-    assert guide_30.fig_ring_test().count("data-ring=") == 2
+    figure = guide_30.fig_ring_test()
+    assert figure.count("data-ring=") == 2
+    # the generator never sits straight across the tank: it would damp a good coil
+    assert (
+        figure.count('data-series="isolation"') == 1 and guide_30.SERIES_OHMS in figure
+    )
 
 
 @pytest.mark.parametrize(("diode", "floor"), [(False, -300), (True, -1.4)])

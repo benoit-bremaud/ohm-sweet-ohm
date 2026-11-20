@@ -13,6 +13,7 @@ from elements import (
     half_meter,
     heading,
     hookup,
+    power_resistor,
     svg,
     text,
     verdict,
@@ -26,6 +27,7 @@ COPPER = "#c8763a"
 
 RING_PERIODS = 6  # periods of the ringing shown on each screen
 RING_DECAY = {"sain": 2.5, "spire en court-circuit": 0.25}  # time constant, in periods
+SERIES_OHMS = "22 kΩ"  # keeps the generator output from damping the tank
 KICK_SUPPLY = 24  # volts across the coil before the switch opens
 KICK_PEAK = -300  # volts at opening without a diode
 KICK_CLAMP = -1.4  # volts at opening with a freewheel diode
@@ -177,17 +179,23 @@ def fig_continuity() -> str:
 
 # ---------------------------------------------------------------- figure 3
 def _ring_setup() -> str:
-    """Pulse generator, capacitor and coil under test in parallel, oscilloscope across them."""
+    """Pulse generator behind its series resistor, capacitor and coil under test in parallel, oscilloscope across them."""
     o = box(40, 110, 130, 80, "Générateur", ("d'impulsions",))
     o += box(590, 110, 130, 80, "Oscilloscope", ("page i2",))
     o += '  <path class="wire" d="M170 130 H590 M170 170 H590"/>\n'
-    o += '  <path class="wire" d="M300 130 V144 M300 156 V170 M284 144 H316 M284 156 H316"/>\n'
+    o += (
+        '  <g data-series="isolation">\n'
+        + power_resistor(196, 256, 130, SERIES_OHMS, 22)
+        + "  </g>\n"
+    )
+    o += '  <path class="wire" d="M340 130 V144 M340 156 V170 M324 144 H356 M324 156 H356"/>\n'
     o += '  <rect class="bg" x="452" y="131.5" width="16" height="37"/>\n'
     o += winding(460, 130, 170, 4)
-    for x, y in ((300, 130), (300, 170), (460, 130), (460, 170)):
+    for x, y in ((340, 130), (340, 170), (460, 130), (460, 170)):
         o += f'  <circle class="blkf" cx="{x}" cy="{y}" r="3.5"/>\n'
-    o += text(300, 100, "condensateur", "mut", 12, "middle")
-    o += text(300, 198, "0,001 à 1 µF", "mut", 12, "middle")
+    o += text(226, 100, "résistance en série", "mut", 12, "middle")
+    o += text(340, 100, "condensateur", "mut", 12, "middle")
+    o += text(340, 198, "0,001 à 1 µF", "mut", 12, "middle")
     o += text(460, 100, "bobinage à tester", "mut", 12, "middle")
     return o
 
@@ -195,7 +203,7 @@ def _ring_setup() -> str:
 def fig_ring_test() -> str:
     b = heading(
         "Test d'oscillation : trouver une spire en court-circuit",
-        "Composant dessoudé : une impulsion fait osciller le bobinage avec un condensateur en parallèle",
+        "Composant dessoudé : une impulsion, à travers une résistance, fait osciller le bobinage et son condensateur",
     )
     b += _ring_setup()
     b += '  <path class="grid" d="M24 222 H736"/>\n'
@@ -243,7 +251,7 @@ def fig_ring_test() -> str:
         760,
         552,
         "Test d'oscillation d'un bobinage à l'oscilloscope",
-        "En haut, le montage : un générateur d'impulsions, un condensateur de 0,001 à 1 microfarad et le bobinage à tester sont branchés en parallèle, et un oscilloscope mesure la tension à leurs bornes. "
+        "En haut, le montage : un générateur d'impulsions attaque, à travers une résistance en série de 22 kilohms, un condensateur de 0,001 à 1 microfarad et le bobinage à tester branchés en parallèle ; un oscilloscope mesure la tension à leurs bornes. "
         "En bas, deux écrans. À gauche, la tension oscille pendant plusieurs cycles en s'amortissant lentement : le bobinage est sain. "
         "À droite, l'oscillation s'éteint en moins de deux cycles : une spire en court-circuit est probable. "
         "Contrôler d'abord la continuité à l'ohmmètre. Sous 10 microhenrys, comparer avec un composant identique reconnu bon.",
