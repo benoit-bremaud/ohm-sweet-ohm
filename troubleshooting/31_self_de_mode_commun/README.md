@@ -95,7 +95,7 @@ Alimentation limitée en courant. Multimètre sur **V continu**, pointe noire à
 
 | Lecture | Verdict |
 | --- | --- |
-| Même tension continue à l'entrée et à la sortie, sur les deux bobinages, alors que l'aval consomme du courant | Le courant continu passe : bobinages continus |
+| Même tension continue à l'entrée et à la sortie, sur les deux bobinages, alors que l'aval consomme du courant et n'est alimenté que par cette self | Le courant continu passe : bobinages continus |
 | Même tension, mais aval sans charge, ou alimenté par un autre chemin | Rien n'est prouvé : confirmer hors tension à l'ohmmètre (fiche [30](../30_inductance/README.md)) |
 | Tension à l'entrée d'un bobinage, rien ou presque à sa sortie | Bobinage coupé, ou court-circuit en aval qui écrase la ligne : couper et contrôler hors tension |
 
@@ -173,7 +173,7 @@ Avant de remettre sous tension : vérifier à l'ohmmètre la continuité de chaq
 - Ohmmètre, calibre 200 Ω, le long de chaque bobinage : faible = continu, OL = coupé.
 - Ohmmètre, calibre 2 MΩ, entre les deux bobinages, self dessoudée : OL = isolés.
 - Deux bobinages identiques : comparer les deux lectures.
-- Sous tension, en continu : même tension à l'entrée et à la sortie de chaque bobinage, seulement si l'aval consomme du courant ; sinon, ohmmètre hors tension.
+- Sous tension, en continu : même tension à l'entrée et à la sortie de chaque bobinage, seulement si l'aval consomme du courant et n'est alimenté que par cette self ; sinon, ohmmètre hors tension.
 - Self coupée : chercher la surintensité (court-circuit en aval, câble, périphérique) avant de remplacer.
 - Remplacement : même référence, même orientation.
 - Filtre d'entrée secteur : hors périmètre.
