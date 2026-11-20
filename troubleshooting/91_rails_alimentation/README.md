@@ -179,13 +179,14 @@ flowchart TD
   B0 --> B
   B -- toute autre lecture --> R0{Entrée-sortie de chaque régulateur : proche de 0 Ω dans les deux sens ?}
   R0 -- oui --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
-  R0 -- non, rail à quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
+  S0 -- court-circuit réparé --> B
+  R0 -- non, un rail à quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
   C -- oui --> D
   C -- non, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
   S2 -- un composant chauffe, ou toujours en limitation au plafond --> S
   S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer --> D
-  R0 -- non, rail au kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
+  R0 -- non, tous les rails au kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
   D --> E{L'alimentation passe en limitation, ou un composant chauffe ?}
   E -- tension près de 0 V, ou un composant chauffe --> S
   E -- tension partielle, rien ne chauffe --> F[Remonter la limite par paliers, sans dépasser le courant nominal de l'adaptateur d'origine]
@@ -209,7 +210,7 @@ flowchart TD
 
 1. Lister les rails : entrée, après chaque protection, sortie de chaque régulateur ; tension attendue de chacun.
 2. Hors tension, carte déchargée : résistance de chaque rail à la masse, dans les deux sens. Moins de 1 Ω : ne pas alimenter, fiche 92. Entrée-sortie de chaque régulateur : jamais proche de 0 Ω.
-3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92 ; tout refermer avant la mise sous tension.
+3. Quelques ohms : comparer (carte saine, schéma qui explique la lecture). Rien pour comparer, ou lecture sous la tension du rail divisée par son courant maximal : injection à courant limité, fiche 92, régulateurs sains entre entrée et sortie ; tout refermer avant la mise sous tension.
 4. Alimentation de laboratoire, tension nominale, limite basse, polarité vérifiée, œil sur le courant.
 5. Tensions de l'entrée vers les charges, pointe noire fixée à la masse : ± 5 % sur un rail régulé.
 6. Rail trop haut : couper. Rail absent ou bas : remonter jusqu'au dernier point juste.

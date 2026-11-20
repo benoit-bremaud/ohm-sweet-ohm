@@ -165,7 +165,7 @@ Sur un composant à deux bornes, lever **une seule** borne suffit pour le sortir
 
 ```mermaid
 flowchart TD
-  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux sans point de comparaison, régulateurs sains entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
+  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux sans point de comparaison dont aucun régulateur ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
   B -- oui --> B1{Carte saine : même lecture ?}
   B1 -- oui --> B2[Pas un court-circuit : mise sous tension, fiche 91]
   B1 -- non, nettement plus bas, ou pas de carte saine --> C
