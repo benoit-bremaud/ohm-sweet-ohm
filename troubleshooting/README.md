@@ -145,7 +145,7 @@ Chaque technique renvoie aux fiches qui l'utilisent ; l'index se remplit avec le
 | Mesure ESR | i5 | [22](22_condensateur_electrolytique/README.md), [23](23_condensateur_tantale/README.md), [24](24_supercondensateur/README.md) |
 | Chute de tension sous tension | [02](02_pieges_en_circuit/README.md) | [10](10_resistance/README.md), [12](12_thermistance/README.md), [13](13_fusible/README.md), [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md), [33](33_relais/README.md) |
 | Injection de courant | 92 | [20](20_condensateur_ceramique/README.md), [23](23_condensateur_tantale/README.md) |
-| Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md), [30](30_inductance/README.md) |
+| Mesure 4 fils (Kelvin) | [10](10_resistance/README.md) | [10](10_resistance/README.md), [30](30_inductance/README.md), [32](32_transformateur/README.md) |
 | Test d'oscillation (spires en court-circuit) | [30](30_inductance/README.md) | [30](30_inductance/README.md), [32](32_transformateur/README.md) |
 | Rapport de transformation | [32](32_transformateur/README.md) | [32](32_transformateur/README.md) |
 | Chute de tension d'un contact sous courant | [33](33_relais/README.md) | [33](33_relais/README.md) |

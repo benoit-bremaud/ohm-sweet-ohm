@@ -4,9 +4,9 @@ Fiche de dépannage du transformateur en basse tension (signal, audio, impulsion
 
 ## En bref
 
-Un transformateur porte **deux bobinages ou plus, isolés l'un de l'autre, sur un même noyau**. Il ne transmet que l'alternatif et change la tension selon le **rapport des nombres de spires**. Il tombe **rarement** en panne. À l'ohmmètre, chaque bobinage n'est qu'un fil : le contrôle de base vérifie la **continuité de chaque bobinage** et l'**isolement entre bobinages séparés**. Les spires en court-circuit échappent à l'ohmmètre : elles se cherchent au test d'oscillation (fiche [30](../30_inductance/README.md)).
+Un transformateur porte **deux bobinages ou plus, isolés l'un de l'autre, sur un même noyau**. Il ne transmet que l'alternatif et change la tension selon le **rapport des nombres de spires**. Il tombe **rarement** en panne. À l'ohmmètre, chaque bobinage n'est qu'un fil : le contrôle de base vérifie la **continuité de chaque bobinage** et l'**isolement entre bobinages séparés**. Les spires en court-circuit échappent à l'ohmmètre : elles se cherchent au test d'oscillation sur un noyau en ferrite, par substitution sur un noyau en tôles (fiche [30](../30_inductance/README.md)).
 
-> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Un bobinage est une bobine : **ne jamais le débrancher ni le dessouder sous courant** (fiche [30](../30_inductance/README.md)). Un transformateur peut **élever** la tension : quelques volts sur le bobinage qui a le moins de spires donnent davantage sur l'autre. Sont **hors du périmètre de ces fiches** et relèvent d'un professionnel : le transformateur **secteur**, le transformateur d'une **alimentation à découpage** reliée au secteur, le transformateur de ligne ou de très haute tension, le transformateur d'un **port réseau PoE** (alimenté par le câble, ou qui alimente un appareil : jusqu'à 57 V continu sur ses points milieux, fiche 00), et tout transformateur dont un bobinage dépasse 50 V continu ou 25 V alternatif.
+> **Sécurité** : mesures hors tension → carte débranchée, piles retirées, condensateurs déchargés et vérifiés au voltmètre ; mesures sous tension → alimentation limitée en courant, 50 V continu (25 V alternatif) au plus partout sur la carte (fiche [00](../00_securite/README.md)). Un bobinage est une bobine : **ne jamais le débrancher ni le dessouder sous courant** (fiche [30](../30_inductance/README.md)). Un transformateur peut **élever** la tension : quelques volts sur le bobinage qui a le moins de spires donnent davantage sur l'autre. Sont **hors du périmètre de ces fiches** et relèvent d'un professionnel : le transformateur **secteur**, le transformateur d'une **alimentation à découpage** reliée au secteur, le transformateur de ligne ou de très haute tension, le transformateur d'un **port réseau PoE** (alimenté par le câble, ou qui alimente un appareil : jusqu'à 57 V continu, fiche 00), et tout transformateur dont un bobinage dépasse 50 V continu ou 25 V alternatif.
 
 ## Identifier le composant
 
@@ -33,7 +33,7 @@ Un petit transformateur porte au mieux une référence : les caractéristiques s
 | Réseau 10/100, deux voies (Bourns PT61018L) | 1 : 1, point milieu de chaque côté, à ±2 % | 350 µH au moins | 0,9 Ω au plus | 1 500 V alternatif |
 
 - **Rapport** : noté primaire : secondaire. Il vaut le rapport des nombres de spires, donc le rapport des tensions ; le rapport des courants est l'inverse.
-- **Rapport d'impédances** : certaines fiches techniques, surtout en audio, donnent les impédances de chaque côté et non les spires. Le rapport des spires en est la **racine carrée** : 10 kΩ : 8 Ω donne un rapport d'impédances de 1 250, donc un rapport de spires d'environ 35.
+- **Rapport d'impédances** : certaines fiches techniques donnent les impédances de chaque côté et non les spires (le plus souvent en audio : constat de cette fiche). L'impédance vue d'un côté vaut celle de l'autre multipliée par le carré du rapport des spires : le rapport des spires est donc la **racine carrée** du rapport des impédances : 10 kΩ : 8 Ω donne un rapport d'impédances de 1 250, donc un rapport de spires d'environ 35.
 - **CT** (*center tap*) sur une fiche technique : point milieu. « 1CT : 1CT » se lit rapport 1 pour 1 avec un point milieu de chaque côté.
 - **Tenue en tension** : elle se contrôle en fabrication par un essai sous haute tension, pas à l'ohmmètre.
 
@@ -80,7 +80,7 @@ Ne pas tenir les broches en retirant les pointes : couper un courant dans un bob
 | --- | --- | --- |
 | Le long d'un bobinage | Faible, une fois la lecture des cordons retranchée | Bobinage continu. Sous quelques ohms, le multimètre ne permet pas de comparer à la fiche technique (mesure 4 fils, fiche [30](../30_inductance/README.md)) : seul OL tranche |
 | Le long d'un bobinage | OL | Bobinage coupé : transformateur à remplacer, cause à chercher |
-| Le long d'un bobinage de plusieurs dizaines d'ohms | Très inférieure à la valeur publiée | Bobinage en partie court-circuité : à confirmer au test d'oscillation |
+| Le long d'un bobinage de plusieurs dizaines d'ohms | Très inférieure à la valeur publiée | Bobinage en partie court-circuité : à confirmer au test d'oscillation (noyau en ferrite) ou par substitution |
 | Entre deux bobinages séparés | OL | Bobinages isolés |
 | Entre deux bobinages séparés | Toute continuité | Défaut : transformateur à remplacer |
 
@@ -91,7 +91,7 @@ Un écart de 10 % sur la résistance d'un bobinage peut ne rien signifier (Goldw
 Cette mesure applique le principe « rapport des tensions = rapport des spires » ; aucune source ouverte ne décrit la procédure telle quelle, c'est une méthode de cette fiche. Elle vaut pour un transformateur **basse fréquence** (audio) : le voltmètre alternatif d'un multimètre n'est juste qu'en basse fréquence (45 à 500 Hz pour la précision annoncée du modèle cité en source). Pour un transformateur d'impulsions ou de réseau, la même comparaison se fait à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)), à la fréquence de travail.
 
 1. Transformateur dessoudé. Repérer le bobinage **qui compte le plus de spires** sur la fiche technique ; à défaut, prendre le plus résistant à l'ohmmètre (indice de cette fiche, pas une règle). C'est lui qui reçoit le générateur : le transformateur **abaisse** alors la tension, et aucun bobinage ne dépasse la tension injectée. Sur la figure, c'est le primaire.
-2. Régler le générateur sur une sinusoïde de 100 Hz, **1 V efficace au plus**, et le brancher sur ce bobinage. Ne pas toucher les autres bobinages.
+2. Régler le générateur sur une sinusoïde de 100 Hz et le brancher sur ce bobinage. Sans fiche technique, partir du réglage minimal et mesurer l'autre bobinage avant de monter ; ne pas dépasser **1 V efficace**. Ne pas toucher les autres bobinages.
 3. Multimètre sur **V alternatif**, une pointe sur chaque extrémité du bobinage alimenté : noter la tension réellement présente (elle peut être plus basse que le réglage du générateur).
 4. Déplacer les pointes sur l'autre bobinage : noter la tension.
 5. Diviser la première tension par la seconde et comparer au rapport **des spires** du schéma ou de la fiche technique (racine carrée du rapport d'impédances quand la fiche donne des impédances).
@@ -102,7 +102,7 @@ Cette mesure applique le principe « rapport des tensions = rapport des spires �
 | --- | --- |
 | Rapport conforme au schéma ou à la fiche technique | Bobinages cohérents ; ne prouve pas l'absence de spires en court-circuit |
 | Aucune tension au secondaire | Bobinage coupé : reprendre le contrôle de continuité |
-| Rapport nettement différent | Bobinage en défaut probable (déduction de cette fiche) : confirmer au test d'oscillation |
+| Rapport nettement différent | Bobinage en défaut probable (déduction de cette fiche) : confirmer au test d'oscillation (noyau en ferrite) ou par substitution |
 
 **Ne pas injecter du côté qui compte le moins de spires** : la tension est alors multipliée par le rapport. 1 V sur le côté 8 Ω d'un transformateur 10 kΩ : 8 Ω donne environ 35 V de l'autre côté, au-dessus de la limite de 25 V alternatif. **Rapport inconnu** : partir du réglage minimal du générateur et mesurer tous les bobinages avant d'augmenter ; ne jamais dépasser 25 V alternatif sur aucun bobinage.
 
@@ -118,7 +118,7 @@ Cette mesure applique le principe « rapport des tensions = rapport des spires �
 
 ### Sous tension
 
-Uniquement sur une carte en basse tension, alimentation limitée en courant. Le voltmètre continu ne dit rien d'un transformateur, qui ne transmet que l'alternatif : la mesure se fait à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)), en comparant le signal au primaire et au secondaire. La pince de masse reste sur le 0 V de la carte, **jamais sur une extrémité de bobinage** (page i2, section Pince de masse et terre) : chaque extrémité se mesure par rapport au 0 V, et la tension du bobinage est la différence de deux voies (A − B) ou se lit avec une sonde différentielle. Un bobinage isolé dont aucune extrémité n'est au 0 V de la carte (côté câble d'un port réseau) ne se mesure pas avec une sonde à pince de masse.
+Uniquement sur une carte en basse tension, alimentation limitée en courant. Le voltmètre continu ne dit rien d'un transformateur, qui ne transmet que l'alternatif : la mesure se fait à l'oscilloscope (page [i2](../i2_oscilloscope/README.md)), en comparant le signal au primaire et au secondaire. La pince de masse reste sur le 0 V de la carte, **jamais sur une extrémité de bobinage** (page i2, section Pince de masse et terre) : chaque extrémité se mesure par rapport au 0 V, et la tension du bobinage est la différence de deux voies (A − B) ou se lit avec une sonde différentielle. Un bobinage isolé dont aucune extrémité n'est au 0 V de la carte (côté câble d'un port réseau) ne se mesure pas avec une sonde à pince de masse (déduction de cette fiche).
 
 | Observation | Verdict |
 | --- | --- |
@@ -202,10 +202,10 @@ Avant de remettre sous tension : vérifier à l'ohmmètre la continuité de chaq
 - Panne rare : soupçonner d'abord les composants autour.
 - Ohmmètre, calibre 200 Ω, le long de chaque bobinage : faible = continu, OL = coupé.
 - Ohmmètre, calibre 2 MΩ, entre bobinages séparés, transformateur dessoudé : OL attendu, toute continuité = défaut.
-- Spires en court-circuit : invisibles à l'ohmmètre, test d'oscillation (fiche 30).
+- Spires en court-circuit : invisibles à l'ohmmètre ; test d'oscillation sur noyau en ferrite, substitution sinon (fiche 30).
 - Rapport : 1 V efficace au plus, 100 Hz, sur le bobinage qui compte le plus de spires ; jamais plus de 25 V alternatif sur un bobinage.
 - Fiche technique en impédances : rapport des spires = racine carrée.
-- Oscilloscope : pince de masse sur le 0 V, jamais sur un bobinage.
+- Oscilloscope en circuit : pince de masse sur le 0 V de la carte, jamais sur une extrémité de bobinage.
 - Transformateur d'impulsions ou de réseau : oscilloscope, pas multimètre.
 - Remplacement : même référence, même orientation.
 - Secteur, alimentation à découpage, port PoE, haute tension : hors périmètre.
@@ -226,7 +226,7 @@ Avant de remettre sous tension : vérifier à l'ohmmètre la continuité de chaq
 
 Les faits ci-dessous sont reformulés ; les fréquences de panne sont un classement qualitatif, pas une statistique.
 
-- Wikipédia (en), *Transformer* : rapport des spires égal au rapport des tensions, rapport des courants inverse ; convention du point (polarité relative) ; point milieu, exemple de l'étage de sortie audio symétrique ; transformateur élévateur ; flux de fuite ; durée de vie de l'isolant environ divisée par deux pour 7 à 10 °C de plus. <https://en.wikipedia.org/wiki/Transformer>
+- Wikipédia (en), *Transformer* : rapport des spires égal au rapport des tensions, rapport des courants inverse ; convention du point (polarité relative) ; impédance de charge ramenée au primaire égale à celle du secondaire multipliée par le carré du rapport des spires ; transformateur élévateur ; flux de fuite ; durée de vie de l'isolant environ divisée par deux pour 7 à 10 °C de plus. <https://en.wikipedia.org/wiki/Transformer>
 - Samuel M. Goldwasser, *Notes on the Troubleshooting and Repair of Small Switchmode Power Supplies* : l'ohmmètre aide à retrouver les bobinages ; coupures faciles à trouver à l'ohmmètre, spires en court-circuit au test d'oscillation ; transformateurs à haute fréquence moins souvent en panne qu'on ne le craint, petits transformateurs de contre-réaction rarement en cause ; un bobinage en court-circuit fait surchauffer ; remplacement souvent disponible chez le seul fabricant d'origine. <https://www.repairfaq.org/sam/smpsfaq.htm>
 - Samuel M. Goldwasser, *Testing of Flyback (LOPT) Transformers* : modes de défaillance (noyau fissuré, spires en court-circuit, bobinage coupé, isolant détruit) ; toute continuité entre bobinages séparés est un défaut ; l'ohmmètre montre les coupures, les courts-circuits entre bobinages et une résistance très réduite, un écart de 10 % peut ne rien signifier, les spires en court-circuit ne se voient en général pas ; test d'oscillation (condensateur de 0,001 à 1 µF, plusieurs cycles si sain, moins de deux sinon, une spire en court-circuit n'importe où amortit depuis n'importe quel bobinage, le test peut manquer une coupure). <https://www.repairfaq.org/sam/flytest.htm>
 - Test & Measurement Tips, *What's a ring tester and why do you need one?* : l'inductance d'un transformateur à spire en court-circuit peut rester proche de celle d'un bon. <https://www.testandmeasurementtips.com/whats-a-ring-tester-and-why-do-you-need-one-faq/>
