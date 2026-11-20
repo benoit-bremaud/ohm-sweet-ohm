@@ -73,7 +73,7 @@ Un indice visible désigne une **zone**, pas encore une cause : une résistance 
 | Lecture qui monte, puis valeur élevée | pas de court-circuit franc : passer à l'étape 6 |
 | Lecture négative, ou qui descend, sans avoir inversé les pointes | charge résiduelle : décharger de nouveau (fiche [00](../00_securite/README.md), « Décharger un condensateur ») |
 
-**Rail douteux, sans carte saine ni schéma qui explique la lecture** : l'injection de la fiche [92](../92_court_circuit/README.md) (limite à 100 mA, relevée par paliers ; tension montée lentement jusqu'à la tension nominale du rail, jamais au-dessus) se lit ainsi.
+**Rail douteux traité par injection** : l'injection de la fiche [92](../92_court_circuit/README.md) (limite à 100 mA, relevée par paliers ; tension montée lentement jusqu'à la tension nominale du rail, jamais au-dessus) se lit ainsi.
 
 - **Un composant chauffe anormalement** (condensateur, résistance, diode, transistor, ou circuit intégré chaud au doigt) : c'est le suspect. Couper, le dessouder, refaire la mesure (fiche [92](../92_court_circuit/README.md)). Un circuit intégré seulement tiède à la tension de son rail peut être normal.
 - **Le rail tient sa tension nominale, l'alimentation ne passe pas en limitation, rien ne chauffe anormalement** : pas de court-circuit franc. Noter le courant lu, puis passer à l'étape 6. Un courant nettement plus fort que ce que les circuits du rail consomment reste une fuite possible (fiche [92](../92_court_circuit/README.md), « Rail qui fuit »).
