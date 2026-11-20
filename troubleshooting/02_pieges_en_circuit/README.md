@@ -29,7 +29,7 @@ La dernière ligne montre le piège inverse : une résistance coupée ne lit pas
 - **Proche de la nominale** : probablement sain, un chemin parallèle de valeur bien plus élevée ne changeant presque rien. Sauf si le schéma annonce une valeur plus basse : dans l'exemple du tableau, on attend 5 kΩ ; lire 10 kΩ voudrait dire que l'une des deux résistances est coupée.
 - **En dessous de la nominale** : ambigu. Le composant peut être sain et shunté, ou bien en court-circuit. Suivre l'arbre de décision.
 
-Une soudure fissurée ne se voit pas pointes sur les pattes : la contrôler au bipeur entre chaque patte et sa pastille.
+Une soudure fissurée ne se voit pas pointes sur les pattes : la contrôler au bipeur entre chaque patte et la piste qui part de sa pastille (fiche [90](../90_inspection_visuelle/README.md)).
 
 **Raisonner sur le schéma** : quand on l'a, repérer tout ce qui relie les deux nœuds et calculer la valeur attendue en parallèle. Une lecture égale à ce calcul est normale.
 

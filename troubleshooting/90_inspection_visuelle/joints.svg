@@ -10,7 +10,7 @@
 <path d="M106 193C120 191 123 178 125 156H131C133 178 136 191 150 193H106Z" fill="url(#paint0_linear_5_78)" stroke="#7D8794" stroke-width="0.8"/>
 <path opacity="0.8" d="M114 189C121 186 123 176 123.5 164" stroke="white" stroke-width="2" stroke-linecap="round"/>
 <text fill="#15803D" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="24" y="248.727">&#x2713; Sain</tspan></text>
-<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="24" y="266.318">Cong&#xe9; concave, brillant, patte visible, </tspan><tspan x="24" y="279.318">pastille couverte</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="24" y="266.318">Cong&#xe9; concave et lisse, patte visible, </tspan><tspan x="24" y="279.318">pastille couverte</tspan></text>
 <path d="M482 84H270C264.477 84 260 88.4772 260 94V281C260 286.523 264.477 291 270 291H482C487.523 291 492 286.523 492 281V94C492 88.4772 487.523 84 482 84Z" fill="#F3F5F8" stroke="#D5DBE3"/>
 <path d="M473 198H279C277.343 198 276 199.343 276 201V221C276 222.657 277.343 224 279 224H473C474.657 224 476 222.657 476 221V201C476 199.343 474.657 198 473 198Z" fill="#1F7A4D"/>
 <path d="M476 198H276V201H476V198Z" fill="#2A9461"/>
@@ -23,8 +23,8 @@
 <path d="M372 189.3C372.718 189.3 373.3 188.718 373.3 188C373.3 187.282 372.718 186.7 372 186.7C371.282 186.7 370.7 187.282 370.7 188C370.7 188.718 371.282 189.3 372 189.3Z" fill="#6B7280"/>
 <path d="M377 166.2C377.663 166.2 378.2 165.663 378.2 165C378.2 164.337 377.663 163.8 377 163.8C376.337 163.8 375.8 164.337 375.8 165C375.8 165.663 376.337 166.2 377 166.2Z" fill="#6B7280"/>
 <path d="M361 187.1C361.608 187.1 362.1 186.608 362.1 186C362.1 185.392 361.608 184.9 361 184.9C360.392 184.9 359.9 185.392 359.9 186C359.9 186.608 360.392 187.1 361 187.1Z" fill="#6B7280"/>
-<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="272" y="248.727">&#x2717; Sec</tspan></text>
-<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="272" y="266.318">Terne, granuleux, bossel&#xe9; : l&#x2019;alliage n&#x2019;a </tspan><tspan x="272" y="279.318">pas coul&#xe9;</tspan></text>
+<text fill="#B91C1C" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="13" font-weight="bold" letter-spacing="0em"><tspan x="272" y="248.727">&#x2717; Froid</tspan></text>
+<text fill="#5F6B7A" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="10.5" letter-spacing="0em"><tspan x="272" y="266.318">Massif, en tas, limite nette : l&#x2019;alliage n&#x2019;a </tspan><tspan x="272" y="279.318">pas coul&#xe9;</tspan></text>
 <path d="M730 84H518C512.477 84 508 88.4772 508 94V281C508 286.523 512.477 291 518 291H730C735.523 291 740 286.523 740 281V94C740 88.4772 735.523 84 730 84Z" fill="#F3F5F8" stroke="#D5DBE3"/>
 <path d="M721 198H527C525.343 198 524 199.343 524 201V221C524 222.657 525.343 224 527 224H721C722.657 224 724 222.657 724 221V201C724 199.343 722.657 198 721 198Z" fill="#1F7A4D"/>
 <path d="M724 198H524V201H724V198Z" fill="#2A9461"/>

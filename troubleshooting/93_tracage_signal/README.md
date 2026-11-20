@@ -27,7 +27,7 @@ Une carte peut porter plusieurs chaînes : celle qui ne marche pas, désignée p
 3. **Recouper la moitié suspecte** de la même façon, jusqu'à un étage dont l'entrée est correcte et la sortie fausse.
 4. Sur cet étage, mesurer **ses rails à ses broches mêmes**, pas seulement à la sortie du régulateur : une piste coupée ou un filtre ouvert peut le priver de son alimentation. Puis ses tensions continues de repos (polarisation), comparées au schéma ou à la carte saine.
 
-**Avec l'oscilloscope** (page [i2](../i2_oscilloscope/README.md)) : pince de masse sur le 0 V de la carte, au plus près de l'étage mesuré, sonde sur le point. Il montre la forme, l'amplitude, la fréquence, les parasites. Garder les mêmes réglages d'un point au suivant, pour que les amplitudes se comparent d'un coup d'œil. Une sinusoïde écrêtée, déformée d'un seul côté ou plus faible que prévu désigne l'étage aussi bien qu'un signal absent.
+**Avec l'oscilloscope** (page [i2](../i2_oscilloscope/README.md)) : pince de masse sur le 0 V de la carte, au plus près de l'étage mesuré, sonde sur le point. Le 0 V se vérifie sur le schéma : sur une sortie audio en pont, la borne « − » du haut-parleur n'est pas le 0 V. Il montre la forme, l'amplitude, la fréquence, les parasites. Garder les mêmes réglages d'un point au suivant, pour que les amplitudes se comparent d'un coup d'œil. Une sinusoïde écrêtée, déformée d'un seul côté ou plus faible que prévu désigne l'étage aussi bien qu'un signal absent.
 
 **Au voltmètre**, sans oscilloscope : pointe noire sur le 0 V par un grippe-fil.
 
@@ -39,7 +39,7 @@ Une carte peut porter plusieurs chaînes : celle qui ne marche pas, désignée p
 Signal correct à l'entrée d'un étage et absent à sa sortie : l'étage peut être sain et sa sortie écrasée par l'étage suivant (entrée en court-circuit, condensateur de liaison fuyant, connecteur en court-circuit). Pour trancher :
 
 1. Couper l'alimentation, décharger.
-2. **Déconnecter la charge** : débrancher le câble ou le module en aval, ou lever une patte de l'élément de liaison (résistance, condensateur, cavalier), comme en fiche [02](../02_pieges_en_circuit/README.md), « Quand lever une patte ».
+2. **Déconnecter la charge** : débrancher le câble ou le module en aval, ou lever une patte de l'élément de liaison (résistance, condensateur, cavalier), comme en fiche [02](../02_pieges_en_circuit/README.md), « Quand lever une patte ». Jamais un élément d'une boucle de contre-réaction ni du pont diviseur d'un régulateur : la sortie monterait au maximum.
 3. Remettre sous tension à courant limité et mesurer de nouveau la sortie, à vide. Le signal revient : la panne est en aval, dans ce qui vient d'être déconnecté. Il reste absent : la panne est dans l'étage.
 
 Une sortie à vide peut lire un peu plus haut qu'en service : comparer avec ce que la fiche technique donne à vide, ou avec la carte saine dans le même état. Refermer tout ce qui a été ouvert avant la remise en service.
@@ -90,7 +90,8 @@ flowchart TD
   E -- non --> G[Recouper la moitié amont]
   F --> H{Étage trouvé : entrée correcte, sortie fausse ?}
   G --> H
-  H -- non --> D
+  H -- non --> D2[Mesurer au milieu de la partie suspecte]
+  D2 --> E
   H -- oui --> I{Rails de l'étage corrects à ses broches ?}
   I -- non --> I1[Piste, filtre ou régulateur local : fiche 91]
   I -- oui --> J[Hors tension, déconnecter la charge en aval, puis mesurer de nouveau la sortie à vide]
@@ -103,9 +104,10 @@ flowchart TD
   N --> O
   O -- oui --> P[Composant désigné : sa fiche, fiche 03 étape 9]
   O -- non --> Q{Élément identique et amovible, panne non destructrice ?}
-  Q -- oui --> R[Échanger hors tension ; la panne suit l'élément ?]
-  R -- oui --> P
-  R -- non --> S[Panne intermittente ou hors de l'étage : fiche 03, Les pannes intermittentes]
+  Q -- oui --> R[Échanger hors tension]
+  R --> R2{La panne suit l'élément ?}
+  R2 -- oui --> P
+  R2 -- non --> S[Panne intermittente ou hors de l'étage : fiche 03, Les pannes intermittentes]
   Q -- non --> S
 ```
 
@@ -119,7 +121,7 @@ flowchart TD
 6. Rails de l'étage mesurés à ses broches, puis tensions de repos.
 7. Sortie absente : hors tension, déconnecter la charge, mesurer de nouveau à vide.
 8. Carte saine ou voie identique : mêmes points, même appareil, même calibre, même polarité ; un tableau, l'écart net seul compte.
-9. Mode diode hors tension, rouge sur la masse : une signature par broche ; près de 0 = court-circuit, OL = coupure.
+9. Mode diode hors tension, rouge sur la masse : une signature par broche ; près de 0 ou OL là où la carte saine lit une signature = court-circuit ou coupure.
 10. Échange : identique, amovible, hors tension, jamais sur un court-circuit, un rail trop haut ou un composant qui chauffe.
 
 ## Sources

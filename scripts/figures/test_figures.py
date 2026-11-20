@@ -448,19 +448,43 @@ def test_illustrations_are_found() -> None:
     assert {"joints.svg", "indices.svg"} <= names
 
 
+# Static drawing elements only: no script, animation, link, image or foreign content.
+ILLUSTRATION_TAGS = {
+    "svg",
+    "g",
+    "defs",
+    "path",
+    "rect",
+    "circle",
+    "ellipse",
+    "line",
+    "polygon",
+    "polyline",
+    "text",
+    "tspan",
+    "linearGradient",
+    "radialGradient",
+    "stop",
+    "clipPath",
+    "title",
+    "desc",
+}
+
+
 @pytest.mark.parametrize("path", ILLUSTRATIONS, ids=lambda p: p.stem)
 def test_illustration_is_a_safe_standalone_svg(path: Path) -> None:
     content = path.read_text(encoding="utf-8")
-    assert ET.fromstring(content).tag == f"{SVG_NS}svg"
+    root = ET.fromstring(content)
+    assert root.tag == f"{SVG_NS}svg"
+    for element in root.iter():
+        assert element.tag.removeprefix(SVG_NS) in ILLUSTRATION_TAGS
+        # event handlers (onload, onclick…) and links in any namespace
+        assert not any(
+            name.rsplit("}", 1)[-1].lower().startswith("on") or name.endswith("href")
+            for name in element.attrib
+        )
     assert re.findall(r"https?://[^\"'\s)]+", content) == ["http://www.w3.org/2000/svg"]
-    for forbidden in (
-        "href",
-        "@import",
-        "<image",
-        "<script",
-        "<foreignObject",
-        "data:",
-    ):
+    for forbidden in ("@import", "data:"):
         assert forbidden not in content
     # only references to the file's own gradients and clip paths
     assert all(ref.startswith("#") for ref in re.findall(r"url\(([^)]*)\)", content))

@@ -136,7 +136,7 @@ Avant de remplacer, répondre à la question « **pourquoi a-t-il lâché ?** »
 
 ## Les pannes intermittentes
 
-Une panne qui va et vient se cherche en la **provoquant**. D'abord hors tension : bipeur entre chaque patte et sa pastille, en appuyant légèrement sur le composant avec un outil isolant (fiche [10](../10_resistance/README.md)). Puis appareil alimenté à courant limité, mesure en place :
+Une panne qui va et vient se cherche en la **provoquant**. D'abord hors tension : bipeur entre chaque patte et la piste qui part de sa pastille (fiche [90](../90_inspection_visuelle/README.md)), en appuyant légèrement sur le composant avec un outil isolant (fiche [10](../10_resistance/README.md)). Puis appareil alimenté à courant limité, mesure en place :
 
 - **tapoter** la carte et les composants avec un outil isolant, non métallique, **bouger** doucement les connecteurs et les câbles sans les débrancher : une panne sensible aux chocs désigne une soudure, un contact, un porte-fusible. Ne jamais débrancher ni rebrancher un connecteur ou une nappe sous tension ;
 - **noter** si elle dépend de la température : à froid, après quelques minutes, seulement à chaud (fiche [22](../22_condensateur_electrolytique/README.md)) ;

@@ -29,14 +29,16 @@ L'outil garde ses deux noms, fer à souder (le plus courant) ou fer à braser.
 
 ## Les joints de brasure
 
-![Six joints de brasure d'un composant traversant vus de côté, côté joints. Sain : congé concave et brillant, patte visible, pastille couverte. Sec : terne, granuleux, bosselé, l'alliage n'a pas coulé. Mal mouillé : une boule sur la patte, un angle vif, la pastille nue. Pont : deux joints reliés, un court-circuit. Pastille soulevée : décollée de la carte, souvent après le retrait d'un composant. Fissuré en anneau : un trait sombre autour de la patte, une panne qui va et vient](joints.svg)
+![Six joints de brasure d'un composant traversant vus de côté, côté joints. Sain : congé concave et lisse, patte visible, pastille couverte. Froid : massif, en tas, limite nette, l'alliage n'a pas coulé. Mal mouillé : une boule sur la patte, un angle vif, la pastille nue. Pont : deux joints reliés, un court-circuit. Pastille soulevée : décollée de la carte, souvent après le retrait d'un composant. Fissuré en anneau : un trait sombre autour de la patte, une panne qui va et vient](joints.svg)
 
-Un joint sain forme un **congé concave**, à la surface lisse, satinée à brillante, où l'on devine encore la forme de la patte. L'alliage s'étale en angle faible sur la patte comme sur la pastille : c'est la preuve qu'il les a **mouillées** toutes les deux. Les défauts à chercher :
+Un joint sain forme un **congé concave**, à la surface lisse, où l'on devine encore la forme de la patte. L'alliage s'étale en angle faible sur la patte comme sur la pastille : c'est la preuve qu'il les a **mouillées** toutes les deux.
+
+L'aspect dépend de l'alliage. L'alliage étain-plomb donne un joint satiné à brillant ; l'alliage sans plomb, celui de presque toutes les cartes récentes, donne un joint satiné à mat, parfois légèrement granuleux, sans défaut pour autant. Juger donc un joint par comparaison avec ses voisins du même type, et d'abord sur la forme du congé et le mouillage. Les défauts à chercher :
 
 - **Joint froid** : l'alliage n'a pas assez chauffé. Il paraît massif, plissé ou en tas, terne ou parfois brillant, avec une limite nette au lieu d'un congé qui se fond dans la patte. Le contact est mauvais et se fissure avec le temps.
-- **Joint perturbé** : la patte a bougé pendant que l'alliage se figeait. Surface granuleuse, mate, cristalline.
+- **Joint perturbé** : la patte a bougé pendant que l'alliage se figeait. Surface ridée ou fracturée, nettement plus rugueuse que celle des joints voisins.
 - **Mal mouillé** : l'alliage reste en boule sur la patte ou sur la pastille sans s'étaler sur l'autre, avec un angle vif. Une pastille nue autour d'une patte brasée signe un contact incertain. Une variante, le **démouillage**, laisse une surface terne parsemée d'îlots d'alliage plus épais.
-- **Trop peu d'alliage** : un congé creux qui ne couvre pas la pastille ; sur un trou traversant, l'alliage ne remonte pas dans le trou. Il tient, puis fissure sous les vibrations et les cycles de température. Pour comparer : les normes de fabrication exigent un trou rempli au moins aux trois quarts.
+- **Trop peu d'alliage** : un congé creux qui ne couvre pas la pastille ; sur un trou traversant, l'alliage ne remonte pas dans le trou. Il tient, puis fissure sous les vibrations et les cycles de température. Pour comparer : sur un trou métallisé (carte double face), les normes de fabrication demandent en général un trou rempli au moins aux trois quarts ; un trou non métallisé (carte simple face) ne se remplit pas.
 - **Pont** : de l'alliage relie deux joints ou deux broches voisines. C'est un court-circuit, à chercher surtout après une réparation et entre les broches fines d'un circuit intégré.
 - **Bille d'alliage** ou éclaboussure : une petite boule collée par le flux, qui peut se déplacer et relier deux pistes.
 - **Pastille soulevée** : décollée de la carte, souvent après le retrait d'un composant, fer trop chaud ou appliqué trop longtemps. La piste qui en part peut être rompue.
@@ -52,13 +54,13 @@ Ces critères désignent un joint à refaire. Ceux qu'appliquent les fabricants 
 
 ![Une résistance traversante vue de côté, côté joints en haut ; le joint de brasure de sa patte gauche est fissuré en anneau. À gauche, ohmmètre, calibre 20 kΩ, une pointe sur chaque patte : 10,0 kΩ, la valeur normale, le joint n'est pas sur le chemin mesuré. À droite, bipeur, pointe rouge sur la patte gauche, pointe noire sur la piste qui part de sa pastille, en appuyant sur le composant : OL, la patte ne touche plus la piste. Au repos, un joint fissuré peut lire 0 Ω](joint-fissure.svg)
 
-Mesurer un joint, c'est mesurer **à travers** lui : une pointe sur la patte, au-dessus du joint, l'autre sur la piste qui part de la pastille, au-delà. Les deux pointes sur les deux pattes d'un composant mesurent le composant, pas ses joints.
+Mesurer un joint, c'est mesurer **à travers** lui : une pointe sur la patte, au-dessus du joint, l'autre sur la piste qui part de la pastille, au-delà, au premier point accessible (pastille suivante, via, cuivre dégagé du vernis) ; un grippe-fil tient cette pointe pendant qu'une main sollicite. Les deux pointes sur les deux pattes d'un composant mesurent le composant, pas ses joints.
 
 1. Bipeur entre la patte et la piste, carte hors tension et déchargée.
-2. **Solliciter pendant la mesure** : appuyer légèrement sur le composant avec un outil isolant, tapoter, faire bouger la patte. Un joint fissuré peut lire 0 Ω au repos et couper sous l'effort : le bip qui hache, ou le passage à OL, le désigne. Le mode MIN/MAX du multimètre, s'il l'a, garde une coupure trop brève pour l'oreille.
-3. Appuyer sans forcer : un effort trop fort fissure un joint sain ou une céramique (fiche [20](../20_condensateur_ceramique/README.md)).
+2. **Solliciter pendant la mesure** : appuyer légèrement sur le composant avec un outil isolant, tapoter, faire bouger la patte. Un joint fissuré peut lire 0 Ω au repos et couper sous l'effort : le bip qui hache, ou le passage à OL, le désigne. Quand l'écran n'est pas visible, l'ohmmètre en mode MIN/MAX, si l'appareil l'a, garde la plus haute valeur lue pendant la sollicitation ; une coupure plus brève que son temps de réponse lui échappe.
+3. Appuyer sans forcer : un effort trop fort fissure un joint sain ou un condensateur céramique (fiche [20](../20_condensateur_ceramique/README.md)).
 
-Un joint douteux se refait plutôt que de se discuter : l'ancien alliage retiré, la patte et la pastille propres, un joint neuf, puis le contrôle de la fiche [03](../03_methode/README.md), étape 10.
+Ce contrôle sert aux joints d'aspect correct mais suspects : panne intermittente, composant lourd ou chaud. Un joint visiblement défectueux se refait plutôt que de se discuter : l'ancien alliage retiré, la patte et la pastille propres, un joint neuf, puis le contrôle de la fiche [03](../03_methode/README.md), étape 10.
 
 ## Les composants
 
@@ -122,17 +124,18 @@ flowchart TD
   D -- non --> E{Corrosion, trace de liquide ?}
   E -- oui --> E1[Trouver l'entrée du liquide, nettoyer, sécher entièrement, regarder de nouveau]
   E -- non --> F{Joint froid, perturbé, mal mouillé, fissuré, pastille soulevée ?}
-  F -- oui --> F1[Bipeur de la patte à la piste, en sollicitant]
-  F1 --> F2{Coupure ou bip qui hache ?}
-  F2 -- oui --> F3[Refaire le joint, puis contrôle de la réparation, fiche 03 étape 10]
-  F2 -- non --> G
-  F -- non --> G{Connecteur, nappe, piste ou via suspect ?}
-  G -- oui --> G1[Contrôler au bipeur en sollicitant ; réenficher hors tension]
+  F -- oui --> F1[Refaire le joint, puis contrôle de la réparation, fiche 03 étape 10]
+  F1 --> G
+  F -- non --> G{Joint d'aspect correct mais suspect, connecteur, nappe, piste ou via ?}
+  G -- oui --> G1[Bipeur à travers la liaison, en sollicitant ; réenficher hors tension]
+  G1 --> G2{Coupure ou bip qui hache ?}
+  G2 -- oui --> G3[Refaire le joint ou réparer la liaison, puis fiche 03 étape 10]
+  G2 -- non --> H
+  G3 --> H
   G -- non --> H[Inspection terminée : rails hors tension, fiche 03 étape 5 ; rien de visible ne prouve rien]
-  C1 --> H
-  D1 --> H
+  C1 --> D
+  D1 --> E
   E1 --> F
-  G1 --> H
 ```
 
 ## Aide-mémoire d'établi
@@ -141,9 +144,9 @@ flowchart TD
 2. Photographier les deux faces avant de toucher.
 3. Lumière rasante, loupe de 4 à 10 fois, davantage pour trancher ; tourner la carte sous la lampe.
 4. Par zones : entrée, régulateurs, composants de puissance, connecteurs, reste.
-5. Joint sain : congé concave, lisse, satiné à brillant, qui mouille patte et pastille.
-6. Défauts : froid, perturbé, mal mouillé, trop peu d'alliage, pont, bille, pastille soulevée, fissure, flux brûlé.
-7. Joint douteux : bipeur de la patte à la piste, en appuyant ou en tapotant avec un outil isolant ; ce qui lit 0 Ω au repos peut couper sous l'effort.
+5. Joint sain : congé concave et lisse qui mouille patte et pastille ; mat sur une carte sans plomb, comparer aux voisins.
+6. Défauts à refaire : froid, perturbé, mal mouillé, trop peu d'alliage, pont, bille, pastille soulevée, fissure, flux brûlé.
+7. Joint d'aspect correct mais suspect : bipeur de la patte à la piste, en appuyant ou en tapotant avec un outil isolant ; ce qui lit 0 Ω au repos peut couper sous l'effort.
 8. Composants : gonflé, fendu, noirci, cratère, carte brunie.
 9. Liquide : source, nettoyage à l'alcool, séchage complet, regarder de nouveau.
 10. Un indice désigne une zone, pas une cause ; rien de visible ne prouve rien.
