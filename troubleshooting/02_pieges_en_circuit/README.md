@@ -69,7 +69,7 @@ Lever une patte (dessouder une seule broche pour isoler le composant) coûte du 
 
 - la lecture est **en dessous** de la nominale et que ni l'inversion des pointes, ni le schéma, ni une carte saine ne permettent de trancher ;
 - on veut une mesure qu'aucun chemin parallèle ne doit fausser : capacité ou ESR exacte, fuite d'un condensateur, gain d'un transistor ;
-- plusieurs composants identiques sont en parallèle (condensateurs de découplage, MOSFET en parallèle) et on cherche lequel est en court-circuit : l'ohmmètre seul ne peut pas les distinguer. Avant de dessouder, essayer la chute de tension le long du rail (fiche 92).
+- plusieurs composants identiques sont en parallèle (condensateurs de découplage, MOSFET en parallèle) et on cherche lequel est en court-circuit : l'ohmmètre seul ne peut pas les distinguer. Avant de dessouder, essayer la chute de tension le long du rail (fiche [92](../92_court_circuit/README.md)).
 
 **Quelle patte** : pour un composant à deux bornes, lever l'une ou l'autre suffit à couper la boucle ; choisir celle qui se dessoude le plus facilement, c'est-à-dire **pas celle reliée à un plan de masse ou d'alimentation**, qui absorbe la chaleur. Transistor bipolaire : lever la base isole les jonctions base-émetteur et base-collecteur (le trajet collecteur-émetteur reste en circuit). MOSFET : la grille n'a pas de jonction ; lever le drain ou la source (souvent la source : sur les boîtiers de puissance, le drain est la languette soudée au cuivre) pour tester le trajet drain-source et la diode interne, et relier un instant grille et source avant la mesure, car une grille en l'air peut rester chargée et rendre le canal passant : un MOSFET sain lirait alors comme un court-circuit. Un circuit intégré se teste sous tension ou se remplace, pas en levant ses broches.
 
@@ -85,7 +85,7 @@ Lever une patte (dessouder une seule broche pour isoler le composant) coûte du 
 
 ## Mesurer la chute de tension sous tension
 
-Le voltmètre est, avec l'ampèremètre (fiche 91), le seul mode qui se branche sur une carte alimentée (fiche [01](../01_multimetre/README.md)), et les chemins parallèles ne le gênent pas : il lit la tension qui existe réellement entre deux points. Carte alimentée par une alimentation limitée en courant (fiche [00](../00_securite/README.md)), une seule pointe tenue, l'autre fixée par un grippe-fil quand c'est possible pour qu'elle ne glisse pas entre deux broches :
+Le voltmètre est, avec l'ampèremètre (fiche [91](../91_rails_alimentation/README.md)), le seul mode qui se branche sur une carte alimentée (fiche [01](../01_multimetre/README.md)), et les chemins parallèles ne le gênent pas : il lit la tension qui existe réellement entre deux points. Carte alimentée par une alimentation limitée en courant (fiche [00](../00_securite/README.md)), une seule pointe tenue, l'autre fixée par un grippe-fil quand c'est possible pour qu'elle ne glisse pas entre deux broches :
 
 ![Multimètre sur V continu, pointes de part et d'autre d'un fusible parcouru par le courant : 12 mV lus, contact sain ; des centaines de mV signalent un contact résistant, toute la tension d'alimentation un fusible ouvert](chute-de-tension.svg)
 
@@ -93,7 +93,7 @@ Le voltmètre est, avec l'ampèremètre (fiche 91), le seul mode qui se branche 
 | --- | --- | --- |
 | Aux bornes d'une résistance | *V = R × I*, à comparer au schéma ou à une carte saine | 0 V : aucun courant (circuit coupé en amont ou en aval, ou résistance en court-circuit) ; tension trop haute : trop de courant, résistance dérivée vers le haut, ou résistance coupée (toute la tension disponible à ses bornes) |
 | Aux bornes d'un fusible, d'un interrupteur fermé, d'un connecteur | quelques mV à quelques dizaines de mV ; davantage pour un fusible de faible calibre ou réarmable (PTC) : comparer à sa fiche technique ou à une carte saine | Plusieurs centaines de mV : contact résistant ou fusible fatigué ; tension d'alimentation complète : ouvert |
-| Le long d'une piste ou d'un plan de masse | quelques mV ; une piste longue et fine peut chuter 10 à 20 mV vers 100 mA en service normal | Nettement plus que sur la carte saine : un courant anormal y passe ; la tension diminue en approchant du court-circuit (fiche 92) |
+| Le long d'une piste ou d'un plan de masse | quelques mV ; une piste longue et fine peut chuter 10 à 20 mV vers 100 mA en service normal | Nettement plus que sur la carte saine : un courant anormal y passe ; la tension diminue en approchant du court-circuit (fiche [92](../92_court_circuit/README.md)) |
 | Base-émetteur d'un transistor bipolaire au silicium qui conduit | 0,6 à 0,7 V (1,2 à 1,4 V pour un Darlington) | Nettement plus haut : jonction ouverte ; 0 V alors qu'il devrait conduire : pas de commande, ou jonction en court-circuit |
 | Aux bornes d'une diode qui conduit | 0,6 à 1 V (silicium), 0,2 à 0,5 V (Schottky) | Proche de 0 V : diode en court-circuit, ou aucun courant |
 

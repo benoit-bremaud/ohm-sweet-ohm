@@ -6,7 +6,7 @@ Ce que chaque mode du multimètre injecte dans le composant, et pourquoi ce comp
 
 En voltmètre, l'appareil écoute presque sans rien consommer. En ohmmètre, en bipeur, en mode diode et en capacimètre, il **injecte** un courant connu et mesure la tension qui en résulte. Presque toutes les lectures « bizarres » s'expliquent par ce courant et par la tension à vide qui le pousse.
 
-> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche [00](../00_securite/README.md)) ; seul le voltmètre (et l'ampèremètre, fiche 91) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
+> **Sécurité** : ohmmètre, bipeur, mode diode et capacimètre se font **hors tension**, carte débranchée, condensateurs déchargés (fiche [00](../00_securite/README.md)) ; seul le voltmètre (et l'ampèremètre, fiche [91](../91_rails_alimentation/README.md)) se branche sur une carte alimentée, par une alimentation limitée en courant, à 50 V continu (25 V alternatif) au plus partout sur la carte. Un multimètre laissé en mode courant (douille A ou mA) est un court-circuit : voir l'encadré « Piège du mode courant ».
 
 ## Le principe commun
 
@@ -127,7 +127,7 @@ Un « Vf » lu ici vaut pour 1 mA environ : il est plus bas que la tension direc
 
 ## Piège du mode courant
 
-> En mode courant, l'appareil insère entre les douilles A (ou mA) et COM un **shunt** de quelques milliohms à quelques ohms : c'est un fil. Laisser le cordon rouge dans la douille A puis toucher une alimentation « pour lire la tension » court-circuite la source. Sur beaucoup d'appareils premier prix, la douille 10 A n'a **aucun fusible**. Sur une batterie (plomb, lithium) ou une alimentation non limitée, le court-circuit débite des dizaines à des centaines d'ampères : cordons qui fondent, brûlure, arc, incendie de la batterie. Remettre le cordon rouge dans la douille V/Ω **avant** chaque mesure de tension, et remplacer un fusible grillé par un fusible de même calibre et de même pouvoir de coupure, jamais par un fil. La mesure de courant elle-même relève de la fiche 91.
+> En mode courant, l'appareil insère entre les douilles A (ou mA) et COM un **shunt** de quelques milliohms à quelques ohms : c'est un fil. Laisser le cordon rouge dans la douille A puis toucher une alimentation « pour lire la tension » court-circuite la source. Sur beaucoup d'appareils premier prix, la douille 10 A n'a **aucun fusible**. Sur une batterie (plomb, lithium) ou une alimentation non limitée, le court-circuit débite des dizaines à des centaines d'ampères : cordons qui fondent, brûlure, arc, incendie de la batterie. Remettre le cordon rouge dans la douille V/Ω **avant** chaque mesure de tension, et remplacer un fusible grillé par un fusible de même calibre et de même pouvoir de coupure, jamais par un fil. La mesure de courant elle-même relève de la fiche [91](../91_rails_alimentation/README.md).
 
 ![Mesure de courant et piège : à gauche, multimètre en série avec la charge, cordon rouge dans la douille 10 A ; à droite, cordon resté dans la douille 10 A et pointes en parallèle sur une batterie, court-circuit](mode-courant.svg)
 

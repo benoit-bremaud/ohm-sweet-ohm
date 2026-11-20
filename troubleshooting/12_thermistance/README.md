@@ -157,7 +157,7 @@ Sélecteur sur V continu, une pointe de chaque côté du composant, carte en fon
 | CTN de puissance | une fraction de volt après quelques secondes | elle a chauffé et conduit : normal |
 | CTN de puissance | toute la tension de l'entrée basse tension, rien en aval | ouverte |
 
-Une CTP qui a basculé reste dans cet état tant que la tension est présente : un faible courant la maintient chaude. **Couper l'alimentation**, chercher le défaut en aval (ohmmètre entre l'aval et la masse, fiche [13](../13_fusible/README.md), puis fiche 92), laisser refroidir, puis remettre sous tension avec une limite de courant réglée juste au-dessus de la consommation attendue.
+Une CTP qui a basculé reste dans cet état tant que la tension est présente : un faible courant la maintient chaude. **Couper l'alimentation**, chercher le défaut en aval (ohmmètre entre l'aval et la masse, fiche [13](../13_fusible/README.md), puis fiche [92](../92_court_circuit/README.md)), laisser refroidir, puis remettre sous tension avec une limite de courant réglée juste au-dessus de la consommation attendue.
 
 ### Du symptôme à la thermistance suspecte
 

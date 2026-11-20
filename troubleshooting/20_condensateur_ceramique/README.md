@@ -115,7 +115,7 @@ Les MLCC de découplage sont tous branchés de la même façon : une terminaison
 | --- | --- |
 | Bip bref puis silence, lecture qui monte | pas de court-circuit franc : les condensateurs se chargent |
 | Bip continu, moins de 1 Ω environ | **court-circuit franc** sur le rail : un condensateur, ou un autre composant du rail |
-| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
+| Quelques ohms à quelques centaines d'ohms, stable | douteux : fuite, ou charge normale du rail. **Comparer** avec le même rail d'une carte saine, ou avec un schéma qui explique la lecture ; sinon, injection à courant limité (fiche [92](../92_court_circuit/README.md)) ; le rail de cœur d'un processeur lit normalement quelques ohms (fiche [01](../01_multimetre/README.md)) |
 
 Ce que cette mesure ne dit pas :
 
@@ -128,13 +128,14 @@ Le capacimètre en circuit additionne tous les condensateurs du rail et ne rense
 
 Le court-circuit dissipe de la chaleur là où il se trouve, et seulement là. On lui fournit un courant **limité** et on cherche le point chaud.
 
-1. Alimentation de laboratoire réglée sur la **tension nominale du rail, jamais au-dessus** (les circuits intégrés du rail la reçoivent aussi), limite de courant à 100 mA. Sortie coupée.
-2. Brancher le + sur le rail, le − sur la masse de la carte, puis activer la sortie : l'alimentation passe en limitation (voyant CC) et la tension s'effondre.
-3. Chercher le point chaud : caméra thermique, ou une goutte d'alcool isopropylique sur chaque suspect (elle s'évapore d'abord sur le coupable), ou le dos du doigt approché brièvement.
-4. Rien ne chauffe : relever la limite par paliers (200 mA, 500 mA, 1 A) en restant sous ce que le rail fournit en service, et recommencer. S'arrêter au premier palier où un composant chauffe.
-5. Couper la sortie, dessouder le composant désigné, puis refaire la mesure au bipeur : le court-circuit doit avoir disparu. S'il est toujours là, un second composant est en cause.
+C'est l'**injection de courant**, décrite pas à pas en fiche [92](../92_court_circuit/README.md) : où brancher, tension de départ, paliers de courant et leur plafond, recherche du point chaud, suivi des millivolts, précautions sur la sortie d'un régulateur. L'essentiel :
 
-La méthode complète (injection sous tension réduite, suivi des millivolts le long du rail) est dans la fiche 92. Si le composant qui chauffe est un circuit intégré, c'est lui qui est en court-circuit, pas un condensateur.
+- alimentation de laboratoire limitée en courant, tension de départ vers 1 V, ou à la tension nominale du rail si elle est plus basse, montée ensuite sans **jamais dépasser** la tension nominale du rail (les circuits intégrés du rail la reçoivent aussi), limite à 100 mA ;
+- point chaud cherché à la caméra thermique, à la goutte d'alcool isopropylique (elle s'évapore d'abord sur le coupable) ou au dos du doigt approché brièvement ;
+- rien ne chauffe : limite relevée par paliers, sans dépasser le plafond défini en fiche [03](../03_methode/README.md), étape 5 ;
+- composant désigné : couper la sortie, le dessouder, refaire la mesure au bipeur. Court-circuit toujours là : un second composant est en cause.
+
+Sur un court-circuit franc injecté à la tension de départ (1 V au plus), un circuit intégré qui chauffe est lui-même en court-circuit, pas un condensateur voisin ; à la tension nominale du rail, un circuit intégré seulement tiède peut être normal (fiche [92](../92_court_circuit/README.md)).
 
 **Rail qui porte des condensateurs tantale** (fiche [23](../23_condensateur_tantale/README.md)) : un tantale en court-circuit peut s'enflammer. Ne relever la limite que par paliers, lunettes de protection portées, sans se pencher au-dessus de la carte, de préférence avec une caméra thermique, et couper au premier échauffement.
 
@@ -155,9 +156,9 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ## Niveau 4 — Méthodes avancées
 
 - **Essai d'isolement sous tension de service**, condensateur dessoudé : le multimètre teste l'isolement sous moins d'un volt, alors qu'une fissure fuit surtout sous la tension du rail. Mettre en série l'alimentation de laboratoire (tension du rail, **jamais plus que la tension de service du condensateur ni que 50 V**, limite 10 mA), une résistance de 1 kΩ et le condensateur ; mesurer en V continu aux bornes de la résistance. Lire après une minute : un céramique sain donne 0,0 mV, ou presque pour une forte valeur ; **1 mV correspond à 1 µA de fuite**. Dans le doute, comparer avec un condensateur neuf identique : une lecture nettement plus élevée que la sienne, ou qui augmente, condamne le condensateur. Le décharger ensuite dans la résistance.
-- **Millivolts le long du rail** : avec le courant injecté du niveau 3, la chute de tension dans les pistes est la plus forte en direction du court-circuit. Un multimètre qui résout 0,01 mV suffit (fiche 92).
+- **Millivolts le long du rail** : avec le courant injecté du niveau 3, la chute de tension dans les pistes est la plus forte en direction du court-circuit. Un multimètre qui résout 0,01 mV suffit (fiche [92](../92_court_circuit/README.md)).
 - **Pont LCR** : mesure la capacité à une fréquence et une tension définies, ainsi que les pertes ; certains appliquent une tension continue et montrent la capacité réelle d'une classe II en service (page i5).
-- **Oscilloscope** : l'ondulation et les parasites sur un rail augmentent quand un condensateur de découplage est ouvert ; comparer avec une carte saine (page [i2](../i2_oscilloscope/README.md) et fiche 93).
+- **Oscilloscope** : l'ondulation et les parasites sur un rail augmentent quand un condensateur de découplage est ouvert ; comparer avec une carte saine (page [i2](../i2_oscilloscope/README.md), fiche [91](../91_rails_alimentation/README.md), « L'ondulation », et fiche 93).
 - **Caméra thermique** : désigne le condensateur en court-circuit en quelques secondes, à courant bien plus faible que le doigt ou l'alcool.
 
 ## Arbre de décision
@@ -165,24 +166,28 @@ Un MLCC **fuyant** (quelques dizaines d'ohms à quelques kΩ) ne fait pas tomber
 ```mermaid
 flowchart TD
   A[Rail suspect, carte débranchée et déchargée] --> B{Bipeur entre le rail et la masse}
-  B -- bip continu, moins de 1 Ω --> C[Court-circuit ou fuite sur le rail]
-  B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine ?}
+  B -- bip continu, moins de 1 Ω --> C[Court-circuit franc sur le rail : examen visuel et division d'abord, fiche 92]
+  B -- quelques ohms à quelques centaines d'ohms --> D{Même lecture sur une carte saine, ou schéma qui explique la lecture ?}
   D -- oui --> E[Charge normale du rail : chercher ailleurs]
-  D -- non, plus bas ici, ou pas de carte saine --> C
+  D -- non, plus bas ici, ou rien pour comparer --> C2[Rail douteux : fuite ou charge normale, à trancher par l'injection]
+  C2 --> H
   B -- bip bref puis lecture qui monte --> F{Symptôme de fuite ou de découplage manquant ?}
   F -- non --> E
   F -- oui --> G[Alimentation limitée : chercher un condensateur tiède, ou comparer l'ondulation, niveau 4]
   G --> G2{Un condensateur tiède ?}
   G2 -- oui --> J
-  G2 -- non --> L
-  C --> H[Injecter un courant limité à la tension du rail au plus, chercher le point chaud]
+  G2 -- non, fuite soupçonnée --> ZC[Fiche 92 : Rail qui fuit]
+  G2 -- non, découplage manquant soupçonné --> ZD[Ondulation à l'oscilloscope : niveau 4, et fiche 91]
+  C --> H[Injecter un courant limité, fiche 92 : 1 V d'abord, ou la tension du rail si elle est plus basse, jamais au-dessus, chercher le point chaud]
   H --> I{Quel composant chauffe ?}
   I -- un condensateur céramique --> J[Le dessouder]
   I -- un autre composant --> K[Voir la fiche de ce composant]
-  I -- rien, à la limite maximale atteinte --> L[Fiche 92 : millivolts le long du rail]
+  I -- rien, tension nominale tenue sans limitation --> ZA[Pas de court-circuit franc : noter le courant ; trop fort, fiche 92, Rail qui fuit ; sinon fils d'injection retirés, tout refermer, mise sous tension, fiche 03 étape 6]
+  I -- rien, limitation à 100 mA, plafond inconnu, rail douteux --> ZB[Doute, pas un verdict : fiche 03, Quand s'arrêter]
+  I -- rien, en limitation au plafond connu de la fiche 03 étape 5, ou à 100 mA, plafond inconnu, sur un rail à moins de 1 Ω --> L[Fiche 92 : millivolts le long du rail]
   J --> M{Bipeur entre le rail et la masse, composant retiré}
-  M -- encore un court-circuit --> H
-  M -- plus de court-circuit --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}
+  M -- encore un court-circuit, ou rail toujours douteux --> H
+  M -- lecture redevenue normale --> N{Composant retiré : OL à l'ohmmètre et capacité conforme ?}
   N -- non --> O[Défaut confirmé : remplacer]
   N -- oui --> P[Fissure probable, invisible à l'établi : remplacer quand même]
   O --> Q[Contrôler fusible, résistance série et inductance en amont]

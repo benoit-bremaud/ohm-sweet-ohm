@@ -169,7 +169,7 @@ Une résistance ne brûle pas d'elle-même. Avant de la remplacer :
 
 1. Hors tension, mesurer la résistance entre le côté **aval** de la résistance brûlée et la masse. Quelques ohms ou moins, et nettement moins que sur une carte saine ou un rail jumeau : un composant du rail est en court-circuit. Un rail sain chargé de circuits intégrés peut lire bas lui aussi (fiche [01](../01_multimetre/README.md)) : c'est la comparaison qui tranche.
 2. Suspects habituels, dans l'ordre : condensateur céramique ou tantale de découplage, diode de protection (TVS, Zener), transistor ou MOSFET, circuit intégré alimenté par ce rail.
-3. Localiser le court-circuit (fiche 92), le réparer, **puis** remplacer la résistance.
+3. Localiser le court-circuit (fiche [92](../92_court_circuit/README.md)), le réparer, **puis** remplacer la résistance.
 4. Remettre sous tension sur alimentation limitée et contrôler la chute de tension aux bornes de la résistance neuve.
 
 Remplacer la résistance sans avoir trouvé la cause, c'est la brûler une seconde fois ; la remplacer par une plus puissante, c'est déplacer la destruction vers une piste ou un autre composant.
@@ -196,7 +196,7 @@ Les résistances CMS à couche épaisse ont une électrode interne en argent. Da
 
 ### Caméra thermique
 
-Elle montre en quelques secondes la résistance en surcharge, et surtout le composant en court-circuit qui la surcharge (page i8 et fiche 92).
+Elle montre en quelques secondes la résistance en surcharge, et surtout le composant en court-circuit qui la surcharge (page i8 et fiche [92](../92_court_circuit/README.md)).
 
 ## Arbre de décision
 
