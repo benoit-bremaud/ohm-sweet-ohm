@@ -10,7 +10,7 @@ Un rail en court-circuit lit la **même** résistance partout : l'ohmmètre dit 
 
 ## Avant de chercher : est-ce bien un court-circuit ?
 
-La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Un rail **douteux** (quelques ohms à quelques centaines d'ohms) sans carte saine, ni schéma qui explique la lecture, se traite par la même injection, une fois vérifié qu'aucun régulateur ne lit près de 0 Ω entre son entrée et sa sortie (fiche 91, étape 6 : sinon l'injection porterait aussi l'autre rail à la tension injectée), faite **avant** de diviser le rail et lue comme au point 5 de « Régler et monter par paliers ». Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
+La mesure de départ est celle de la fiche [91](../91_rails_alimentation/README.md), « Hors tension » : moins de 1 Ω environ entre le rail et la masse, dans les deux sens des pointes. Un rail **douteux** (quelques ohms à quelques centaines d'ohms) sans carte saine, ni schéma qui explique la lecture, se traite par la même injection, une fois vérifié qu'aucun régulateur de ce rail ne lit près de 0 Ω entre son entrée et sa sortie (fiche 91, étape 6 : sinon l'injection porterait aussi l'autre rail à la tension injectée), faite **avant** de diviser le rail et lue comme au point 5 de « Régler et monter par paliers ». Avant de dessouder quoi que ce soit, écarter les lectures basses qui sont **normales** :
 
 - **Rail de cœur d'un processeur** (autour de 1 V, plusieurs ampères) : quelques ohms, parfois moins, sur une carte saine.
 - **Bobinage, lampe à filament, élément chauffant, moteur** branchés directement sur le rail : l'ohmmètre lit leur résistance en continu, parfois moins de 1 Ω.
@@ -165,7 +165,7 @@ Sur un composant à deux bornes, lever **une seule** borne suffit pour le sortir
 
 ```mermaid
 flowchart TD
-  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux sans point de comparaison dont aucun régulateur ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
+  A[Rail lu à moins de 1 Ω dans les deux sens, ou rail douteux, sans point de comparaison, dont aucun régulateur ne lit près de 0 Ω entre entrée et sortie, fiche 91] --> B{Lecture basse possible sur ce rail : cœur de processeur, bobinage, lampe, moteur ?}
   B -- oui --> B1{Carte saine : même lecture ?}
   B1 -- oui --> B2[Pas un court-circuit : mise sous tension, fiche 91]
   B1 -- non, nettement plus bas, ou pas de carte saine --> C

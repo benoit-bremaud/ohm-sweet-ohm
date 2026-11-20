@@ -181,12 +181,12 @@ flowchart TD
   R0 -- oui --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
   S0 -- court-circuit réparé --> B
   R0 -- non, un rail à quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
-  C -- oui --> D
-  C -- non, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
+  C -- oui, autres lectures douteuses tranchées --> D
+  C -- non, nettement plus bas que sur la carte saine, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
   S2 -- un composant chauffe, ou toujours en limitation au plafond --> S
   S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
-  S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer --> D
-  R0 -- non, tous les rails au kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
+  S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer, autres lectures douteuses tranchées --> D
+  R0 -- non, tous les rails au kilohm ou plus ou à lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
   D --> E{L'alimentation passe en limitation, ou un composant chauffe ?}
   E -- tension près de 0 V, ou un composant chauffe --> S
   E -- tension partielle, rien ne chauffe --> F[Remonter la limite par paliers, sans dépasser le courant nominal de l'adaptateur d'origine]
