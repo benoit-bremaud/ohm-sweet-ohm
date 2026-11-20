@@ -172,19 +172,20 @@ Ses limites :
 
 ```mermaid
 flowchart TD
-  A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse, et entre l'entrée et la sortie de chaque régulateur}
-  B -- entrée-sortie d'un régulateur proche de 0 Ω dans les deux sens, rails pas tous deux sous 1 Ω à la masse --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
+  A[Carte dans le périmètre de la fiche 00, rails repérés] --> B{Hors tension : résistance de chaque rail à la masse}
   B -- moins de 1 Ω dans les deux sens --> S[Ne pas alimenter normalement : fiche 92]
   S -- court-circuit réparé --> B
   B -- lecture négative ou qui descend --> B0[Charge résiduelle : décharger de nouveau, fiche 00]
   B0 --> B
-  B -- quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
+  B -- toute autre lecture --> R0{Entrée-sortie de chaque régulateur : proche de 0 Ω dans les deux sens ?}
+  R0 -- oui --> S0[Ne pas alimenter : fiche 92, Court-circuit entre deux rails]
+  R0 -- non, rail à quelques ohms à quelques centaines d'ohms --> C{Carte saine, ou schéma qui explique la lecture : lecture normale ?}
   C -- oui --> D
   C -- non, rien pour comparer ni expliquer, ou lecture sous le repère de la loi d'Ohm --> S2{Résultat de l'injection à courant limité, fiche 92}
   S2 -- un composant chauffe, ou toujours en limitation au plafond --> S
   S2 -- limitation à 100 mA, plafond inconnu --> S3[Doute, pas un verdict : fiche 03, Quand s'arrêter]
   S2 -- tension nominale tenue sans limitation ni chaleur : noter le courant, tout refermer --> D
-  B -- kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
+  R0 -- non, rail au kilohm ou plus, ou lecture qui monte --> D[Mise sous tension à courant limité, fiche 00]
   D --> E{L'alimentation passe en limitation, ou un composant chauffe ?}
   E -- tension près de 0 V, ou un composant chauffe --> S
   E -- tension partielle, rien ne chauffe --> F[Remonter la limite par paliers, sans dépasser le courant nominal de l'adaptateur d'origine]
