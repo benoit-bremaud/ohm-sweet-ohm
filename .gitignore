@@ -33,3 +33,4 @@ __pycache__/
 
 # Exported figures and field photos (scripts/figures/export.py, #162): never committed
 /out/
+/photos/

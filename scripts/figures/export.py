@@ -1,6 +1,7 @@
 """Export the figures of one guide as PNG, and pair each with its field photo (`just figures-png`).
 
 Usage: python3 scripts/figures/export.py <guide folder> <output dir> [photo dir]
+Needs Inkscape (PNG) and ImageMagick 7 (`magick`, plates) on the PATH.
 
 Every `<guide folder>/*.svg` becomes `<output dir>/<name>.png` (Inkscape). When `<photo dir>/<name>.jpg`
 exists, `<output dir>/<name>-planche.png` puts the photo on the left and the figure on the right
@@ -24,33 +25,45 @@ def png_command(svg: Path, png: Path) -> list[str]:
         str(svg),
         "--export-type=png",
         f"--export-width={WIDTH}",
+        "--export-background=white",
+        "--export-background-opacity=1",
         f"--export-filename={png}",
     ]
 
 
 def plate_command(photo: Path, png: Path, plate: Path) -> list[str]:
-    """ImageMagick command joining `photo` (left) and `png` (right) at the same height."""
+    """ImageMagick command: `photo` on the left, a 24 px white gutter, `png` on the right, same height."""
     return [
         "magick",
         str(photo),
-        str(png),
         "-resize",
         "x1080",
         "-background",
         "white",
         "-gravity",
-        "center",
+        "east",
         "-splice",
         "24x0",
+        "(",
+        str(png),
+        "-resize",
+        "x1080",
+        ")",
+        "-alpha",
+        "remove",
         "+append",
+        "+repage",
         str(plate),
     ]
 
 
 def plan(guide: Path, out: Path, photos: Path | None) -> list[list[str]]:
-    """Commands exporting every figure of `guide`, then a plate for each figure that has a photo."""
+    """Commands exporting every figure of `guide`, each followed by its plate when it has a photo."""
     commands = []
-    for svg in sorted(guide.glob("*.svg")):
+    # arbre-N.svg are the decision trees drawn for the site, not figures
+    for svg in sorted(
+        p for p in guide.glob("*.svg") if not p.stem.startswith("arbre-")
+    ):
         png = out / f"{svg.stem}.png"
         commands.append(png_command(svg, png))
         photo = photos / f"{svg.stem}.jpg" if photos else None
@@ -67,9 +80,17 @@ def main(argv: list[str]) -> int:
     if not guide.is_dir():
         sys.stderr.write(f"no such guide folder: {guide}\n")
         return 2
+    photos = Path(argv[2]) if len(argv) == 3 else None
+    if photos and not photos.is_dir():
+        sys.stderr.write(f"no such photo folder: {photos}\n")
+        return 2
     out.mkdir(parents=True, exist_ok=True)
-    for command in plan(guide, out, Path(argv[2]) if len(argv) == 3 else None):
-        subprocess.run(command, check=True, capture_output=True)
+    for command in plan(guide, out, photos):
+        try:
+            subprocess.run(command, check=True)
+        except (OSError, subprocess.CalledProcessError) as error:
+            sys.stderr.write(f"export failed: {' '.join(command)}: {error}\n")
+            return 1
     return 0
 
 

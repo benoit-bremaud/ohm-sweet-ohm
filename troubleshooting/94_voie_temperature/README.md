@@ -14,15 +14,15 @@ Une PT1000 vaut **1 000 Ω à 0 °C** et prend environ **3,85 Ω par °C** (norm
 
 ## 1. Remplacer la sonde par une résistance connue
 
-![Une résistance de 1 000 Ω à 0,1 % est branchée à la place de la sonde PT1000 sur le connecteur 2 broches TEMP, carte sous tension. 1 000 Ω donne 0 °C, 1 100 Ω environ 26 °C, 1 385 Ω environ 100 °C. Lecture juste : la sonde ou son câble est en cause. Lecture fausse : la voie de la carte](substitution-sonde.svg)
+![Une résistance de 1 000 Ω à 0,1 % est branchée à la place de la sonde PT1000 sur le connecteur 2 broches TEMP, carte sous tension. 1 000 Ω donne 0 °C, 1 100 Ω environ 26 °C, 1 385 Ω environ 100 °C. Lecture juste : la sonde ou son câble est en cause. Lecture fausse : la voie de la carte. Essai bref, élément chauffant débranché](substitution-sonde.svg)
 
-Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent une lecture attendue connue. Lecture juste : la sonde ou le câble est en cause. Lecture fausse ou défaut maintenu : la carte.
+Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent une lecture attendue connue. Lecture juste : la sonde ou le câble est en cause. Lecture fausse ou défaut maintenu : la carte. Essai bref, sous surveillance, élément chauffant débranché, **jamais** sur un pack ou un chargeur de batteries : la carte croit lire une température fixe et sa protection thermique est neutralisée pendant l'essai.
 
 ## 2. Repérer la masse du connecteur
 
 ![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP 1 : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
 
-Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la sonde peut être montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
+Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la masse logique peut être isolée du châssis, ou la sonde montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
 
 ## 3. Mesurer chaque broche à la masse, hors tension
 
@@ -30,35 +30,55 @@ Le trou de fixation est souvent relié à la terre de protection, pas au 0 V log
 
 En circuit, l'ohmmètre voit tous les chemins en parallèle (fiche [02](../02_pieges_en_circuit/README.md)) : une diode de protection change la lecture selon le sens des pointes. Mesurer **dans les deux sens**, et comparer chaque sens à la même broche d'une voie jumelle, pas à une valeur théorique.
 
-![Ohmmètre sur un nœud filtré par un condensateur : la lecture part de zéro et monte en quelques secondes jusqu'à 995 Ω](noeud-filtre-ohm.svg)
+![Ohmmètre sur un nœud qui porte 100 kΩ et 10 µF : la lecture part de zéro, vaut 86,5 kΩ après 2 s et se stabilise à 100 kΩ. Le filtre d'une entrée de sonde se charge en moins d'une milliseconde](noeud-filtre-ohm.svg)
 
-Sur un nœud filtré, la lecture **monte** pendant que l'ohmmètre charge le condensateur : attendre qu'elle se stabilise avant de la noter.
+Le filtre d'une entrée de sonde (quelques nanofarads à un microfarad) se charge en moins d'une milliseconde : la lecture est immédiate. Une lecture qui **monte** pendant des secondes signale un gros condensateur sur le nœud (τ = R·C) : attendre qu'elle se stabilise avant de la noter, et chercher ce condensateur s'il n'a rien à faire là.
 
 ## 4. Contrôler la protection en mode diode
 
-![Mode diode : rouge sur la masse, noire sur la broche, 0,58 V ; inversé, OL. Environ 0 V dans les deux sens signale une protection ou une entrée en court-circuit](mode-diode-entree.svg)
+![Mode diode : rouge sur la masse, noire sur la broche, 0,58 V ; inversé, une valeur haute ou OL, comme sur la voie jumelle. Environ 0 V dans les deux sens signale une protection ou une entrée en court-circuit](mode-diode-entree.svg)
 
 ## 5. Suivre la piste jusqu'au multiplexeur
 
 ![Continuité entre la broche de mesure du connecteur TEMP 2 et les entrées d'un multiplexeur TS3A5017 : le bip sur 1S2, broche 5, désigne la voie](trace-multiplexeur.svg)
 
-La continuité suit une piste ; le mode diode compare deux voies, parce qu'il voit aussi les jonctions. Un interrupteur du multiplexeur dégradé (résistance à l'état passant qui dérive, fuite) ne fausse qu'une voie : sondes saines, écart entre deux voies jumelles.
+La continuité suit une piste ; le mode diode compare deux voies, parce qu'il voit aussi les jonctions. Pas de bip : passer sur ohms, une résistance série de protection (1 à 10 kΩ) entre le connecteur et le multiplexeur est normale. Un interrupteur du multiplexeur dégradé (résistance à l'état passant qui dérive, fuite) ne fausse qu'une voie : sondes saines, écart entre deux voies jumelles.
 
 ## 6. Observer l'excitation sous tension
 
-![Multimètre sur volts continus : une valeur qui saute ; oscilloscope : des impulsions d'environ 1,2 V pendant la mesure. Lire le plateau, pas la moyenne](excitation-pulsee.svg)
+![Multimètre sur volts continus : une valeur qui saute autour de 0,45 V ; oscilloscope : des impulsions d'environ 1,2 V pendant la mesure. Lire le plateau, pas la moyenne](excitation-pulsee.svg)
 
-Beaucoup de cartes n'alimentent la sonde que pendant la conversion, ou passent d'une voie à l'autre : le multimètre affiche une moyenne instable. L'oscilloscope montre le plateau de l'impulsion, à comparer au plateau de la voie jumelle.
+Beaucoup de cartes n'alimentent la sonde que pendant la conversion, ou commutent leur source de courant d'une voie à l'autre : le multimètre affiche une moyenne instable. Quand seul le multiplexeur commute, après le pont diviseur, la broche reste en continu. L'oscilloscope montre le plateau de l'impulsion, à comparer au plateau de la voie jumelle.
 
-## Figures pour un rapport de réparation
+## Arbre de décision
 
-Chaque figure s'exporte en PNG, et se joint à la photo de terrain quand elle existe :
-
-```bash
-just figures-png 94_voie_temperature out/figures photos
+```mermaid
+flowchart TD
+  A[Défaut sonde annoncé par la carte] --> B[Sonde hors circuit à l'ohmmètre : environ 1 000 Ω à 0 °C, 3,85 Ω par °C]
+  B --> C{Valeur juste ?}
+  C -- non --> C1[Remplacer la sonde ou son câble]
+  C -- oui --> D[Sous tension : résistance connue à la place de la sonde]
+  D --> E{Lecture juste ?}
+  E -- oui --> E1[Connecteur, câble ou contact de la sonde]
+  E -- non --> F[Hors tension : repérer la masse, puis chaque broche à la masse dans les deux sens]
+  F --> G{Écart avec la voie jumelle ?}
+  G -- oui --> H[Suivre la piste : résistance de référence, filtre, protection, multiplexeur]
+  H --> H1[Composant désigné : sa fiche]
+  G -- non --> I[Oscilloscope : plateau de l'excitation comparé à la voie jumelle]
+  I --> J{Écart ?}
+  J -- oui --> H
+  J -- non --> K[Convertisseur ou logiciel : sonde de débogage, registres de l'ADC]
 ```
 
-La photo `photos/<nom-de-la-figure>.jpg` donne une planche `out/figures/<nom>-planche.png` : la photo à gauche, la figure à droite. Les photos et les exports restent hors du dépôt.
+## Aide-mémoire d'établi
+
+| Mesure | État | Lecture saine | Suspect |
+| --- | --- | --- | --- |
+| PT1000 hors circuit | hors tension | ≈ 1 000 Ω à 0 °C, + 3,85 Ω par °C | OL, ≈ 0 Ω, écart de plus de quelques degrés |
+| Résistance connue à la place de la sonde | sous tension, essai bref | 1 000 Ω → 0 °C, 1 100 Ω → 26 °C | défaut maintenu : la carte |
+| Broche → masse, deux sens | hors tension | même lecture que la voie jumelle | écart net avec la jumelle |
+| Mode diode, rouge sur la masse | hors tension | 0,5 à 0,7 V | ≈ 0 V dans les deux sens |
+| Plateau de l'excitation | sous tension, oscilloscope | même plateau que la voie jumelle | plateau absent ou décalé |
 
 ## Sources
 

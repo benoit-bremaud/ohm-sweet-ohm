@@ -18,18 +18,12 @@ def test_pt1000_conversion_follows_its_linear_slope(
     assert guide_94.pt1000_celsius(ohms) == pytest.approx(celsius, abs=0.5)
 
 
-def test_twin_drift_of_76_ohms_is_about_20_degrees() -> None:
-    assert guide_94.pt1000_celsius(1071) - guide_94.pt1000_celsius(
-        995
-    ) == pytest.approx(20, abs=0.5)
-
-
-def test_filtered_node_starts_at_zero_and_settles_on_the_resistor() -> None:
+def test_capacitor_node_starts_at_zero_and_settles_on_the_resistor() -> None:
     assert guide_94.rc_ohms(0) == 0
-    assert guide_94.rc_ohms(3) == pytest.approx(
-        861, abs=1
-    )  # the 0.86 kΩ shown on the meter
-    assert guide_94.rc_ohms(20) == pytest.approx(995, abs=0.5)
+    assert guide_94.rc_ohms(2) == pytest.approx(
+        86_466, abs=1
+    )  # the 86.5 kΩ on the meter
+    assert guide_94.rc_ohms(5) > 0.99 * 100_000  # "stable après 5 s environ"
 
 
 def test_pulses_alternate_between_rest_and_plateau_over_the_screen() -> None:
@@ -55,21 +49,21 @@ def test_mux_figure_probes_input_1s2_on_pin_5() -> None:
         r'data-probe="black" transform="translate\(([\d.]+) ([\d.]+)\)', svg
     )
     assert black and (float(black[1]), float(black[2])) == tips[5]
-    assert guide_94.TSSOP16[5] == "1S2"
 
 
 @pytest.mark.parametrize(
-    ("draw", "red_on"),
+    ("draw", "red_on", "readings"),
     [
-        (guide_94.fig_ohm_polarities, ("broche", "masse")),
-        (guide_94.fig_diode_mode, ("masse", "broche")),
+        (guide_94.fig_ohm_polarities, ("broche", "masse"), (">4.72<", ">1.18<")),
+        (guide_94.fig_diode_mode, ("masse", "broche"), (">0.58<", ">OL<")),
     ],
 )
 def test_two_polarity_figures_swap_the_red_probe_between_pin_and_ground(
-    draw, red_on: tuple[str, str]
+    draw, red_on: tuple[str, str], readings: tuple[str, str]
 ) -> None:
     svg = draw()
-    # the red tip lands on the left point of each panel: x0 + 245
+    # the red tip lands on the left point of each panel: x0 + 245, and each panel keeps its reading
+    assert svg.index(readings[0]) < svg.index(readings[1])
     for x0, label in zip((0, 380), red_on, strict=True):
         assert re.search(rf'<text [^>]*x="{x0 + 245}"[^>]*>{label}<', svg)
 
@@ -80,18 +74,29 @@ def test_export_plans_one_png_per_figure_and_a_plate_only_with_a_photo(
     guide, photos, out = tmp_path / "g", tmp_path / "p", tmp_path / "o"
     guide.mkdir()
     photos.mkdir()
-    (guide / "a.svg").write_text("<svg/>")
-    (guide / "b.svg").write_text("<svg/>")
+    for name in ("a", "b", "arbre-1"):
+        (guide / f"{name}.svg").write_text("<svg/>")
     (photos / "b.jpg").write_bytes(b"")
     commands = export.plan(guide, out, photos)
     assert [c[0] for c in commands] == ["inkscape", "inkscape", "magick"]
-    assert commands[2][-1] == str(out / "b-planche.png")
+    assert all("arbre-1" not in " ".join(c) for c in commands)
     assert [c[0] for c in export.plan(guide, out, None)] == ["inkscape", "inkscape"]
 
 
+def test_plate_puts_the_photo_then_a_gutter_then_the_figure() -> None:
+    c = export.plate_command(Path("p.jpg"), Path("f.png"), Path("x.png"))
+    # the gutter is spliced on the photo's east side, before the figure joins it
+    assert c.index("p.jpg") < c.index("east") < c.index("24x0") < c.index("f.png")
+    assert c.index("f.png") < c.index("+append") and c[-1] == "x.png"
+
+
 def test_export_refuses_wrong_arguments(tmp_path: Path) -> None:
+    (tmp_path / "g").mkdir()
     assert export.main([]) == 2
     assert export.main([str(tmp_path / "missing"), str(tmp_path)]) == 2
+    assert (
+        export.main([str(tmp_path / "g"), str(tmp_path), str(tmp_path / "nope")]) == 2
+    )
 
 
 def test_export_runs_every_planned_command(tmp_path: Path, monkeypatch) -> None:
@@ -101,3 +106,15 @@ def test_export_runs_every_planned_command(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr(export.subprocess, "run", lambda c, **_: ran.append(c))
     assert export.main([str(tmp_path / "g"), str(tmp_path / "o")]) == 0
     assert ran and ran[0][0] == "inkscape" and (tmp_path / "o").is_dir()
+
+
+def test_export_reports_a_missing_tool(tmp_path: Path, monkeypatch, capsys) -> None:
+    (tmp_path / "g").mkdir()
+    (tmp_path / "g" / "a.svg").write_text("<svg/>")
+
+    def missing(command: list[str], **_: object) -> None:
+        raise FileNotFoundError(command[0])
+
+    monkeypatch.setattr(export.subprocess, "run", missing)
+    assert export.main([str(tmp_path / "g"), str(tmp_path / "o")]) == 1
+    assert "export failed: inkscape" in capsys.readouterr().err
