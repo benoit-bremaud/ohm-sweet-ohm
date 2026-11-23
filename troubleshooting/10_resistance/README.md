@@ -146,6 +146,7 @@ Une lecture qui **monte** lentement est un condensateur qui se charge : attendre
 | Entrée logique flottante, bouton capricieux, bus I²C muet | résistance de tirage (*pull-up*), réseau de résistances | ouverte : la ligne n'est plus ramenée à un niveau défini |
 | LED éteinte, LED elle-même saine | résistance série | ouverte |
 | Gain ou décalage faux sur une seule voie | résistances de contre-réaction de l'amplificateur | comparer avec la voie saine |
+| Température fausse sur une seule voie de sonde | résistance de référence de la voie (souvent 1 kΩ à 0,1 %) | dérivée : son écart passe dans la lecture, au signe près (fiche [94](../94_voie_temperature/README.md)) |
 | Panne qui vient à chaud, part au choc | soudures des résistances de puissance, CMS près d'une vis ou d'un connecteur | soudure ou corps fissuré |
 
 ### Sous tension : la chute de tension donne le courant
@@ -193,6 +194,14 @@ Choisir le courant pour rester sous la puissance de la pièce (*P = R × I²*) :
 ### Sulfuration des CMS
 
 Les résistances CMS à couche épaisse ont une électrode interne en argent. Dans une atmosphère soufrée (joints et gaines en caoutchouc, air industriel, certaines huiles), le soufre traverse la jonction entre le vernis et la terminaison et transforme l'argent en sulfure, isolant : la valeur monte sur des mois, puis la résistance s'ouvre. Rien n'est visible à l'œil nu ; au microscope, des cristaux sombres au bord d'une terminaison. Si plusieurs CMS d'une même carte lisent trop haut sans trace de surchauffe, y penser, et remplacer par des résistances **anti-soufre** (mention *anti-sulfur* du fabricant).
+
+### Résistance de précision qui dérive : comparer aux jumelles
+
+Une résistance de référence (0,1 %, film mince) qui a dérivé de quelques pour cent se lit encore « 1 kΩ » à l'œil, mais fausse toute la voie : 7 % sur la référence d'une PT1000 valent environ 18 °C, trop chaud ou trop froid selon le montage. Causes habituelles : échauffement prolongé, humidité sous tension (corrosion de la couche, surtout sous un vernis fissuré), atmosphère soufrée, décharge électrostatique. Rien ne se voit : on la trouve en mesurant **la même résistance sur les voies jumelles** de la carte, hors tension, dans les deux sens. Celle qui s'écarte des autres est la suspecte, même si sa valeur paraît plausible.
+
+![Entonnoir de comparaison : au connecteur, broche b de TEMP 2 à 1 071 Ω contre 995 Ω sur TEMP 1 ; au via, même lecture ; sur la résistance, R25 à 1 071 Ω contre 994 Ω pour ses jumelles R82 et R24. R25 a dérivé de 7 % sur 1 000 Ω](../94_voie_temperature/entonnoir-voie.svg)
+
+Avant de remplacer : relever la valeur et la tolérance sur le marquage des jumelles, et chercher la cause de la dérive (chaleur, humidité, vernis fissuré), sinon la neuve dérivera aussi. Remplacer par la même valeur, la même tolérance et le même coefficient de température (film mince, 25 ppm/°C ou mieux), puis relire la voie et sa jumelle.
 
 ### Caméra thermique
 

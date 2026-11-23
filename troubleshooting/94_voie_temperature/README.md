@@ -20,7 +20,7 @@ Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent u
 
 ## 2. Repérer la masse du connecteur
 
-![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP 1 : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
+![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
 
 Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la masse logique peut être isolée du châssis, ou la sonde montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
 
@@ -50,6 +50,26 @@ La continuité suit une piste ; le mode diode compare deux voies, parce qu'il vo
 
 Beaucoup de cartes n'alimentent la sonde que pendant la conversion, ou commutent leur source de courant d'une voie à l'autre : le multimètre affiche une moyenne instable. Quand seul le multiplexeur commute, après le pont diviseur, la broche reste en continu. L'oscilloscope montre le plateau de l'impulsion, à comparer au plateau de la voie jumelle.
 
+## 7. Comparer aux voies jumelles et localiser
+
+Cas réel : une carte de commande qui lit deux PT1000 par tuyau chauffé et signale un défaut d'écart de températures entre les deux sondes d'un même tuyau. Les sondes mesurent juste hors circuit (niveau 2 de la fiche [12](../12_thermistance/README.md)).
+
+![Carte déposée hors tension, broche b à la masse sur quatre voies : TEMP 1 995 Ω, TEMP 2 1 071 Ω, TEMP 3 1 000 Ω, TEMP 4 1 025 Ω. TEMP 1 et TEMP 2 sondent le même tuyau : 76 Ω d'écart, environ 20 °C. TEMP 2 est l'intruse, TEMP 4 un second suspect](comparaison-voies.svg)
+
+Une carte qui lit plusieurs sondes identiques porte autant de voies identiques : chacune sert d'étalon aux autres. Noter la même mesure sur toutes les voies, dans le même sens, et chercher **l'intruse** plutôt qu'une valeur théorique. Deux voies qui doivent lire pareil et qui s'écartent désignent la panne, même quand chaque valeur paraît plausible. Ici aucune broche ne bipe : la broche b voit la résistance de référence vers la masse, le cas « sonde montée sur une référence » de l'étape 2. TEMP 4, 2,5 % au-dessus de 1 000 Ω alors qu'une référence est donnée à 0,1 %, est un second suspect, à relire une fois la première panne réparée.
+
+![Test d'échange : cartes filtre TFB1 et TFB2 échangées, puis fiches TEMP 1 et TEMP 2 échangées. Échange hors tension avec bracelet antistatique, relecture sur alimentation limitée, chauffage débranché. Pour les fiches, lire la température de chaque voie : la température fausse suit la sonde, ou reste sur la voie de la carte](test-echange.svg)
+
+Quand deux cartes ou deux fiches sont identiques, l'échange tranche sans instrument. Un seul échange à la fois, hors tension, bracelet antistatique au poignet (fiche [00](../00_securite/README.md)), fiches repérées et photographiées avant. Jamais sur une panne destructrice (court-circuit, fumée) : on la déplacerait sur la carte saine. La relecture se fait dans les conditions de l'étape 1 : carte sur alimentation de laboratoire limitée en courant, élément chauffant débranché. Remettre sous tension un appareil alimenté par le secteur sort du périmètre de la fiche [00](../00_securite/README.md) : cela se confie à un professionnel. Pour l'échange des fiches de deux sondes d'un même tuyau, lire la **température de chaque voie** (menu de service, afficheur), pas le code : un défaut d'écart entre les deux reste le même après l'échange.
+
+![Hypothèse de voie : PT1000 entre a et b, résistance de référence R25 de b à la masse, à 1 071 Ω au lieu de 1 000 Ω, soit 7 %. Si la carte lit la tension de a seule, TEMP 2 lit environ 18 °C trop chaud ; si elle lit le rapport des deux résistances, cas le plus courant, environ 19 °C trop froid. Dans les deux cas l'écart d'environ 20 °C entre les sondes du tuyau déclenche le défaut d'écart](derive-reference.svg)
+
+Le schéma est une **hypothèse** reconstruite à l'ohmmètre, sans schéma constructeur : il suffit à chiffrer l'effet d'une dérive. Le sens de l'erreur dépend de la façon dont la carte lit la voie. Si elle lit la tension de la broche a seule et retranche la valeur prévue de la référence, une référence qui monte fait lire **chaud**. Si elle lit le rapport des deux résistances (montage ratiométrique, le plus courant, TI SBAA275A), elle fait lire **froid**. Dans les deux cas l'ampleur est la même, environ 2,7 °C par pour cent de dérive autour de 20 °C. Le menu de service ou l'afficheur tranche : la voie suspecte lit-elle trop chaud ou trop froid ?
+
+![Entonnoir : connecteur, via, puis résistance. À chaque étape, la même mesure sur la voie suspecte et sur sa jumelle ; R25 à 1 071 Ω contre 994 Ω pour R82 et R24, soit 7 % sur 1 000 Ω. La lecture est trop haute : un chemin parallèle ne pouvant que la baisser, R25 est en cause](entonnoir-voie.svg)
+
+Resserrer la même mesure, du connecteur vers le composant, en comparant toujours à la jumelle : une piste coupée ou une soudure résistante se montre à l'étape où l'écart apparaît. Le connecteur, le via et la résistance sont un même nœud : en circuit, l'entonnoir ne sépare pas la résistance d'un composant en parallèle. Il conclut ici parce que la lecture est **trop haute** : un chemin parallèle ne peut que la faire baisser. Une lecture trop basse demande de lever une patte (fiche [02](../02_pieges_en_circuit/README.md)). Avant de remplacer, relever la valeur et la tolérance sur le marquage des jumelles, et chercher la cause de la dérive (chaleur, humidité, vernis fissuré), sinon la neuve dérivera aussi. La remplacer par la même valeur, la même tolérance et le même coefficient de température (fiche [10](../10_resistance/README.md)).
+
 ## Arbre de décision
 
 ```mermaid
@@ -62,7 +82,10 @@ flowchart TD
   E -- oui --> E1[Connecteur, câble ou contact de la sonde]
   E -- non --> F[Hors tension : repérer la masse, puis chaque broche à la masse dans les deux sens]
   F --> G{Écart avec la voie jumelle ?}
-  G -- oui --> H[Suivre la piste : résistance de référence, filtre, protection, multiplexeur]
+  G -- oui --> G1{Cartes ou fiches jumelles échangeables ?}
+  G1 -- oui --> G2[Échange hors tension : la panne suit l'élément ou reste sur la voie]
+  G2 --> H[Suivre la piste : résistance de référence, filtre, protection, multiplexeur]
+  G1 -- non --> H
   H --> H1[Composant désigné : sa fiche]
   G -- non --> I[Oscilloscope : plateau de l'excitation comparé à la voie jumelle]
   I --> J{Écart ?}
@@ -79,8 +102,11 @@ flowchart TD
 | Broche → masse, deux sens | hors tension | même lecture que la voie jumelle | écart net avec la jumelle |
 | Mode diode, rouge sur la masse | hors tension | 0,5 à 0,7 V | ≈ 0 V dans les deux sens |
 | Plateau de l'excitation | sous tension, oscilloscope | même plateau que la voie jumelle | plateau absent ou décalé |
+| Même mesure sur toutes les voies jumelles | hors tension | écarts de quelques ohms | une voie à part : 4 Ω ≈ 1 °C |
+| Échange de deux éléments jumeaux | échange hors tension, relecture sur alimentation limitée, élément chauffant débranché | l'élément échangé est sain : la panne reste | l'élément échangé est en cause : la panne le suit |
 
 ## Sources
 
 - IEC 60751:2022, *Industrial platinum resistance thermometers and platinum temperature sensors* : 1 000 Ω à 0 °C, α = 0,00385 /°C.
+- Texas Instruments, note d'application SBAA275A, *A Basic Guide to RTD Measurements* : mesure ratiométrique.
 - Texas Instruments, fiche technique TS3A5017 (SCDS221) : brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.

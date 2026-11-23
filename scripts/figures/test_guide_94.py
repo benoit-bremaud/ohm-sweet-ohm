@@ -68,6 +68,59 @@ def test_two_polarity_figures_swap_the_red_probe_between_pin_and_ground(
         assert re.search(rf'<text [^>]*x="{x0 + 245}"[^>]*>{label}<', svg)
 
 
+def test_odd_one_out_is_the_channel_furthest_from_the_median() -> None:
+    assert guide_94.odd_one_out(guide_94.TWINS) == "TEMP 2"
+    assert guide_94.odd_one_out((("A", 10), ("B", 10), ("C", 3))) == "C"  # odd count
+    assert guide_94.odd_one_out((("A", 5), ("B", 5))) == "A"  # all equal: first wins
+
+
+@pytest.mark.parametrize(("ref", "celsius"), [(1000, 0), (1071, 18.4), (995, -1.3)])
+def test_reference_drift_lands_whole_on_the_reading(ref: float, celsius: float) -> None:
+    assert guide_94.reference_error(ref) == pytest.approx(celsius, abs=0.1)
+
+
+def test_twin_gap_is_about_twenty_degrees() -> None:
+    gap = guide_94.reference_error(1071) - guide_94.reference_error(995)
+    assert gap == pytest.approx(20, abs=0.5)
+
+
+def test_twin_table_paints_only_the_odd_channel_red() -> None:
+    svg = guide_94.fig_twin_table()
+    assert len(re.findall(r'<rect class="no"', svg)) == 1
+    assert len(re.findall(r'<rect class="ok"', svg)) == 3
+
+
+def test_french_numbers_use_a_narrow_space_and_a_true_minus() -> None:
+    assert guide_94.fr(1071) == "1\u202f071"
+    assert guide_94.fr(-1.3, sign=True) == "−1"
+    assert guide_94.fr(18.4, sign=True) == "+18"
+    assert guide_94.fr(-0.3, sign=True) == "0"  # no "−0"
+
+
+def test_drift_percent_is_against_the_value_given() -> None:
+    assert guide_94.drift_percent(1071) == pytest.approx(7.1)
+    assert guide_94.drift_percent(1071, 994) == pytest.approx(7.75, abs=0.01)
+
+
+def test_ratiometric_reference_that_rises_reads_cold() -> None:
+    assert guide_94.ratiometric_error(1000) == 0
+    assert guide_94.ratiometric_error(1071) == pytest.approx(-18.6, abs=0.1)
+    assert guide_94.ratiometric_error(995) == pytest.approx(1.4, abs=0.1)
+
+
+def test_drift_figure_shows_both_signs_from_its_own_calculation() -> None:
+    svg = guide_94.fig_drift()
+    assert "TEMP 2, 1 071 Ω : +18 °C" in svg  # V(a) alone: reads hot
+    assert "TEMP 2, 1 071 Ω : −19 °C" in svg  # ratiometric: reads cold
+    assert "TEMP 2 lit chaud" in svg and "TEMP 2 lit froid" in svg
+
+
+def test_funnel_concludes_on_the_drift_against_nominal_and_twins() -> None:
+    svg = guide_94.fig_funnel()
+    assert "R25 : +7 % " in svg  # against the 1 000 Ω nominal
+    assert "(+8 % " in svg  # against the twins R82 and R24
+
+
 def test_export_plans_one_png_per_figure_and_a_plate_only_with_a_photo(
     tmp_path: Path,
 ) -> None:
