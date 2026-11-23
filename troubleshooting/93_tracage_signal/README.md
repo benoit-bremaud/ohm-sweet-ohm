@@ -77,6 +77,17 @@ Sans carte saine ni voie identique, le schéma et les fiches techniques sont la 
 - **Jamais** sur une panne destructrice : un court-circuit, un rail trop haut, un composant qui chauffe détruirait la pièce saine (fiche [03](../03_methode/README.md), étape 8). Un fusible sain posé dans un circuit en court-circuit fond aussi.
 - **Voies identiques** : échanger les entrées des voies gauche et droite (câbles, sources). La panne reste sur la même voie : elle est dans la carte, sur cette voie. Elle change de voie : elle est en amont, dans la source ou le câble.
 
+## Cas pratique : sondes saines, défaut après les sondes
+
+Une carte à quatre entrées de température affiche une valeur fausse sur la voie 3 seulement. Les quatre sondes, mesurées à l'ohmmètre, lisent la même valeur à l'ambiante, et échanger les sondes 2 et 3 laisse l'erreur sur la voie 3 : le défaut est sur la carte, après les sondes. Les quatre voies sont identiques : elles servent de référence les unes aux autres.
+
+![Tableau de quatre voies d'entrée, trois lignes de mesure : tension à vide sous tension, 2,68, 2,66, 2,71 et 2,64 V, aucun écart ; ohmmètre de la broche à la masse, rouge sur la broche, 12,40, 12,38, 3,05 et 12,41 kΩ ; mode diode rouge sur la masse, 0,552, 0,549, 0,214 et 0,551 V ; seules les cellules de la voie 3 des deux dernières lignes sont marquées](voies-identiques.svg)
+
+1. Même appareil, même calibre, même sens des pointes sur les quatre voies ; un tableau.
+2. La tension à vide ne sépare pas les voies : quelques pour cent d'écart, rien de net.
+3. Hors tension, l'ohmmètre et le mode diode désignent la voie 3 : 3,05 kΩ contre environ 12,4 kΩ, 0,214 V contre environ 0,55 V. Un chemin de fuite vers la masse sur cette entrée.
+4. Suivre ce chemin composant par composant, du connecteur vers le convertisseur, toujours en comparant avec une voie saine. La démarche complète d'une voie de sonde de platine est en fiche [14](../14_sonde_platine/README.md).
+
 ## Arbre de décision
 
 ```mermaid

@@ -488,3 +488,112 @@ def test_illustration_is_a_safe_standalone_svg(path: Path) -> None:
         assert forbidden not in content
     # only references to the file's own gradients and clip paths
     assert all(ref.startswith("#") for ref in re.findall(r"url\(([^)]*)\)", content))
+
+
+def test_pt1000_reads_1000_ohms_at_0_c_and_about_3_85_ohms_per_degree() -> None:
+    import guide_14
+
+    assert guide_14.pt1000_ohms(0) == 1000
+    assert guide_14.pt1000_ohms(100) == pytest.approx(1385.055, abs=1e-3)
+    assert guide_14.pt1000_ohms(26) == pytest.approx(1101.2, abs=0.1)
+
+
+@pytest.mark.parametrize("t", [0.0, 25.7, 100.0, 300.0])
+def test_pt1000_temperature_is_the_inverse_of_its_resistance(t: float) -> None:
+    import guide_14
+
+    assert guide_14.pt1000_celsius(guide_14.pt1000_ohms(t)) == pytest.approx(t)
+
+
+def test_pt1000_curve_refuses_negative_temperatures_both_ways() -> None:
+    import guide_14
+
+    with pytest.raises(ValueError, match="0 °C"):
+        guide_14.pt1000_ohms(-1)
+    with pytest.raises(ValueError, match="1000 Ω"):
+        guide_14.pt1000_celsius(999)
+
+
+def test_substitution_figure_shows_0_c_then_about_26_c() -> None:
+    import guide_14
+
+    svg = guide_14.fig_substitution()
+    assert ">T2 0,0 °C</text>" in svg and ">T2 25,7 °C</text>" in svg
+    assert "-0,0" not in svg
+
+
+@pytest.mark.parametrize("duty", [0, 1, -0.1])
+def test_pulse_train_refuses_a_duty_outside_zero_one(duty: float) -> None:
+    import guide_14
+
+    with pytest.raises(ValueError, match="duty"):
+        guide_14.pulse_train(2, duty)
+
+
+def test_pulse_train_is_high_for_its_duty_of_each_period() -> None:
+    import guide_14
+
+    pts = guide_14.pulse_train(2.5, 0.2, periods=3, cols=6)
+    highs = [
+        (a[0], b[0]) for a, b in zip(pts, pts[1:], strict=False) if a[1] == b[1] == 2.5
+    ]
+    assert len(highs) == 3
+    assert all(x1 - x0 == pytest.approx(0.4) for x0, x1 in highs)
+    assert pts[0] == (0.0, 0.0) and pts[-1] == (6.0, 0.0)
+
+
+def test_input_pin_figures_put_the_red_probe_on_the_labelled_point() -> None:
+    import guide_14
+
+    for draw, first in (
+        (guide_14.fig_resistance, ("broche", "masse")),
+        (guide_14.fig_diode, ("masse", "broche")),
+    ):
+        svg = draw()
+        reds = [
+            float(x)
+            for x in re.findall(r'data-probe="red" transform="translate\(([\d.]+)', svg)
+        ]
+        labels = re.findall(
+            r'x="([\d.]+)" y="212" font-size="12" text-anchor="middle" font-weight="700">(broche|masse)<',
+            svg,
+        )
+        where = {float(x): name for x, name in labels}
+        assert [where[x] for x in reds] == [first[0], first[1]]
+
+
+def test_odd_channel_designates_one_channel_or_none() -> None:
+    import guide_93
+
+    assert guide_93.odd_channel((2.68, 2.66, 2.71, 2.64)) is None
+    assert guide_93.odd_channel((12.40, 12.38, 3.05, 12.41)) == 2
+    assert (
+        guide_93.odd_channel((1.0, 2.0, 1.0, 3.0)) is None
+    )  # two depart: nothing designated
+
+
+def test_channel_figure_marks_only_the_odd_cells() -> None:
+    import guide_93
+
+    svg = guide_93.fig_channels()
+    assert re.findall(r'class="no"[^>]*>([\d,]+)</text>', svg) == ["3,05", "0,214"]
+
+
+def test_a_71_ohm_reference_drift_reads_about_18_c_too_high_at_20_c() -> None:
+    import guide_14
+
+    assert guide_14.apparent_error(20, 71) == pytest.approx(18.3, abs=0.1)
+    assert guide_14.apparent_error(20, 0) == pytest.approx(0)
+    assert ">+18,3 °C</text>" in guide_14.fig_drift()
+
+
+def test_funnel_figure_keeps_the_same_gap_at_every_stage() -> None:
+    import guide_14
+
+    gaps = {
+        round(100 * (bad - good) / good, 1)
+        for _, _, bad, good in guide_14.FUNNEL
+        if bad is not None and good is not None
+    }
+    assert gaps == {7.7}
+    assert guide_14.fig_funnel().count(">bip</text>") == 2

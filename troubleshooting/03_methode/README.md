@@ -118,7 +118,7 @@ Rails corrects, panne toujours là : la carte est une **chaîne d'étages**, de 
 - **Comparer** avec une carte saine ou avec une voie identique de la même carte : mêmes points, même appareil, même calibre (fiche [02](../02_pieges_en_circuit/README.md), « Comparer avec une carte saine »).
 - **Échanger** deux éléments réellement identiques (même version, même configuration) et amovibles (modules, cartes filles, câbles), carte hors tension pendant l'échange, et seulement si la panne n'est pas destructrice : si la panne suit l'élément, il est en cause. Un court-circuit, un rail trop haut ou un composant qui chauffe interdit l'échange, qui détruirait la pièce saine.
 
-Le traçage de signal et la comparaison complète sont en fiche [93](../93_tracage_signal/README.md).
+Le traçage de signal et la comparaison complète sont en fiche [93](../93_tracage_signal/README.md) ; un cas pratique sur une carte à plusieurs voies d'entrée y compare des voies identiques.
 
 ## Étape 9 — Confirmer le composant, trouver la cause
 

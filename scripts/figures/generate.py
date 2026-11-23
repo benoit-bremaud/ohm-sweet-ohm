@@ -18,6 +18,7 @@ import guide_10
 import guide_11
 import guide_12
 import guide_13
+import guide_14
 import guide_20
 import guide_21
 import guide_22
@@ -43,6 +44,7 @@ GUIDES = {
     "11_potentiometre": guide_11.FIGURES,
     "12_thermistance": guide_12.FIGURES,
     "13_fusible": guide_13.FIGURES,
+    "14_sonde_platine": guide_14.FIGURES,
     "20_condensateur_ceramique": guide_20.FIGURES,
     "21_condensateur_film": guide_21.FIGURES,
     "22_condensateur_electrolytique": guide_22.FIGURES,
