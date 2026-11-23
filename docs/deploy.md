@@ -14,8 +14,10 @@ repository: they live in the git-ignored `.env.staging` and in Cloudflare.
 | PostgreSQL | Neon, project `ohm-sweet-ohm`, free plan, `eu-central-1` | `just deploy staging` from up-to-date `main` after a green `just gate`: `just render`, then `pnpm catalogue:import` with `DATABASE_URL` from `.env.staging` | — |
 
 Staging and production are the same Worker and the same Neon project. Migrations run in the
-importer only; the Worker assumes the schema is there. The Worker sees a new import within 5
-seconds of its version check, plus the Hyperdrive query cache delay (ADR-0005).
+importer only; the Worker assumes the schema is there. Workers Builds deploys the Worker on the
+merge, before anyone runs the import, so a migration ships expand-first: it is imported with
+`just deploy staging` before the PR whose Worker code reads it is merged (ADR-0005). The Worker sees a new import within 5
+seconds of its version check; the Hyperdrive query cache is disabled (ADR-0005).
 
 ## Secrets and variables
 
@@ -49,11 +51,12 @@ Create the config once, from a shell where the string never reaches the history 
 
 ```bash
 set -a; . ./.env.staging; set +a
-npx wrangler hyperdrive create ohm-sweet-ohm-catalogue --connection-string="$DATABASE_URL"
+pnpm -C apps/web exec wrangler hyperdrive create ohm-sweet-ohm-catalogue \
+  --connection-string="$DATABASE_URL" --caching-disabled
 ```
 
 Copy the printed `id` into `apps/web/wrangler.jsonc`, in the `hyperdrive` entry with the binding
-`HYPERDRIVE`. The same entry carries a `localConnectionString` for local development. The free
+`HYPERDRIVE` and in the `previews` block (previews do not inherit it). The same entry carries a `localConnectionString` for local development. The free
 plan allows 100,000 queries a day; `pg` 8.16.3 or later is required (the repository has 8.23.1).
 
 ### Cloudflare Workers Builds
@@ -102,7 +105,7 @@ just nightly   # L3, systemd user timer: liveness of the production site (`scrip
 
 The nightly timer runs at 04:00 in a detached worktree of `origin/main` under
 `~/.cache/nightly/ohm-sweet-ohm`, fetched, reset and cleaned each run, never the working checkout
-(#71, agents-skills#427), and `notify-send`s a failure. A dead site (`/` or `/blocks/led-resistor-basic` not answering 2xx or 3xx after one retry), Trivy and TruffleHog findings fail it;
+(#71, agents-skills#427), and `notify-send`s a failure. A dead site (`/` not redirecting to `/depannage/`, or the LED block page or its schematic not answering 200, after one retry), Trivy and TruffleHog findings fail it;
 `just check` and `mise outdated --bump` only warn. Install the units by copying them from
 `origin/main` (a link would follow whatever branch the checkout is on), again after every change:
 
@@ -137,8 +140,7 @@ recorded waiver; every later PR goes through `just merge`.
 `refs/notes/gate` and the commit status `gate` on the pushed head, verified by `just merge <pr>`. Signing is SSH: `git config gpg.format ssh` and `user.signingkey` pointing at a
 public key listed in `.github/allowed_signers`, with its private key in `ssh-agent`. A squash merge
 creates a new `main` commit with no attestation: run `just gate` again on `main` before
-`just deploy staging`; after the staging QA pass, `just attest staging` records it, which the
-production tag requires.
+`just deploy staging`; after the staging QA pass, `just attest staging` records it.
 
 ### Release
 

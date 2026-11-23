@@ -5,6 +5,8 @@
 - Deciders: Benoît Bremaud
 - Supersedes: [ADR-0004](0004-staging-hosting.md) for the API hosting (decision 1); Neon (decision 2)
   and Workers Builds (decision 3) are kept
+- Amends: [ADR-0003](0003-web-astro-cloudflare.md) (the web app depended on `packages/schemas`
+  only and showed schematics from the API)
 - Related: issue #111 (public site down), [ADR-0003](0003-web-astro-cloudflare.md), the
   deployment view in [03-component.md](../diagrams/catalogue/03-component.md)
 
@@ -74,8 +76,14 @@ Sensitivity: with the API weight at 30 (effort 20), A wins.
 - The schematic is served by the Worker itself, same origin
   (`/blocks/{slug}/schematic.svg`: sandboxed CSP, `nosniff`, content-hash ETag, 304).
 - `/` redirects (302) to `/depannage/` until the home page of the redesign (#161).
-- `just nightly` runs `scripts/check-live.sh`: it fetches `/` and `/blocks/led-resistor-basic`
-  on the production Worker and fails after one retry when either is not 2xx or 3xx.
+- `just nightly` runs `scripts/check-live.sh`: it fetches `/` (a 302 to `/depannage/`), the LED
+  block page and its schematic on the production Worker and fails after one retry when one of
+  them answers anything else (the pages and the SVG must answer 200).
+- The Hyperdrive query cache is disabled: the version check and the catalogue reload are separate
+  queries, and a cached reload could be stored under a fresh version; the isolate cache already
+  spares the database.
+- Workers Builds deploys the Worker on the merge, before the import: a migration ships
+  expand-first and is imported with `just deploy staging` before the PR that reads it merges.
 - Staging and production are the same Worker and the same Neon project.
 
 ### Consequences
@@ -85,8 +93,6 @@ Sensitivity: with the API weight at 30 (effort 20), A wins.
 - Bad: no public JSON API and no `/docs` any more; the "third-party client" actor of the use-case
   diagram has no entry point until an API route is added.
 - Bad: the Workers free plan limits CPU time per request; the catalogue reload must stay small.
-- Bad: the Hyperdrive query cache can delay an import by up to its cache TTL, on top of the
-  5-second version check.
 - Bad: the importer and the Worker share the Neon credential until a read-only role exists.
 
 ### Revisit when

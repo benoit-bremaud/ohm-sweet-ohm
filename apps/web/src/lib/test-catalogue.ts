@@ -1,6 +1,6 @@
 import { BASE_CIRCUITS, Catalogue, type BlockDraft } from '@ohm-sweet-ohm/domain';
 
-/** A catalogue holding the LED block and one variant, as the API tests expect it. */
+/** A catalogue holding the LED block and one variant, as the catalogue tests expect it. */
 export function makeCatalogue(): Catalogue {
   const catalogue = new Catalogue(BASE_CIRCUITS);
   const root: BlockDraft = {

@@ -5,7 +5,7 @@
 #
 #   L0 fast     pre-commit hook                        staged files only                         < 10 s
 #   L1 check    pre-push hook, review-local --push     lint + test + security + secrets          < 3 min
-#   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + image + render,    5–15 min
+#   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + render,           5–15 min
 #               before every merge                     then the attestation
 #   L3 nightly  systemd user timer                     Trivy fs + TruffleHog + live site fail; check + mise outdated warn
 #

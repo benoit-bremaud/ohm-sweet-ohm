@@ -58,6 +58,7 @@ just --show merge | grep -q 'attest.sh verify gate' || fail "merge does not veri
 just --show deploy | grep -q 'attest.sh verify gate HEAD' || fail "deploy staging skips the gate attestation"
 just --show deploy | grep -q 'only staging is deployed' || fail "deploy does not refuse an environment other than staging"
 just --show attest | grep -q 'attest.sh write deploy/staging' || fail "attest staging does not write the note"
+sed -n '/"previews"/,$p' apps/web/wrangler.jsonc | grep -q '"binding": "HYPERDRIVE"' || fail "branch previews lack the HYPERDRIVE binding (they do not inherit it, ADR-0005)"
 [ ! -d .github/workflows ] || fail "a GitHub workflow is back (agents-skills ADR-0004, local CI only, #111)"
 e3=$(just --show gate | grep -n 'exit 3' | head -1 | cut -d: -f1); at=$(just --show gate | grep -n 'attest.sh write gate' | cut -d: -f1)
 [ -n "$e3" ] && [ -n "$at" ] && [ "$e3" -lt "$at" ] || fail "gate must exit 3 (Docker down) before it writes the attestation"

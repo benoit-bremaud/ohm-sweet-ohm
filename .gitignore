@@ -25,8 +25,6 @@ fp-info-cache
 # Playwright MCP session output
 .playwright-mcp/
 
-# Local CI (just gate): SBOM of the API image
-sbom-*.spdx.json
 
 # Python caches (figure generator, scripts/figures)
 __pycache__/

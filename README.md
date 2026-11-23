@@ -1,6 +1,6 @@
 # Ohm Sweet Ohm
 
-A public API (and its demo web front-end) that helps electronics enthusiasts find
+A public web catalogue that helps electronics enthusiasts find
 a **reusable circuit block** matching a precise need — and explore its variants,
 from the simplest base circuits to more complex ones.
 
