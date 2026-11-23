@@ -518,7 +518,7 @@ def test_substitution_figure_shows_0_c_then_about_26_c() -> None:
     import guide_14
 
     svg = guide_14.fig_substitution()
-    assert ">T2 0,0 °C</text>" in svg and ">T2 25,7 °C</text>" in svg
+    assert ">V2 0,0 °C</text>" in svg and ">V2 25,7 °C</text>" in svg
     assert "-0,0" not in svg
 
 
@@ -579,12 +579,13 @@ def test_channel_figure_marks_only_the_odd_cells() -> None:
     assert re.findall(r'class="no"[^>]*>([\d,]+)</text>', svg) == ["3,05", "0,214"]
 
 
-def test_a_71_ohm_reference_drift_reads_about_18_c_too_high_at_20_c() -> None:
+def test_a_71_ohm_reference_rise_reads_about_18_c_too_cold_at_20_c() -> None:
     import guide_14
 
-    assert guide_14.apparent_error(20, 71) == pytest.approx(18.3, abs=0.1)
+    assert guide_14.apparent_error(20, 71) == pytest.approx(-18.3, abs=0.1)
+    assert guide_14.apparent_error(20, -10) > 0
     assert guide_14.apparent_error(20, 0) == pytest.approx(0)
-    assert ">+18,3 °C</text>" in guide_14.fig_drift()
+    assert ">−18,3 °C</text>" in guide_14.fig_drift()
 
 
 def test_funnel_figure_keeps_the_same_gap_at_every_stage() -> None:
@@ -595,5 +596,5 @@ def test_funnel_figure_keeps_the_same_gap_at_every_stage() -> None:
         for _, _, bad, good in guide_14.FUNNEL
         if bad is not None and good is not None
     }
-    assert gaps == {7.7}
+    assert gaps == {7.1}
     assert guide_14.fig_funnel().count(">bip</text>") == 2

@@ -88,7 +88,7 @@ SUBSTITUTES = {
 def fig_substitution() -> str:
     b = heading(
         "Remplacer la sonde par une résistance connue",
-        "Carte sous tension, sonde débranchée, résistance 0,1 % enfichée dans le connecteur de la voie",
+        "Résistance 0,1 % enfichée carte hors tension, puis carte remise sous tension limitée en courant",
     )
     b += '  <path class="grid" d="M380 84 V340"/>\n'
     for x0, (r, code) in zip((0, 380), SUBSTITUTES.items(), strict=True):
@@ -98,18 +98,18 @@ def fig_substitution() -> str:
         )
         b += f'  <rect class="panel" x="{x0 + 30}" y="200" width="320" height="120" rx="10" stroke-width="1.5"/>\n'
         b += text(x0 + 334, 222, "Carte de commande", "fg", 13, "end", 700)
-        h, p1, p2 = _header(x0 + 60, 250, "connecteur T2")
+        h, p1, p2 = _header(x0 + 60, 250, "connecteur voie 2")
         b += h
         # resistor bent over the header: one lead in each pin
         b += f'  <path stroke="#aab2bd" stroke-width="3" fill="none" d="M{p1[0]} {p1[1]} V140 M{p2[0]} {p2[1]} V140"/>\n'
         b += res_h(p1[0] - 22, p2[0] + 22, 128, 22, bands(*code), BLUE)
         b += text(x0 + 140, 132, f"{r:.0f} Ω ± 0,1 %", "blue", 13, weight=700)
-        b += _board_display(x0 + 180, 252, f"T2 {fr(t)} °C")
+        b += _board_display(x0 + 180, 252, f"V2 {fr(t)} °C")
         b += text(x0 + 255, 310, "affichage de la carte", "mut", 11, "middle")
     b += verdict(
         380,
         374,
-        "La carte lit 0 °C puis ≈ 26 °C : la voie est saine, la sonde ou son câble est en cause",
+        "La carte lit 0 °C puis ≈ 26 °C : voie saine : sonde, câble ou carte de filtrage en cause",
         "Elle lit une autre valeur ou reste en défaut : la panne est sur la carte, dans cette voie",
         "ok",
     )
@@ -230,6 +230,7 @@ def fig_diode() -> str:
 
 # ---------------------------------------------------------------- figure 5
 PULSE_HIGH, PULSE_DUTY = 2.5, 0.2
+PULSE_MEAN_V = 0.08  # 0.2 mA through 2.08 kΩ ≈ 0.42 V pulses at duty 0.2
 
 
 def fig_pulsed() -> str:
@@ -240,10 +241,8 @@ def fig_pulsed() -> str:
     b += '  <path class="grid" d="M380 84 V520"/>\n'
     b += text(20, 100, "Oscilloscope, pince sur la masse", size=15, weight=700)
     b += screen(30, 120, 320, 200, 6, 4, pulse_train(PULSE_HIGH, PULSE_DUTY))
-    b += text(30, 344, "La voie n'est alimentée que pendant de courtes", "mut", 12)
-    b += text(
-        30, 360, "impulsions, puis la mesure passe à la voie suivante.", "mut", 12
-    )
+    b += text(30, 344, "Sur certaines cartes, la voie n'est alimentée que", "mut", 12)
+    b += text(30, 360, "pendant de courtes impulsions, puis repose.", "mut", 12)
     b += verdict(
         190,
         478,
@@ -254,18 +253,18 @@ def fig_pulsed() -> str:
     o, v, com = half_meter(
         380,
         "VDC",
-        "0.41",
+        f"{PULSE_MEAN_V:.2f}",
         "V",
         "Multimètre",
-        ("Une moyenne qui", "change à chaque", "lecture."),
+        ("Une moyenne,", "bien plus basse", "que l'impulsion."),
     )
     pads, left, right = _pin_pair(380, True)
     b += o + pads + hookup(v, com, left, right)
     b += verdict(
         570,
         478,
-        "Une valeur instable, sans défaut",
-        "l'appareil intègre des impulsions trop brèves",
+        "Une moyenne basse, sans défaut",
+        "l'appareil moyenne des impulsions trop brèves",
         "warn",
     )
     return svg(
@@ -274,21 +273,21 @@ def fig_pulsed() -> str:
         "Excitation pulsée d'une sonde : multimètre et oscilloscope",
         "Carte sous tension, sonde branchée, mesure entre l'entrée de la voie et la masse. "
         "À gauche, l'oscilloscope, pince de masse sur la masse de la carte, montre des impulsions rectangulaires brèves séparées de longs repos à 0 V : "
-        "la voie n'est alimentée que pendant ces impulsions, puis la mesure passe à la voie suivante. "
-        "À droite, un multimètre sur le calibre tension continue, pointe rouge sur la broche d'entrée, noire sur la masse, affiche 0,41 V, valeur d'exemple, "
-        "une moyenne qui change à chaque lecture : l'appareil intègre des impulsions trop brèves, cette instabilité n'est pas un défaut. "
+        "sur certaines cartes, la voie n'est alimentée que pendant ces impulsions. "
+        "À droite, un multimètre sur le calibre tension continue, pointe rouge sur la broche d'entrée, noire sur la masse, affiche 0,08 V, valeur d'exemple, "
+        "une moyenne bien plus basse que la hauteur des impulsions : l'appareil moyenne des impulsions trop brèves, ce n'est pas un défaut. "
         "Pour comparer deux voies, comparer le niveau des impulsions à l'oscilloscope.",
         b,
     )
 
 
 def apparent_error(t: float, drift: float) -> float:
-    """Error in °C when the reference resistor in series with the sensor drifts by `drift` ohms.
+    """Error in °C when the reference resistor of a ratiometric channel drifts by `drift` ohms.
 
-    Model (an assumption, the firmware is unknown): the board measures the series sum of sensor
-    and reference and subtracts the nominal reference, so the whole drift lands on the sensor.
+    Ratiometric model (TI SBAA275A, eq. 5): the board computes R_sensor = ratio × nominal R_ref,
+    so a reference that has risen makes the sensor look smaller and the channel read cold.
     """
-    return pt1000_celsius(pt1000_ohms(t) + drift) - t
+    return pt1000_celsius(pt1000_ohms(t) * R0 / (R0 + drift)) - t
 
 
 def _res_sym(x1: float, x2: float, y: float, label: str, cls: str = "fg") -> str:
@@ -326,6 +325,8 @@ def fig_channel() -> str:
     b += '  <path class="wire" d="M300 320 V330"/>\n'
     b += '  <rect class="panel" x="289" y="330" width="22" height="50" stroke-width="2.5"/>\n'
     b += '  <path class="wire" d="M300 380 V392"/>\n' + _ground(300, 392)
+    b += '  <path class="wire" stroke-dasharray="5 4" d="M300 300 V290 H600 V250"/>\n'
+    b += text(450, 284, "tension de R réf, vers le CAN", "mut", 11, "middle")
     b += text(320, 352, "R réf 1 kΩ 0,1 %", "amber", 12, weight=700)
     b += text(320, 368, "référence de mesure", "mut", 11)
     # pin a: RC filter, multiplexer, ADC
@@ -353,7 +354,7 @@ def fig_channel() -> str:
     b += text(
         40,
         440,
-        "La carte calcule la température à partir de la sonde et de R réf : une dérive de R réf",
+        "La carte mesure le rapport des tensions de la sonde et de R réf : une dérive de R réf",
         "fg",
         13,
     )
@@ -369,16 +370,16 @@ def fig_channel() -> str:
         "La broche a passe par un filtre : un condensateur vers la masse, précédé d'une résistance série supposée, dessinée en pointillé, puis entre dans un multiplexeur analogique à quatre voies, "
         "dont la sortie attaque l'entrée du convertisseur analogique-numérique du microcontrôleur. "
         "La source d'excitation dépend de la carte et n'est pas représentée ; sur certains appareils, une carte de filtrage s'intercale entre la sonde et le connecteur. "
-        "La carte calcule la température à partir de la sonde et de la résistance de référence : une dérive de celle-ci fausse la température sans défaut sur la sonde.",
+        "La broche b, tension de la résistance de référence, est aussi mesurée par le convertisseur, en pointillé : la carte mesure le rapport des deux tensions, et une dérive de la référence fausse la température sans défaut sur la sonde.",
         b,
     )
 
 
 # ---------------------------------------------------------------- figure 7
 FUNNEL = (
-    ("Connecteur", "broche b → masse", 1071, 994),
+    ("Connecteur", "broche b → masse", 1071, 1000),
     ("Via", "bipeur, broche b → pastille", None, None),
-    ("Résistance", "aux bornes de R réf", 1071, 994),
+    ("Résistance", "aux bornes de R réf", 1071, 1000),
 )
 
 
@@ -418,10 +419,10 @@ def fig_funnel() -> str:
         408,
         "Entonnoir de comparaison d'une voie suspecte avec sa voie jumelle",
         "Carte hors tension et déchargée, ohmmètre, mêmes points sur la voie suspecte et sur sa voie jumelle, puis pointes inversées : même valeur, le chemin est purement résistif. "
-        "Étape 1, au connecteur, broche b vers la masse : 1071 Ω contre 994 Ω. "
+        "Étape 1, au connecteur, broche b vers la masse : 1071 Ω contre 1000 Ω. "
         "Étape 2, continuité de la broche b à la pastille de la résistance à travers le via : bip sur les deux voies, aucun écart. "
-        "Étape 3, aux bornes de la résistance de référence : 1071 Ω contre 994 Ω. "
-        f"L'écart, +{fr(100 * 77 / 994)} %, se retrouve aux bornes de la résistance : la résistance de référence a dérivé. "
+        "Étape 3, aux bornes de la résistance de référence : 1071 Ω contre 1000 Ω. "
+        f"L'écart, +{fr(100 * 71 / 1000)} %, se retrouve aux bornes de la résistance : la résistance de référence a dérivé. "
         "Les pointes inversées donnent la même lecture : le chemin est purement résistif, ce n'est pas une jonction.",
         b,
     )
@@ -433,18 +434,20 @@ DRIFT_T, DRIFT = 20.0, 71.0
 
 def fig_drift() -> str:
     rpt = pt1000_ohms(DRIFT_T)
-    seen = pt1000_celsius(rpt + DRIFT)
+    rref = R0 + DRIFT
+    ratio = rpt / rref
+    seen = pt1000_celsius(ratio * R0)
     err = apparent_error(DRIFT_T, DRIFT)
     b = heading(
-        "Une référence qui dérive de 7 % : environ 20 °C d'erreur",
-        "Calcul d'exemple, en supposant que la carte retranche la valeur nominale de R réf",
+        f"Une référence qui monte de {fr(100 * DRIFT / R0)} % : la voie lit {fr(-err)} °C trop froid",
+        "Calcul d'exemple, mesure ratiométrique : la carte multiplie le rapport mesuré par la valeur nominale de R réf",
     )
     rows = (
         ("Sonde PT1000 à 20 °C", f"{fr(rpt)} Ω", "fg"),
-        ("R réf réelle (nominale 1000 Ω)", f"{fr(1000 + DRIFT, 0)} Ω", "no"),
-        ("Somme mesurée par la carte", f"{fr(rpt + 1000 + DRIFT)} Ω", "fg"),
-        ("Moins la valeur nominale de R réf", "− 1000,0 Ω", "fg"),
-        ("Résistance attribuée à la sonde", f"{fr(rpt + DRIFT)} Ω", "no"),
+        ("R réf réelle (nominale 1000 Ω)", f"{fr(rref, 0)} Ω", "no"),
+        ("Rapport mesuré, sonde / R réf", fr(ratio, 4), "fg"),
+        ("Multiplié par la valeur nominale de R réf", "× 1000 Ω", "fg"),
+        ("Résistance attribuée à la sonde", f"{fr(ratio * R0)} Ω", "no"),
         ("Température affichée", f"{fr(seen)} °C", "no"),
     )
     for i, (label, value, cls) in enumerate(rows):
@@ -453,23 +456,24 @@ def fig_drift() -> str:
         b += text(560, y, value, cls, 15, "end", 700)
     b += '  <path class="grid" d="M60 298 H560"/>\n'
     b += text(60, 326, "Erreur", "fg", 15, weight=700)
-    b += text(560, 326, f"+{fr(err)} °C", "no", 17, "end", 700)
+    b += text(560, 326, f"−{fr(-err)} °C", "no", 17, "end", 700)
     b += text(
         60,
         366,
-        "Règle : une PT1000 varie d'environ 3,85 Ω par degré ; chaque ohm de dérive en série",
+        "Règle : une référence qui monte fait lire froid, une référence qui baisse fait lire chaud ;",
         "mut",
         12,
     )
-    b += text(60, 384, "avec elle ajoute environ un quart de degré.", "mut", 12)
+    b += text(60, 384, "1 % de dérive vaut environ 2,6 °C autour de 20 °C.", "mut", 12)
     return svg(
         760,
         408,
         "Effet d'une dérive de la résistance de référence sur la température lue",
-        "Calcul d'exemple, en supposant que la carte mesure la somme de la sonde et de la résistance de référence puis retranche la valeur nominale de celle-ci. "
-        f"Sonde PT1000 à 20 °C : {fr(rpt)} Ω. Résistance de référence réelle : {fr(1000 + DRIFT, 0)} Ω au lieu de 1000 Ω. "
-        f"La carte attribue {fr(rpt + DRIFT)} Ω à la sonde et affiche {fr(seen)} °C, soit une erreur de +{fr(err)} °C. "
-        "Règle : une PT1000 varie d'environ 3,85 Ω par degré, chaque ohm de dérive en série ajoute environ un quart de degré.",
+        "Calcul d'exemple pour une mesure ratiométrique : la carte mesure le rapport entre la tension de la sonde et celle de la résistance de référence, "
+        "puis le multiplie par la valeur nominale de la référence. "
+        f"Sonde PT1000 à 20 °C : {fr(rpt)} Ω. Résistance de référence réelle : {fr(rref, 0)} Ω au lieu de 1000 Ω. "
+        f"Rapport mesuré : {fr(ratio, 4)} ; la carte attribue {fr(ratio * R0)} Ω à la sonde et affiche {fr(seen)} °C, soit une erreur de −{fr(-err)} °C. "
+        "Règle : une référence qui monte fait lire froid, une référence qui baisse fait lire chaud ; 1 % de dérive vaut environ 2,6 °C autour de 20 °C.",
         b,
     )
 
@@ -478,7 +482,7 @@ def fig_drift() -> str:
 def fig_coating() -> str:
     b = heading(
         "Mesurer à travers un vernis de tropicalisation",
-        "Carte hors tension et déchargée ; pointe fine sur la pastille, jamais sur le corps du composant",
+        "Carte hors tension et déchargée ; pointe fine sur la terminaison métallique du composant",
     )
     # board cross-section: substrate, pad, component, coating
     b += '  <rect x="40" y="300" width="400" height="34" fill="#2f6b3a" stroke="#1d4426"/>\n'
@@ -491,15 +495,15 @@ def fig_coating() -> str:
         240, 356, "pastille        composant        pastille", "mut", 11, "middle"
     )
     # needle tip alone (no meter here): steel needle then red handle, tip on the pad
-    b += '  <path d="M130 288 L114 262" stroke="#c0c7d0" stroke-width="2.5" stroke-linecap="round"/>\n'
-    b += '  <path d="M114 262 L84 212" stroke="#dc2626" stroke-width="12" stroke-linecap="round"/>\n'
-    b += text(60, 170, "pointe-aiguille inclinée,", "fg", 12)
-    b += text(60, 186, "sur la pastille", "fg", 12)
+    b += '  <path d="M168 274 L140 240" stroke="#c0c7d0" stroke-width="2.5" stroke-linecap="round"/>\n'
+    b += '  <path d="M140 240 L110 190" stroke="#dc2626" stroke-width="12" stroke-linecap="round"/>\n'
+    b += text(40, 150, "pointe-aiguille inclinée,", "fg", 12)
+    b += text(40, 166, "sur la terminaison", "fg", 12)
     notes = (
-        ("Repérer", "une lampe UV fait souvent briller le vernis"),
-        ("Acrylique", "se dissout à l'alcool isopropylique, localement"),
-        ("Silicone", "ne se dissout pas : gratter sur la pastille seule"),
-        ("Outil", "stylo fibre de verre ou scalpel, pastille seule"),
+        ("Repérer", "lampe UV, si le vernis contient un traceur"),
+        ("Terminaison", "sinon la pastille : la lecture inclut le joint"),
+        ("Dégager", "localement, selon la fiche du vernis"),
+        ("Lire", "comparer à la voie jumelle, mêmes points"),
         ("Jamais", "près des broches à pas fin"),
         ("Après", "revernir la zone (stylo de vernis)"),
     )
@@ -512,9 +516,9 @@ def fig_coating() -> str:
         400,
         "Mesure à travers un vernis de tropicalisation",
         "Coupe d'une carte recouverte de vernis de tropicalisation : un composant CMS sur deux pastilles, le tout sous une couche de vernis. "
-        "Une pointe-aiguille rouge, inclinée, traverse le vernis sur la pastille, jamais sur le corps du composant ; carte hors tension et déchargée. "
-        "À droite, les règles : une lampe UV fait souvent briller le vernis ; un vernis acrylique se dissout localement à l'alcool isopropylique ; "
-        "un vernis silicone ne se dissout pas, on le gratte sur la pastille seule ; outil : stylo fibre de verre ou scalpel, sur la pastille seule ; "
+        "Une pointe-aiguille rouge, inclinée, traverse le vernis jusqu'à la terminaison métallique du composant ; carte hors tension et déchargée. "
+        "À droite, les règles : une lampe UV le fait briller s'il contient un traceur ; faute d'atteindre la terminaison, la pastille, mais la lecture inclut alors le joint de brasure ; "
+        "dégager localement selon la fiche technique du vernis ; comparer à la voie jumelle aux mêmes points ; "
         "jamais près des broches à pas fin ; après la réparation, revernir la zone au stylo de vernis.",
         b,
     )

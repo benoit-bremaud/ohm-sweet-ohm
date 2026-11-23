@@ -21,7 +21,7 @@
   </style>
   <rect class="bg" width="760" height="420" rx="16"/>
   <text class="fg" x="24" y="38" font-size="20" font-weight="700">Remplacer la sonde par une résistance connue</text>
-  <text class="mut" x="24" y="60" font-size="14">Carte sous tension, sonde débranchée, résistance 0,1 % enfichée dans le connecteur de la voie</text>
+  <text class="mut" x="24" y="60" font-size="14">Résistance 0,1 % enfichée carte hors tension, puis carte remise sous tension limitée en courant</text>
   <path class="grid" d="M380 84 V340"/>
   <text class="fg" x="20" y="100" font-size="15" font-weight="700">1000 Ω à la place de la PT1000</text>
   <rect class="panel" x="30" y="200" width="320" height="120" rx="10" stroke-width="1.5"/>
@@ -29,7 +29,7 @@
   <rect x="60" y="250" width="64" height="32" rx="3" fill="#f5f0e6" stroke="#8a7f6b"/>
   <rect x="72" y="260" width="12" height="12" fill="#c9a227" stroke="#7a6212"/>
   <rect x="100" y="260" width="12" height="12" fill="#c9a227" stroke="#7a6212"/>
-  <text class="mut" x="92" y="300" font-size="11" text-anchor="middle">connecteur T2</text>
+  <text class="mut" x="92" y="300" font-size="11" text-anchor="middle">connecteur voie 2</text>
   <path stroke="#aab2bd" stroke-width="3" fill="none" d="M78 266 V140 M106 266 V140"/>
   <rect x="56" y="117.0" width="72" height="22" rx="9" fill="#8fbfe0" stroke="#3f6f96" stroke-width="1.5"/>
   <rect x="67.5" y="117.0" width="6.5" height="22" fill="#7b3f00"/>
@@ -39,7 +39,7 @@
   <rect x="113.9" y="117.0" width="6.5" height="22" fill="#7c3aed"/>
   <text class="blue" x="140" y="132" font-size="13" font-weight="700">1000 Ω ± 0,1 %</text>
   <rect x="180" y="252" width="150" height="40" rx="5" fill="#0c0e11" stroke="#11151a"/>
-  <text x="255" y="278" font-size="17" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#4ade80">T2 0,0 °C</text>
+  <text x="255" y="278" font-size="17" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#4ade80">V2 0,0 °C</text>
   <text class="mut" x="255" y="310" font-size="11" text-anchor="middle">affichage de la carte</text>
   <text class="fg" x="400" y="100" font-size="15" font-weight="700">1100 Ω à la place de la PT1000</text>
   <rect class="panel" x="410" y="200" width="320" height="120" rx="10" stroke-width="1.5"/>
@@ -47,7 +47,7 @@
   <rect x="440" y="250" width="64" height="32" rx="3" fill="#f5f0e6" stroke="#8a7f6b"/>
   <rect x="452" y="260" width="12" height="12" fill="#c9a227" stroke="#7a6212"/>
   <rect x="480" y="260" width="12" height="12" fill="#c9a227" stroke="#7a6212"/>
-  <text class="mut" x="472" y="300" font-size="11" text-anchor="middle">connecteur T2</text>
+  <text class="mut" x="472" y="300" font-size="11" text-anchor="middle">connecteur voie 2</text>
   <path stroke="#aab2bd" stroke-width="3" fill="none" d="M458 266 V140 M486 266 V140"/>
   <rect x="436" y="117.0" width="72" height="22" rx="9" fill="#8fbfe0" stroke="#3f6f96" stroke-width="1.5"/>
   <rect x="447.5" y="117.0" width="6.5" height="22" fill="#7b3f00"/>
@@ -57,8 +57,8 @@
   <rect x="493.9" y="117.0" width="6.5" height="22" fill="#7c3aed"/>
   <text class="blue" x="520" y="132" font-size="13" font-weight="700">1100 Ω ± 0,1 %</text>
   <rect x="560" y="252" width="150" height="40" rx="5" fill="#0c0e11" stroke="#11151a"/>
-  <text x="635" y="278" font-size="17" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#4ade80">T2 25,7 °C</text>
+  <text x="635" y="278" font-size="17" font-weight="700" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#4ade80">V2 25,7 °C</text>
   <text class="mut" x="635" y="310" font-size="11" text-anchor="middle">affichage de la carte</text>
-  <text class="ok" x="380" y="374" font-size="14" text-anchor="middle" font-weight="700">La carte lit 0 °C puis ≈ 26 °C : la voie est saine, la sonde ou son câble est en cause</text>
+  <text class="ok" x="380" y="374" font-size="14" text-anchor="middle" font-weight="700">La carte lit 0 °C puis ≈ 26 °C : voie saine : sonde, câble ou carte de filtrage en cause</text>
   <text class="mut" x="380" y="392" font-size="12" text-anchor="middle">Elle lit une autre valeur ou reste en défaut : la panne est sur la carte, dans cette voie</text>
 </svg>

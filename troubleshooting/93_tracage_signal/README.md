@@ -81,11 +81,11 @@ Sans carte saine ni voie identique, le schéma et les fiches techniques sont la 
 
 Une carte à quatre entrées de température affiche une valeur fausse sur la voie 3 seulement. Les quatre sondes, mesurées à l'ohmmètre, lisent la même valeur à l'ambiante, et échanger les sondes 2 et 3 laisse l'erreur sur la voie 3 : le défaut est sur la carte, après les sondes. Les quatre voies sont identiques : elles servent de référence les unes aux autres.
 
-![Tableau de quatre voies d'entrée, trois lignes de mesure : tension à vide sous tension, 2,68, 2,66, 2,71 et 2,64 V, aucun écart ; ohmmètre de la broche à la masse, rouge sur la broche, 12,40, 12,38, 3,05 et 12,41 kΩ ; mode diode rouge sur la masse, 0,552, 0,549, 0,214 et 0,551 V ; seules les cellules de la voie 3 des deux dernières lignes sont marquées](voies-identiques.svg)
+![Tableau de quatre voies d'entrée, trois lignes de mesure : rail local de la voie sous tension, 2,68, 2,66, 2,71 et 2,64 V, aucun écart ; ohmmètre de la broche à la masse, rouge sur la broche, 12,40, 12,38, 3,05 et 12,41 kΩ ; mode diode rouge sur la masse, 0,552, 0,549, 0,214 et 0,551 V ; seules les cellules de la voie 3 des deux dernières lignes sont marquées](voies-identiques.svg)
 
 1. Même appareil, même calibre, même sens des pointes sur les quatre voies ; un tableau.
-2. La tension à vide ne sépare pas les voies : quelques pour cent d'écart, rien de net.
-3. Hors tension, l'ohmmètre et le mode diode désignent la voie 3 : 3,05 kΩ contre environ 12,4 kΩ, 0,214 V contre environ 0,55 V. Un chemin de fuite vers la masse sur cette entrée.
+2. Le rail local de chaque voie ne les sépare pas : quelques pour cent d'écart, rien de net.
+3. Hors tension, l'ohmmètre et le mode diode désignent la voie 3 : 3,05 kΩ contre environ 12,4 kΩ, 0,214 V contre environ 0,55 V. Une fuite seule ne baisserait pas la signature de la diode : c'est la jonction de protection de cette entrée, abîmée, qui fuit vers la masse.
 4. Suivre ce chemin composant par composant, du connecteur vers le convertisseur, toujours en comparant avec une voie saine. La démarche complète d'une voie de sonde de platine est en fiche [14](../14_sonde_platine/README.md).
 
 ## Arbre de décision

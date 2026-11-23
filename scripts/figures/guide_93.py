@@ -161,7 +161,7 @@ def fig_compare() -> str:
 # ---------------------------------------------------------------- figure 3
 # Same measurement on four identical channels; the third departs in two rows.
 CHANNEL_ROWS = (
-    ("Tension à vide, sous tension (V)", (2.68, 2.66, 2.71, 2.64), 2),
+    ("Rail local de la voie, sous tension (V)", (2.68, 2.66, 2.71, 2.64), 2),
     ("Ω broche → masse, rouge sur la broche (kΩ)", (12.40, 12.38, 3.05, 12.41), 2),
     ("Mode diode, rouge sur la masse (V)", (0.552, 0.549, 0.214, 0.551), 3),
 )
@@ -211,7 +211,7 @@ def fig_channels() -> str:
         380,
         340,
         "Deux lignes désignent la voie 3 : la chercher entre son connecteur et le microcontrôleur",
-        "la tension à vide ne la distingue pas : une seule mesure ne suffit pas",
+        "le rail local ne la distingue pas : une seule mesure ne suffit pas",
         "no",
     )
     return svg(
@@ -219,11 +219,11 @@ def fig_channels() -> str:
         384,
         "Comparaison de la même mesure sur quatre voies identiques",
         "Un tableau compare quatre voies d'entrée identiques d'une même carte, mesurées aux mêmes points avec le même appareil, "
-        "le même calibre et la même polarité. Tension à vide, sous tension : 2,68, 2,66, 2,71 et 2,64 V, aucune voie ne se distingue. "
+        "le même calibre et la même polarité. Rail local de la voie, sous tension : 2,68, 2,66, 2,71 et 2,64 V, aucune voie ne se distingue. "
         "Résistance de la broche à la masse, pointe rouge sur la broche : 12,40, 12,38, 3,05 et 12,41 kΩ, la voie 3 diffère. "
         "Mode diode, pointe rouge sur la masse : 0,552, 0,549, 0,214 et 0,551 V, la voie 3 diffère encore. "
         "Conclusion : deux lignes désignent la voie 3, à chercher entre son connecteur et le microcontrôleur ; "
-        "la tension à vide ne la distinguait pas, une seule mesure ne suffit pas.",
+        "le rail local ne la distinguait pas, une seule mesure ne suffit pas.",
         b,
     )
 
