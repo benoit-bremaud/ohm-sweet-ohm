@@ -68,6 +68,38 @@ def test_two_polarity_figures_swap_the_red_probe_between_pin_and_ground(
         assert re.search(rf'<text [^>]*x="{x0 + 245}"[^>]*>{label}<', svg)
 
 
+def test_odd_one_out_is_the_channel_furthest_from_the_median() -> None:
+    assert guide_94.odd_one_out(guide_94.TWINS) == "TEMP 2"
+    assert guide_94.odd_one_out((("A", 10), ("B", 10), ("C", 3))) == "C"  # odd count
+    assert guide_94.odd_one_out((("A", 5), ("B", 5))) == "A"  # all equal: first wins
+
+
+@pytest.mark.parametrize(("ref", "celsius"), [(1000, 0), (1071, 18.4), (995, -1.3)])
+def test_reference_drift_lands_whole_on_the_reading(ref: float, celsius: float) -> None:
+    assert guide_94.reference_error(ref) == pytest.approx(celsius, abs=0.1)
+
+
+def test_twin_gap_is_about_twenty_degrees() -> None:
+    gap = guide_94.reference_error(1071) - guide_94.reference_error(995)
+    assert gap == pytest.approx(20, abs=0.5)
+
+
+def test_twin_table_paints_only_the_odd_channel_red() -> None:
+    svg = guide_94.fig_twin_table()
+    assert len(re.findall(r'<rect class="no"', svg)) == 1
+    assert len(re.findall(r'<rect class="ok"', svg)) == 3
+
+
+def test_funnel_ends_on_the_drifted_resistor() -> None:
+    svg = guide_94.fig_funnel()
+    assert [stage for stage, _, _ in guide_94.FUNNEL] == [
+        "Connecteur",
+        "Via",
+        "Résistance",
+    ]
+    assert "R25 : 1 071 Ω" in svg
+
+
 def test_export_plans_one_png_per_figure_and_a_plate_only_with_a_photo(
     tmp_path: Path,
 ) -> None:

@@ -50,6 +50,24 @@ La continuité suit une piste ; le mode diode compare deux voies, parce qu'il vo
 
 Beaucoup de cartes n'alimentent la sonde que pendant la conversion, ou commutent leur source de courant d'une voie à l'autre : le multimètre affiche une moyenne instable. Quand seul le multiplexeur commute, après le pont diviseur, la broche reste en continu. L'oscilloscope montre le plateau de l'impulsion, à comparer au plateau de la voie jumelle.
 
+## 7. Comparer aux voies jumelles et localiser
+
+![Carte nue hors tension, broche b à la masse sur quatre voies : TEMP 1 995 Ω, TEMP 2 1 071 Ω, TEMP 3 1 000 Ω, TEMP 4 1 025 Ω. TEMP 1 et TEMP 2 sondent le même tuyau : 76 Ω d'écart, environ 20 °C. TEMP 2 est l'intruse](comparaison-voies.svg)
+
+Une carte qui lit plusieurs sondes identiques porte autant de voies identiques : chacune sert d'étalon aux autres. Noter la même mesure sur toutes les voies, dans le même sens, et chercher **l'intruse** plutôt qu'une valeur théorique. Deux voies qui doivent lire pareil (deux sondes d'un même tuyau, par exemple) et qui s'écartent désignent la panne, même quand chaque valeur paraît plausible.
+
+![Test d'échange : cartes filtre TFB1 et TFB2 échangées, puis fiches TEMP 1 et TEMP 2 échangées. Le défaut qui suit l'élément désigne l'élément ; le défaut qui reste désigne la voie de la carte](test-echange.svg)
+
+Quand deux cartes ou deux fiches sont identiques, l'échange tranche sans instrument : un seul échange à la fois, hors tension, fiches repérées et photographiées avant. Jamais sur une panne destructrice (court-circuit, fumée) : on la déplacerait sur la carte saine.
+
+![Hypothèse de voie : source de courant, PT1000 entre a et b, résistance de référence R25 de b à la masse. R25 à 1 071 Ω au lieu de 1 000 Ω ajoute environ 18 °C à la lecture ; la voie saine à 995 Ω retire environ 1 °C ; l'écart de 20 °C déclenche « Temperature Mismatch »](derive-reference.svg)
+
+Le schéma est une **hypothèse** reconstruite à l'ohmmètre, sans schéma constructeur : il suffit à chiffrer l'effet d'une dérive. Avec une source de courant, toute la dérive de la référence passe dans la lecture, à 3,85 Ω par °C. Avec un pont diviseur ratiométrique, le signe change mais l'ordre de grandeur reste.
+
+![Entonnoir : connecteur, via, puis résistance. À chaque étape, la même mesure sur la voie suspecte et sur sa jumelle ; R25 à 1 071 Ω contre 994 Ω pour R82 et R24](entonnoir-voie.svg)
+
+Resserrer la même mesure, du connecteur vers le composant, en comparant toujours à la jumelle : l'étape où l'écart apparaît désigne le composant ou la piste. Une résistance de précision qui a dérivé se remplace par la même valeur, la même tolérance et le même coefficient de température (fiche [10](../10_resistance/README.md)).
+
 ## Arbre de décision
 
 ```mermaid
@@ -79,6 +97,7 @@ flowchart TD
 | Broche → masse, deux sens | hors tension | même lecture que la voie jumelle | écart net avec la jumelle |
 | Mode diode, rouge sur la masse | hors tension | 0,5 à 0,7 V | ≈ 0 V dans les deux sens |
 | Plateau de l'excitation | sous tension, oscilloscope | même plateau que la voie jumelle | plateau absent ou décalé |
+| Même mesure sur toutes les voies jumelles | hors tension | écarts de quelques ohms | une voie à part : 4 Ω ≈ 1 °C |
 
 ## Sources
 

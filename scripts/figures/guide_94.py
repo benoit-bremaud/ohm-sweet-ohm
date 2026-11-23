@@ -485,6 +485,242 @@ def fig_cap_rising() -> str:
     )
 
 
+# ---------------------------------------------------------------- family 2: compare twin channels
+# Field data (bare board, 2026-11-23): pin b to ground on the four channels; TEMP 1 and 2 are the
+# two sensors of the same hose, so they are twins.
+TWINS = (("TEMP 1", 995), ("TEMP 2", 1071), ("TEMP 3", 1000), ("TEMP 4", 1025))
+R_NOMINAL = 1000  # reference resistor the firmware assumes
+
+
+def odd_one_out(readings: tuple[tuple[str, float], ...]) -> str:
+    """Name of the channel furthest from the median of all the channels."""
+    values = sorted(v for _, v in readings)
+    mid = len(values) // 2
+    median = values[mid] if len(values) % 2 else (values[mid - 1] + values[mid]) / 2
+    return max(readings, key=lambda nv: abs(nv[1] - median))[0]
+
+
+def reference_error(actual: float, assumed: float = R_NOMINAL) -> float:
+    """Temperature error (°C) of a current-source channel whose series reference drifted.
+
+    The channel reads V = I · (R_PT1000 + R_ref) and subtracts the assumed R_ref: the whole drift
+    lands on the sensor reading.
+    """
+    return (actual - assumed) / PT1000_ALPHA
+
+
+def fig_twin_table() -> str:
+    b = heading(
+        "Comparer les voies jumelles : l'intruse désigne la panne",
+        "Carte nue, hors tension : la même mesure, broche b → masse, sur chaque voie identique",
+    )
+    x0, base, scale = 60, 400, 1.5  # bars start at 900 Ω
+    suspect = odd_one_out(TWINS)
+    for i, (name, ohms) in enumerate(TWINS):
+        x = x0 + 120 * i
+        h = (ohms - 900) * scale
+        cls = "no" if name == suspect else "ok"
+        b += f'  <rect class="{cls}" x="{x}" y="{base - h:.1f}" width="70" height="{h:.1f}" rx="4"/>\n'
+        b += text(x + 35, base - h - 8, f"{ohms} Ω", cls, 14, "middle", 700)
+        b += text(x + 35, base + 20, name, "fg", 13, "middle", 700)
+    b += f'  <path class="grid" d="M{x0 - 10} {base - 100 * scale} H{x0 + 470}"/>\n'
+    b += text(x0 + 474, base - 100 * scale + 4, "1 000 Ω", "mut", 11)
+    b += text(x0 - 10, base + 44, "Échelle à partir de 900 Ω", "mut", 11)
+    b += text(580, 120, "Lecture", size=15, weight=700)
+    b += text(580, 146, "TEMP 1 et TEMP 2 : même tuyau,", "fg", 12)
+    b += text(580, 162, "elles doivent lire pareil.", "fg", 12)
+    b += text(580, 190, "1 071 − 995 = 76 Ω", "no", 13, weight=700)
+    b += text(
+        580,
+        206,
+        f"≈ {reference_error(1071) - reference_error(995):.0f} °C de PT1000",
+        "no",
+        13,
+        weight=700,
+    )
+    b += text(580, 234, "Les voies 3 et 4 restent", "mut", 12)
+    b += text(580, 250, "proches de 1 000 Ω : la", "mut", 12)
+    b += text(580, 266, "voie 2 est l'intruse.", "mut", 12)
+    b += verdict(
+        380,
+        470,
+        "Mesurer dans les deux sens, comparer sens par sens",
+        "en circuit, l'ohmmètre voit aussi les chemins en parallèle",
+        "blue",
+    )
+    return svg(
+        760,
+        510,
+        "Tableau de comparaison de quatre voies jumelles : la voie intruse",
+        "Sur une carte nue hors tension, la résistance de la broche b à la masse est mesurée sur quatre voies identiques : "
+        "TEMP 1 995 Ω, TEMP 2 1 071 Ω, TEMP 3 1 000 Ω, TEMP 4 1 025 Ω. TEMP 1 et TEMP 2 sont les deux sondes du même tuyau et doivent lire pareil ; "
+        "leur écart de 76 Ω vaut environ 20 °C de PT1000. TEMP 2 est l'intruse. "
+        "En circuit l'ohmmètre voit aussi les chemins en parallèle : mesurer dans les deux sens et comparer sens par sens.",
+        b,
+    )
+
+
+def fig_drift() -> str:
+    b = heading(
+        "Une résistance de référence qui dérive de 7 % : 20 °C d'erreur",
+        "Hypothèse de voie : une source de courant traverse la PT1000 puis la référence vers la masse",
+    )
+    # schematic: current source -> a -> PT1000 -> b -> Rref -> ground; a -> measured voltage
+    x = 150
+    b += box(x - 60, 90, 120, 44, "Source de courant", ())
+    b += f'  <path class="wire" d="M{x} 134 V170 M{x} 230 V270 M{x} 330 V350 M{x - 14} 350 h28 M{x - 9} 356 h18 M{x - 4} 362 h8 M{x} 160 H280"/>\n'
+    b += f'  <rect x="{x - 14}" y="170" width="28" height="60" rx="4" fill="#8fbfe0" stroke="#3f6f96" stroke-width="1.5"/>\n'
+    b += text(x + 24, 196, "PT1000", "blue", 13, weight=700)
+    b += text(x + 24, 212, "sonde, entre a et b", "mut", 11)
+    b += f'  <rect x="{x - 14}" y="270" width="28" height="60" rx="4" fill="#d9b88c" stroke="#8a6d45" stroke-width="1.5"/>\n'
+    b += text(x + 24, 296, "R réf. (R25)", "no", 13, weight=700)
+    b += text(x + 24, 312, "1 000 Ω prévue", "mut", 11)
+    b += text(x - 22, 164, "a", "fg", 13, "end", 700) + text(
+        x - 22, 254, "b", "fg", 13, "end", 700
+    )
+    b += text(286, 156, "→ filtre,", "mut", 12) + text(286, 172, "mux, ADC", "mut", 12)
+    b += text(24, 400, "V(a) = I × (R PT1000 + R réf.)", "fg", 13, weight=700)
+    b += text(24, 420, "le logiciel retranche 1 000 Ω pour R réf.", "mut", 12)
+    rows = (
+        ("Voie saine, R réf. = 995 Ω", 995),
+        ("Voie TEMP 2, R réf. = 1 071 Ω", 1071),
+    )
+    b += text(420, 120, "Calcul, sonde à 20 °C (≈ 1 078 Ω)", size=15, weight=700)
+    for i, (label, ref) in enumerate(rows):
+        y = 160 + 90 * i
+        err = reference_error(ref)
+        cls = "ok" if abs(err) < 2 else "no"
+        b += text(420, y, label, "fg", 13, weight=700)
+        b += text(
+            420,
+            y + 20,
+            f"lue : 1 078 + ({ref} − 1 000) = {1078 + ref - 1000} Ω",
+            "mut",
+            12,
+        )
+        b += text(420, y + 40, f"erreur ≈ {err:+.0f} °C", cls, 14, weight=700)
+    b += text(420, 360, "Écart entre les deux sondes du tuyau :", "fg", 13, weight=700)
+    b += text(
+        420,
+        380,
+        f"76 Ω / 3,85 Ω par °C ≈ {reference_error(1071) - reference_error(995):.0f} °C → « Temperature Mismatch »",
+        "no",
+        12,
+        weight=700,
+    )
+    b += text(
+        24,
+        470,
+        "Avec un pont ratiométrique, l'erreur change de signe mais garde le même ordre : la dérive de la référence passe dans la lecture.",
+        "mut",
+        12,
+    )
+    return svg(
+        760,
+        500,
+        "Comment une dérive de 7 % de la résistance de référence devient 20 °C d'erreur",
+        "Hypothèse de voie : une source de courant traverse la PT1000, entre les broches a et b, puis la résistance de référence R25 vers la masse ; "
+        "la broche a part vers le filtre, le multiplexeur et l'ADC. V(a) vaut I fois la somme des deux résistances, et le logiciel retranche 1 000 Ω pour la référence. "
+        "Sonde à 20 °C, environ 1 078 Ω. Voie saine, référence à 995 Ω : erreur d'environ −1 °C. Voie TEMP 2, référence à 1 071 Ω : erreur d'environ +18 °C. "
+        "L'écart de 76 Ω entre les deux sondes du même tuyau vaut environ 20 °C et déclenche le défaut Temperature Mismatch. "
+        "Avec un pont ratiométrique, l'erreur change de signe mais garde le même ordre.",
+        b,
+    )
+
+
+def fig_swap() -> str:
+    b = heading(
+        "Échanger deux éléments identiques : la panne suit-elle ?",
+        "Hors tension pour chaque échange, puis remise sous tension et lecture du code défaut",
+    )
+    rows = (
+        (
+            "Échanger les cartes filtre TFB1 ↔ TFB2",
+            "Le défaut passe du tuyau 1 au tuyau 2",
+            "la carte filtre est en cause",
+            "Le défaut reste sur le tuyau 1",
+            "la carte de commande ou les sondes",
+        ),
+        (
+            "Échanger les fiches TEMP 1 ↔ TEMP 2",
+            "Le défaut suit la sonde",
+            "sonde ou câble",
+            "Le défaut reste sur la voie",
+            "la voie de la carte (ici : R25)",
+        ),
+    )
+    for i, (title, follows, follows_sub, stays, stays_sub) in enumerate(rows):
+        y = 100 + 180 * i
+        b += text(24, y, title, size=15, weight=700)
+        for cx, lab in ((150, "A"), (330, "B")):
+            b += f'  <rect class="panel" x="{cx - 60}" y="{y + 20}" width="120" height="60" rx="8" stroke-width="1.5"/>\n'
+            b += text(cx, y + 56, lab, "fg", 18, "middle", 700)
+        b += f'  <path class="wire" d="M210 {y + 40} C230 {y + 20} 250 {y + 20} 270 {y + 40} M270 {y + 60} C250 {y + 80} 230 {y + 80} 210 {y + 60}"/>\n'
+        b += text(240, y + 110, "échange", "mut", 12, "middle")
+        b += text(440, y + 36, "✓ " + follows, "ok", 13, weight=700) + text(
+            456, y + 54, follows_sub, "mut", 12
+        )
+        b += text(440, y + 88, "✗ " + stays, "no", 13, weight=700) + text(
+            456, y + 106, stays_sub, "mut", 12
+        )
+    b += text(
+        24,
+        470,
+        "Un seul échange à la fois, repéré et photographié ; jamais sur une panne qui détruit (court-circuit, fumée).",
+        "fg",
+        13,
+        weight=700,
+    )
+    return svg(
+        760,
+        500,
+        "Test d'échange de deux cartes filtre et de deux fiches de sondes",
+        "Premier test : échanger les deux cartes filtre identiques TFB1 et TFB2, hors tension, puis relire le code défaut. "
+        "Si le défaut passe du tuyau 1 au tuyau 2, la carte filtre est en cause ; s'il reste sur le tuyau 1, chercher sur la carte de commande ou les sondes. "
+        "Second test : échanger les fiches TEMP 1 et TEMP 2 sur la carte de commande. Si le défaut suit la sonde, la sonde ou son câble est en cause ; "
+        "s'il reste sur la voie, la voie de la carte est en cause, ici la résistance R25. Un seul échange à la fois, jamais sur une panne destructrice.",
+        b,
+    )
+
+
+FUNNEL = (
+    ("Connecteur", "TEMP 2 broche b : 1 071 Ω", "TEMP 1 : 995 Ω"),
+    ("Via", "même lecture côté soudure", "la piste est saine"),
+    ("Résistance", "R25 : 1 071 Ω", "R82, R24 : 994 Ω"),
+)
+
+
+def fig_funnel() -> str:
+    b = heading(
+        "L'entonnoir : du connecteur à la résistance qui a dérivé",
+        "Carte hors tension : la même mesure, de plus en plus près du composant, sur la voie suspecte et sa jumelle",
+    )
+    for i, (stage, suspect, twin) in enumerate(FUNNEL):
+        y = 100 + 110 * i
+        inset = 40 * i
+        b += f'  <path class="panel" d="M{40 + inset} {y} H{720 - inset} L{700 - inset} {y + 90} H{60 + inset} Z" stroke-width="1.5"/>\n'
+        b += text(380, y + 30, f"{i + 1}. {stage}", "fg", 15, "middle", 700)
+        b += text(380, y + 52, suspect, "no", 13, "middle", 700)
+        b += text(380, y + 70, "jumelle : " + twin, "mut", 12, "middle")
+    b += verdict(
+        380,
+        450,
+        "R25 a dérivé de +7,7 % : la remplacer par une 1 kΩ 0,1 %",
+        "film mince, même coefficient de température ; puis relire les deux sondes",
+        "ok",
+    )
+    return svg(
+        760,
+        500,
+        "Entonnoir de comparaison du connecteur à la résistance de référence",
+        "Carte hors tension, la même mesure faite de plus en plus près du composant sur la voie suspecte et sur sa jumelle. "
+        "Au connecteur : broche b de TEMP 2 à 1 071 Ω, TEMP 1 à 995 Ω. Au via, côté soudure : même lecture, la piste est saine. "
+        "Sur la résistance : R25 à 1 071 Ω, ses jumelles R82 et R24 à 994 Ω. R25 a dérivé de 7,7 % : la remplacer par une 1 kΩ à 0,1 % en film mince, "
+        "puis relire les deux sondes.",
+        b,
+    )
+
+
 FIGURES = {
     "substitution-sonde": (fig_substitution, []),
     "ohm-deux-polarites": (fig_ohm_polarities, ["20k", "20k"]),
@@ -493,4 +729,8 @@ FIGURES = {
     "broche-de-masse": (fig_ground_pin, ["BEEP"]),
     "trace-multiplexeur": (fig_mux_trace, ["BEEP"]),
     "noeud-filtre-ohm": (fig_cap_rising, ["200k"]),
+    "comparaison-voies": (fig_twin_table, []),
+    "derive-reference": (fig_drift, []),
+    "test-echange": (fig_swap, []),
+    "entonnoir-voie": (fig_funnel, []),
 }
