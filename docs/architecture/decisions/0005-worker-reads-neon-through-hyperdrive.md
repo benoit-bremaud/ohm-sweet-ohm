@@ -79,7 +79,8 @@ Sensitivity: with the API weight at 30 (effort 20), A wins.
 - `just nightly` runs `scripts/check-live.sh`: it fetches `/` (a 302 to `/depannage/`), the LED
   block page and its schematic on the production Worker and fails after one retry when one of
   them answers anything else (the pages and the SVG must answer 200).
-- The Hyperdrive query cache is disabled: the version check and the catalogue reload are separate
+- The Hyperdrive query cache is disabled (pending: the owner runs
+  `wrangler hyperdrive update <id> --caching-disabled true` on the existing config): the version check and the catalogue reload are separate
   queries, and a cached reload could be stored under a fresh version; the isolate cache already
   spares the database.
 - Workers Builds deploys the Worker on the merge, before the import: a migration ships
