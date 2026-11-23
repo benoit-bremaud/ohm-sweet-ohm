@@ -46,6 +46,8 @@ Une sortie à vide peut lire un peu plus haut qu'en service : comparer avec ce q
 
 ## Comparer avec une carte saine
 
+Cas traité de bout en bout : une voie d'entrée de sonde de température comparée à sa voie jumelle, fiche [94](../94_voie_temperature/README.md).
+
 ![Deux multimètres en mode diode mesurent la même broche du même circuit intégré à huit broches, sur deux cartes identiques hors tension et déchargées : pointe rouge sur la broche 4, la masse, pointe noire sur la broche 6. Carte saine : 0,548 V, la diode de protection de la broche conduit, c'est la référence. Carte en panne : 0,012 V, écart net, la broche 6 est en court-circuit avec la masse](comparaison.svg)
 
 Une carte identique qui fonctionne, ou une **voie identique** de la même carte (voie gauche et voie droite d'un amplificateur, phases d'un régulateur, canaux d'un convertisseur), est le meilleur des schémas : les chemins parallèles qui faussent une mesure en circuit sont les mêmes des deux côtés, la comparaison les neutralise (fiche [02](../02_pieges_en_circuit/README.md), « Comparer avec une carte saine »).

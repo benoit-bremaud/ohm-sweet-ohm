@@ -127,6 +127,7 @@ L'ordre dans lequel les employer est donné par la fiche [03](03_methode/README.
 | [91 Contrôle des rails d'alimentation](91_rails_alimentation/README.md) | Résistance des rails hors tension, première mise sous tension, tensions, ondulation, mesure de courant | #93 |
 | [92 Recherche de court-circuit et injection de courant](92_court_circuit/README.md) | Division du rail, injection à courant limité, point chaud, suivi des millivolts | #93 |
 | [93 Traçage de signal et comparaison avec une carte saine](93_tracage_signal/README.md) | Suivre un signal étage par étage, étage qui charge sa sortie, comparer point par point, échanger les éléments identiques | #93 |
+| [94 Voie d'entrée d'une sonde de température résistive](94_voie_temperature/README.md) | Substituer la sonde, repérer la masse, ohmmètre dans les deux sens, mode diode, suivre la piste au multiplexeur, excitation pulsée | #162 |
 
 ## Index des techniques
 
