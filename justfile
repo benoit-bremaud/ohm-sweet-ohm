@@ -34,6 +34,11 @@ setup:
 figures:
     python3 -B scripts/figures/generate.py
 
+# Export one guide's figures as PNG, plus photo plates when photos exist (#162; needs Inkscape and
+# ImageMagick 7); out/ and photos/ are git-ignored: photos of a client's board are never committed
+figures-png guide out="out/figures" photos="":
+    python3 -B scripts/figures/export.py {{quote("troubleshooting/" + guide)}} {{quote(out)}} {{ if photos == "" { "" } else { quote(photos) } }}
+
 # Render the Mermaid diagrams of the guides to the committed arbre-N.svg files (#123); a test
 # fails while one is stale. Re-run it after a Mermaid upgrade: the hash does not cover the
 # version. Needs Chromium once: `mise x -- pnpm --filter web exec playwright install chromium`
