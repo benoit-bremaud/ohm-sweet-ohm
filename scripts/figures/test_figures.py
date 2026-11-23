@@ -520,6 +520,7 @@ def test_substitution_figure_shows_0_c_then_about_26_c() -> None:
     svg = guide_14.fig_substitution()
     assert ">V2 0,0 °C</text>" in svg and ">V2 25,7 °C</text>" in svg
     assert "-0,0" not in svg
+    assert "T2" not in svg
 
 
 @pytest.mark.parametrize("duty", [0, 1, -0.1])

@@ -118,11 +118,11 @@ def fig_substitution() -> str:
         760,
         420,
         "Substitution d'une sonde PT1000 par une résistance de précision",
-        "Deux panneaux. La carte de commande est sous tension, la sonde PT1000 de la voie T2 est débranchée "
-        "et une résistance à 0,1 % est enfichée dans les deux broches du connecteur T2. "
+        "Deux panneaux. La sonde PT1000 de la voie 2 est débranchée ; une résistance à 0,1 % est enfichée, carte hors tension, "
+        "dans les deux broches du connecteur de la voie 2, puis la carte est remise sous tension limitée en courant. "
         f"À gauche, 1000 Ω : l'affichage de la carte indique {t0} °C. "
         f"À droite, 1100 Ω : il indique {t1} °C, soit environ 26 °C. "
-        "Conclusion : si la carte lit ces valeurs, la voie est saine et la sonde ou son câble est en cause ; "
+        "Conclusion : si la carte lit ces valeurs, la voie est saine et la sonde, son câble ou une carte de filtrage intermédiaire est en cause ; "
         "si elle lit autre chose ou reste en défaut, la panne est sur la carte, dans cette voie.",
         b,
     )
@@ -464,7 +464,7 @@ def fig_drift() -> str:
         "mut",
         12,
     )
-    b += text(60, 384, "1 % de dérive vaut environ 2,6 °C autour de 20 °C.", "mut", 12)
+    b += text(60, 384, "1 % de dérive vaut environ 2,7 °C autour de 20 °C.", "mut", 12)
     return svg(
         760,
         408,
@@ -473,7 +473,7 @@ def fig_drift() -> str:
         "puis le multiplie par la valeur nominale de la référence. "
         f"Sonde PT1000 à 20 °C : {fr(rpt)} Ω. Résistance de référence réelle : {fr(rref, 0)} Ω au lieu de 1000 Ω. "
         f"Rapport mesuré : {fr(ratio, 4)} ; la carte attribue {fr(ratio * R0)} Ω à la sonde et affiche {fr(seen)} °C, soit une erreur de −{fr(-err)} °C. "
-        "Règle : une référence qui monte fait lire froid, une référence qui baisse fait lire chaud ; 1 % de dérive vaut environ 2,6 °C autour de 20 °C.",
+        "Règle : une référence qui monte fait lire froid, une référence qui baisse fait lire chaud ; 1 % de dérive vaut environ 2,7 °C autour de 20 °C.",
         b,
     )
 
@@ -489,14 +489,16 @@ def fig_coating() -> str:
     b += '  <rect x="110" y="290" width="70" height="10" fill="#c9a227" stroke="#7a6212"/>\n'
     b += '  <rect x="300" y="290" width="70" height="10" fill="#c9a227" stroke="#7a6212"/>\n'
     b += '  <rect x="160" y="258" width="160" height="32" rx="3" fill="#20242b" stroke="#7d8794"/>\n'
+    b += '  <rect x="160" y="258" width="16" height="32" fill="#c0c7d0" stroke="#7d8794"/>\n'
+    b += '  <rect x="304" y="258" width="16" height="32" fill="#c0c7d0" stroke="#7d8794"/>\n'
     b += '  <path d="M40 300 V292 H104 Q110 282 120 284 L156 256 Q240 244 324 256 L360 284 Q370 282 376 292 H440 V300" fill="#93c5fd" fill-opacity="0.45" stroke="#2563eb" stroke-width="1.5"/>\n'
     b += text(440, 276, "vernis", "blue", 12, "end", 700)
     b += text(
         240, 356, "pastille        composant        pastille", "mut", 11, "middle"
     )
     # needle tip alone (no meter here): steel needle then red handle, tip on the pad
-    b += '  <path d="M168 274 L140 240" stroke="#c0c7d0" stroke-width="2.5" stroke-linecap="round"/>\n'
-    b += '  <path d="M140 240 L110 190" stroke="#dc2626" stroke-width="12" stroke-linecap="round"/>\n'
+    b += '  <path d="M168 258 L140 224" stroke="#c0c7d0" stroke-width="2.5" stroke-linecap="round"/>\n'
+    b += '  <path d="M140 224 L110 174" stroke="#dc2626" stroke-width="12" stroke-linecap="round"/>\n'
     b += text(40, 150, "pointe-aiguille inclinée,", "fg", 12)
     b += text(40, 166, "sur la terminaison", "fg", 12)
     notes = (

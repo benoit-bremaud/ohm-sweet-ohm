@@ -117,7 +117,7 @@ Hors tension, ohmmètre, **mêmes points sur les deux voies**, d'amont en aval. 
 
 ![Calcul de l'effet d'une résistance de référence montée à 1071 Ω, mesure ratiométrique : à 20 °C la sonde vaut 1077,9 Ω ; rapport mesuré 1,0065, multiplié par la valeur nominale de 1000 Ω, la carte attribue 1006,5 Ω à la sonde et affiche 1,7 °C, soit une erreur de −18,3 °C](derive-reference.svg)
 
-Une résistance de référence qui dérive fausse toute la voie : sur une mesure ratiométrique, une référence qui **monte** fait lire **froid**, une référence qui baisse fait lire chaud, environ 2,6 °C par pour cent autour de 20 °C. Une carte construite autrement peut inverser le sens : son schéma tranche.
+Une résistance de référence qui dérive fausse toute la voie : sur une mesure ratiométrique, une référence qui **monte** fait lire **froid**, une référence qui baisse fait lire chaud, environ 2,7 °C par pour cent autour de 20 °C. Une carte construite autrement peut inverser le sens : son schéma tranche.
 
 ### Mesurer sous un vernis de protection
 
@@ -158,7 +158,7 @@ flowchart TD
 | Composant | Règle |
 | --- | --- |
 | Sonde | même élément (PT1000 ou PT100), même classe de tolérance, même nombre de fils, même montage mécanique |
-| Résistance de référence | même valeur, **même tolérance et même coefficient de température** (0,1 % ou mieux) : une résistance ordinaire de 1 % peut fausser la voie d'environ 2,6 °C |
+| Résistance de référence | même valeur, **même tolérance et même coefficient de température** (0,1 % ou mieux) : une résistance ordinaire de 1 % peut fausser la voie d'environ 2,7 °C |
 | Résistance CMS | même taille de boîtier, lue au pied à coulisse avant de commander |
 
 Après réparation : substitution à 1000 Ω puis 1100 Ω, puis sonde remise et comparée à une voie saine à l'ambiante.
