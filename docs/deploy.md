@@ -17,8 +17,7 @@ Staging and production are the same Worker and the same Neon project. Migrations
 importer only; the Worker assumes the schema is there. Workers Builds deploys the Worker on the
 merge, before anyone runs the import, so a migration ships expand-first: it is imported with
 `just deploy staging` before the PR whose Worker code reads it is merged (ADR-0005). The Worker sees a new import within 5
-seconds of its version check; the Hyperdrive query cache is disabled (ADR-0005; pending on the existing config until
-`wrangler hyperdrive update <id> --caching-disabled true` is run).
+seconds of its version check; the Hyperdrive query cache is disabled (ADR-0005).
 
 ## Secrets and variables
 
