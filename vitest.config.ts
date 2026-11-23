@@ -5,7 +5,6 @@ import { defineConfig } from 'vitest/config';
 const FLOOR = { lines: 80, functions: 80, branches: 80, statements: 80 };
 // Every workspace package: a new one must be added here, or its code has no floor.
 const PACKAGES = [
-  'apps/api',
   'apps/importer',
   'apps/web',
   'packages/db',
@@ -29,8 +28,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['{apps,packages}/*/src/**/*.{ts,astro}'],
-      // main.ts files only wire the process together; `just smoke` proves the api one starts.
-      exclude: ['**/*.test.ts', '**/*.d.ts', '{apps,packages}/*/src/main.ts'],
+      // main.ts and catalogue-runtime.ts only wire the process or the Worker bindings together;
+      // the liveness check of the deployed site proves the latter (scripts/check-live.sh).
+      exclude: [
+        '**/*.test.ts',
+        '**/*.d.ts',
+        '{apps,packages}/*/src/main.ts',
+        'apps/web/src/lib/catalogue-runtime.ts',
+      ],
       // lcov feeds SonarQube (sonar-project.properties).
       reporter: ['text-summary', 'text', 'lcov'],
       thresholds: Object.fromEntries(PACKAGES.map((p) => [`${p}/src/**`, FLOOR])),

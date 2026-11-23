@@ -1,9 +1,9 @@
 #!/bin/sh
 # Tests for the local CI wiring (#68, skill local-ci rule 7): the four tiers exist and compose
 # (check ⊇ lint + test + security + secrets; gate ⊇ check; nightly runs check as a warning and fails
-# only on Trivy and TruffleHog, agents-skills#427), gate ends with the attestation
-# and merge / deploy prod verify it (agents-skills ADR-0003/0004), the prod workflow is the only one
-# and takes attest.sh from main, deploy.sh refuses bad arguments before any deploy command,
+# only on Trivy, TruffleHog and the live site check, agents-skills#427, #111), gate ends with the
+# attestation and merge / deploy staging verify it (agents-skills ADR-0003/0004), no GitHub
+# workflow is left (#111), deploy.sh refuses bad arguments before any deploy command,
 # lint and test sync the Astro store first (#135), lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
 # refuses the right subjects, and L0 (`just fast`) passes a clean staged change but refuses a staged
 # secret and a staged typo, in a throwaway repository. Needs mise, just, lefthook, gitleaks, typos:
@@ -38,7 +38,7 @@ for r in lint test; do deps "$r" | grep -qw sync || fail "$r does not run sync f
 grep -q "cacheDir: './.astro'" apps/web/astro.config.ts || fail "web cacheDir is not .astro: sync writes the store where the tests do not read it"
 just --show sync | grep -q 'astro sync' || fail "sync does not run astro sync"
 just --show nightly | grep -q '^    warn just check$' || fail "nightly does not run check as a warning"
-for t in 'trivy fs' 'trivy image' 'trufflehog git'; do
+for t in 'trivy fs' 'trufflehog git' 'check-live.sh'; do
   just --show nightly | grep "$t" | grep -q '|| rc=1$' || fail "nightly does not fail on $t"
 done
 for r in gate nightly; do
@@ -52,37 +52,32 @@ ids=$(grep -c '^  - id:' .trivyignore.yaml || true)
 n=$((n + 6))
 just --show nightly | tail -1 | grep -q '^    exit "$rc"$' || fail "nightly does not end with exit \"\$rc\""
 just --show gate | grep -q "^    just check$" || fail "gate does not run check (from its body, before the attestation)"
-for r in setup merge rehearse deploy attest render smoke sonar; do just --show "$r" > /dev/null 2>&1 || fail "recipe $r missing"; n=$((n + 1)); done
+for r in setup merge rehearse deploy attest render sonar; do just --show "$r" > /dev/null 2>&1 || fail "recipe $r missing"; n=$((n + 1)); done
 just --show gate | grep -q 'attest.sh write gate' || fail "gate does not write the attestation"
 just --show merge | grep -q 'attest.sh verify gate' || fail "merge does not verify the attestation"
-just --show deploy | grep -q 'attest.sh release' || fail "deploy prod skips attest.sh release"
 just --show deploy | grep -q 'attest.sh verify gate HEAD' || fail "deploy staging skips the gate attestation"
+just --show deploy | grep -q 'only staging is deployed' || fail "deploy does not refuse an environment other than staging"
 just --show attest | grep -q 'attest.sh write deploy/staging' || fail "attest staging does not write the note"
-wf=.github/workflows/prod.yml
-[ "$(find .github/workflows -name '*.yml' -o -name '*.yaml' | wc -l)" -eq 1 ] || fail "more than one GitHub workflow (agents-skills ADR-0004: prod.yml only)"
-grep -q 'git show origin/main:scripts/attest.sh' "$wf" || fail "prod workflow does not take attest.sh from main"
-grep -q 'attest.sh" release' "$wf" || fail "prod workflow does not run attest.sh release"
-grep -q 'scripts/deploy.sh api prod' "$wf" || fail "prod workflow does not run scripts/deploy.sh api prod"
+[ ! -d .github/workflows ] || fail "a GitHub workflow is back (agents-skills ADR-0004, local CI only, #111)"
 e3=$(just --show gate | grep -n 'exit 3' | head -1 | cut -d: -f1); at=$(just --show gate | grep -n 'attest.sh write gate' | cut -d: -f1)
 [ -n "$e3" ] && [ -n "$at" ] && [ "$e3" -lt "$at" ] || fail "gate must exit 3 (Docker down) before it writes the attestation"
-n=$((n + 10))
+n=$((n + 6))
 # deploy.sh refusals: no network, exit 1 and a message, before any deploy command runs.
-# Stub flyctl and pnpm first on PATH: a refusal that regressed would otherwise deploy for real.
+# Stub pnpm first on PATH: a refusal that regressed would otherwise import for real.
 mkdir -p "$work/stub"
-for s in flyctl pnpm; do printf "#!/bin/sh\ntouch \"$work/CALLED-$s\"\n" > "$work/stub/$s"; chmod +x "$work/stub/$s"; done
+printf "#!/bin/sh\ntouch \"$work/CALLED-pnpm\"\n" > "$work/stub/pnpm"; chmod +x "$work/stub/pnpm"
 refuse() { # refuse <expected substring> <args…>: deploy.sh must exit 1, say "deploy: … <expected>", call nothing
   want=$1; shift
   if out=$(PATH="$work/stub:$PATH" sh scripts/deploy.sh "$@" 2>&1); then fail "deploy.sh $* did not refuse"; fi
   printf "%s" "$out" | grep -qE "^deploy:.*($want)" || fail "deploy.sh $* refused with the wrong message: $out"
-  [ ! -e "$work/CALLED-flyctl" ] && [ ! -e "$work/CALLED-pnpm" ] || fail "deploy.sh $* called a deploy command before refusing"
+  [ ! -e "$work/CALLED-pnpm" ] || fail "deploy.sh $* called a deploy command before refusing"
   n=$((n + 1))
 }
-refuse usage; refuse usage api; refuse "unknown environment" api qa; refuse "unknown component" web prod
+refuse usage; refuse usage catalogue; refuse "unknown environment" catalogue qa; refuse "unknown component" api staging
 refuse "staging deploy only" catalogue prod; refuse "run just render|no .env.staging" catalogue staging # depends on build/
-# The Node pin is written in four places; they must agree.
+# The Node pin is written in three places; they must agree.
 v=$(cat .nvmrc)
-grep -q "^node = \"$v\"" mise.toml && grep -q "^nodejs $v$" .tool-versions \
-  && [ "$(grep -c "^FROM node:$v-" apps/api/Dockerfile)" -eq 2 ] || fail "Node pins diverge from .nvmrc ($v)"
+grep -q "^node = \"$v\"" mise.toml && grep -q "^nodejs $v$" .tool-versions || fail "Node pins diverge from .nvmrc ($v)"
 n=$((n + 1))
 grep -q '{1}' lefthook.yml || fail "commit-msg hook does not pass the message file"
 grep -q 'just check' lefthook.yml || fail "pre-push hook does not run just check"

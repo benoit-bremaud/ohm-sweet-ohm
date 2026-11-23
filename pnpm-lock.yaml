@@ -118,6 +118,12 @@ importers:
       '@fontsource/ibm-plex-sans':
         specifier: 5.3.0
         version: 5.3.0
+      '@ohm-sweet-ohm/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@ohm-sweet-ohm/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@ohm-sweet-ohm/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas

@@ -4,8 +4,6 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
-  /** Origins the page loads images from, added to the CSP of this response. */
-  imageOrigins?: readonly string[];
   /** Language of the page content; the frame's own words follow it. */
   lang?: keyof typeof CHROME;
 }
@@ -23,9 +21,9 @@ const CHROME = {
   },
 } as const;
 
-const { title, description, imageOrigins = [], lang = 'en' } = Astro.props;
+const { title, description, lang = 'en' } = Astro.props;
 const words = CHROME[lang];
-Astro.csp?.insertDirective(`img-src ${["'self'", ...imageOrigins].join(' ')}`);
+Astro.csp?.insertDirective("img-src 'self'");
 ---
 
 <!doctype html>

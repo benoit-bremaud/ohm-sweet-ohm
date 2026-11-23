@@ -1,6 +1,6 @@
 # ADR-0004 — Staging hosting: API on Fly.io, PostgreSQL on Neon, web previews by Workers Builds
 
-- Status: accepted
+- Status: accepted. Superseded for the API by [ADR-0005](0005-worker-reads-neon-through-hyperdrive.md) (2026-11-23); Neon and Workers Builds are kept
 - Date: 2026-10-15
 - Deciders: Benoît Bremaud
 - Related: issue #19 (deployment), issue #24 (HSTS and `script-src` once the domain exists),

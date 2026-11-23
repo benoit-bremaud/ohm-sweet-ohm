@@ -6,11 +6,18 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "binding": "ASSETS", "directory": "./dist" },
   "observability": { "enabled": true },
-  // Non-secret variables. API_URL is an origin (scheme, host, port; a path would be ignored):
-  // the staging API on Fly.io (ADR-0004, docs/deploy.md), shared by production and the branch
-  // previews; local development overrides it in .dev.vars (see README).
-  "vars": { "API_URL": "https://ohm-sweet-ohm-api.fly.dev" },
-  // Branch previews (`wrangler preview`, run by Workers Builds on non-production branches) do not
-  // inherit the top-level vars: the block is required and carries its own copy.
-  "previews": { "vars": { "API_URL": "https://ohm-sweet-ohm-api.fly.dev" } },
+  // Public address under the owner's domain (zone on Cloudflare): the custom domain creates its DNS
+  // record and certificate on deploy (#111). workers.dev stays reachable.
+  "routes": [{ "pattern": "ohm.benoitbremaud.fr", "custom_domain": true }],
+  // The catalogue database (Neon) through Hyperdrive (ADR-0005). The id names a Hyperdrive
+  // configuration, not a secret: the connection string stays in Cloudflare (docs/deploy.md).
+  // `astro dev` and the tests connect to localConnectionString instead, the local database of the
+  // README (no secret); CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE overrides it.
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "2084ae3c06894ab99f5cc377a9db6305",
+      "localConnectionString": "postgres://user:password@localhost:5432/ohm",
+    },
+  ],
 }

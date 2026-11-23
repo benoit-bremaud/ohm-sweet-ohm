@@ -21,7 +21,7 @@ check tool (see `docs/deploy.md` § Local CI).
 ```bash
 mise trust && mise install && mise x -- just setup   # once per clone: toolchain, pnpm install, Astro sync, git hooks (just itself comes from mise)
 just check   # format, lint, typecheck, tests with coverage, Semgrep, audit, gitleaks (pre-push hook)
-just gate    # the pre-merge gate: check + SonarQube, Trivy, API image smoke, catalogue render, attestation
+just gate    # the pre-merge gate: check + SonarQube, Trivy fs, catalogue render, attestation
 ```
 
 Integration tests start a disposable PostgreSQL with Testcontainers, so Docker must be running.
@@ -36,36 +36,31 @@ DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm catalogue:import
 The import mirrors the `catalogue/` folder: it adds, updates and removes blocks so the database
 matches it exactly, and refuses to run when no block is found.
 
-Serve the catalogue (the importer applies the migrations; the API only reads):
+Run the web front-end (Astro on Cloudflare Workers, ADR-0003). It runs in `workerd`, the
+production runtime, and reads the catalogue straight from PostgreSQL through the `HYPERDRIVE`
+binding (ADR-0005). Locally the binding points at the `localConnectionString` of
+`apps/web/wrangler.jsonc` (`postgres://user:password@localhost:5432/ohm`); set
+`CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE` to use another database. Start a local
+PostgreSQL there, import the catalogue into it, then start the dev server:
 
 ```bash
-DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm --filter @ohm-sweet-ohm/api start
+just render
+DATABASE_URL=postgres://user:password@localhost:5432/ohm pnpm catalogue:import
+pnpm -C apps/web dev
 ```
 
-`PORT` (default 3000) and `HOST` (default `0.0.0.0`) are optional. The interactive API
-documentation is served at `/docs`. A new import is visible within 5 seconds; if the database
-becomes unreachable, the API keeps serving the catalogue already in memory.
-
-Run the web front-end (Astro on Cloudflare Workers, ADR-0003) against that API. It runs in
-`workerd`, the production runtime, and reads the API origin (scheme, host and port, no path) from
-`API_URL`, set for local work in `apps/web/.dev.vars` (git-ignored):
-
-```bash
-echo 'API_URL=http://127.0.0.1:3000' > apps/web/.dev.vars
-pnpm --filter @ohm-sweet-ohm/web dev
-```
-
-Then open `http://localhost:4321/blocks/led-resistor-basic`. `pnpm --filter @ohm-sweet-ohm/web build`
-produces the Worker in `apps/web/dist`; deployment is configured in `apps/web/wrangler.jsonc`.
+Then open `http://localhost:4321/blocks/led-resistor-basic`. A new import is visible within a few
+seconds. `pnpm --filter @ohm-sweet-ohm/web build` produces the Worker in `apps/web/dist`;
+deployment is configured in `apps/web/wrangler.jsonc`.
 
 ## Deployment
 
-Staging runs on Cloudflare Workers (web, one preview per branch), Fly.io (API container) and
-Neon (PostgreSQL); `just deploy staging` imports the catalogue and deploys the API from an attested
-`main`, and a signed release tag deploys production through the only GitHub workflow
-(`prod.yml`). Providers, secrets, re-creation steps, the local CI tiers and the container checks
-are in [docs/deploy.md](docs/deploy.md); the decision is
-[ADR-0004](docs/architecture/decisions/0004-staging-hosting.md).
+The site runs on Cloudflare Workers (web, one preview per branch) reading Neon (PostgreSQL)
+through Hyperdrive; there is no API server and no Fly.io since ADR-0005. `just deploy staging`
+imports the catalogue into Neon from an attested `main`, and `just nightly` checks that the
+production site answers. No GitHub workflow is left. Setup, secrets, re-creation steps, the
+local CI tiers and the container checks are in [docs/deploy.md](docs/deploy.md); the decision is
+[ADR-0005](docs/architecture/decisions/0005-worker-reads-neon-through-hyperdrive.md).
 
 ## Licenses
 

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { CatalogueCache } from './catalogue-cache.js';
-import { makeCatalogue } from './test-catalogue.js';
+import { CatalogueCache } from './catalogue-cache';
+import { makeCatalogue } from './test-catalogue';
 
 function setup() {
   const clock = { now: 0 };
