@@ -64,7 +64,7 @@ Quand deux cartes ou deux fiches sont identiques, l'échange tranche sans instru
 
 ![Hypothèse de voie : PT1000 entre a et b, résistance de référence R25 de b à la masse, à 1 071 Ω au lieu de 1 000 Ω, soit 7 %. Si la carte lit la tension de a seule, TEMP 2 lit environ 18 °C trop chaud ; si elle lit le rapport des deux résistances, cas le plus courant, environ 19 °C trop froid. Dans les deux cas l'écart d'environ 20 °C entre les sondes du tuyau déclenche le défaut d'écart](derive-reference.svg)
 
-Le schéma est une **hypothèse** reconstruite à l'ohmmètre, sans schéma constructeur : il suffit à chiffrer l'effet d'une dérive. Le sens de l'erreur dépend de la façon dont la carte lit la voie. Si elle lit la tension de la broche a seule et retranche la valeur prévue de la référence, une référence qui monte fait lire **chaud**. Si elle lit le rapport des deux résistances (montage ratiométrique, le plus courant, TI SBAA275A), elle fait lire **froid**. Dans les deux cas l'ampleur est la même, près de 3 °C par pour cent de dérive autour de 20 °C. Le menu de service ou l'afficheur tranche : la voie suspecte lit-elle trop chaud ou trop froid ?
+Le schéma est une **hypothèse** reconstruite à l'ohmmètre, sans schéma constructeur : il suffit à chiffrer l'effet d'une dérive. Le sens de l'erreur dépend de la façon dont la carte lit la voie. Si elle lit la tension de la broche a seule et retranche la valeur prévue de la référence, une référence qui monte fait lire **chaud**. Si elle lit le rapport des deux résistances (montage ratiométrique, le plus courant, TI SBAA275A), elle fait lire **froid**. Dans les deux cas l'ampleur est la même, environ 2,7 °C par pour cent de dérive autour de 20 °C. Le menu de service ou l'afficheur tranche : la voie suspecte lit-elle trop chaud ou trop froid ?
 
 ![Entonnoir : connecteur, via, puis résistance. À chaque étape, la même mesure sur la voie suspecte et sur sa jumelle ; R25 à 1 071 Ω contre 994 Ω pour R82 et R24, soit 7 % sur 1 000 Ω. La lecture est trop haute : un chemin parallèle ne pouvant que la baisser, R25 est en cause](entonnoir-voie.svg)
 
@@ -108,5 +108,5 @@ flowchart TD
 ## Sources
 
 - IEC 60751:2022, *Industrial platinum resistance thermometers and platinum temperature sensors* : 1 000 Ω à 0 °C, α = 0,00385 /°C.
-- Texas Instruments, note d'application SBAA275A, *A Basic Guide to RTD Measurements* : mesure ratiométrique, équation 5.
+- Texas Instruments, note d'application SBAA275A, *A Basic Guide to RTD Measurements* : mesure ratiométrique.
 - Texas Instruments, fiche technique TS3A5017 (SCDS221) : brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.

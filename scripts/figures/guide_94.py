@@ -593,7 +593,7 @@ def fig_twin_table() -> str:
 def ratiometric_error(
     actual: float, sensor: float = 1078, assumed: float = R_NOMINAL
 ) -> float:
-    """Temperature error (°C) of a ratiometric channel (TI SBAA275A, eq. 5) whose reference drifted.
+    """Temperature error (°C) of a ratiometric channel (TI SBAA275A) whose reference drifted.
 
     The ADC reads R_PT1000 / R_ref and multiplies by the assumed R_ref: a reference that rises
     makes the sensor read cold.
@@ -604,7 +604,7 @@ def ratiometric_error(
 def fig_drift() -> str:
     pct = fr(drift_percent(1071))
     b = heading(
-        f"Une référence qui dérive de {pct} % : près de 20 °C d'erreur",
+        f"Une référence qui dérive de {pct} % : 18 à 19 °C d'erreur",
         "Hypothèse de voie : PT1000 entre a et b, référence R25 de b à la masse ; le sens de l'erreur dépend de la lecture",
     )
     x = 150
@@ -619,6 +619,7 @@ def fig_drift() -> str:
     b += text(x - 22, 164, "a", "fg", 13, "end", 700) + text(
         x - 22, 254, "b", "fg", 13, "end", 700
     )
+    b += text(x + 24, 254, "b → réf. ADC si ratiométrique", "mut", 11)
     b += text(286, 156, "→ filtre,", "mut", 12) + text(286, 172, "mux, ADC", "mut", 12)
     b += text(24, 400, "Sonde à 20 °C ≈ 1 078 Ω", "fg", 13, weight=700)
     b += text(
@@ -675,7 +676,7 @@ def fig_drift() -> str:
     return svg(
         760,
         500,
-        "Comment une dérive de 7 % de la résistance de référence devient près de 20 °C d'erreur",
+        "Comment une dérive de 7 % de la résistance de référence devient 18 à 19 °C d'erreur",
         "Hypothèse de voie : la PT1000 entre les broches a et b, la résistance de référence R25 de b à la masse ; la broche a part vers le filtre, le multiplexeur et l'ADC. "
         "Sonde à 20 °C, environ 1 078 Ω. Si la carte lit la tension de a seule et retranche 1 000 Ω, la voie saine à 995 Ω lit environ −1 °C de trop et TEMP 2 à 1 071 Ω environ +18 °C : TEMP 2 lit chaud. "
         "Si la carte lit le rapport des deux résistances, cas le plus courant, la voie saine lit environ +1 °C et TEMP 2 environ −19 °C : TEMP 2 lit froid. "
