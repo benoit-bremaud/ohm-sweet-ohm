@@ -94,6 +94,7 @@ def test_french_numbers_use_a_narrow_space_and_a_true_minus() -> None:
     assert guide_94.fr(1071) == "1\u202f071"
     assert guide_94.fr(-1.3, sign=True) == "−1"
     assert guide_94.fr(18.4, sign=True) == "+18"
+    assert guide_94.fr(-0.3, sign=True) == "0"  # no "−0"
 
 
 def test_drift_percent_is_against_the_value_given() -> None:
@@ -101,11 +102,17 @@ def test_drift_percent_is_against_the_value_given() -> None:
     assert guide_94.drift_percent(1071, 994) == pytest.approx(7.75, abs=0.01)
 
 
-def test_drift_figure_heading_matches_its_own_calculation() -> None:
+def test_ratiometric_reference_that_rises_reads_cold() -> None:
+    assert guide_94.ratiometric_error(1000) == 0
+    assert guide_94.ratiometric_error(1071) == pytest.approx(-18.6, abs=0.1)
+    assert guide_94.ratiometric_error(995) == pytest.approx(1.4, abs=0.1)
+
+
+def test_drift_figure_shows_both_signs_from_its_own_calculation() -> None:
     svg = guide_94.fig_drift()
-    assert "dérive de 7 % : 18 °C d'erreur" in svg
-    assert "20 °C d'écart entre jumelles" in svg
-    assert "erreur ≈ +18 °C" in svg and "erreur ≈ −1 °C" in svg
+    assert "TEMP 2, 1 071 Ω : +18 °C" in svg  # V(a) alone: reads hot
+    assert "TEMP 2, 1 071 Ω : −19 °C" in svg  # ratiometric: reads cold
+    assert "TEMP 2 lit chaud" in svg and "TEMP 2 lit froid" in svg
 
 
 def test_funnel_concludes_on_the_drift_against_nominal_and_twins() -> None:

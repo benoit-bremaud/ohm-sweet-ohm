@@ -197,7 +197,7 @@ Les résistances CMS à couche épaisse ont une électrode interne en argent. Da
 
 ### Résistance de précision qui dérive : comparer aux jumelles
 
-Une résistance de référence (0,1 %, film mince) qui a dérivé de quelques pour cent se lit encore « 1 kΩ » à l'œil, mais fausse toute la voie : 7 % sur la référence d'une PT1000 valent environ 18 °C. Causes habituelles : échauffement prolongé, humidité sous tension (corrosion de la couche, surtout sous un vernis fissuré), atmosphère soufrée, décharge électrostatique. Rien ne se voit : on la trouve en mesurant **la même résistance sur les voies jumelles** de la carte, hors tension, dans les deux sens. Celle qui s'écarte des autres est la suspecte, même si sa valeur paraît plausible.
+Une résistance de référence (0,1 %, film mince) qui a dérivé de quelques pour cent se lit encore « 1 kΩ » à l'œil, mais fausse toute la voie : 7 % sur la référence d'une PT1000 valent environ 18 °C, trop chaud ou trop froid selon le montage. Causes habituelles : échauffement prolongé, humidité sous tension (corrosion de la couche, surtout sous un vernis fissuré), atmosphère soufrée, décharge électrostatique. Rien ne se voit : on la trouve en mesurant **la même résistance sur les voies jumelles** de la carte, hors tension, dans les deux sens. Celle qui s'écarte des autres est la suspecte, même si sa valeur paraît plausible.
 
 ![Entonnoir de comparaison : au connecteur, broche b de TEMP 2 à 1 071 Ω contre 995 Ω sur TEMP 1 ; au via, même lecture ; sur la résistance, R25 à 1 071 Ω contre 994 Ω pour ses jumelles R82 et R24. R25 a dérivé de 7 % sur 1 000 Ω](../94_voie_temperature/entonnoir-voie.svg)
 

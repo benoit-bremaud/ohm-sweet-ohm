@@ -495,6 +495,8 @@ R_NOMINAL = 1000  # reference resistor the firmware assumes
 def fr(value: float, sign: bool = False) -> str:
     """French number: narrow thousands space, true minus sign (1 071, −1, +18)."""
     out = f"{value:+,.0f}" if sign else f"{value:,.0f}"
+    if round(value) == 0:
+        return "0"
     return out.replace(",", "\u202f").replace("-", "−")
 
 
@@ -543,10 +545,20 @@ def fig_twin_table() -> str:
             ("Lecture", "fg", 700),
             ("TEMP 1 et TEMP 2 : même", "fg", 400),
             ("tuyau, même lecture attendue.", "fg", 400),
-            ("1 071 − 995 = 76 Ω", "no", 700),
+            (
+                f"{fr(TWINS[1][1])} − {fr(TWINS[0][1])} = {fr(TWINS[1][1] - TWINS[0][1])} Ω",
+                "no",
+                700,
+            ),
             (f"≈ {fr(gap)} °C de PT1000", "no", 700),
             ("TEMP 2 : l'intruse.", "no", 700),
-            ("TEMP 4 : +2,5 % sur 1 000 Ω,", "mut", 400),
+            (
+                f"TEMP 4 : {drift_percent(TWINS[3][1]):+.1f} % sur 1 000 Ω,".replace(
+                    ".", ","
+                ),
+                "mut",
+                400,
+            ),
             ("second suspect, à relire", "mut", 400),
             ("après la réparation.", "mut", 400),
         )
@@ -578,15 +590,25 @@ def fig_twin_table() -> str:
     )
 
 
+def ratiometric_error(
+    actual: float, sensor: float = 1078, assumed: float = R_NOMINAL
+) -> float:
+    """Temperature error (°C) of a ratiometric channel (TI SBAA275A, eq. 5) whose reference drifted.
+
+    The ADC reads R_PT1000 / R_ref and multiplies by the assumed R_ref: a reference that rises
+    makes the sensor read cold.
+    """
+    return (sensor * assumed / actual - sensor) / PT1000_ALPHA
+
+
 def fig_drift() -> str:
-    err, gap = reference_error(1071), reference_error(1071) - reference_error(995)
+    pct = fr(drift_percent(1071))
     b = heading(
-        f"Une référence qui dérive de {fr(drift_percent(1071))} % : {fr(err)} °C d'erreur",
-        f"Hypothèse de voie : source de courant, PT1000 puis référence vers la masse ; {fr(gap)} °C d'écart entre jumelles",
+        f"Une référence qui dérive de {pct} % : près de 20 °C d'erreur",
+        "Hypothèse de voie : PT1000 entre a et b, référence R25 de b à la masse ; le sens de l'erreur dépend de la lecture",
     )
-    # schematic: current source -> a -> PT1000 -> b -> Rref -> ground; a -> measured voltage
     x = 150
-    b += box(x - 60, 90, 120, 44, "Source de courant", ())
+    b += box(x - 60, 90, 120, 44, "Excitation", ())
     b += f'  <path class="wire" d="M{x} 134 V170 M{x} 230 V270 M{x} 330 V350 M{x - 14} 350 h28 M{x - 9} 356 h18 M{x - 4} 362 h8 M{x} 160 H280"/>\n'
     b += f'  <rect x="{x - 14}" y="170" width="28" height="60" rx="4" fill="#8fbfe0" stroke="#3f6f96" stroke-width="1.5"/>\n'
     b += text(x + 24, 196, "PT1000", "blue", 13, weight=700)
@@ -598,51 +620,66 @@ def fig_drift() -> str:
         x - 22, 254, "b", "fg", 13, "end", 700
     )
     b += text(286, 156, "→ filtre,", "mut", 12) + text(286, 172, "mux, ADC", "mut", 12)
-    b += text(24, 400, "V(a) = I × (R PT1000 + R réf.)", "fg", 13, weight=700)
-    b += text(24, 420, "le logiciel retranche 1 000 Ω pour R réf.", "mut", 12)
-    rows = (
-        ("Voie saine, R réf. = 995 Ω", 995),
-        ("Voie TEMP 2, R réf. = 1 071 Ω", 1071),
-    )
-    b += text(420, 120, "Calcul, sonde à 20 °C (≈ 1 078 Ω)", size=15, weight=700)
-    for i, (label, ref) in enumerate(rows):
-        y = 160 + 90 * i
-        e = reference_error(ref)
-        cls = "ok" if abs(e) < 2 else "no"
-        b += text(420, y, label, "fg", 13, weight=700)
-        b += text(
-            420,
-            y + 20,
-            f"lue : 1 078 + ({fr(ref)} − 1 000) = {fr(1078 + ref - 1000)} Ω",
-            "mut",
-            12,
-        )
-        b += text(420, y + 40, f"erreur ≈ {fr(e, True)} °C", cls, 14, weight=700)
-    b += text(420, 360, "Écart entre les deux sondes du tuyau :", "fg", 13, weight=700)
+    b += text(24, 400, "Sonde à 20 °C ≈ 1 078 Ω", "fg", 13, weight=700)
     b += text(
+        24,
         420,
-        380,
-        f"76 Ω / 3,85 Ω par °C ≈ {fr(gap)} °C → défaut d'écart",
-        "no",
+        "Le menu de service dit quel cas : TEMP 2 lit-elle chaud ou froid ?",
+        "mut",
         12,
-        weight=700,
     )
+    cases = (
+        (
+            "Source de courant, V(a) seule",
+            "le logiciel retranche 1 000 Ω",
+            reference_error,
+        ),
+        (
+            "Ratiométrique (le plus courant)",
+            "rapport R PT1000 / R réf. (TI SBAA275A)",
+            ratiometric_error,
+        ),
+    )
+    for i, (title, how, model) in enumerate(cases):
+        y = 110 + 140 * i
+        b += text(400, y, title, size=14, weight=700)
+        b += text(400, y + 18, how, "mut", 11)
+        for j, (label, ref) in enumerate(
+            (("voie saine, 995 Ω", 995), ("TEMP 2, 1 071 Ω", 1071))
+        ):
+            e = model(ref)
+            b += text(
+                400,
+                y + 42 + 20 * j,
+                f"{label} : {fr(e, True)} °C",
+                "ok" if abs(e) < 2 else "no",
+                13,
+                weight=700,
+            )
+        gap = abs(model(1071) - model(995))
+        b += text(
+            400,
+            y + 102,
+            f"TEMP 2 lit {'chaud' if model(1071) > 0 else 'froid'} ; écart ≈ {fr(gap)} °C",
+            "no",
+            12,
+            weight=700,
+        )
     b += text(
         24,
         470,
-        "Lecture ratiométrique (pont diviseur) : l'erreur change de signe, l'ordre de grandeur reste.",
+        "Dans les deux cas l'écart entre les sondes du tuyau déclenche le défaut d'écart : la dérive passe dans la lecture.",
         "mut",
         12,
     )
     return svg(
         760,
         500,
-        "Comment une dérive de 7 % de la résistance de référence devient 18 °C d'erreur",
-        "Hypothèse de voie : une source de courant traverse la PT1000, entre les broches a et b, puis la résistance de référence R25 vers la masse ; "
-        "la broche a part vers le filtre, le multiplexeur et l'ADC. V(a) vaut I fois la somme des deux résistances, et le logiciel retranche 1 000 Ω pour la référence. "
-        "Sonde à 20 °C, environ 1 078 Ω. Voie saine, référence à 995 Ω : erreur d'environ −1 °C. Voie TEMP 2, référence à 1 071 Ω : erreur d'environ +18 °C. "
-        "L'écart de 76 Ω entre les deux sondes du même tuyau vaut environ 20 °C et déclenche le défaut d'écart de températures. "
-        "Avec une lecture ratiométrique, en pont diviseur, l'erreur change de signe mais garde le même ordre de grandeur.",
+        "Comment une dérive de 7 % de la résistance de référence devient près de 20 °C d'erreur",
+        "Hypothèse de voie : la PT1000 entre les broches a et b, la résistance de référence R25 de b à la masse ; la broche a part vers le filtre, le multiplexeur et l'ADC. "
+        "Sonde à 20 °C, environ 1 078 Ω. Si la carte lit la tension de a seule et retranche 1 000 Ω, la voie saine à 995 Ω lit environ −1 °C de trop et TEMP 2 à 1 071 Ω environ +18 °C : TEMP 2 lit chaud. "
+        "Si la carte lit le rapport des deux résistances, cas le plus courant, la voie saine lit environ +1 °C et TEMP 2 environ −19 °C : TEMP 2 lit froid. "
+        "Dans les deux cas l'écart d'environ 20 °C entre les deux sondes du tuyau déclenche le défaut d'écart. Le menu de service dit quel cas s'applique.",
         b,
     )
 

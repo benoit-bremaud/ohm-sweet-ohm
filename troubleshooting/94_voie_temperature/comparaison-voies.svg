@@ -40,7 +40,7 @@
   <text class="fg" x="570" y="120" font-size="15" font-weight="700">Lecture</text>
   <text class="fg" x="570" y="146" font-size="12" font-weight="400">TEMP 1 et TEMP 2 : même</text>
   <text class="fg" x="570" y="166" font-size="12" font-weight="400">tuyau, même lecture attendue.</text>
-  <text class="no" x="570" y="186" font-size="12" font-weight="700">1 071 − 995 = 76 Ω</text>
+  <text class="no" x="570" y="186" font-size="12" font-weight="700">1 071 − 995 = 76 Ω</text>
   <text class="no" x="570" y="206" font-size="12" font-weight="700">≈ 20 °C de PT1000</text>
   <text class="no" x="570" y="226" font-size="12" font-weight="700">TEMP 2 : l'intruse.</text>
   <text class="mut" x="570" y="246" font-size="12" font-weight="400">TEMP 4 : +2,5 % sur 1 000 Ω,</text>
