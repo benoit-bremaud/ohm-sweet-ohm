@@ -496,7 +496,7 @@ def fig_coating() -> str:
     b += text(
         240, 356, "pastille        composant        pastille", "mut", 11, "middle"
     )
-    # needle tip alone (no meter here): steel needle then red handle, tip on the pad
+    # needle tip alone (no meter here): steel needle then red handle, tip on the left terminal
     b += '  <path d="M168 258 L140 224" stroke="#c0c7d0" stroke-width="2.5" stroke-linecap="round"/>\n'
     b += '  <path d="M140 224 L110 174" stroke="#dc2626" stroke-width="12" stroke-linecap="round"/>\n'
     b += text(40, 150, "pointe-aiguille inclinée,", "fg", 12)
