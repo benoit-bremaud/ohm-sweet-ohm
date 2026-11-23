@@ -90,14 +90,28 @@ def test_twin_table_paints_only_the_odd_channel_red() -> None:
     assert len(re.findall(r'<rect class="ok"', svg)) == 3
 
 
-def test_funnel_ends_on_the_drifted_resistor() -> None:
+def test_french_numbers_use_a_narrow_space_and_a_true_minus() -> None:
+    assert guide_94.fr(1071) == "1\u202f071"
+    assert guide_94.fr(-1.3, sign=True) == "−1"
+    assert guide_94.fr(18.4, sign=True) == "+18"
+
+
+def test_drift_percent_is_against_the_value_given() -> None:
+    assert guide_94.drift_percent(1071) == pytest.approx(7.1)
+    assert guide_94.drift_percent(1071, 994) == pytest.approx(7.75, abs=0.01)
+
+
+def test_drift_figure_heading_matches_its_own_calculation() -> None:
+    svg = guide_94.fig_drift()
+    assert "dérive de 7 % : 18 °C d'erreur" in svg
+    assert "20 °C d'écart entre jumelles" in svg
+    assert "erreur ≈ +18 °C" in svg and "erreur ≈ −1 °C" in svg
+
+
+def test_funnel_concludes_on_the_drift_against_nominal_and_twins() -> None:
     svg = guide_94.fig_funnel()
-    assert [stage for stage, _, _ in guide_94.FUNNEL] == [
-        "Connecteur",
-        "Via",
-        "Résistance",
-    ]
-    assert "R25 : 1 071 Ω" in svg
+    assert "R25 : +7 % " in svg  # against the 1 000 Ω nominal
+    assert "(+8 % " in svg  # against the twins R82 and R24
 
 
 def test_export_plans_one_png_per_figure_and_a_plate_only_with_a_photo(
