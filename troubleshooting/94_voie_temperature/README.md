@@ -16,7 +16,7 @@ Une PT1000 vaut **1 000 Ω à 0 °C** et prend environ **3,85 Ω par °C** (norm
 
 ![Une résistance de 1 000 Ω à 0,1 % est branchée à la place de la sonde PT1000 sur le connecteur 2 broches TEMP, carte sous tension. 1 000 Ω donne 0 °C, 1 100 Ω environ 26 °C, 1 385 Ω environ 100 °C. Lecture juste : la sonde ou son câble est en cause. Lecture fausse : la voie de la carte. Essai bref, élément chauffant débranché](substitution-sonde.svg)
 
-Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent une lecture attendue connue. Lecture juste : la sonde ou le câble est en cause. Lecture fausse ou défaut maintenu : la carte. Essai bref, sous surveillance, élément chauffant débranché, **jamais** sur un pack ou un chargeur de batteries : la carte croit lire une température fixe et sa protection thermique est neutralisée pendant l'essai.
+Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent une lecture attendue connue. Lecture juste : connecteur, câble ou contact de la sonde. Lecture fausse ou défaut maintenu : la carte. Essai bref, sous surveillance, élément chauffant débranché, **jamais** sur un pack ou un chargeur de batteries : la carte croit lire une température fixe et sa protection thermique est neutralisée pendant l'essai.
 
 ## 2. Repérer la masse du connecteur
 
@@ -75,7 +75,7 @@ flowchart TD
 | Mesure | État | Lecture saine | Suspect |
 | --- | --- | --- | --- |
 | PT1000 hors circuit | hors tension | ≈ 1 000 Ω à 0 °C, + 3,85 Ω par °C | OL, ≈ 0 Ω, écart de plus de quelques degrés |
-| Résistance connue à la place de la sonde | sous tension, essai bref | 1 000 Ω → 0 °C, 1 100 Ω → 26 °C | défaut maintenu : la carte |
+| Résistance connue à la place de la sonde | sous tension, essai bref, élément chauffant débranché | 1 000 Ω → 0 °C, 1 100 Ω → 26 °C | défaut maintenu : la carte |
 | Broche → masse, deux sens | hors tension | même lecture que la voie jumelle | écart net avec la jumelle |
 | Mode diode, rouge sur la masse | hors tension | 0,5 à 0,7 V | ≈ 0 V dans les deux sens |
 | Plateau de l'excitation | sous tension, oscilloscope | même plateau que la voie jumelle | plateau absent ou décalé |

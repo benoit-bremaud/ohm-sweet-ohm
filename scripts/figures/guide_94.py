@@ -316,7 +316,7 @@ def fig_ground_pin() -> str:
     b += h
     hole = (345, 300)
     b += f'  <circle cx="{hole[0]}" cy="{hole[1]}" r="14" fill="#d4af37" stroke="#8a6d1c" stroke-width="2"/><circle cx="{hole[0]}" cy="{hole[1]}" r="7" fill="#20242b"/>\n'
-    b += text(hole[0] - 8, 338, "trou de fixation", "mut", 11, "end")
+    b += text(hole[0] + 20, 304, "trou de fixation", "mut", 11)
     b += hookup(v, com, (xb, yb), hole)
     b += text(420, 120, "Résultat", size=15, weight=700)
     for i, (cls, head, sub) in enumerate(
