@@ -1,25 +1,23 @@
 # Local CI (#68, skill local-ci): four tiers, one recipe each, no GitHub and no AI agent needed.
-# GitHub Actions keeps one workflow, `prod.yml`, triggered by a signed release tag (agents-skills
-# ADR-0004, local-first CI/CD). Tools come from mise.toml (`just setup`); run through
+# No GitHub Actions workflow (agents-skills ADR-0004, local-first CI/CD; the last one, `prod.yml`,
+# deployed the removed API, #111). Tools come from mise.toml (`just setup`); run through
 # `mise x -- just <tier>` when the shell does not activate mise (the git hooks do).
 #
 #   L0 fast     pre-commit hook                        staged files only                         < 10 s
 #   L1 check    pre-push hook, review-local --push     lint + test + security + secrets          < 3 min
-#   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + image + render,    5–15 min
+#   L2 gate     review-local § 2b, on the pushed head  check + Sonar + Trivy + render,           5–15 min
 #               before every merge                     then the attestation
-#   L3 nightly  systemd user timer                     Trivy fs/image + TruffleHog fail; check + mise outdated warn
+#   L3 nightly  systemd user timer                     Trivy fs + TruffleHog + live site fail; check + mise outdated warn
 #
 # Then: `just merge <pr>` (refuses without the gate attestation on the head SHA), `just deploy
-# staging` from up-to-date main (API on Fly.io, catalogue into Neon), `just attest staging` after
-# the QA pass, a signed tag for production (`just deploy prod <tag>` is the fallback when Actions
-# cannot run). The API has one Fly app and one Neon project: staging and production share them
-# until a second app exists (derogation recorded in PROJECT_LOG.md, 2026-11-07).
+# staging` from up-to-date main (catalogue into Neon), `just attest staging` after the QA pass. The
+# web Worker reads Neon through Hyperdrive and is deployed by Cloudflare Workers Builds from `main`
+# (ADR-0005): there is no API to deploy and no prod workflow any more (#111).
 
 set shell := ["sh", "-eu", "-c"]
 
 semgrep := "uvx semgrep@1.182.1" # via uv, not mise: a mise pipx install needs a mise-managed Python
 ruff := "uvx ruff@0.15.8"
-api_image := "ohm-sweet-ohm-api:gate"
 renderer_image := "ohm-sweet-ohm-renderer"
 
 # L1 by default
@@ -57,7 +55,7 @@ node-guard:
 sync: node-guard
     pnpm -C apps/web exec astro sync
 
-# Format, eslint, markdownlint, tsc, typos, the prod workflow, the Dockerfiles, the shell scripts, the
+# Format, eslint, markdownlint, tsc, typos, any GitHub workflow, the Dockerfiles, the shell scripts, the
 # figure generator (ruff), the hooks
 lint: sync
     pnpm format:check
@@ -65,9 +63,8 @@ lint: sync
     pnpm lint:md
     pnpm typecheck
     typos
-    actionlint
-    zizmor --quiet .github/workflows
-    hadolint --config .hadolint.yaml apps/api/Dockerfile docker/renderer/Dockerfile
+    if [ -d .github/workflows ]; then actionlint; zizmor --quiet .github/workflows; fi
+    hadolint --config .hadolint.yaml docker/renderer/Dockerfile
     shellcheck --severity=warning scripts/*.sh
     {{ruff}} format --check scripts/figures
     {{ruff}} check scripts/figures
@@ -81,6 +78,7 @@ test: sync
     pnpm doc:coverage
     sh scripts/test-local-ci.sh
     sh scripts/test-attest.sh
+    sh scripts/test-check-live.sh
     sh scripts/test-figures.sh
 
 # SAST (Semgrep Community Edition, named registry rulesets: `--config auto` would send the project
@@ -91,7 +89,7 @@ test: sync
 # EIO_BACKEND=posix: semgrep-core otherwise opens io_uring rings, charged to the user's
 # RLIMIT_MEMLOCK together with every Electron/Node process, and dies intermittently.
 security:
-    EIO_BACKEND=posix {{semgrep}} scan --config p/javascript --config p/typescript --config p/nodejs --error --metrics=off --quiet -j 4 apps/api/src apps/importer/src apps/web/src packages/db/src packages/domain/src packages/schemas/src scripts
+    EIO_BACKEND=posix {{semgrep}} scan --config p/javascript --config p/typescript --config p/nodejs --error --metrics=off --quiet -j 4 apps/importer/src apps/web/src packages/db/src packages/domain/src packages/schemas/src scripts
     pnpm audit --audit-level high
 
 # Secrets in the whole git history
@@ -118,15 +116,10 @@ gate base="origin/main":
     trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs node_modules,build,dist,coverage,.wrangler .
     trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs node_modules,build,dist,coverage,.wrangler .
     if ! docker info > /dev/null 2>&1; then
-      echo "gate: WARNING docker unreachable, API image build, smoke, trivy image, syft SBOM, catalogue render and act not run"
+      echo "gate: WARNING docker unreachable, catalogue render and act not run"
       echo "gate: INCOMPLETE (exit 3) — start Docker and run just gate again before asking for a merge"
       exit 3
     fi
-    docker build -q -f apps/api/Dockerfile -t {{api_image}} .
-    just smoke
-    trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}}
-    syft {{api_image}} -q -o spdx-json > sbom-api.spdx.json
-    echo "gate: SBOM written to sbom-api.spdx.json (gitignored)"
     just render
     changed=$(git diff --name-only --diff-filter=d "$base...HEAD" -- .github/workflows)
     if [ -z "$changed" ]; then echo "gate: no workflow added or changed, rehearse skipped"
@@ -147,25 +140,6 @@ sonar:
     SONAR_TOKEN="${SONAR_TOKEN:-$(cat "$HOME/.config/sonarqube/analysis-token" 2>/dev/null || true)}"
     [ -n "$SONAR_TOKEN" ] || { echo "sonar: no token in SONAR_TOKEN or ~/.config/sonarqube/analysis-token" >&2; exit 1; }
     SONAR_TOKEN="$SONAR_TOKEN" sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL:-http://localhost:9000}"
-
-# Proves the gate's API image starts and answers /health as the unprivileged user; the database URL
-# points nowhere on purpose, the health route does not need it. Private: needs the image `gate` builds.
-[private]
-smoke:
-    #!/bin/sh
-    set -eu
-    name=osh-api-smoke
-    docker rm -f "$name" > /dev/null 2>&1 || true
-    docker run -d --name "$name" -e DATABASE_URL=postgres://nobody:nothing@127.0.0.1:1/nothing {{api_image}} > /dev/null
-    i=0
-    while [ "$i" -lt 20 ]; do
-      i=$((i + 1))
-      if [ "$(docker inspect -f '{{{{.State.Health.Status}}' "$name")" = healthy ]; then
-        docker rm -f "$name" > /dev/null; echo "smoke: healthy after $i s"; exit 0
-      fi
-      sleep 1
-    done
-    docker logs "$name"; docker rm -f "$name" > /dev/null; echo "smoke: not healthy after 20 s" >&2; exit 1
 
 # Render every catalogue schematic to a cropped SVG under build/catalogue (renderer image: KiCad and
 # Inkscape, ADR-0002) and check one SVG per schematic. `just deploy staging` imports the result.
@@ -211,43 +185,21 @@ merge pr:
     sh scripts/attest.sh verify gate "$sha"
     gh pr merge {{quote(pr)}} --squash --match-head-commit "$sha"
 
-# Deploy from a clean tree (scripts/deploy.sh holds the commands). staging: up-to-date main after a
-# green gate (agents-skills ADR-0002): the catalogue is rendered and imported into Neon (migrations
-# inside, DATABASE_URL from the git-ignored .env.staging), then the API is deployed to Fly.io.
-# prod: the fallback when Actions cannot run (agents-skills ADR-0004): classify, verify-tag, peel,
-# status + notes, deployed from the tag's commit, then back to the branch.
-deploy env tag="":
+# Deploy from a clean tree (scripts/deploy.sh holds the commands): up-to-date main after a green
+# gate (agents-skills ADR-0002); the catalogue is rendered and imported into Neon (migrations
+# inside, DATABASE_URL from the git-ignored .env.staging). The web Worker is deployed by Workers
+# Builds on every push to main and reads Neon through Hyperdrive (ADR-0005).
+deploy env:
     #!/bin/sh
     set -eu
-    env={{quote(env)}} tag={{quote(tag)}}
+    [ {{quote(env)}} = staging ] || { echo "deploy: only staging is deployed from here (the web Worker ships through Workers Builds, ADR-0005)" >&2; exit 1; }
     [ -z "$(git status --porcelain)" ] || { echo "deploy: commit or stash local changes first" >&2; exit 1; }
-    case "$env" in
-      staging)
-        [ -z "$tag" ] || { echo "deploy: staging takes no tag (it deploys up-to-date main)" >&2; exit 1; }
-        git fetch --quiet origin main
-        [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ] \
-          || { echo "deploy: staging deploys from up-to-date main only" >&2; exit 1; }
-        sh scripts/attest.sh verify gate HEAD
-        just render
-        sh scripts/deploy.sh catalogue staging
-        sh scripts/deploy.sh api staging
-        ;;
-      prod)
-        [ -n "$tag" ] || { echo "deploy: usage just deploy prod vX.Y.Z" >&2; exit 1; }
-        # this recipe and attest.sh must be the trusted ones of main, never a branch's; same checks as
-        # the prod workflow (.github/workflows/prod.yml)
-        git fetch --quiet origin main tag "$tag"
-        [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ] \
-          || { echo "deploy: run the prod fallback from up-to-date main" >&2; exit 1; }
-        sha=$(sh scripts/attest.sh release "$tag")
-        back=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
-        trap 'git checkout --quiet "$back"' EXIT
-        git -c advice.detachedHead=false checkout --quiet "$sha"
-        sh scripts/deploy.sh api prod
-        echo "deploy: prod deployed from $tag ($sha) by the local fallback: log it in PROJECT_LOG.md"
-        ;;
-      *) echo "deploy: unknown environment $env (staging, prod)" >&2; exit 1 ;;
-    esac
+    git fetch --quiet origin main
+    [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ] \
+      || { echo "deploy: staging deploys from up-to-date main only" >&2; exit 1; }
+    sh scripts/attest.sh verify gate HEAD
+    just render
+    sh scripts/deploy.sh catalogue staging
 
 # Record the staging QA pass on the deployed main commit, only after it succeeded (agents-skills ADR-0004)
 attest env:
@@ -259,9 +211,10 @@ attest env:
       || { echo "attest: HEAD is not the deployed origin/main" >&2; exit 1; }
     sh scripts/attest.sh write deploy/staging
 
-# L3 — nightly, systemd user timer (no time budget): new CVEs against the unchanged lockfile and API
-# image, deep secret history, toolchain drift (`--bump`: without it exact pins report nothing).
-# Only vulnerabilities and secrets fail the nightly; lint, tests and drift only warn (agents-skills#427)
+# L3 — nightly, systemd user timer (no time budget): new CVEs against the unchanged lockfile, deep
+# secret history, the live site (#111: an outage went unseen for days), toolchain drift (`--bump`:
+# without it exact pins report nothing). Vulnerabilities, secrets and an outage fail the nightly;
+# lint, tests and drift only warn (agents-skills#427)
 nightly:
     #!/bin/sh
     set -u
@@ -269,15 +222,7 @@ nightly:
     warn() { "$@" || echo "WARNING nightly: '$*' failed (drift, not a failure)"; }
     warn just check
     trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs node_modules,build,dist,coverage,.wrangler . || rc=1
-    if docker info > /dev/null 2>&1; then
-        if docker build -q -f apps/api/Dockerfile -t {{api_image}} .; then
-            trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed {{api_image}} || rc=1
-        else
-            echo "WARNING nightly: API image build failed, image scan not run"
-        fi
-    else
-        echo "WARNING nightly: docker unreachable, image scan not run"
-    fi
     trufflehog git "file://$PWD" --no-verification --fail --no-update || rc=1
+    sh scripts/check-live.sh || rc=1
     warn mise outdated --bump
     exit "$rc"

@@ -76,5 +76,5 @@ sequenceDiagram
   removed by the mirror. Two concurrent imports queue on a database lock.
 - **Rendering stays outside the importer**: the importer only reads the SVGs produced by
   `scripts/render-catalogue.sh` (ADR-0002); it never calls KiCad.
-- **SVGs in a separate table** (`block_schematics`): the catalogue loaded in memory by the API
-  never carries the schematics; the API reads one SVG when a page asks for it.
+- **SVGs in a separate table** (`block_schematics`): the catalogue loaded in memory by the web
+  Worker never carries the schematics; the Worker reads one SVG when a page asks for it.

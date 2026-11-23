@@ -1,6 +1,7 @@
 # ADR-0003 — Web front-end: Astro rendered on Cloudflare Workers
 
-- Status: accepted
+- Status: accepted; amended by [ADR-0005](0005-worker-reads-neon-through-hyperdrive.md)
+  (2026-11-23): the Worker reads PostgreSQL through Hyperdrive and serves the schematic itself
 - Date: 2026-10-15
 - Deciders: Benoît Bremaud
 - Related: issue #18 (web page), issue #19 (deployment), UC3 in

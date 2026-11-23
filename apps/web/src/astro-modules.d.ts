@@ -6,3 +6,8 @@ declare module '*.astro' {
   const Component: AstroComponentFactory;
   export default Component;
 }
+
+// The Worker's bindings (wrangler.jsonc), read through `cloudflare:workers` (ADR-0005).
+declare module 'cloudflare:workers' {
+  export const env: { readonly HYPERDRIVE: { readonly connectionString: string } };
+}

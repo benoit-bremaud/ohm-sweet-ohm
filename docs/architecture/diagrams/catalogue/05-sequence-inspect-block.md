@@ -1,5 +1,11 @@
 # Sequence diagram — catalogue — inspect a block (UC3)
 
+> **Retired by [ADR-0005](../../decisions/0005-worker-reads-neon-through-hyperdrive.md)
+> (2026-11-23).** The JSON API (`apps/api`, `GET /blocks/{slug}`, `/docs`) no longer exists; the
+> web Worker reads the catalogue itself through Hyperdrive. The diagram is kept for history. The
+> cache, freshness and schematic rules still apply to the Worker: see
+> [06-sequence-view-block-page.md](06-sequence-view-block-page.md).
+>
 > **Feature**: issue #17 — public read API (milestone M1)
 > **Use case**: UC3 Inspect a block, [01-use-case.md](01-use-case.md)
 > **Source specs**: [04-class.md](04-class.md),

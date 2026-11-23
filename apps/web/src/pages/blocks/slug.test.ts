@@ -2,14 +2,23 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { LED_BLOCK } from '../../lib/block.fixture';
+import { type BlockLookup, findBlock } from '../../lib/catalogue';
 import BlockPage from './[slug].astro';
 
-// The page wires fetchBlock to the response: these tests stub the network, the one boundary.
-function serve(status: number, body: unknown): void {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(() => Promise.resolve(Response.json(body, { status }))),
-  );
+// The page wires findBlock to the response (findBlock has its own tests); the Worker bindings
+// do not exist under Node, so the runtime reader is replaced too.
+vi.mock('../../lib/catalogue-runtime', () => ({ catalogueReader: {} }));
+vi.mock('../../lib/catalogue', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../lib/catalogue')>()),
+  findBlock: vi.fn(),
+}));
+
+function serve(lookup: BlockLookup): void {
+  vi.mocked(findBlock).mockResolvedValue(lookup);
+}
+
+function found(block: Partial<typeof LED_BLOCK> = {}): BlockLookup {
+  return { kind: 'found', block: { ...LED_BLOCK, ...block } };
 }
 
 let container: AstroContainer;
@@ -19,31 +28,26 @@ beforeAll(async () => {
 });
 
 afterEach(() => {
-  vi.unstubAllGlobals();
+  vi.mocked(findBlock).mockReset();
 });
 
 describe('block page', () => {
-  it('renders the block with its schematic from the API', async () => {
-    serve(200, LED_BLOCK);
+  it('renders the block with its same-origin schematic', async () => {
+    serve(found());
 
     const html = await container.renderToString(BlockPage, {
       params: { slug: 'led-resistor-basic' },
     });
 
     expect(html).toMatch(/<h1[^>]*>LED with current-limiting resistor<\/h1>/);
-    // The origin comes from API_URL (wrangler vars: the staging API over https; .dev.vars locally,
-    // usually http); the path is the contract.
-    expect(html).toMatch(
-      /<img[^>]+src="https?:\/\/[^/]+\/blocks\/led-resistor-basic\/schematic\.svg"/,
-    );
+    // Served by this Worker (ADR-0005): a same-origin path, so img-src 'self' allows it.
+    expect(html).toMatch(/<img[^>]+src="\/blocks\/led-resistor-basic\/schematic\.svg"/);
     expect(html).not.toContain('Hazardous voltage');
     expect(html).not.toContain('<script');
-    // No link to a route that does not exist yet (home page comes with M2).
-    expect(html).not.toMatch(/href="\/"/);
   });
 
   it('warns before the schematic when the block is hazardous', async () => {
-    serve(200, { ...LED_BLOCK, hazardous: true });
+    serve(found({ hazardous: true }));
 
     const html = await container.renderToString(BlockPage, {
       params: { slug: 'led-resistor-basic' },
@@ -57,7 +61,7 @@ describe('block page', () => {
     ['theoretical', 'Theoretical'],
     ['tested', 'Tested on a build'],
   ] as const)('stamps a %s block with its validation status', async (status, label) => {
-    serve(200, { ...LED_BLOCK, validationStatus: status });
+    serve(found({ validationStatus: status }));
 
     const html = await container.renderToString(BlockPage, {
       params: { slug: 'led-resistor-basic' },
@@ -67,7 +71,7 @@ describe('block page', () => {
   });
 
   it('links the source only when it has a URL', async () => {
-    serve(200, { ...LED_BLOCK, source: { title: 'App note', url: 'https://example.com/an' } });
+    serve(found({ source: { title: 'App note', url: 'https://example.com/an' } }));
 
     const html = await container.renderToString(BlockPage, {
       params: { slug: 'led-resistor-basic' },
@@ -76,8 +80,8 @@ describe('block page', () => {
     expect(html).toContain('<a href="https://example.com/an"');
   });
 
-  it('answers 502, not cacheable, when the API fails', async () => {
-    serve(500, { error: 'boom' });
+  it('answers 502, not cacheable, when the catalogue is unavailable', async () => {
+    serve({ kind: 'unavailable', reason: 'database down' });
 
     const response = await container.renderToResponse(BlockPage, { params: { slug: 'led' } });
 

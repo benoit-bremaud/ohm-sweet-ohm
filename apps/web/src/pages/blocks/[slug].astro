@@ -1,6 +1,4 @@
 ---
-import { API_URL } from 'astro:env/server';
-
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Formulas from '../../components/Formulas.astro';
 import KeyComponents from '../../components/KeyComponents.astro';
@@ -8,11 +6,12 @@ import SafetyWarning from '../../components/SafetyWarning.astro';
 import Schematic from '../../components/Schematic.astro';
 import SpecTable from '../../components/SpecTable.astro';
 import Page from '../../layouts/Page.astro';
-import { fetchBlock } from '../../lib/catalogue-api';
+import { findBlock } from '../../lib/catalogue';
+import { catalogueReader } from '../../lib/catalogue-runtime';
 import { sentence } from '../../lib/format';
 
 const { slug = '' } = Astro.params;
-const lookup = await fetchBlock(API_URL, slug);
+const lookup = await findBlock(catalogueReader, slug);
 
 if (lookup.kind === 'not-found') {
   return Astro.rewrite('/404');
@@ -25,7 +24,6 @@ if (lookup.kind === 'unavailable') {
 }
 
 const block = lookup.kind === 'found' ? lookup.block : undefined;
-const api = new URL(API_URL);
 ---
 
 {block === undefined ? (
@@ -36,7 +34,7 @@ const api = new URL(API_URL);
     </p>
   </Page>
 ) : (
-  <Page title={block.name} description={block.description} imageOrigins={[api.origin]}>
+  <Page title={block.name} description={block.description}>
     <article class="block">
       <header class="head">
         <Breadcrumb block={block} />
@@ -51,7 +49,7 @@ const api = new URL(API_URL);
       {block.hazardous && <SafetyWarning />}
 
       <div class="sheet-and-specs">
-        <Schematic block={block} src={new URL(block.schematicUrl, api).href} />
+        <Schematic block={block} src={block.schematicUrl} />
         <section aria-labelledby="specs">
           <h2 id="specs">Specifications</h2>
           <SpecTable specs={block.specs} />

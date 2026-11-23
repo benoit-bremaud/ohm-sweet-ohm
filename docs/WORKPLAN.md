@@ -19,7 +19,7 @@ See [FRAMING.md](FRAMING.md) for the decisions behind this plan.
 Single public repo `ohm-sweet-ohm` (public since 2026-11-07), pnpm workspace (no Turborepo/Nx in v1):
 
 ```text
-apps/api          Fastify + Zod, OpenAPI
+apps/api          removed 2026-11-23 (ADR-0005): the web Worker reads Neon through Hyperdrive
 apps/web          Astro on Cloudflare Workers (catalogue rendered on demand, troubleshooting guides prerendered, ADR-0003)
 apps/importer     CLI: validate meta.yaml, read the SVG rendered by docker/renderer (just render), upsert into PostgreSQL
 packages/schemas  Shared Zod schemas (meta.yaml, API DTOs) — single source of truth

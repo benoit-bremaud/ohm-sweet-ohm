@@ -1,16 +1,33 @@
 import cloudflare from '@astrojs/cloudflare';
 import { unified } from '@astrojs/markdown-remark';
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig } from 'astro/config';
 
 import { rehypeGuideLinks } from './src/lib/guide-links';
 import { remarkMermaidImages } from './src/lib/mermaid-text';
 
-// Catalogue pages are rendered on demand so an import shows within the API's freshness window
-// without a redeploy (ADR-0003). The troubleshooting guides under /depannage are prerendered:
+// Catalogue pages are rendered on demand from the catalogue database (Hyperdrive, ADR-0005) so an
+// import shows within the cache's freshness window without a redeploy (ADR-0003). The troubleshooting guides under /depannage are prerendered:
 // they change with a commit, not with an import (#123).
 export default defineConfig({
   output: 'server',
-  // No image transformation and no sessions: images are served as they are (the API's schematics,
+  // pg is CommonJS and requires Node built-ins by their bare names ("events", "net"); the Worker's
+  // ESM bundle has no `require`, so each server chunk gets one from node:module (workerd resolves
+  // built-ins only and has no import.meta.url, hence the "/" base; #111).
+  vite: {
+    environments: {
+      ssr: {
+        build: {
+          rollupOptions: {
+            output: {
+              banner:
+                "import { createRequire as __osoCreateRequire } from 'node:module'; const require = __osoCreateRequire('/');",
+            },
+          },
+        },
+      },
+    },
+  },
+  // No image transformation and no sessions: images are served as they are (the catalogue's schematics,
   // the guides' SVG figures), so the adapter must not provision Images or KV bindings.
   adapter: cloudflare({ imageService: 'passthrough' }),
   session: false,
@@ -30,13 +47,7 @@ export default defineConfig({
       rehypePlugins: [rehypeGuideLinks],
     }),
   },
-  env: {
-    schema: {
-      // Origin of the catalogue API, server-side only; validated at build and at start.
-      API_URL: envField.string({ context: 'server', access: 'public', url: true }),
-    },
-  },
-  // Astro hashes its own inline styles; the page adds the API origin for images at request time.
+  // Astro hashes its own inline styles; the page layout adds img-src 'self'.
   security: {
     csp: {
       directives: [
