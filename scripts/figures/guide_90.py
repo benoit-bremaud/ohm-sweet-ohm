@@ -196,7 +196,7 @@ def fig_connector_back() -> str:
     steps = (
         "1. Choisir un repère visible des deux faces : trou de fixation, coin, encoche.",
         "2. Photographier les deux faces, lampe de côté ; écrire les numéros des broches sur la photo du dos.",
-        "3. Confirmer une broche au bipeur, d'une face à l'autre, avant de suivre les pistes.",
+        "3. Confirmer au bipeur la broche 1, ou une broche d'extrémité, d'une face à l'autre.",
     )
     for i, step in enumerate(steps):
         b += text(24, 378 + 22 * i, step, "fg", 13)
@@ -210,7 +210,7 @@ def fig_connector_back() -> str:
         "la broche 1 est à droite, toujours du côté du trou de fixation. Un cadre en pointillé montre ce que la photo doit contenir, "
         "toutes les broches, nettes ; une lampe tenue de côté éclaire en lumière rasante. "
         "Trois étapes : choisir un repère visible des deux faces, photographier les deux faces et écrire les numéros sur la photo du dos, "
-        "confirmer une broche au bipeur d'une face à l'autre.",
+        "confirmer au bipeur la broche 1, ou une broche d'extrémité, d'une face à l'autre.",
         b,
     )
 
@@ -222,13 +222,18 @@ LOT = "K4"  # example lot code
 
 
 def date_code(year: int, week: int) -> str:
-    """Four-digit date code, two digits of the year then the week."""
+    """Four-digit date code, two digits of the year then the week.
+
+    Some manufacturers print the first week of a multi-week period instead of
+    the calendar week (TI SNOA039C, six-week periods): the figure uses a week
+    that starts such a period, so its code reads the same either way.
+    """
     if not 1 <= week <= 53:
         raise ValueError(f"week {week} is not a calendar week")
     return f"{year % 100:02d}{week:02d}"
 
 
-MARK_YEAR, MARK_WEEK = 2025, 31
+MARK_YEAR, MARK_WEEK = 2025, 30
 
 
 def _package(
@@ -274,7 +279,7 @@ def fig_chip_marking() -> str:
         ),
         (
             code,
-            f"code de date, souvent l'année puis la semaine (ici {MARK_YEAR}, semaine {MARK_WEEK})",
+            f"code de date, par exemple l'année puis la semaine (ici {MARK_YEAR}, semaine {MARK_WEEK})",
         ),
         (LOT, "code de lot : traçabilité ; il ne dit rien de la référence"),
     )
@@ -295,7 +300,7 @@ def fig_chip_marking() -> str:
         "Lecture du marquage d'un circuit intégré",
         f"Un circuit intégré vu de dessus, la broche 1 en bas à gauche à côté d'un point. Il porte deux lignes : {PART_MARKING}, puis {code} {LOT}. "
         f"{PART_MARKING} est la référence, souvent abrégée : la fiche technique donne le code, ici celui du {PART}. "
-        f"{code} est un code de date, souvent l'année puis la semaine, ici {MARK_YEAR}, semaine {MARK_WEEK}. "
+        f"{code} est un code de date, par exemple l'année puis la semaine, ici {MARK_YEAR}, semaine {MARK_WEEK}. "
         f"{LOT} est un code de lot, qui sert à la traçabilité et ne dit rien de la référence. "
         "À droite, le même boîtier sous deux éclairages : en lumière de face, un reflet efface le marquage ; "
         "en lumière rasante, la gravure se lit. Le format des codes de date et de lot dépend du fabricant.",
@@ -321,6 +326,8 @@ def fig_coating() -> str:
     b += f'  <rect x="{TERMINAL[0]}" y="{PART_TOP}" width="160" height="32" rx="3" fill="#20242b" stroke="#7d8794"/>\n'
     b += f'  <rect x="{TERMINAL[0]}" y="{PART_TOP}" width="{TERMINAL[1] - TERMINAL[0]}" height="32" fill="#c0c7d0" stroke="#7d8794"/>\n'
     b += f'  <rect x="304" y="{PART_TOP}" width="16" height="32" fill="#c0c7d0" stroke="#7d8794"/>\n'
+    # solder fillets between each termination and its pad
+    b += '  <path d="M160 270 V290 H146 Z M320 270 V290 H334 Z" fill="#aeb6c0" stroke="#7d8794"/>\n'
     b += '  <path d="M40 300 V292 H104 Q110 282 120 284 L156 256 Q240 244 324 256 L360 284 Q370 282 376 292 H440 V300" fill="#93c5fd" fill-opacity="0.45" stroke="#2563eb" stroke-width="1.5"/>\n'
     b += text(440, 276, "vernis", "blue", 12, "end", 700)
     b += text(145, 356, "pastille", "mut", 11, "middle")
@@ -333,12 +340,12 @@ def fig_coating() -> str:
     b += text(40, 130, "pointe-aiguille inclinée,", "fg", 12)
     b += text(40, 146, "sur la terminaison", "fg", 12)
     notes = (
-        ("Repérer", "lampe UV, si le vernis est fluorescent"),
+        ("Repérer", "lampe UV-A, si le vernis est fluorescent"),
         ("Terminaison", "sinon la pastille : la lecture inclut le joint"),
         ("Dégager", "localement, selon la fiche du vernis"),
         ("Lire", "comparer à un composant identique"),
         ("Jamais", "sur le corps, ni près des broches à pas fin"),
-        ("Après", "revernir la zone (stylo de vernis)"),
+        ("Après", "revernir la zone au pinceau, laisser sécher"),
     )
     for i, (head, sub) in enumerate(notes):
         y = 120 + 44 * i
@@ -350,9 +357,9 @@ def fig_coating() -> str:
         "Mesure à travers un vernis de tropicalisation",
         "Coupe d'une carte recouverte de vernis de tropicalisation : un composant monté en surface sur deux pastilles, le tout sous une couche de vernis. "
         "Une pointe-aiguille, inclinée, traverse le vernis jusqu'à la terminaison métallique du composant ; carte hors tension et déchargée. "
-        "À droite, les règles : une lampe UV fait briller le vernis s'il est fluorescent ; faute d'atteindre la terminaison, la pastille, mais la lecture inclut alors le joint de brasure ; "
+        "À droite, les règles : une lampe UV-A fait briller le vernis s'il est fluorescent ; faute d'atteindre la terminaison, la pastille, mais la lecture inclut alors le joint de brasure ; "
         "dégager localement selon la fiche technique du vernis ; comparer à un composant identique ; "
-        "jamais sur le corps du composant ni près des broches à pas fin ; après la réparation, revernir la zone au stylo de vernis.",
+        "jamais sur le corps du composant ni près des broches à pas fin ; après la réparation, revernir la zone au pinceau et laisser sécher.",
         b,
     )
 

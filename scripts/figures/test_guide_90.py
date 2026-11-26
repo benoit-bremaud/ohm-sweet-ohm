@@ -47,7 +47,7 @@ def test_connector_figure_keeps_the_landmark_on_the_side_of_pin_1() -> None:
 
 @pytest.mark.parametrize(
     ("year", "week", "code"),
-    [(2025, 31, "2531"), (2000, 6, "0006"), (1999, 48, "9948")],
+    [(2025, 30, "2530"), (2000, 6, "0006"), (1999, 48, "9948")],
 )
 def test_date_code_is_two_digits_of_the_year_then_the_week(
     year: int, week: int, code: str
@@ -81,3 +81,8 @@ def test_needle_tip_lands_on_the_metal_termination_not_on_the_body() -> None:
     assert guide_90.TERMINAL[0] <= x <= guide_90.TERMINAL[1]
     assert y == guide_90.PART_TOP
     assert f'd="M{x} {y} L' in guide_90.fig_coating()
+
+
+def test_figure_week_starts_a_six_week_period() -> None:
+    """The drawn code must read the same as a calendar week and as a period start."""
+    assert guide_90.MARK_WEEK % 6 == 0

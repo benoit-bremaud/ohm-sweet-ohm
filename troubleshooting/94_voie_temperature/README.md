@@ -22,7 +22,7 @@ Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent u
 
 ![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
 
-Sans schéma, photographier les deux faces du connecteur avant de mesurer : au dos de la carte, les broches sont dans l'ordre inverse (fiche [90](../90_inspection_visuelle/README.md), « Photographier pour suivre des broches »).
+Sans schéma, photographier les deux faces du connecteur avant de mesurer : au dos de la carte, les broches se lisent en miroir : les numéroter depuis un repère visible des deux faces (fiche [90](../90_inspection_visuelle/README.md), « Photographier pour suivre des broches »).
 
 Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la masse logique peut être isolée du châssis, ou la sonde montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
 
@@ -46,7 +46,7 @@ Le filtre d'une entrée de sonde (quelques nanofarads à un microfarad) se charg
 
 La continuité suit une piste ; le mode diode compare deux voies, parce qu'il voit aussi les jonctions. Pas de bip : passer sur ohms, une résistance série de protection (1 à 10 kΩ) entre le connecteur et le multiplexeur est normale. Un interrupteur du multiplexeur dégradé (résistance à l'état passant qui dérive, fuite) ne fausse qu'une voie : sondes saines, écart entre deux voies jumelles.
 
-Le multiplexeur s'identifie par son marquage, souvent un code abrégé : un TS3A5017 porte YA017 (fiche [90](../90_inspection_visuelle/README.md), « Lire le marquage d'un circuit intégré »).
+Le multiplexeur s'identifie par son marquage, souvent un code abrégé : un TS3A5017 en boîtier TSSOP porte YA017 (fiche [90](../90_inspection_visuelle/README.md), « Lire le marquage d'un circuit intégré »).
 
 ## 6. Observer l'excitation sous tension
 
@@ -115,4 +115,4 @@ flowchart TD
 
 - IEC 60751:2022, *Industrial platinum resistance thermometers and platinum temperature sensors* : 1 000 Ω à 0 °C, α = 0,00385 /°C.
 - Texas Instruments, note d'application SBAA275A, *A Basic Guide to RTD Measurements* : mesure ratiométrique.
-- Texas Instruments, *TS3A5017 Dual SP4T Analog Switch / Multiplexer / Demultiplexer*, SCDS188G (janvier 2005, révisée en janvier 2019), <https://www.ti.com/lit/gpn/ts3a5017> : marquage YA017, brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.
+- Texas Instruments, *TS3A5017 Dual SP4T Analog Switch / Multiplexer / Demultiplexer*, SCDS188G (janvier 2005, révisée en janvier 2019), <https://www.ti.com/lit/gpn/ts3a5017> : marquage YA017 du boîtier TSSOP, brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.
