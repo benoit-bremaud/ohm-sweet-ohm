@@ -45,15 +45,15 @@ for r in gate nightly; do
   just --show "$r" | grep 'trivy fs' | grep -q -- '--ignorefile .trivyignore.yaml' || fail "$r trivy fs does not pass --ignorefile .trivyignore.yaml"
 done
 for r in gate nightly; do # every Trivy scan takes the shared skip list, quoted (sh must not expand the glob)
-  [ "$(just --show "$r" | grep -c 'trivy ')" = "$(just --show "$r" | grep 'trivy ' | grep -cE -- "--skip-dirs '\{\{ ?trivy_skip ?\}\}'")" ] || fail "$r has a Trivy scan without --skip-dirs '{{trivy_skip}}'"
+  [ "$(just --show "$r" | grep -c 'trivy ')" = "$(just --show "$r" | grep 'trivy ' | grep -cE -- '--skip-dirs \{\{ ?quote\(trivy_skip\) ?\}\}')" ] || fail "$r has a Trivy scan without --skip-dirs {{quote(trivy_skip)}}"
 done
-# The skip list on a throwaway tree (#175): Dockerfiles running as root in a nested node_modules and
+# The skip list on a throwaway tree (#175): Dockerfiles running as root in a top-level or nested node_modules and
 # in another worktree are skipped, the same Dockerfile in the project is still reported.
-for d in apps/web/node_modules/p .claude/worktrees/x/node_modules/.pnpm/p .claude/worktrees/x/docker docker/renderer; do
+for d in node_modules/p apps/web/node_modules/p .claude/worktrees/x/node_modules/.pnpm/p .claude/worktrees/x/docker docker/renderer; do
   mkdir -p "$work/trivy/$d" && printf 'FROM alpine:3.20\nRUN apk add curl\n' > "$work/trivy/$d/Dockerfile"
 done
 rc=0
-(cd "$work/trivy" && trivy config --quiet --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs "$(just --justfile "$root/justfile" --evaluate trivy_skip)" .) > "$work/trivy.out" 2>&1 || rc=$?
+(cd "$work/trivy" && trivy config --quiet --skip-version-check --disable-telemetry --skip-check-update --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs "$(just --justfile "$root/justfile" --evaluate trivy_skip)" .) > "$work/trivy.out" 2>&1 || rc=$?
 [ "$rc" -eq 1 ] || { cat "$work/trivy.out"; fail "trivy config misses a project Dockerfile running as root (exit $rc, expected 1)"; }
 [ "$(grep -c 'Dockerfile (dockerfile)' "$work/trivy.out")" = 1 ] && grep -q '^docker/renderer/Dockerfile (dockerfile)' "$work/trivy.out" \
   || { cat "$work/trivy.out"; fail "trivy config must report docker/renderer/Dockerfile only (nested node_modules and worktrees skipped)"; }

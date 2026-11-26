@@ -156,5 +156,5 @@ serves no traffic. `just gate` runs the checks; one at a time:
 
 ```bash
 just lint                                                    # Hadolint on the renderer Dockerfile, among the linters
-trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs node_modules,build,dist,coverage,.wrangler .   # as in the gate
+trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs "$(just --evaluate trivy_skip)" .   # as in the gate
 ```

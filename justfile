@@ -121,8 +121,8 @@ gate base="origin/main":
     base={{quote(base)}}
     case "$base" in origin/*) git fetch --quiet origin "${base#origin/}" ;; esac
     just sonar
-    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs '{{trivy_skip}}' .
-    trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs '{{trivy_skip}}' .
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs {{quote(trivy_skip)}} .
+    trivy config --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs {{quote(trivy_skip)}} .
     if ! docker info > /dev/null 2>&1; then
       echo "gate: WARNING docker unreachable, catalogue render and act not run"
       echo "gate: INCOMPLETE (exit 3) — start Docker and run just gate again before asking for a merge"
@@ -229,7 +229,7 @@ nightly:
     rc=0
     warn() { "$@" || echo "WARNING nightly: '$*' failed (drift, not a failure)"; }
     warn just check
-    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs '{{trivy_skip}}' . || rc=1
+    trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore.yaml --skip-dirs {{quote(trivy_skip)}} . || rc=1
     trufflehog git "file://$PWD" --no-verification --fail --no-update || rc=1
     sh scripts/check-live.sh || rc=1
     warn mise outdated --bump
