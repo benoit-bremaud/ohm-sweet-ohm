@@ -27,6 +27,29 @@ L'outil garde ses deux noms, fer à souder (le plus courant) ou fer à braser.
 - **Photographier** avant de toucher (fiche [03](../03_methode/README.md), étape 3) : la photo agrandie montre ce que l'œil a manqué, et sert à comparer avec une carte saine ou une photo du même modèle.
 - **Un ordre** : par zones, l'entrée d'alimentation d'abord, puis chaque régulateur, puis les composants qui chauffent ou portent du courant, les connecteurs, enfin le reste. Noter chaque indice sur la photo.
 
+### Photographier pour suivre des broches
+
+![Une barrette de six broches traversantes vue sur les deux faces d'une carte hors tension. Face composants : la broche 1 est à gauche, près d'un trou de fixation qui sert de repère. Carte retournée comme une page, face joints : les six joints sont dans l'ordre inverse, la broche 1 est à droite, toujours du côté du repère. Un cadre montre ce que la photo doit contenir, toutes les broches, nettes ; une lampe tenue de côté éclaire en lumière rasante](photo-connecteur.svg)
+
+Pour savoir où va chaque broche d'un connecteur, la photo du dos de la carte remplace le schéma qu'on n'a pas.
+
+1. **Choisir un repère visible des deux faces** : un trou de fixation, un coin coupé, une encoche. La pastille carrée de la broche 1, quand elle existe, la désigne directement côté joints ; côté composants, le boîtier du connecteur la cache souvent. Le dos est une image miroir : carte retournée comme une page, la gauche et la droite s'échangent ; retournée de haut en bas, le haut et le bas. Sans repère, on numérote le dos à l'envers.
+2. **Photographier les deux faces**, l'appareil à plat au-dessus de la zone, toutes les broches dans le cadre et nettes, la lampe de côté pour que les joints et les pistes se détachent.
+3. **Écrire les numéros des broches sur la photo du dos**, en partant du repère.
+4. **Confirmer au bipeur la broche 1**, ou une broche d'extrémité, d'une face à l'autre, avant de suivre les pistes : elle valide toute la numérotation. Jamais la broche du milieu, qui garde sa place dans le miroir.
+
+### Lire le marquage d'un circuit intégré
+
+![Un circuit intégré vu de dessus, la broche 1 en bas à gauche à côté d'un point, marqué sur deux lignes : YA017, puis 2530 K4. YA017 est la référence, abrégée : la fiche technique donne le code, ici celui du TS3A5017 en boîtier TSSOP. 2530 est un code de date, ici 2025, semaine 30. K4 est un code de lot. À droite, le même boîtier sous deux éclairages : en lumière de face, un reflet efface le marquage ; en lumière rasante, la gravure se lit](marquage-puce.svg)
+
+Le marquage d'un boîtier est une gravure peu profonde : de face, la lampe s'y reflète et l'efface. Tenir la lampe de côté et tourner la carte, ou la lampe, jusqu'à ce que les caractères ressortent ; photographier de près, puis agrandir.
+
+- **La référence** n'est pas toujours écrite en entier : sur un petit boîtier, la place manque et le fabricant grave un **code abrégé**. La fiche technique du composant donne ce code. Exemple : le commutateur analogique TS3A5017 porte YA017 en boîtier TSSOP, SSOP, TVSOP ou VQFN, son nom complet en SOIC, et ZVL en UQFN : le code dépend aussi du boîtier.
+- **Le logo** désigne le fabricant : le joindre au code abrégé dans la recherche de la fiche technique.
+- **Les autres caractères** servent à la traçabilité : code de date (par exemple l'année puis la semaine), code de lot. Leur format change d'un fabricant à l'autre. Ils ne disent rien de la référence : ne pas les saisir dans la recherche. Attention, une référence longue peut continuer sur une deuxième ligne ou finir par un suffixe (grade, boîtier) : n'écarter que les caractères reconnus comme code de date ou de lot.
+- **La broche 1** est repérée sur le boîtier, par un point ou une encoche ; le dessin du boîtier dans la fiche technique donne la numérotation.
+- **Marquage effacé ou illisible** : sur un boîtier qui a chauffé, c'est un indice (« Les composants ») ; pour l'identifier, comparer avec un composant identique de la carte ou d'une carte du même modèle.
+
 ## Les joints de brasure
 
 ![Six joints de brasure d'un composant traversant vus de côté, côté joints. Sain : congé concave et lisse, patte visible, pastille couverte. Froid : massif, en tas, limite nette, l'alliage n'a pas coulé. Mal mouillé : une boule sur la patte, un angle vif, la pastille nue. Pont : deux joints reliés, un court-circuit. Pastille soulevée : décollée de la carte, souvent après le retrait d'un composant. Fissuré en anneau : un trait sombre autour de la patte, une panne qui va et vient](joints.svg)
@@ -106,6 +129,22 @@ Un nettoyage peut suffire à faire disparaître une panne intermittente due à d
 
 Une piste suspecte se contrôle au bipeur d'un bout à l'autre, en la sollicitant comme un joint.
 
+## Mesurer à travers un vernis de tropicalisation
+
+![Coupe d'une carte recouverte de vernis de tropicalisation : un composant monté en surface sur deux pastilles, sous une couche de vernis. Une pointe-aiguille inclinée traverse le vernis jusqu'à la terminaison métallique du composant, carte hors tension et déchargée. Les règles : lampe UV-A si le vernis est fluorescent ; faute d'atteindre la terminaison, la pastille, mais la lecture inclut alors le joint ; dégager localement selon la fiche du vernis ; comparer à un composant identique ; jamais sur le corps ni près des broches à pas fin ; revernir au pinceau après la réparation et laisser sécher](mesure-sous-vernis.svg)
+
+Certaines cartes sont couvertes d'un **vernis de tropicalisation**, une couche transparente de quelques dizaines de micromètres qui les protège de l'humidité. À ne pas confondre avec le vernis épargne, la couche colorée qui couvre les pistes. Il isole : une pointe posée dessus lit OL, sur un composant sain comme sur un composant coupé.
+
+1. **Le repérer** : un aspect brillant ou satiné qui couvre aussi les joints, un bourrelet au pied des composants. Certains vernis sont fluorescents : une lampe UV-A les fait briller et montre où ils manquent ; ne jamais regarder la lampe ni la diriger vers les yeux. Tous ne le sont pas : l'absence de lueur ne prouve rien.
+2. **Mesurer hors tension**, carte déchargée, avec une **pointe-aiguille** : la poser inclinée sur la **terminaison métallique** du composant et appuyer juste assez pour traverser le vernis. Jamais sur le corps du composant, qu'elle fissure ou qu'elle raye.
+3. **Faute d'atteindre la terminaison**, piquer la pastille : la lecture inclut alors le joint de brasure (« Contrôler un joint douteux »). Une lecture trop haute peut venir du joint et ne condamne plus le composant (fiche [02](../02_pieges_en_circuit/README.md)).
+4. **Une lecture OL ou instable** vient d'abord du vernis mal traversé : reprendre le contact, puis comparer avec un composant identique de la carte, mesuré aux mêmes points, avant de conclure.
+5. **Jamais près des broches à pas fin** : la pointe glisse, tord une broche ou en relie deux. Y mesurer sur le point de test ou le composant voisin relié à la même piste.
+6. **Dégager le vernis** pour refaire un joint se fait localement, par la méthode que donne la fiche technique du vernis : selon le produit, un décapant adapté, ou le fer à souder à travers la couche. Lire d'abord la fiche de données de sécurité du produit ; pièce aérée, fumées aspirées, décapant tenu loin du fer chaud. Sans ces fiches, se limiter à la pointe-aiguille.
+7. **Après la réparation**, nettoyer puis **revernir** la zone dégagée et les points percés, au pinceau : un vernis ouvert laisse entrer l'humidité là où il manque. Laisser sécher le temps que donne la fiche du vernis (24 heures à l'air pour celui cité en source) avant toute mise sous tension.
+
+Sous tension, la carte reste dans le périmètre de la fiche [00](../00_securite/README.md), sur une alimentation limitée en courant. La pointe-aiguille se pose carte hors tension, tenue par un support de sonde, puis on met sous tension ; couper l'alimentation avant de déplacer ou de retirer la pointe : une pointe qui glisse entre deux broches fait un court-circuit.
+
 ## Après l'inspection
 
 - **Un indice désigne une zone, pas une cause** (fiche [03](../03_methode/README.md), étape 4) : une résistance brûlée a obéi à un courant trop fort, que quelque chose d'autre a laissé passer.
@@ -150,6 +189,9 @@ flowchart TD
 8. Composants : gonflé, fendu, noirci, cratère, carte brunie.
 9. Liquide : source, nettoyage à l'alcool, séchage complet, regarder de nouveau.
 10. Un indice désigne une zone, pas une cause ; rien de visible ne prouve rien.
+11. Dos d'un connecteur : image miroir ; un repère visible des deux faces, la broche 1 ou une broche d'extrémité confirmée au bipeur.
+12. Marquage : lumière rasante ; code abrégé à chercher dans la fiche technique ; date et lot ne disent rien de la référence.
+13. Carte vernie : pointe-aiguille inclinée sur la terminaison, hors tension ; jamais sur le corps ni près du pas fin ; revernir après et laisser sécher.
 
 ## Sources
 
@@ -162,4 +204,7 @@ flowchart TD
 - Adafruit, *Adafruit Guide To Excellent Soldering*, page *Common Problems* (joint perturbé, froid, surchauffé, mal mouillé, trop peu ou trop d'alliage, pattes non coupées, pont, pastille soulevée, éclaboussures) — <https://learn.adafruit.com/adafruit-guide-excellent-soldering/common-problems>
 - EE Notebook, *Is This Connection Intermittent?* (contrôle de continuité en sollicitant la liaison, mode MIN/MAX, défauts liés à la température, nettoyage à l'alcool isopropylique) — <https://applied-ee.github.io/ee-notebook/docs/measurement/continuity-connections/intermittent-connection>
 - Cadence, *What Could Cause a Solder Joint to Crack?* (causes mécaniques, thermiques et chimiques, défauts intermittents, remplissage insuffisant d'un trou traversant) — <https://resources.system-analysis.cadence.com/blog/what-could-cause-a-solder-joint-to-crack>
+- Texas Instruments, *TS3A5017 Dual SP4T Analog Switch / Multiplexer / Demultiplexer*, SCDS188G (janvier 2005, révisée en janvier 2019, addendum de boîtiers du 5 mars 2026) : marquage par boîtier (YA017 ; TS3A5017 en SOIC ; ZVL en UQFN), mention d'un marquage supplémentaire (logo, code de lot), dessin des boîtiers vus de dessus — <https://www.ti.com/lit/gpn/ts3a5017>
+- Texas Instruments (National Semiconductor), *Device Marking Conventions*, SNOA039C (mai 2004, révisée en juillet 2005) : contenu des lignes de marquage (logo, code de date fondé sur des périodes de six semaines, code de lot, référence), code abrégé des petits boîtiers faute de place, marquage précis donné par la fiche technique — <https://e2e.ti.com/cfs-file/__key/communityserver-discussions-components-files/14/device_2D00_marking_2D00_conventions_2D00_rev_2D00_c.pdf>
+- MG Chemicals, *419D Liquid, Acrylic Conformal Coating*, fiche technique version 4.0 (31 juillet 2025) : vernis acrylique fluorescent sous UV-A, film de 25 à 75 µm, retrait par un décapant adapté ou brasage à travers la couche, retouche au pinceau, séchage de 24 heures à température ambiante, renvoi à la fiche de données de sécurité — <https://mgchemicals.com/downloads/tds/tds-419d-l.pdf>
 - Les procédures de base viennent des fiches citées, qui portent leurs propres sources : [00](../00_securite/README.md) (travail hors tension, ESD), [03](../03_methode/README.md) (place de l'inspection, pannes intermittentes, contrôle de la réparation), [20](../20_condensateur_ceramique/README.md), [22](../22_condensateur_electrolytique/README.md) et [23](../23_condensateur_tantale/README.md) (indices propres aux condensateurs), [92](../92_court_circuit/README.md) (époxy carbonisé).

@@ -22,6 +22,8 @@ Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent u
 
 ![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
 
+Sans schéma, photographier les deux faces du connecteur avant de mesurer : au dos de la carte, les broches se lisent en miroir ; les numéroter depuis un repère visible des deux faces (fiche [90](../90_inspection_visuelle/README.md), « Photographier pour suivre des broches »).
+
 Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la masse logique peut être isolée du châssis, ou la sonde montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
 
 ## 3. Mesurer chaque broche à la masse, hors tension
@@ -43,6 +45,8 @@ Le filtre d'une entrée de sonde (quelques nanofarads à un microfarad) se charg
 ![Continuité entre la broche de mesure du connecteur TEMP 2 et les entrées d'un multiplexeur TS3A5017 : le bip sur 1S2, broche 5, désigne la voie](trace-multiplexeur.svg)
 
 La continuité suit une piste ; le mode diode compare deux voies, parce qu'il voit aussi les jonctions. Pas de bip : passer sur ohms, une résistance série de protection (1 à 10 kΩ) entre le connecteur et le multiplexeur est normale. Un interrupteur du multiplexeur dégradé (résistance à l'état passant qui dérive, fuite) ne fausse qu'une voie : sondes saines, écart entre deux voies jumelles.
+
+Le multiplexeur s'identifie par son marquage, souvent un code abrégé : un TS3A5017 en boîtier TSSOP porte YA017 (fiche [90](../90_inspection_visuelle/README.md), « Lire le marquage d'un circuit intégré »).
 
 ## 6. Observer l'excitation sous tension
 
@@ -69,6 +73,8 @@ Le schéma est une **hypothèse** reconstruite à l'ohmmètre, sans schéma cons
 ![Entonnoir : connecteur, via, puis résistance. À chaque étape, la même mesure sur la voie suspecte et sur sa jumelle ; R25 à 1 071 Ω contre 994 Ω pour R82 et R24, soit 7 % sur 1 000 Ω. La lecture est trop haute : un chemin parallèle ne pouvant que la baisser, R25 est en cause](entonnoir-voie.svg)
 
 Resserrer la même mesure, du connecteur vers le composant, en comparant toujours à la jumelle : une piste coupée ou une soudure résistante se montre à l'étape où l'écart apparaît. Le connecteur, le via et la résistance sont un même nœud : en circuit, l'entonnoir ne sépare pas la résistance d'un composant en parallèle. Il conclut ici parce que la lecture est **trop haute** : un chemin parallèle ne peut que la faire baisser. Une lecture trop basse demande de lever une patte (fiche [02](../02_pieges_en_circuit/README.md)). Avant de remplacer, relever la valeur et la tolérance sur le marquage des jumelles, et chercher la cause de la dérive (chaleur, humidité, vernis fissuré), sinon la neuve dérivera aussi. La remplacer par la même valeur, la même tolérance et le même coefficient de température (fiche [10](../10_resistance/README.md)).
+
+Sur une carte vernie, la pointe ne touche le métal qu'à travers le vernis : pointe-aiguille sur la terminaison, hors tension (fiche [90](../90_inspection_visuelle/README.md), « Mesurer à travers un vernis de tropicalisation »). Une lecture OL sur la voie suspecte seule se confirme en reprenant le contact avant de conclure.
 
 ## Arbre de décision
 
@@ -109,4 +115,4 @@ flowchart TD
 
 - IEC 60751:2022, *Industrial platinum resistance thermometers and platinum temperature sensors* : 1 000 Ω à 0 °C, α = 0,00385 /°C.
 - Texas Instruments, note d'application SBAA275A, *A Basic Guide to RTD Measurements* : mesure ratiométrique.
-- Texas Instruments, fiche technique TS3A5017 (SCDS221) : brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.
+- Texas Instruments, *TS3A5017 Dual SP4T Analog Switch / Multiplexer / Demultiplexer*, SCDS188G (janvier 2005, révisée en janvier 2019), <https://www.ti.com/lit/gpn/ts3a5017> : marquage YA017 du boîtier TSSOP, brochage TSSOP-16, 1S1–1S4 sur les broches 6 à 3, 2S1–2S4 sur les broches 10 à 13, GND broche 8.
