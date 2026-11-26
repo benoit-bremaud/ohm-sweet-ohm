@@ -85,4 +85,4 @@ def test_needle_tip_lands_on_the_metal_termination_not_on_the_body() -> None:
 
 def test_figure_week_starts_a_six_week_period() -> None:
     """The drawn code must read the same as a calendar week and as a period start."""
-    assert guide_90.MARK_WEEK % 6 == 0
+    assert guide_90.MARK_WEEK in {52, *range(6, 49, 6)}

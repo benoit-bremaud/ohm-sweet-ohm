@@ -33,7 +33,7 @@ L'outil garde ses deux noms, fer à souder (le plus courant) ou fer à braser.
 
 Pour savoir où va chaque broche d'un connecteur, la photo du dos de la carte remplace le schéma qu'on n'a pas.
 
-1. **Choisir un repère visible des deux faces** : un trou de fixation, un coin coupé, une encoche. La pastille carrée de la broche 1, quand elle existe, se voit aussi des deux faces. Le dos est une image miroir : carte retournée comme une page, la gauche et la droite s'échangent ; retournée de haut en bas, le haut et le bas. Sans repère, on numérote le dos à l'envers.
+1. **Choisir un repère visible des deux faces** : un trou de fixation, un coin coupé, une encoche. La pastille carrée de la broche 1, quand elle existe, la désigne directement côté joints ; côté composants, le boîtier du connecteur la cache souvent. Le dos est une image miroir : carte retournée comme une page, la gauche et la droite s'échangent ; retournée de haut en bas, le haut et le bas. Sans repère, on numérote le dos à l'envers.
 2. **Photographier les deux faces**, l'appareil à plat au-dessus de la zone, toutes les broches dans le cadre et nettes, la lampe de côté pour que les joints et les pistes se détachent.
 3. **Écrire les numéros des broches sur la photo du dos**, en partant du repère.
 4. **Confirmer au bipeur la broche 1**, ou une broche d'extrémité, d'une face à l'autre, avant de suivre les pistes : elle valide toute la numérotation. Jamais la broche du milieu, qui garde sa place dans le miroir.
@@ -143,7 +143,7 @@ Certaines cartes sont couvertes d'un **vernis de tropicalisation**, une couche t
 6. **Dégager le vernis** pour refaire un joint se fait localement, par la méthode que donne la fiche technique du vernis : selon le produit, un décapant adapté, ou le fer à souder à travers la couche. Lire d'abord la fiche de données de sécurité du produit ; pièce aérée, fumées aspirées, décapant tenu loin du fer chaud. Sans ces fiches, se limiter à la pointe-aiguille.
 7. **Après la réparation**, nettoyer puis **revernir** la zone dégagée et les points percés, au pinceau : un vernis ouvert laisse entrer l'humidité là où il manque. Laisser sécher le temps que donne la fiche du vernis (24 heures à l'air pour celui cité en source) avant toute mise sous tension.
 
-Sous tension, la carte reste dans le périmètre de la fiche [00](../00_securite/README.md), sur une alimentation limitée en courant. La pointe-aiguille se pose carte hors tension, tenue par un support de sonde, puis on met sous tension : une pointe qui glisse entre deux broches fait un court-circuit.
+Sous tension, la carte reste dans le périmètre de la fiche [00](../00_securite/README.md), sur une alimentation limitée en courant. La pointe-aiguille se pose carte hors tension, tenue par un support de sonde, puis on met sous tension ; couper l'alimentation avant de déplacer ou de retirer la pointe : une pointe qui glisse entre deux broches fait un court-circuit.
 
 ## Après l'inspection
 

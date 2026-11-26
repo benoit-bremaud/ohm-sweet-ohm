@@ -22,7 +22,7 @@ Une boîte à décades, ou deux résistances fixes (1 kΩ et 1,1 kΩ), donnent u
 
 ![Multimètre en continuité, pointe noire sur un trou de fixation métallisé, pointe rouge sur chaque broche du connecteur TEMP : la broche b bipe, c'est la masse ; la broche a est la broche de mesure](broche-de-masse.svg)
 
-Sans schéma, photographier les deux faces du connecteur avant de mesurer : au dos de la carte, les broches se lisent en miroir : les numéroter depuis un repère visible des deux faces (fiche [90](../90_inspection_visuelle/README.md), « Photographier pour suivre des broches »).
+Sans schéma, photographier les deux faces du connecteur avant de mesurer : au dos de la carte, les broches se lisent en miroir ; les numéroter depuis un repère visible des deux faces (fiche [90](../90_inspection_visuelle/README.md), « Photographier pour suivre des broches »).
 
 Le trou de fixation est souvent relié à la terre de protection, pas au 0 V logique : confirmer sur la broche GND d'un circuit intégré de la voie (le multiplexeur, par exemple). Si aucune broche ne bipe, la masse logique peut être isolée du châssis, ou la sonde montée entre l'entrée et une résistance de référence : c'est l'ohmmètre qui le montre (étape 3).
 

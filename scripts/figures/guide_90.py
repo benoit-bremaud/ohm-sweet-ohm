@@ -275,7 +275,7 @@ def fig_chip_marking() -> str:
     rows = (
         (
             PART_MARKING,
-            f"référence, souvent abrégée : la fiche technique donne le code (ici {PART})",
+            f"référence, souvent abrégée : la fiche technique donne le code (ici {PART}, boîtier TSSOP)",
         ),
         (
             code,
@@ -299,7 +299,7 @@ def fig_chip_marking() -> str:
         432,
         "Lecture du marquage d'un circuit intégré",
         f"Un circuit intégré vu de dessus, la broche 1 en bas à gauche à côté d'un point. Il porte deux lignes : {PART_MARKING}, puis {code} {LOT}. "
-        f"{PART_MARKING} est la référence, souvent abrégée : la fiche technique donne le code, ici celui du {PART}. "
+        f"{PART_MARKING} est la référence, souvent abrégée : la fiche technique donne le code, ici celui du {PART} en boîtier TSSOP. "
         f"{code} est un code de date, par exemple l'année puis la semaine, ici {MARK_YEAR}, semaine {MARK_WEEK}. "
         f"{LOT} est un code de lot, qui sert à la traçabilité et ne dit rien de la référence. "
         "À droite, le même boîtier sous deux éclairages : en lumière de face, un reflet efface le marquage ; "
