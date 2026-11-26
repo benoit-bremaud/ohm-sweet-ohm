@@ -4,9 +4,9 @@
 # only on Trivy, TruffleHog and the live site check, agents-skills#427, #111), gate ends with the
 # attestation and merge / deploy staging verify it (agents-skills ADR-0003/0004), no GitHub
 # workflow is left (#111), deploy.sh refuses bad arguments before any deploy command,
-# lint and test sync the Astro store first (#135), lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
+# lint and test sync the Astro store first (#135), the Trivy skip list skips nested node_modules and worktrees but not a project Dockerfile (#175), lefthook.yml is valid and wires the commit-msg and pre-push hooks, the commit-msg check accepts and
 # refuses the right subjects, and L0 (`just fast`) passes a clean staged change but refuses a staged
-# secret and a staged typo, in a throwaway repository. Needs mise, just, lefthook, gitleaks, typos:
+# secret and a staged typo, in a throwaway repository. Needs mise, just, lefthook, gitleaks, typos, trivy:
 #   mise x -- sh scripts/test-local-ci.sh
 set -e
 # A hook (pre-push runs `just check`) exports these; they would aim git at the outer repository.
@@ -23,7 +23,7 @@ fail() { echo "FAIL $1"; exit 1; }
 
 # `mise x --` puts the tools on PATH but not mise itself (hooks and the throwaway repo need it).
 command -v mise > /dev/null || { [ -x "$HOME/.local/bin/mise" ] && PATH="$HOME/.local/bin:$PATH" && export PATH; }
-for bin in mise just lefthook gitleaks typos; do
+for bin in mise just lefthook gitleaks typos trivy; do
   command -v "$bin" > /dev/null || fail "$bin not on PATH"
 done
 
@@ -44,6 +44,20 @@ done
 for r in gate nightly; do
   just --show "$r" | grep 'trivy fs' | grep -q -- '--ignorefile .trivyignore.yaml' || fail "$r trivy fs does not pass --ignorefile .trivyignore.yaml"
 done
+for r in gate nightly; do # every Trivy scan takes the shared skip list, quoted (sh must not expand the glob)
+  [ "$(just --show "$r" | grep -c 'trivy ')" = "$(just --show "$r" | grep 'trivy ' | grep -cE -- "--skip-dirs '\{\{ ?trivy_skip ?\}\}'")" ] || fail "$r has a Trivy scan without --skip-dirs '{{trivy_skip}}'"
+done
+# The skip list on a throwaway tree (#175): Dockerfiles running as root in a nested node_modules and
+# in another worktree are skipped, the same Dockerfile in the project is still reported.
+for d in apps/web/node_modules/p .claude/worktrees/x/node_modules/.pnpm/p .claude/worktrees/x/docker docker/renderer; do
+  mkdir -p "$work/trivy/$d" && printf 'FROM alpine:3.20\nRUN apk add curl\n' > "$work/trivy/$d/Dockerfile"
+done
+rc=0
+(cd "$work/trivy" && trivy config --quiet --exit-code 1 --severity HIGH,CRITICAL --misconfig-scanners dockerfile --skip-dirs "$(just --justfile "$root/justfile" --evaluate trivy_skip)" .) > "$work/trivy.out" 2>&1 || rc=$?
+[ "$rc" -eq 1 ] || { cat "$work/trivy.out"; fail "trivy config misses a project Dockerfile running as root (exit $rc, expected 1)"; }
+[ "$(grep -c 'Dockerfile (dockerfile)' "$work/trivy.out")" = 1 ] && grep -q '^docker/renderer/Dockerfile (dockerfile)' "$work/trivy.out" \
+  || { cat "$work/trivy.out"; fail "trivy config must report docker/renderer/Dockerfile only (nested node_modules and worktrees skipped)"; }
+n=$((n + 4))
 [ -f .trivyignore.yaml ] || fail ".trivyignore.yaml missing (gate and nightly pass it with --ignorefile)"
 ids=$(grep -c '^  - id:' .trivyignore.yaml || true)
 [ "$ids" = "$(grep -cE '^    (paths|purls):' .trivyignore.yaml || true)" ] || fail ".trivyignore.yaml entry without a scope (paths or purls)"
