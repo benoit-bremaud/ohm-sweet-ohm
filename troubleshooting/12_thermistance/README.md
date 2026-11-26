@@ -39,6 +39,26 @@ Valeurs calculées pour B ≈ 3950 K, arrondies ; la table de la fiche technique
 
 Règle pratique : autour de 25 °C, une CTN perd environ **4 % de sa valeur par degré**. Un écart de 20 % entre la lecture et la valeur nominale peut donc n'être que 5 °C d'écart sur la température de la pièce.
 
+### Ne pas confondre avec une sonde platine (PT1000)
+
+Une PT1000 n'est pas une thermistance : c'est une résistance de platine, presque linéaire, dont la valeur **monte** avec la température, d'environ 0,4 % par degré, dix fois moins vite qu'une CTN. Lire 1 080 Ω sur une sonde de température ne désigne donc pas une CTN de 1 kΩ en défaut : c'est une PT1000 saine à 20 °C.
+
+Valeurs calculées selon la norme IEC 60751 (α = 0,00385 /°C), hors tolérance de la sonde.
+
+| Température | Résistance |
+| --- | --- |
+| 0 °C | 1 000,0 Ω |
+| 20 °C | 1 077,9 Ω |
+| 25 °C | 1 097,3 Ω |
+| 30 °C | 1 116,7 Ω |
+| 37 °C | 1 143,8 Ω |
+| 50 °C | 1 194,0 Ω |
+| 100 °C | 1 385,1 Ω |
+
+- **Contrôle à l'ohmmètre** : la méthode à froid puis au chaud ci-dessous s'applique, mais l'écart attendu est petit, environ 3,9 Ω par degré. Tenir la sonde entre les doigts ne la fait monter que de quelques dizaines d'ohms.
+- **Auto-échauffement** : le courant de mesure chauffe l'élément. Un petit élément à couche mince s'échauffe d'environ 0,4 K par milliwatt dans l'air, 0,15 K par milliwatt dans l'eau glacée (fiches Yageo Nexensos) : 1 mA dans 1 000 Ω dissipe 1 mW. C'est pourquoi les cartes excitent la sonde par un courant faible ou par impulsions.
+- **Voie de mesure d'une PT1000** sur une carte : fiche [94](../94_voie_temperature/README.md).
+
 ## Modes de défaillance
 
 Classés du plus fréquent au plus rare (classement qualitatif d'après les sources citées ; aucune statistique publiée n'a été vérifiée).
@@ -255,5 +275,7 @@ Les faits ci-dessous sont reformulés ; les fréquences de panne sont un classem
 - Vishay Ametherm, *SL12 – Inrush Current Limiters*, document 24504 : tolérance de ± 20 % sur R25, résistance résiduelle et température du corps au courant maximal. <https://www.vishay.com/docs/24504/sl12.pdf>
 - Bourns, *MF-RM Series – PTC Resettable Fuses*, fiche technique (copie hébergée par un distributeur) : courants de maintien et de déclenchement, tension et courant maximaux, résistance initiale et résistance une heure après déclenchement, baisse du courant de maintien avec la température. <https://static.chipdip.ru/lib/417/DOC013417683.pdf>
 - Analog Technologies, *Common Failures and Causes for NTC Thermistor* : coupures, dérives et courts-circuits d'une CTN et leurs causes (contraintes mécaniques, humidité, chaleur de reprise, surcharge). <https://www.analogtechnologies.com/white-paper/2015/1010/656.htm>
+- IEC 60751:2022, *Industrial platinum resistance thermometers and platinum temperature sensors* : 1 000 Ω à 0 °C et α = 0,00385 /°C d'une PT1000 ; la table est calculée avec l'équation de Callendar–Van Dusen.
+- Yageo Nexensos, fiches techniques *M 222* et *PCB 2225* (capteurs platine à couche mince) : auto-échauffement de 0,4 K/mW à 0 °C et de 0,15 K/mW dans l'eau glacée. <https://content.kemet.com/datasheets/yageo_nexensos_m222_datasheet_en.pdf>, <https://content.kemet.com/datasheets/yageo_nexensos_pcb2225_datasheet_en.pdf>
 - Wikipédia (en anglais), *Resettable fuse* : maintien de l'état basculé par un faible courant, réarmement après coupure et refroidissement, résistance plus élevée après un déclenchement. <https://en.wikipedia.org/wiki/Resettable_fuse>
 - Wikipédia (en anglais), *Thermistor* : loi à coefficient B et son domaine de validité, CTP céramique au titanate de baryum et ses usages. <https://en.wikipedia.org/wiki/Thermistor>
