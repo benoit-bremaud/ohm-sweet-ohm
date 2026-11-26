@@ -46,7 +46,7 @@ Le marquage d'un boîtier est une gravure peu profonde : de face, la lampe s'y r
 
 - **La référence** n'est pas toujours écrite en entier : sur un petit boîtier, la place manque et le fabricant grave un **code abrégé**. La fiche technique du composant donne ce code. Exemple : le commutateur analogique TS3A5017 porte YA017 en boîtier TSSOP, SSOP, TVSOP ou VQFN, son nom complet en SOIC, et ZVL en UQFN : le code dépend aussi du boîtier.
 - **Le logo** désigne le fabricant : le joindre au code abrégé dans la recherche de la fiche technique.
-- **Les autres caractères** servent à la traçabilité : code de date (par exemple l'année puis la semaine), code de lot. Leur format change d'un fabricant à l'autre. Ils ne disent rien de la référence : ne pas les saisir dans la recherche.
+- **Les autres caractères** servent à la traçabilité : code de date (par exemple l'année puis la semaine), code de lot. Leur format change d'un fabricant à l'autre. Ils ne disent rien de la référence : ne pas les saisir dans la recherche. Attention, une référence longue peut continuer sur une deuxième ligne ou finir par un suffixe (grade, boîtier) : n'écarter que les caractères reconnus comme code de date ou de lot.
 - **La broche 1** est repérée sur le boîtier, par un point ou une encoche ; le dessin du boîtier dans la fiche technique donne la numérotation.
 - **Marquage effacé ou illisible** : sur un boîtier qui a chauffé, c'est un indice (« Les composants ») ; pour l'identifier, comparer avec un composant identique de la carte ou d'une carte du même modèle.
 
