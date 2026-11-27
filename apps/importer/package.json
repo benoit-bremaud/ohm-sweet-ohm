@@ -15,7 +15,7 @@
     "@ohm-sweet-ohm/schemas": "workspace:*"
   },
   "devDependencies": {
-    "@testcontainers/postgresql": "12.2.1",
+    "@testcontainers/postgresql": "12.2.2",
     "tsx": "4.23.15"
   }
 }
